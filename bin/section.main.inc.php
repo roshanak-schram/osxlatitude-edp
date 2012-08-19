@@ -27,9 +27,13 @@
   		echo "  3. INSTALLER     : Contains various tools and applications \n";
   		echo "  4. TOOLS         : Different cool OSX tools \n";
 		echo "  5. UPDATE        : Update EDP, requires internet connection \n \n";
-		echo "  q. Quit          : Don't do squad.. just exit..\n\n";
+		echo "  q. Quit          : Don't do squad.. just exit..\n\n\n";
+		
+		echo "Sys.INFO >> Operating system: $os - Extentions folder: $ee - $slepath \n\n";
 		echo "$footer\n\n";	
 		echo "Please choose: ";
+
+		
 		$choice = getChoice();
 		return $choice;
 	}

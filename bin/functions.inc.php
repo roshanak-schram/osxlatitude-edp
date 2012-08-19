@@ -28,10 +28,9 @@
 	
 	//This function is used to make a build from /Extra/custom
 	function doCustomBuild() {
-		global $verbose; global $workpath; global $ee; global $cachepath; global $rootpath;
+		global $verbose; global $os; global $workpath; global $ee; global $cachepath; global $rootpath;
 
 		$custompath = "$workpath/custom";
-		$os = getVersion();
 		system("clear");
 		
 		echo "  Cleaning up in $workpathn";
@@ -108,7 +107,9 @@
 	
 	
 	function getVersion() {
-		$v = exec("sw_vers -productVersion");
+		global $rootpath;
+		$path = "".$rootpath."System/Library/CoreServices/SystemVersion";
+		$v = exec("defaults read $path ProductVersion");
 		if ($v == "10.6")   { $r="sl"; }		
 		if ($v == "10.6.0") { $r="sl"; }
 		if ($v == "10.6.1") { $r="sl"; }
@@ -145,7 +146,7 @@
 	function prepareCustomCopy() {
 		global $modeldb; global $modelID; global $modelname;
 		
-		$modeldb[$modelID]["name"]				= "$modelname";
+		$modeldb["name"]				= "$modelname";
 		$modeldb[$modelID]["ps2pack"]			= selectPS2();
 		$modeldb[$modelID]["nullcpu"]			= selectNULLCPU();
 		$modeldb[$modelID]["sleepEnabler"]		= selectSE();
@@ -314,11 +315,12 @@
 
 					
 	function confirmBuild() {
-		global $header; global $footer; global $rootpath; global $workpath; global $slepath; global $modeldb; global $modelID;
+		global $os; global $header; global $footer; global $rootpath; global $workpath; global $slepath; global $modeldb; global $modelID;
 		
 		system("clear");
 		echo "$header \n\n";
-		echo "MODEL ID: $modelID \n\n";
+		echo "MODEL ID: $modelID \n";
+		echo "OS: $os \n\n";
 		echo "Please confirm that the information below is correct.... \n\n";
 	
 		echo "Paths: (Please doublecheck these) \n";
@@ -360,12 +362,12 @@ function copyEssentials() {
 		if (file_exists($file)) { system("rm $file"); }
 
 
-  		echo "  Copying COMMON smbios.plist, org.chameleon.boot.plist and dsdt.aml to $workpath \n\n";
+  		echo "  Copying COMMON system plists and dsdt.aml from $workpath/Models/$modelName/common to $workpath \n\n";
   			$file = "$workpath/Models/$modelName/common/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/common/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/common/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }
 		
-  		echo "  Copying OS Specific smbios.plist, org.chameleon.boot.plist and dsdt.aml to $workpath \n\n";
+  		echo "  Copying OS Specific system plists and dsdt.aml from $workpath/Models/$modelName/$os to $workpath \n\n";
   			$file = "$workpath/Models/$modelName/$os/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/$os/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }					
