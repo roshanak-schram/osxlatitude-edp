@@ -1,0 +1,79 @@
+
+<dict>
+	<key>PathMapRef</key>
+	<array>
+		<dict>
+			<key>CodecID</key>
+			<array>
+				<integer>283904133</integer>
+			</array>
+			<key>DetectDelegates</key>
+			<dict>
+				<key>SPDIF_Out</key>
+				<integer>22</integer>
+			</dict>
+			<key>DetectDependencies</key>
+			<dict>
+				<key>SPDIF_In</key>
+				<integer>21</integer>
+			</dict>
+			<key>Mic</key>
+			<dict>
+				<key>MuteGPIO</key>
+				<integer>1342242841</integer>	<!-- 0x50010019 Virtual GPIO VREF to 80% for NodeID 25 -->
+				<key>SignalProcessing</key>
+				<dict/>
+			</dict>
+			<key>Inputs</key>
+			<array>
+				<string>"LineIn"</string>
+				<string>"Mic"</string>
+				<string>"SPDIFIn"</string>
+			</array>
+			<key>IntSpeaker</key>
+			<dict>
+				<key>AmpPostDelay</key>
+				<integer>150</integer>
+				<key>AmpPreDelay</key>
+				<integer>150</integer>
+				<key>MaximumBootBeepValue</key>
+				<integer>48</integer>
+				<key>MuteGPIO</key>
+				<integer>1342242842</integer>		<!-- 0x5001001A Virtual GPIO VREF to 80% for NodeID 26 -->
+				<key>SignalProcessing</key>
+				<dict>
+					<key>SoftwareDSP</key>
+					<dict/>
+				</dict>
+			</dict>
+			<key>LineIn</key>
+			<dict>
+				<key>MuteGPIO</key>
+				<integer>838926357</integer>	<!-- 0x32010015 Virtual GPIO VREF to 50% for NodeID 21 -->
+			</dict>
+			<key>LineOut</key>
+			<dict>
+				<key>AmpPostDelay</key>
+				<integer>150</integer>
+				<key>AmpPreDelay</key>
+				<integer>150</integer>
+				<key>MuteGPIO</key>
+				<integer>1342242840</integer>		<!-- 0x50010018 Virtual GPIO VREF to 80% for NodeID 24 -->
+			</dict>
+			<key>Outputs</key>
+			<array>
+				<string>"IntSpeaker"</string>
+				<string>"LineOut"</string>
+				<string>"SPDIFOut"</string>
+			</array>
+			<key>PathMapID</key>
+			<integer>13</integer>	<!-- {{{{7,36,25} }} = Mic,{{{8,35,21}} = LineIn,{{10,31}} = SpdifIn},{{26,15,5}} = Speaker,{{20,12,2}} = Headphone,{{30,6}} = SpdifOut}} -->
+			<key>SPDIFIn</key>
+			<dict/>
+			<key>SPDIFOut</key>
+			<dict/>
+		</dict>
+	</array>
+	<key>LayoutID</key>
+	<integer>36</integer>							
+</dict>

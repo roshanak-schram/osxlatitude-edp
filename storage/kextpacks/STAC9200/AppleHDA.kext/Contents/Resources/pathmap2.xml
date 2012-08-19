@@ -1,0 +1,208 @@
+<dict>
+					<!--
+		{ { PathSet{Path{7,24,19,11} = Mic }},
+		  { PathSet{Path{6,23,18,15} = Line In }},
+		  { PathSet{Path{12,3}} = Speaker, PathSet{Path{10,2}} = Line Out, PathSet{Path{16,8}} = S/PDIF Out } } for STAC922x
+	-->
+	<key>PathMapID</key>										<!--	Used with SigmaTel STAC9220	-->
+	<integer>2</integer>
+	<key>PathMap</key>
+	<array>														<!-- PathMap array aka fPathMap / an AppleHDA instance	-->
+		<array>													<!-- path group aka Engine Instance)	-->	
+			<array>												<!-- path set	-->
+				<array>											<!-- path array start  also 'pathNodeIDArray' or 'pathArray' or arrayOfWidgetNodeIDValues	-->
+					<dict>
+						<key>NodeID</key>
+						<integer>7</integer>
+						<key>ProcessingState</key>				<!--	<rdar://4483915> 1A	-->
+						<true/>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>24</integer>
+						<key>Amp</key>
+						<dict>
+							<key>VolumeInputAmp</key>
+							<true/>
+							<key>MuteInputAmp</key>
+							<true/>
+							<key>PublishVolume</key>
+							<true/>
+							<key>PublishMute</key>
+							<true/>
+							<key>Channels</key>
+							<array>
+								<dict>
+									<key>Channel</key>
+									<integer>1</integer>		<!--	supports front left				-->
+									<key>Bind</key>
+									<integer>1</integer>
+								</dict>
+								<dict>
+									<key>Channel</key>
+									<integer>2</integer>		<!--	supports front right			-->
+									<key>Bind</key>
+									<integer>2</integer>
+								</dict>
+							</array>
+						</dict>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>19</integer>
+						<key>Boost</key>						<!--	<rdar://4483915> 1C	-->
+						<integer>1</integer>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>11</integer>
+						<key>VREF</key>							<!--	<rdar://4388585>		-->
+						<integer>80</integer>
+					</dict>
+				</array>										<!-- a path supporting the port	-->
+			</array>											<!-- path set aka a port	-->
+		</array>												<!-- path group aka Engine Instance)	-->	
+		<array>													<!-- path group aka Engine Instance)	-->	
+			<array>												<!-- path set aka a port	-->
+				<array>											<!-- a path supporting the port	-->
+					<dict>
+						<key>NodeID</key>
+						<integer>6</integer>
+						<key>ProcessingState</key>				<!--	<rdar://4483915> 1A	-->
+						<true/>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>23</integer>
+						<key>Amp</key>
+						<dict>
+							<key>VolumeInputAmp</key>
+							<true/>
+							<key>MuteInputAmp</key>
+							<true/>
+							<key>PublishVolume</key>
+							<true/>
+							<key>PublishMute</key>
+							<true/>
+							<key>Channels</key>
+							<array>
+								<dict>
+									<key>Channel</key>
+									<integer>1</integer>		<!--	supports front left				-->
+									<key>Bind</key>
+									<integer>1</integer>
+								</dict>
+								<dict>
+									<key>Channel</key>
+									<integer>2</integer>		<!--	supports front right			-->
+									<key>Bind</key>
+									<integer>2</integer>
+								</dict>
+							</array>
+						</dict>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>18</integer>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>15</integer>
+					</dict>
+				</array>										<!-- a path supporting the port	-->
+			</array>											<!-- path set aka a port	-->
+		</array>												<!-- path group aka Engine Instance)	-->	
+		<array>													<!-- path group aka Engine Instance)	-->	
+			<array>												<!-- path set aka a port	-->
+				<array>											<!-- a path supporting the port	-->
+					<dict>
+						<key>NodeID</key>
+						<integer>12</integer>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>3</integer>
+						<key>Amp</key>
+						<dict>
+							<key>VolumeInputAmp</key>
+							<false/>
+							<key>MuteInputAmp</key>
+							<false/>
+							<key>PublishVolume</key>
+							<true/>
+							<key>PublishMute</key>
+							<true/>
+							<key>Channels</key>
+							<array>
+								<dict>
+									<key>Channel</key>
+									<integer>1</integer>		<!--	supports front left				-->
+									<key>Bind</key>
+									<integer>1</integer>
+								</dict>
+								<dict>
+									<key>Channel</key>
+									<integer>2</integer>		<!--	supports front right			-->
+									<key>Bind</key>
+									<integer>2</integer>
+								</dict>
+							</array>
+						</dict>
+					</dict>
+				</array>										<!-- a path supporting the port	-->
+			</array>											<!-- path set aka a port	-->
+			<array>												<!-- path set aka a port	-->
+				<array>											<!-- a path supporting the port	-->
+					<dict>
+						<key>NodeID</key>
+						<integer>10</integer>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>2</integer>
+						<key>Amp</key>
+						<dict>
+							<key>VolumeInputAmp</key>
+							<false/>
+							<key>MuteInputAmp</key>
+							<false/>
+							<key>PublishVolume</key>
+							<true/>
+							<key>PublishMute</key>
+							<true/>
+							<key>Channels</key>
+							<array>
+								<dict>
+									<key>Channel</key>
+									<integer>1</integer>		<!--	supports front left				-->
+									<key>Bind</key>
+									<integer>1</integer>
+								</dict>
+								<dict>
+									<key>Channel</key>
+									<integer>2</integer>		<!--	supports front right			-->
+									<key>Bind</key>
+									<integer>2</integer>
+								</dict>
+							</array>
+						</dict>
+					</dict>
+				</array>										<!-- a path supporting the port	-->
+			</array>											<!-- path set aka a port	-->
+			<array>												<!-- path set aka a port	-->
+				<array>											<!-- a path supporting the port	-->
+					<dict>
+						<key>DetectDelegate</key>				<!--	<rdar://4432397>		-->
+						<integer>14</integer>
+						<key>NodeID</key>
+						<integer>16</integer>
+					</dict>
+					<dict>
+						<key>NodeID</key>
+						<integer>8</integer>
+					</dict>
+				</array>										<!-- a path supporting the port	-->
+			</array>											<!-- path set aka a port	-->
+		</array>												<!-- path group aka Engine Instance)	-->	
+	</array>													<!-- PathMap array aka fPathMap / an AppleHDA instance	-->
+</dict>
