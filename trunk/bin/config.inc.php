@@ -13,7 +13,7 @@
 	$slepath	= "".$rootpath."System/Library/Extensions";
 	$cachepath	= "".$rootpath."System/Library/Caches/com.apple.kext.caches/Startup";
 
-    $localrev	= exec("cd $workpath; svn info --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
+    $localrev	= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
     $localrev	= str_replace("Last Changed Rev: ", "", $localrev);
  
   	
