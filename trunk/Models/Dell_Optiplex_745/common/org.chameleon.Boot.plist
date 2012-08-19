@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Default Partition</key>
+	<string>hd(1,2)</string>
+	<key>UseKernelCache</key>
+	<string>no</string>	
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
+	<key>Graphics Mode</key>
+	<string>1440x900x32</string>
+	<key>GraphicsEnabler</key>
+	<string>Yes</string>
+	<key>Kernel Flags</key>
+	<string>-v</string>
+	<key>PciRoot(0x4)/Pci(0x1c,0x4)/Pci(0x0,0x0)</key>
+	<dict>
+		<key>built-in</key>
+		<string>0x01</string>
+	</dict>
+	<key>Rescan</key>
+	<string>yes</string>
+	<key>SystemType</key>
+	<string>2</string>
+	<key>Theme</key>
+	<string>Default</string>
+	<key>Timeout</key>
+	<string>10</string>
+	<key>USBBusFix</key>
+	<string>Yes</string>
+	<key>arch</key>
+	<string>i386</string>
+</dict>
+</plist>

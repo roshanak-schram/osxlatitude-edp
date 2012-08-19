@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DSDT</key>
+	<string>/Extra/dsdt.aml</string>
+	<key>Default Partition</key>
+	<string>hd(0,2)</string>
+	<key>DropSSDT</key>
+	<string>Yes</string>
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
+	<key>GenerateCStates</key>
+	<string>Yes</string>
+	<key>GeneratePStates</key>
+	<string>Yes</string>
+	<key>Graphics Mode</key>
+	<string>1280x1024x32</string>
+	<key>Hide Partition</key>
+	<string>hd(0,1)</string>
+	<key>Kernel</key>
+	<string>mach_kernel</string>
+	<key>PciRoot</key>
+	<string>1</string>
+	<key>SMBIOS</key>
+	<string>/Extra/SMBios.plist</string>
+	<key>SystemType</key>
+	<string>1</string>
+	<key>Timeout</key>
+	<string>3</string>
+	<key>UseKernelCache</key>
+	<string>Yes</string>
+	<key>arch</key>
+	<string>i386</string>
+</dict>
+</plist>

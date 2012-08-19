@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SMbiosdate</key>
+	<string>07/26/10</string>
+	<key>SMbiosvendor</key>
+	<string>Apple Inc.</string>
+	<key>SMbiosversion</key>
+	<string>MBP61.88Z.0057.B0C.1007261552</string>
+	<key>SMboardproduct</key>
+	<string>Mac-F22589C8</string>
+	<key>SMbusspeed</key>
+	<string>4800</string>
+	<key>SMfamily</key>
+	<string>MacBook Pro</string>
+	<key>SMmanufacter</key>
+	<string>Apple Inc.</string>
+	<key>SMmanufacturer</key>
+	<string>Apple Inc.</string>
+	<key>SMmemmanufacter</key>
+	<string>Samsung</string>
+	<key>SMmempart</key>
+	<string>M471B5673FH0-CF8</string>
+	<key>SMmemserial_1</key>
+	<string>96D6FAAA</string>
+	<key>SMmemserial_2</key>
+	<string>96D6FBBZ</string>
+	<key>SMmemspeed</key>
+	<string>1066</string>
+	<key>SMmemtype</key>
+	<string>24</string>
+	<key>SMproductname</key>
+	<string>MacBookPro6,1</string>
+	<key>SMserial</key>
+	<string>C02G7959DC79</string>
+	<key>SMsystemversion</key>
+	<string>1.0</string>
+</dict>
+</plist>
