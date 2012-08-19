@@ -2,7 +2,7 @@
 	include_once "functions.inc.php";
 	
 	$verbose 	= "true";
-	$os			= getVersion();
+
 
 
 	//Get system vars
@@ -16,16 +16,18 @@
     $localrev	= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
     $localrev	= str_replace("Last Changed Rev: ", "", $localrev);
  
-  	
+ 
+	$os			= getVersion();  	
 	$verbose 	= "1";
 
 
-	$version 	= "Rev. $localrev";
-	$header 	= "-- E.D.P 4 - $version -------------------------------------------------------------------------------------------";
+	$version 	= "Rev: $localrev";
+	$header 	= "-- OSXLatitude E.D.P Version #4 ($version) ------------------------------------------------------------------";
 	$footer		= "---------------------------------------------------------------------------- O S X L A T I T U D E . C O M --";
 	
 
 
 	
 	if ($os == "") { echo "Unable to detect operating system, edptool has exited"; exit; }
+
 ?>
