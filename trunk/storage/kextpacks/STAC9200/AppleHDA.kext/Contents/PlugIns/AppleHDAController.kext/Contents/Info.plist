@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AppleHDAController</string>
+	<key>CFBundleGetInfoString</key>
+	<string>1.5.7a24, Copyright Apple Inc. 2005-2008</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.driver.AppleHDAController</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>HDA Controller Driver</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.5.7</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.5.7a24</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>BuiltInHDA</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleHDAController</string>
+			<key>HDAConfigDefault</key>
+			<array>
+				<dict>
+					<key>CodecID</key>
+					<integer>-2088470896</integer>
+					<key>ConfigData</key>
+					<data>
+					AIcc+gCHHQMAhx7AAIcfQACXHEAAlx0TAJce
+					RACXHwEA1xwwANcdEADXHiEA1x8EAOccEADn
+					HQMA5x4XAOcfkAD3HPsA9x0DAPcegAD3H0AB
+					BxwgAQcdEAEHHqEBBx8EARccEQEXHQMBFx4X
+					ARcfkAEnHPwBJx0DASce8AEnH0A=
+					</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>12</integer>
+				</dict>
+			</array>
+			<key>IOClass</key>
+			<string>AppleHDAController</string>
+			<key>IOPCIClassMatch</key>
+			<string>0x04020000&amp;0xFFFE0000</string>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleCompatibleVersion</key>
+	<string>1.0.0d1</string>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOHDAFamily</key>
+		<string>1.0.0d1</string>
+		<key>com.apple.iokit.IOPCIFamily</key>
+		<string>1.1</string>
+		<key>com.apple.kpi.bsd</key>
+		<string>8.0.0b3</string>
+		<key>com.apple.kpi.iokit</key>
+		<string>8.0.0b3</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>8.0.0b3</string>
+		<key>com.apple.kpi.mach</key>
+		<string>8.0.0b3</string>
+	</dict>
+</dict>
+</plist>
