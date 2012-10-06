@@ -343,7 +343,20 @@
 		return "$choice";		
 	}
 	
-
+function AppleACPIfixCheck() {
+		global $os; global $header; global $footer; global $rootpath; global $workpath; global $slepath; global $modeldb; global $modelID;
+		
+		//Check if ACPIfix is selected
+		if ($modeldb[$modelID]["useACPIfix"] == "yes") {
+			//Remove the existing AppleACPIPlatform.kext from sle to make sure that we dont get dual loading and breaks kernelcache
+			system("rm -Rf $slepath/AppleACPIPlatform.kext");
+			//Copy the patched AppleACPIPlatform.kext to sle
+			system("cp -R $workpath/storage/kexts/AppleACPIPlatform.kext $slepath");
+			
+			
+		}
+	
+}
 
 function copyEssentials() {
 		global $workpath; global $rootpath; global $modeldb; global $modelID; global $os;
@@ -490,6 +503,10 @@ function copyKexts() {
 	$tf = "$workpath/Models/$modelName/$os/Extensions";
 	//if (isEmptyDir("$tf") == "no") { system("cp -Rf $tf/* $ee"); };
 	system("cp -Rf $tf/* $ee");
+	
+	echo "  Checking if we need ACPIfix \n\n";
+	AppleACPIfixCheck();
+	
 }
 
 
