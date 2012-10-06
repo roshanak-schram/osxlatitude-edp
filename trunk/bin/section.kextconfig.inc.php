@@ -79,9 +79,7 @@
 		}
 
 		echo "\n\n";
-		echo " a. Make build from custom folder... \n\n\n";
-		echo "-------------------------------------------------------------------------------------------------------------\n";
-		echo " PRESS (x) to go back to last menu or (q) to Quit\n";
+		echo " Other options: (a) Make build from custom folder  -  (x) to go back to last menu  -  (q) to Quit\n";
 		echo "$footer\n";
 		echo "Please choose: ";
 		$choice = getChoice();
