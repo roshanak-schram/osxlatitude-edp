@@ -344,15 +344,15 @@
 	}
 	
 function AppleACPIfixCheck() {
-		global $os; global $header; global $footer; global $rootpath; global $workpath; global $slepath; global $modeldb; global $modelID;
+		global $os; global $ee; global $header; global $footer; global $rootpath; global $workpath; global $slepath; global $modeldb; global $modelID;
 		
 		//Check if ACPIfix is selected
 		if ($modeldb[$modelID]["useACPIfix"] == "yes") {
 			//Remove the existing AppleACPIPlatform.kext from sle to make sure that we dont get dual loading and breaks kernelcache
 			system("rm -Rf $slepath/AppleACPIPlatform.kext");
-			//Copy the patched AppleACPIPlatform.kext to sle
+			//Copy the patched AppleACPIPlatform.kext to sle and ee
 			system("cp -R $workpath/storage/kexts/AppleACPIPlatform.kext $slepath");
-			
+			system("cp -R $workpath/storage/kexts/AppleACPIPlatform.kext $ee");
 			
 		}
 	
