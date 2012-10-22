@@ -7,7 +7,7 @@
 		if ("$choice" == "1") { loadKextConfig(); }
 		if ("$choice" == "2") { loadFixSystem(); }
 		if ("$choice" == "3") { loadInstallerConfig(); }
-		if ("$choice" == "4") { echo "Under construction :-)"; exit; }
+		if ("$choice" == "4") { loadTools(); }
 		if ("$choice" == "5") { updateEDP(); exit; }
 		if ("$choice" == "q") { exit; }	
 	
