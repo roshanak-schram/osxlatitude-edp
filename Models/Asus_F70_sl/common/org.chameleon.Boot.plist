@@ -17,14 +17,14 @@
 	<key>Kernel</key>
 	<string>mach_kernel</string>
 	<key>Kernel Flags</key>
-	<string>-v -f npci=0x2000</string>
-	<key>Quiet Boot</key>
-	<string>No</string>
+	<string>-v npci=0x2000</string>
 	<key>SystemType</key>
 	<string>2</string>
 	<key>Timeout</key>
 	<string>10</string>
 	<key>USBBusFix</key>
+	<string>Yes</string>
+	<key>UseKernelCache</key>
 	<string>Yes</string>
 </dict>
 </plist>
