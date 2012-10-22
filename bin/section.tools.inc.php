@@ -23,4 +23,10 @@
 		return "$choice";		
 	}
 
+
+	function runDellBiosCrack() {
+		system("open $workpath/bin/DELLBiosPWgen");
+		showToolsMenu();
+		
+	}
 ?>
