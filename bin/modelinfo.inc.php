@@ -701,7 +701,7 @@ $modeldb = array(
                       		audiopack		=> "1",
                       		supports_sl		=> "yes",
                       		supports_lion	=> "no",
-                      		supports_ml		=> "no",                      		                      		                      		
+                      		supports_ml		=> "no",                      		                   	
                       		customCham 		=> "",                      		
                       		customKernel 	=> ""                      		 
                     ),                                                                                                                                                      
