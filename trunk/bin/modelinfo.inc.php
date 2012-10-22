@@ -685,7 +685,26 @@ $modeldb = array(
                       		supports_ml		=> "yes",                      		
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                      		 
-                    ),                                                                                                                                      
+                    ),     
+					array( 	name 			=> "Asus_F70_sl", 
+                      		desc 			=> "Asus F70SL",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "2",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "1",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",
+                      		ethernet		=> "",
+                      		audiopack		=> "1",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "no",
+                      		supports_ml		=> "no",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                      		 
+                    ),                                                                                                                                                      
              );
 
 
