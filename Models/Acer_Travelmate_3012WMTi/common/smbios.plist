@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Copyright</key>
+	<string>SMBios by 7ender @ InMac.org	Created with Champlist.app</string>
+	<key>SMbiosvendor</key>
+	<string>Apple Inc.</string>
+	<key>SMbiosversion</key>
+	<string>MBA31.88Z.0061.B01.1011181342</string>
+	<key>SMboardproduct</key>
+	<string>Mac-942452F5819B1C1B</string>
+	<key>SMfamily</key>
+	<string>MacBook Air</string>
+	<key>SMproductname</key>
+	<string>MacBookAir3,1</string>
+	<key>SMserial</key>
+	<string>53HX14J</string>
+</dict>
+</plist>
