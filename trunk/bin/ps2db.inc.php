@@ -51,6 +51,15 @@ $ps2db = array(
                 arch    	=> "x86_x64",
                 notes	 	=> "It works on the Dell E6520, no multi touch, gestures or on pad scrolling"
              ),        
+
+        array(  name 		=> "VoodooPS2controller #1",
+                foldername 	=> "voodoops2-1",
+                arch    	=> "x86",
+                notes	 	=> "Works good with Synaptics with both 2 fingers etc."
+             ),
+             
+
+
                                                                              
         );
 
