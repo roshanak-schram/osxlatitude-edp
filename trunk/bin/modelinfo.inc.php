@@ -588,6 +588,28 @@ $modeldb = array(
                     ),
 
 
+					array( 	name 			=> "Acer_Travelmate_3012WMTi", 
+                      		desc 			=> "Acer Travelmate 3012WMTi",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "1",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",
+                      		ethernet		=> "AppleBCM5701Ethernet.kext",
+                      		audiopack		=> "1",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "no",
+                      		supports_ml		=> "no",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                      		 
+                    ), 
+                    
+                    
+                    
                 	array( 	name 			=> "LG_R200_CPTTV", 
                       		desc 			=> "LG R200 CPTTV",
                       		nullcpu 		=> "yes",
