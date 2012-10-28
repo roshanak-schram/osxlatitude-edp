@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DSDT</key>
+	<string>/Extra/DSDT.aml</string>
+	<key>Default Partition</key>
+	<string>hd(0,4)</string>
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
+	<key>GenerateCStates</key>
+	<string>Yes</string>
+	<key>GeneratePStates</key>
+	<string>Yes</string>
+	<key>Graphics Mode</key>
+	<string>1600x900x32</string>
+	<key>GraphicsEnabler</key>
+	<string>Yes</string>
+	<key>HD4000PlatformId</key>
+	<string>2</string>
+	<key>Kernel</key>
+	<string>mach_kernel</string>
+	<key>Kernel Flags</key>
+	<string>-v npci=0x2000 darkwake=0</string>
+	<key>SystemType</key>
+	<string>2</string>
+	<key>Timeout</key>
+	<string>5</string>
+	<key>USBBusFix</key>
+	<string>Yes</string>
+	<key>UseKernelCache</key>
+	<string>Yes</string>
+</dict>
+</plist>

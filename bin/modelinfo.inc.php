@@ -726,8 +726,28 @@ $modeldb = array(
                       		supports_ml		=> "no",                      		                   	
                       		customCham 		=> "",                      		
                       		customKernel 	=> ""                      		 
-                    ),                                                                                                                                                      
+                    ),        
+                    array( 	name 			=> "Samsung_np_900x3c", 
+                      		desc 			=> "Samsung NP900X3C",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "0",
+                      		emulatedST 		=> "no",                      		
+                      		tscsync 		=> "no",                      		
+                      		batteryKext		=> "",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",                      		                    		
+                      		ethernet		=> "",
+                      		audiopack		=> "2",                      		                      		
+                      		supports_sl		=> "no",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                      		 
+                    ),                                                                                                                                                                   
              );
+
 
 
 ?>
