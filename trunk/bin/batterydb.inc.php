@@ -14,10 +14,15 @@ $batterydb = array(
                 arch		=> "x86_x64"
              ),
 
-		array( 	name 		=> "Apple SmartBattery Manager", 
+		array( 	name 		=> "SmartBattery Manager", 
                 kextname 	=> "AppleSmartBatteryManager.kext",
                 arch		=> "x86_x64"	
              ), 
 
+		array( 	name 		=> "SmartBattery Manager #2 (istat support)", 
+                kextname 	=> "AppleSmartBatteryManager2.kext",
+                arch		=> "x86_x64"	
+             ), 
+             
         );
 ?>
