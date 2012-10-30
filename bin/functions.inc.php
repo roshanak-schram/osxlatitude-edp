@@ -351,8 +351,8 @@ function AppleACPIfixCheck() {
 			//Remove the existing AppleACPIPlatform.kext from sle to make sure that we dont get dual loading and breaks kernelcache
 			system("rm -Rf $slepath/AppleACPIPlatform.kext");
 			//Copy the patched AppleACPIPlatform.kext to sle and ee
-			system("cp -R $workpath/storage/coolbook-fix/AppleACPIPlatform.kext $slepath");
-			system("cp -R $workpath/storage/coolbook-fix/AppleACPIPlatform.kext $ee");
+			system("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $slepath");
+			system("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $ee");
 			
 		}
 	
