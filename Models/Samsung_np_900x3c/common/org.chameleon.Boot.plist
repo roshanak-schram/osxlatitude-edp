@@ -4,8 +4,6 @@
 <dict>
 	<key>DSDT</key>
 	<string>/Extra/DSDT.aml</string>
-	<key>Default Partition</key>
-	<string>hd(0,4)</string>
 	<key>EthernetBuiltIn</key>
 	<string>Yes</string>
 	<key>GenerateCStates</key>
@@ -16,12 +14,8 @@
 	<string>1600x900x32</string>
 	<key>GraphicsEnabler</key>
 	<string>Yes</string>
-	<key>HD4000PlatformId</key>
-	<string>2</string>
-	<key>Kernel</key>
-	<string>mach_kernel</string>
 	<key>Kernel Flags</key>
-	<string>-v npci=0x2000 darkwake=0</string>
+	<string>-v darkwake=0</string>
 	<key>SystemType</key>
 	<string>2</string>
 	<key>Timeout</key>
