@@ -4,9 +4,9 @@
 <dict>
 	<key>DSDT</key>
 	<string>/Extra/DSDT.aml</string>
-	<key>EthernetBuiltIn</key>
+	<key>DropSSDT</key>
 	<string>Yes</string>
-	<key>GenerateCStates</key>
+	<key>EthernetBuiltIn</key>
 	<string>Yes</string>
 	<key>GeneratePStates</key>
 	<string>Yes</string>
@@ -15,13 +15,11 @@
 	<key>GraphicsEnabler</key>
 	<string>Yes</string>
 	<key>Kernel Flags</key>
-	<string>-v darkwake=0</string>
+	<string>-v</string>
 	<key>SystemType</key>
 	<string>2</string>
 	<key>Timeout</key>
-	<string>5</string>
-	<key>USBBusFix</key>
-	<string>Yes</string>
+	<string>3</string>
 	<key>UseKernelCache</key>
 	<string>Yes</string>
 </dict>
