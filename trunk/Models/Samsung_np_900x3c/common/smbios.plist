@@ -2,20 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>SMbiosdate</key>
-	<string>05/10/12</string>
+	<key>Credits</key>
+	<string>Created with Champlist</string>
 	<key>SMbiosvendor</key>
 	<string>Apple Inc.</string>
 	<key>SMbiosversion</key>
-	<string>MBA51.88Z.00EF.B00.1205221442</string>
+	<string>MBP83.88Z.0047.B27.1201241646</string>
 	<key>SMboardproduct</key>
-	<string>Mac-2E6FAB96566FE58C</string>
+	<string>Mac-942459F5819B171B</string>
 	<key>SMfamily</key>
-	<string>MacBook Air</string>
-	<key>SMmanufacturer</key>
-	<string>Apple Inc.</string>
+	<string>MacBook Pro</string>
 	<key>SMproductname</key>
-	<string>MacBookAir5,2</string>
+	<string>MacBookPro8,3</string>
 	<key>SMserial</key>
 	<string>C02JW458DRVC</string>
 	<key>SMsystemversion</key>
