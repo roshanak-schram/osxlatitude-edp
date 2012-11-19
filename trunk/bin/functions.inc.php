@@ -368,7 +368,7 @@ function kernelcachefix() {
 			system("mkdir $chkdir");
 			if (file_exists($kerncachefile)) {
 				echo "\n\nWARNING: Falling back to EDP kernelcache generation - myfix was not successfull.. \n\n";
-				system("kernelcache -system-prelinked-kernel");
+				system("kextcache -system-prelinked-kernel");
 			}
 			
 		}
