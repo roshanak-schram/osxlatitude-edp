@@ -51,6 +51,7 @@
   		
   		echo "  Calling myFix to generate new cache…\n";
   		system("myfix -q -t $rootpath && tput bel");
+  		kernelcachefix();
   		
   				
 	}
@@ -358,6 +359,21 @@ function AppleACPIfixCheck() {
 	
 }
 
+function kernelcachefix() {
+		global $workpath; global $rootpath;
+		$chkdir = "".$rootpath."/System/Library/Caches/com.apple.kext.caches/Startup";
+		$kerncachefile = "".$rootpath."/System/Library/Caches/com.apple.kext.caches/Startup/kernelcache";
+		
+		if (!is_dir("$chkdir") && $workpath == "/Extra") {
+			system("mkdir $chkdir");
+			if (file_exists($kerncachefile)) {
+				echo "WARNING: Falling back to EDP kernelcache generation - myfix was not successfull.. \n\n";
+				system("kernelcache -system-prelinked-kernel");
+			}
+			
+		}
+	
+}
 function copyEssentials() {
 		global $workpath; global $rootpath; global $modeldb; global $modelID; global $os;
 		$modelName = $modeldb[$modelID]["name"];
@@ -388,18 +404,18 @@ function copyEssentials() {
   			$file = "$workpath/Models/$modelName/common/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/common/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }
 		
-  		echo "  Copying OS Specific system plists and dsdt.aml from $workpath/Models/$modelName/$os to $workpath \n\n";
+  		echo "  Copying OS Specific system plists and dsdt.aml from $workpath/Models/$modelName/$os to $workpath \n";
   			$file = "$workpath/Models/$modelName/$os/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/$os/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }					
 
-		echo "  Checking if your model includes SSDT dump files - will copy if any exists..";
-			$file = "$workpath/Models/$modelName/SSDT.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/SSDT-1.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/SSDT-2.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/SSDT-3.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/SSDT-4.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/SSDT-5.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }			
+		echo "  Checking if your model includes SSDT dump files - will copy if any exists..\n\n";
+			$file = "$workpath/Models/$modelName/common/SSDT.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/common/SSDT-1.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/common/SSDT-2.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/common/SSDT-3.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/common/SSDT-4.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/common/SSDT-5.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }			
 }
 
 
