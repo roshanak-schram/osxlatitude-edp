@@ -373,6 +373,14 @@ function copyEssentials() {
 				
 		$file = "$workpath/dsdt.aml";
 		if (file_exists($file)) { system("rm $file"); }
+		
+		//Remove old SSDT table files
+		$file = "$workpath/SSDT.aml"; if (file_exists($file)) { system("rm $file"); }
+		$file = "$workpath/SSDT-1.aml"; if (file_exists($file)) { system("rm $file"); }
+		$file = "$workpath/SSDT-2.aml"; if (file_exists($file)) { system("rm $file"); }
+		$file = "$workpath/SSDT-3.aml"; if (file_exists($file)) { system("rm $file"); }
+		$file = "$workpath/SSDT-4.aml"; if (file_exists($file)) { system("rm $file"); }
+		$file = "$workpath/SSDT-5.aml"; if (file_exists($file)) { system("rm $file"); }
 
 
   		echo "  Copying COMMON system plists and dsdt.aml from $workpath/Models/$modelName/common to $workpath \n\n";
@@ -384,6 +392,14 @@ function copyEssentials() {
   			$file = "$workpath/Models/$modelName/$os/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/$os/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
   			$file = "$workpath/Models/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }					
+
+		echo "  Checking if your model includes SSDT dump files - will copy if any exists..";
+			$file = "$workpath/Models/$modelName/SSDT.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/SSDT-1.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/SSDT-2.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/SSDT-3.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/SSDT-4.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/SSDT-5.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }			
 }
 
 
