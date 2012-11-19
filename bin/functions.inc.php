@@ -367,7 +367,7 @@ function kernelcachefix() {
 		if (!is_dir("$chkdir") && $workpath == "/Extra") {
 			system("mkdir $chkdir");
 			if (file_exists($kerncachefile)) {
-				echo "WARNING: Falling back to EDP kernelcache generation - myfix was not successfull.. \n\n";
+				echo "\n\nWARNING: Falling back to EDP kernelcache generation - myfix was not successfull.. \n\n";
 				system("kernelcache -system-prelinked-kernel");
 			}
 			
@@ -410,7 +410,7 @@ function copyEssentials() {
   			$file = "$workpath/Models/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }					
 
 		echo "  Checking if your model includes SSDT dump files - will copy if any exists..\n\n";
-			$file = "$workpath/Models/$modelName/common/SSDT.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/Models/$modelName/common/SSDT.aml"; 		if (file_exists($file)) { system("cp -f $file $workpath"); }
 			$file = "$workpath/Models/$modelName/common/SSDT-1.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
 			$file = "$workpath/Models/$modelName/common/SSDT-2.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
 			$file = "$workpath/Models/$modelName/common/SSDT-3.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
@@ -440,17 +440,19 @@ function copyKexts() {
 
 	echo "  Copying the Audio kexts to $ee \n";
 		$audioid = $modeldb[$modelID]['audiopack']; $audiodir = $audiodb[$audioid]["foldername"];
+		if ($modeldb[$modelID]['audiopack'] != "") {
+			//Clean up
+			if (is_dir("$slepath/HDAEnabler.kext")) { system("rm -Rf $slepath/HDAEnabler.kext"); }
 		
-		//Clean up
-		if (is_dir("$slepath/HDAEnabler.kext")) { system("rm -Rf $slepath/HDAEnabler.kext"); }
-		
-		//Hack for loading STAC9200 correctly durring boot
-		if ($audioid == "3") { 
-			if (is_dir("$slepath/AppleHDA.kext")) { system("rm -Rf $slepath/AppleHDA.kext"); }
-			system("cp -R $workpath/storage/kextpacks/$audiodir/HDAEnabler.kext $slepath/");
+			//Hack for loading STAC9200 correctly durring boot
+			if ($audioid == "3") { 
+				if (is_dir("$slepath/AppleHDA.kext")) { system("rm -Rf $slepath/AppleHDA.kext"); }
+				system("cp -R $workpath/storage/kextpacks/$audiodir/HDAEnabler.kext $slepath/");
+				}
+				system("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
 		}
-		system("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
-
+		
+		
 
 		
 					
@@ -542,10 +544,9 @@ function copyKexts() {
 }
 
 
-	function isEmptyDir($dir) {
-		if ( ($files = @scandir("$dir")) && (count($files) > 2) ) { return "yes"; } else { return "no"; }			
-		
-	}
+function isEmptyDir($dir) {
+	if ( ($files = @scandir("$dir")) && (count($files) > 2) ) { return "yes"; } else { return "no"; }			
+}
 	
 	
 		
