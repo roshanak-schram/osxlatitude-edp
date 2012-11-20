@@ -17,7 +17,7 @@
 		global $verbose; global $workpath; global $edpplugin; global $ee; global $slepath; global $rootpath;
 		if (!is_dir("$slepath/myHack.kext")) 	{ 
 			system("cp -R \"$workpath/myHack.kext\" $slepath");
-			system("cd \"$slepath/myHack.kext\"; rm -Rf 'find . -type d -name .svn'");
+			system("rm -Rf 'find -f path \"$slepath/myHack.kext\" -type d -name .svn'");
 		}
 		if (!is_file("/usr/sbin/
 		")) 		{ system("cp \"$workpath/bin/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix"); }
@@ -50,7 +50,7 @@
   			system("cp $custompath/dsdt.aml $workpath");
 			  		
   		echo "  Removing version control of kexts in $ee \n";
-  			system("cd \"$ee\"; rm -Rf 'find . -type d -name .svn'");  	
+  			system("rm -Rf 'find -f path \"$ee\" -type d -name .svn'"); 	
   				
   		echo "  Calling myFix to generate new cache…\n";
   		system("myfix -q -t $rootpath && tput bel");
@@ -541,11 +541,11 @@ function copyKexts() {
 	//if (isEmptyDir("$tf") == "no") { system("cp -Rf $tf/* $ee"); };
 	system("cp -Rf $tf/* $ee");
 	
-	echo "  Checking if we need ACPIfix \n\n";
+	echo "  Checking if we need ACPIfix \n";
 	AppleACPIfixCheck();
 	
-	echo "  Removing version control of kexts in $ee \n";
-	system("cd \"$ee\"; rm -Rf 'find . -type d -name .svn'");
+	echo "  Removing version control of kexts in $ee \n\n";
+	system("rm -Rf 'find -f path \"$ee\" -type d -name .svn'");
 				
 	
 }
