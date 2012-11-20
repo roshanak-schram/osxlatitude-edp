@@ -77,7 +77,7 @@
 		}
 
 		echo "\n\n";
-		echo " Other options: (a) Make build from custom folder  -  (x) to go back to last menu  -  (q) to Quit\n";
+		echo " Other options: (a) Build from custom folder  -  (b) Build existing config  -  (x) to go back to last menu  -  (q) to Quit\n";
 		echo "$footer\n";
 		echo "Please choose: ";
 		$choice = getChoice();
@@ -88,6 +88,7 @@
 		}
 		if ($choice == "q") { exit; }
 		if ($choice == "x") { loadMainSystem(); exit; }
+		if ($choice == "b") { buildPresent(); exit; }
 		
 		global $modelname; $modelname = $modeldb[$choice]["name"];
 		return "$choice";

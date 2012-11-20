@@ -30,6 +30,21 @@
 		if ($slepath != "") { if (!is_dir("$slepath/0EDP.kext")) { system("rm -Rf $slepath/0EDP.kext"); } }
 	}
 	
+	//Function to build from existing config
+	function buildPresent() {
+		global $verbose; global $os; global $workpath; global $ee; global $cachepath; global $rootpath;
+
+		system("clear");
+		echo "Doing build based on existing configuration \n\n";
+		
+  		echo "  Removing version control of kexts in $ee \n";
+  		system("rm -Rf `find -f path \"$ee\" -type d -name .svn`"); 	
+  				
+  		echo "  Calling myFix to generate new cache…\n";
+  		system("myfix -q -t $rootpath && tput bel");
+  		kernelcachefix();  				
+		
+	}
 	//This function is used to make a build from /Extra/custom
 	function doCustomBuild() {
 		global $verbose; global $os; global $workpath; global $ee; global $cachepath; global $rootpath;
