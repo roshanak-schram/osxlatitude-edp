@@ -15,7 +15,10 @@
 	//Function to check if myhack.kext exists in ale, and if it docent.. add it there….
 	function myHackCheck() {
 		global $verbose; global $workpath; global $edpplugin; global $ee; global $slepath; global $rootpath;
-		if (!is_dir("$slepath/myHack.kext")) 	{ system("cp -R \"$workpath/myHack.kext\" $slepath"); }
+		if (!is_dir("$slepath/myHack.kext")) 	{ 
+			system("cp -R \"$workpath/myHack.kext\" $slepath");
+			system("cd \"$slepath/myHack.kext\"; rm -Rf 'find . -type d -name .svn'");
+		}
 		if (!is_file("/usr/sbin/
 		")) 		{ system("cp \"$workpath/bin/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix"); }
 		
@@ -46,9 +49,9 @@
   			system("cp $custompath/org.chameleon.boot.plist $workpath");
   			system("cp $custompath/dsdt.aml $workpath");
 			  		
-  		
-  		system("rm -Rf $cachepath; mkdir $cachepath");
-  		
+  		echo "  Removing version control of kexts in $ee \n";
+  			system("cd \"$ee\"; rm -Rf 'find . -type d -name .svn'");  	
+  				
   		echo "  Calling myFix to generate new cache…\n";
   		system("myfix -q -t $rootpath && tput bel");
   		kernelcachefix();
