@@ -15,9 +15,10 @@
 	//Function to check if myhack.kext exists in ale, and if it docent.. add it there….
 	function myHackCheck() {
 		global $verbose; global $workpath; global $edpplugin; global $ee; global $slepath; global $rootpath;
-		if (!is_dir("$slepath/myHack.kext")) 	{ 
+		if (!is_dir("$slepath/myHack.kext")) 	{
+			$myhackkext = "$workpath/myHack.kext";
+			system("rm -Rf `find -f path \"$myhackkext\" -type d -name .svn`"); 
 			system("cp -R \"$workpath/myHack.kext\" $slepath");
-			//system("rm -Rf \`find -f path \"$slepath/myHack.kext\" -type d -name .svn\`");
 		}
 		if (!is_file("/usr/sbin/
 		")) 		{ system("cp \"$workpath/bin/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix"); }
