@@ -544,6 +544,10 @@ function copyKexts() {
 	echo "  Checking if we need ACPIfix \n\n";
 	AppleACPIfixCheck();
 	
+	echo "  Removing version control of kexts in $ee \n";
+	system("cd \"$ee\"; rm -Rf 'find . -type d -name .svn'");
+				
+	
 }
 
 

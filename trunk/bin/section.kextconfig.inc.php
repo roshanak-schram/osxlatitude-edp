@@ -35,16 +35,14 @@
 			
 			echo "Step 2) Preparing kexts for myHack.kext \n";
 			copyKexts();
-			
-			
-			//if ("$cachepath" != "/" && "$cachepath" != "") {
-			//	echo "Step 3) Cleaning $cachepath before calling myfix \n";
-			//	system("rm -Rf $cachepath; mkdir $cachepath");
-			//}
+  			
   		
 			echo "Step 3) Call myFix to do the new build... \n";
 			system("myfix -q -t $rootpath  && tput bel");
 
+			echo "Step 4) Doing sanity check... \n";
+			kernelcachefix();
+			
 			exit;
 					
 		} else { loadMainSystem(); exit; }	
