@@ -354,7 +354,20 @@ function AppleACPIfixCheck() {
 		//Check if ACPIfix is selected
 		if ($modeldb[$modelID]["useACPIfix"] == "yes") {
 			//Remove the existing AppleACPIPlatform.kext from sle to make sure that we dont get dual loading and breaks kernelcache
+			
+			
+			//Create backup folder
+			date_default_timezone_set('UTC');
+			$date = date("d-m-Y");
+			$backupfolder = "/backup/$date";
+			system("mkdir /backup"); system("mkdir $backupfolder");
+			system("rm -Rf $backupfolder/*");
+			
+			//Backup the ACPIPlatform.kext before removing it
+			system("cp -R $slepath/AppleACPIPlatform.kext $backupfolder");
+			
 			system("rm -Rf $slepath/AppleACPIPlatform.kext");
+			
 			//Copy the patched AppleACPIPlatform.kext to sle and ee
 			system("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $slepath");
 			system("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $ee");
