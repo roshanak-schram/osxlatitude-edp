@@ -108,7 +108,27 @@ $modeldb = array(
                     ),
                                        
                		array( 	name 			=> "Dell_Latitude_D620-intel", 
-                      		desc 			=> "Dell Latitude D620, Intel GMA950 graphics card",
+                      		desc 			=> "Dell Latitude D620, Intel GMA950 graphics (1280x800)",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "4",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "1",
+                      		loadIOATAFamily	=> "",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "yes",                      		
+                      		ethernet		=> "AppleBCM5751Ethernet.kext",
+                      		audiopack		=> "2",                      		                       		
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "no",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                     		 
+                    ),
+                    
+                    array( 	name 			=> "Dell_Latitude_D620-intel-high", 
+                      		desc 			=> "Dell Latitude D620, Intel GMA950 graphics (1440x900)",
                       		nullcpu 		=> "no",
                       		sleepEnabler 	=> "no",                      		
                       		ps2pack 		=> "4",
@@ -146,9 +166,6 @@ $modeldb = array(
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                      		 
                     ),
-
-
-
 
                		array( 	name 			=> "Dell_Latitude_D630-intel", 
                       		desc 			=> "Dell Latitude D630, Intel x3100 graphics (1280x800)",
