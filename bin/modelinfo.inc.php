@@ -689,8 +689,8 @@ $modeldb = array(
                     
                      array( name 			=> "Samsung_R530_JT02", 
                       		desc 			=> "Samsung R530 JT02",
-                      		nullcpu 		=> "yes",
-                      		sleepEnabler 	=> "yes",                      		
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
                       		ps2pack 		=> "7",
                       		emulatedST 		=> "no",                      		
                       		tscsync 		=> "no",                      		
