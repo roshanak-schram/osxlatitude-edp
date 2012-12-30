@@ -31,6 +31,7 @@
 	}
 
 	function getKextVersion($kext) {
+		global $workpath;
 		include_once("$workpath/bin/PlistParser.inc");
 		$parser = new plistParser();
 		$plist = $parser->parseFile("$kext/Contents/Info.plist");
