@@ -29,6 +29,18 @@
 		global $verbose; global $workpath; global $edpplugin; global $ee; global $slepath;
 		if ($slepath != "") { if (!is_dir("$slepath/0EDP.kext")) { system("rm -Rf $slepath/0EDP.kext"); } }
 	}
+
+	function getKextVersion($kext) {
+		include_once("$workpath/bin/PlistParser.inc");
+		$parser = new plistParser();
+		$plist = $parser->parseFile("$kext/Contents/Info.plist");
+		reset($plist);
+		while (list($key, $value) = each($plist)) {
+			if ($key == "CFBundleShortVersionString") {
+			return "$value";
+			}
+		}
+	}
 	
 	//Function to build from existing config
 	function buildPresent() {
