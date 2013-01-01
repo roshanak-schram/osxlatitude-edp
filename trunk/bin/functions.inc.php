@@ -107,7 +107,12 @@
 		return "$choice";
 	}
 
-
+	function patchAppleIntelCPUPowerManagement() {
+		global $workpath; global $ee; global $slepath;
+		echo "  Patching AppleIntelCPUPowerManagement.kext \n";
+		system("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee");
+		system("perl -pi -e 's|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g' $ee/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement";)
+	}
 	function copyKextToSLE($kext, $frompath) {
 		global $slepath; global $workpath;
 		
@@ -461,6 +466,11 @@ function copyKexts() {
 	echo "  Start by cleaning up in $ee\n";
 	system("rm -Rf $ee/*");
 	
+	//Checking if we need to patch AppleIntelCPUPowerManagement.kext
+		$pathCPU = $modeldb[$modelID]["patchCPU"];
+		if ($pathCPU == "yes") { patchAppleIntelCPUPowerManagement(); }
+		
+		
 	echo "  Copying the PS2 controller kexts (mouse+keyboard driver) to $ee \n";
 		$ps2id 	= $modeldb[$modelID]['ps2pack'];
 		if ($ps2id != "") {
