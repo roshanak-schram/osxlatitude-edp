@@ -179,7 +179,7 @@
 	function prepareCustomCopy() {
 		global $modeldb; global $modelID; global $modelname;
 		
-		$modeldb["name"]				= "$modelname";
+		$modeldb["name"]						= "$modelname";
 		$modeldb[$modelID]["ps2pack"]			= selectPS2();
 		$modeldb[$modelID]["nullcpu"]			= selectNULLCPU();
 		$modeldb[$modelID]["sleepEnabler"]		= selectSE();
@@ -192,7 +192,7 @@
 	
 	
 	function selectPS2() {
-		global $header; global $footer;	global $ps2db;
+		global $header; global $footer;	global $ps2db; global $workpath;
 		system("clear");
 		
 		echo "$header\n\n";
@@ -203,8 +203,11 @@
 			$name 	= $ps2db[$id]["name"];
 			$arch	= $ps2db[$id]["arch"];
 			$notes	= $ps2db[$id]["notes"];
+			$folder	= $ps2db[$id]["foldername"];
+			$kname	= $ps2db[$id]["kextname"];
+			if ($kname != "") { $kver 	= getKextVersion("$workpath/storage/kextpacks/$folder/$kname"); }
 			
-			echo "  $id. $name ($arch support)\n";
+			echo "  $id. $name - kext: $kname - version: $kver - arch: $arch\n";
 			echo "     $notes \n";
 			echo "\n";
 			
