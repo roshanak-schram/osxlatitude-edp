@@ -107,12 +107,12 @@
 		return "$choice";
 	}
 
-	function patchAppleIntelCPUPowerManagement() {
-		global $workpath; global $ee; global $slepath;
-		echo "  Patching AppleIntelCPUPowerManagement.kext \n";
-		system("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee");
-		system("perl -pi -e 's|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g' $ee/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement");
-	}
+        function patchAppleIntelCPUPowerManagement() {
+                global $workpath; global $ee; global $slepath;
+                echo "  Patching AppleIntelCPUPowerManagement.kext \n";
+                system("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
+                system('perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+        }
 	function copyKextToSLE($kext, $frompath) {
 		global $slepath; global $workpath;
 		
