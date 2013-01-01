@@ -401,6 +401,7 @@ function AppleACPIfixCheck() {
 				
 				echo "  NOTICE: A newer version of AppleACPIPlatform.kext was found in $slepath, the kext will be moved to $backupfolder \n";
 				system("mv $slepath/AppleACPIPlatform.kext /backup/$date/AppleACPIPlatform.kext-$kver2/");
+			}
 		}
 	
 }
