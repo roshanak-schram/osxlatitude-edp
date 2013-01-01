@@ -399,8 +399,8 @@ function AppleACPIfixCheck() {
 				$backupfolder = "/backup/$date/AppleACPIPlatform.kext-$kver2";
 				system("mkdir /backup"); system("mkdir /backup/$date"); system("mkdir $backupfolder");
 				
-				echo "  NOTICE: A newer version of AppleACPIPlatform.kext was found in $slepath, the kext will be moved to $backupfolder \n";
-				system("mv $slepath/AppleACPIPlatform.kext /backup/$date/AppleACPIPlatform.kext-$kver2/");
+				echo "  NOTICE: A newer version of AppleACPIPlatform.kext was found in $slepath - the kext will be moved to $backupfolder \n";
+				system("mv $slepath/AppleACPIPlatform.kext $backupfolder");
 			}
 		}
 	
