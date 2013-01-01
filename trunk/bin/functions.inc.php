@@ -390,7 +390,17 @@ function AppleACPIfixCheck() {
 		//Check if ACPIfix is selected
 		if ($modeldb[$modelID]["useACPIfix"] == "yes") {
 			system("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $ee");
-			
+			$kver1 = getKextVersion("$ee/AppleACPIPlatform.kext");
+			$kver2 = getKextVersion("$slepath/AppleACPIPlatform.kext");
+			if ($kver2 > $kver1) {
+				//Create backup folder
+				date_default_timezone_set('UTC');
+				$date = date("d-m-Y");
+				$backupfolder = "/backup/$date/AppleACPIPlatform.kext-$kver2";
+				system("mkdir /backup"); system("mkdir $backupfolder");
+				
+				echo "  NOTICE: A newer version of AppleACPIPlatform.kext was found in $slepath, the kext will be moved to $backupfolder \n";
+				system("mv $slepath/AppleACPIPlatform.kext /backup/$date/AppleACPIPlatform.kext-$kver2/");
 		}
 	
 }
