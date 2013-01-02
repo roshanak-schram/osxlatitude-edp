@@ -7,7 +7,11 @@
 		//Start by checking for myhack
 		myHackCheck();
 		
-		//Lets start by loading the next configuration menu, the selection made at the menu will be return into $modelID
+		//Step 1: Select the vendor
+		$vendorfile = selectVendor();
+		include "$vendorfile";
+		
+		//Step 2: Load the modelinfo for the vendor selected above
 		global $modelID; global $os;
 		
 		$modelID = showKEXTmenu();
@@ -52,9 +56,39 @@
 
 		
 		
+	//This function parses the vendordb.inc.php and generates a selection menu from it
+	function selectVendor() {
+		include "config.inc.php";
+		global $vendordb;
 
-
+		system("clear");
+		echo "$header\n\n";
+		echo "Select your the vendor you wish to build for.... \n\n";
+				
+		$id = 0;
+		while ($vendordb[$id] != ""){
+			$name = $vendordb[$id]["name"];		
+			echo "  $id. $name	\n";
+			$id++;
+		}	
+			
+		echo "\n\n";
+		echo " Other options: (x) to go back to last menu  -  (q) to Quit\n";
+		echo "$footer\n";
+		echo "Please choose: ";
+		$choice = getChoice();
+				
+		if ($choice == "q") { exit; }
+		if ($choice == "x") { loadMainSystem(); exit; }
 		
+		$vendorfile = $vendordb[$choice]["dbfile"];
+		return "$vendorfile";
+	}
+		
+
+
+
+
 
 	function showKEXTmenu() {
 		include "config.inc.php";

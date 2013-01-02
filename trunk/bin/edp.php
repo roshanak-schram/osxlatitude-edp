@@ -7,7 +7,7 @@
 	include_once "functions.inc.php";
 	
 	//Include the model info 
-	include "modelinfo.inc.php";
+	include "vendordb.inc.php";
 	include "ps2db.inc.php";
 	include "audiodb.inc.php";
 	include "batterydb.inc.php";
