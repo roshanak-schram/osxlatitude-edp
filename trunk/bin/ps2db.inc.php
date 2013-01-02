@@ -67,7 +67,12 @@ $ps2db = array(
                 notes	 	=> "Works good with Synaptics with both 2 fingers etc."
              ),
              
-
+        array(  name 		=> "Elan v4 by Dinesh",
+                foldername 	=> "elanv4",
+                kextname	=> "ApplePS2ElanTouchpad.kext",                
+                arch    	=> "x86_x64",
+                notes	 	=> "Elan v4 kext by Dinesh - see forum for more info."
+             ),
 
                                                                              
         );
