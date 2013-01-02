@@ -32,6 +32,7 @@
 
 	function getKextVersion($kext) {
 		global $workpath;
+		if (!is_dir($kext)) { return "0.00"; } 
 		include_once("$workpath/bin/PlistParser.inc");
 		$parser = new plistParser();
 		$plist = $parser->parseFile("$kext/Contents/Info.plist");
@@ -396,7 +397,7 @@ function AppleACPIfixCheck() {
 				//Create backup folder
 				date_default_timezone_set('UTC');
 				$date = date("d-m-Y");
-				$backupfolder = "/backup/$date/AppleACPIPlatform.kext-$kver2";
+				$backupfolder = "/backup/$date-AppleACPIPlatform.kext-$kver2";
 				system("mkdir /backup"); system("mkdir $backupfolder");
 				
 				echo "  NOTICE: A newer version of AppleACPIPlatform.kext was found in $slepath - the kext will be moved to $backupfolder \n";
