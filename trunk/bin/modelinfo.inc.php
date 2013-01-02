@@ -727,6 +727,29 @@ $modeldb = array(
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                      		 
                     ),     
+                    
+					array( 	name 			=> "Dell_Vostro_410", 
+                      		desc 			=> "Dell Vostro 410",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "",
+                      		emulatedST 		=> "",                      		
+                      		tscsync 		=> "",                      		
+                      		batteryKext		=> "",
+                      		loadIOATAFamily	=> "",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",
+                      		patchCPU		=> "",
+                      		ethernet		=> "",
+                      		audiopack		=> "",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                      		 
+                    ),
+                                        
+                    
 					array( 	name 			=> "Asus_F70_sl", 
                       		desc 			=> "Asus F70SL",
                       		nullcpu 		=> "yes",
