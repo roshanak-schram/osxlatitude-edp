@@ -8,8 +8,6 @@
 	<string>Yes</string>
 	<key>GeneratePStates</key>
 	<string>Yes</string>
-	<key>Graphics Mode</key>
-	<string>1920x1080x32@60</string>
 	<key>GraphicsEnabler</key>
 	<string>Yes</string>
 	<key>Kernel</key>
