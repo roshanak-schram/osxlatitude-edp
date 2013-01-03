@@ -27,7 +27,7 @@ $modeldb = array(
 
                        
                     array( 	name 			=> "Shuttle_SH67_SH67H3", 
-                      		desc 			=> "Shuttle SH67H3",
+                      		desc 			=> "Shuttle SH67 H3",
                       		nullcpu 		=> "no",
                       		sleepEnabler 	=> "no",                      		
                       		ps2pack 		=> "no",

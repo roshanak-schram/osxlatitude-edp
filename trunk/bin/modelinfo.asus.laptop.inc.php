@@ -48,7 +48,7 @@ $modeldb = array(
                                         
                     
 					array( 	name 			=> "Asus_F70_sl", 
-                      		desc 			=> "Asus F70SL",
+                      		desc 			=> "Asus F70 SL",
                       		nullcpu 		=> "yes",
                       		sleepEnabler 	=> "yes",                      		
                       		ps2pack 		=> "5",

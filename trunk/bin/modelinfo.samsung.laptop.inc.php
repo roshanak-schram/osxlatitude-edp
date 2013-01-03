@@ -49,7 +49,7 @@ $modeldb = array(
                                         
                           
                     array( 	name 			=> "Samsung_np_900x3c", 
-                      		desc 			=> "Samsung NP900X3C",
+                      		desc 			=> "Samsung NP 900X3C",
                       		nullcpu 		=> "no",
                       		sleepEnabler 	=> "no",                      		
                       		ps2pack 		=> "5",
