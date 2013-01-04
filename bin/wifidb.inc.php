@@ -3,7 +3,8 @@
 global $wifidb;
 $wifidb = array( 
 
-		array( 	name 		=> "Atheros #01", 
+		array( 	
+				name 		=> "Atheros #01", 
                 foldername 	=> "atheros01",
                 kextname	=> "AirPortAtheros40.kext",
                 arch		=> "x86_x64",

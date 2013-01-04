@@ -2,6 +2,8 @@
 	//Include basic configuration
 	include "config.inc.php";
 
+	//Include the custom config
+	if (is_file("$workpath/edpconfig.php")) { include "$workpath/edpconfig.php"; } else { include "$workpath/bin/edpconfig.php";}
 	
 	//Include functions
 	include_once "functions.inc.php";
