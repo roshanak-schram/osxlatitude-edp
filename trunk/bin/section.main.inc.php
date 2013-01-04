@@ -15,11 +15,13 @@
 	}
 	
 	function showMainMenu() {
+		global $edpconfig;
+		
 		include "config.inc.php";
 		system("clear");
 		echo "$header\n\n";
 		
-		checkSVNrevs(); 
+		if ($edpconfig[0]["checkSVNonStart"] == "yes") { checkSVNrevs(); } 
 		
 		echo " Please choose a submenu..\n\n";
 		echo "  1. CONFIGURATION : Configure kexts, dsdt and plists for your computer \n";
