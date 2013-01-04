@@ -25,6 +25,27 @@ $modeldb = array(
                     ), 	
 
 
+					array( 	name 			=> "Dell_Latitude_13",
+                      		desc 			=> "Dell Latitude 13",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "0",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "0",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "yes",
+                      		patchCPU		=> "no",
+                      		ethernet		=> "",
+                      		audiopack		=> "2",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "no",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                     		 
+                    ),
+                    
 					array( 	name 			=> "Dell_Latitude_D4x0",
                       		desc 			=> "Dell Latitude D420 Single core",
                       		type			=> "alias",                          		
