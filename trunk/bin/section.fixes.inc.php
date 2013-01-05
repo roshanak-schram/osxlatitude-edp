@@ -3,14 +3,13 @@
 	function loadFixSystem() {
 		$choice = showFixMenu();
 		if ($choice == "1")  { fixes_touch_sle(); }
-		if ($choice == "2")  { fixes_sleepfix(); }
+		if ($choice == "2")  { fixes_toogleHibernationMode(); }
 		if ($choice == "3")  { fixes_slowconsole(); }
 		if ($choice == "4")  { fixes_soundelay(); }	
 		if ($choice == "5")  { fixes_biometric(); }
 		if ($choice == "6")  { fixes_console_colors(); }	
 		if ($choice == "7")  { fixes_reset_display(); }
 		if ($choice == "8")  { fixes_airdrop(); }
-		if ($choice == "9")  { fixes_toogleHibernationMode(); }
 		if ($choice == "x")  { loadMainSystem(); }
 		if ($choice == "q")  { exit; }			
 		
@@ -24,14 +23,13 @@
 		echo " This section contains a lot of solutions/fixes to everyday small problems..\n\n";
 		echo "What do you wanna do ? \n\n";
 		echo "  1.  Touch /System/Library/Extensions/ (Fix alot of weird issues)\n";
-		echo "  2.  Disable Hibernation (part of getting sleep to work)\n";
+		echo "  2.  Toogle Hibernation - Currently set to mode: $hibernatemode (0=off, 3 = on)\n"; 
 		echo "  3.  Fix console slow start issue\n";
 		echo "  4.  Fix sound delay (Install soundflower)\n";
 		echo "  5.  Fix biometric reader (Install Protector suite)\n";
 		echo "  6.  Add file/dir colors to console\n";
 		echo "  7.  Reset displays (fixes video corruption after mirror mode selection)\n";
 		echo "  8.  Enable Aidrop\n";
-		echo "  9.  Toogle Hibernation - Currently set to mode: $hibernatemode (0=off, 3 = on)\n"; 
 		echo "  x.  <-- Go back to last menu \n";
 		echo "  q. Quit - don't do anything. \n\n";
 		echo "$footer\n\n";	
@@ -49,13 +47,6 @@
 		loadFixSystem();
 	}
 	
-	function fixes_sleepfix() {
-		system("pmset hibernatemode 0");
-		system("touch /var/vm/sleepimage");
-		system("rm /var/vm/sleepimage");
-		system("clear"); echo "Fix applied.. return to menu in 3 secs.."; system("sleep 3");
-		loadFixSystem();	
-	}
 	
 	function fixes_slowconsole() {
 		system("sudo rm -rf /private/var/log/asl/*.asl");
