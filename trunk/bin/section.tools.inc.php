@@ -27,6 +27,6 @@
 	function runDellBiosCrack() {
 		global $workpath;
 		system("open $workpath/bin/DELLBiosPWgen");
-		showToolsMenu();
+		loadTools();
 	}
 ?>
