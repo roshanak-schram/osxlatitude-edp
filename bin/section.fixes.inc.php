@@ -10,6 +10,7 @@
 		if ($choice == "6")  { fixes_console_colors(); }	
 		if ($choice == "7")  { fixes_reset_display(); }
 		if ($choice == "8")  { fixes_airdrop(); }
+		if ($choice == "9")  { fixes_toogleHibernationMode(); }
 		if ($choice == "x")  { loadMainSystem(); }
 		if ($choice == "q")  { exit; }			
 		
@@ -30,6 +31,7 @@
 		echo "  6.  Add file/dir colors to console\n";
 		echo "  7.  Reset displays (fixes video corruption after mirror mode selection)\n";
 		echo "  8.  Enable Aidrop\n";
+		echo "  9.  Toogle Hibernation - Currently set to mode: $hibernationmode (0=off, 3 = on)\n"; 
 		echo "  x.  <-- Go back to last menu \n";
 		echo "  q. Quit - don't do anything. \n\n";
 		echo "$footer\n\n";	
@@ -97,7 +99,29 @@
 	}
 
 
+	function fixes_toogleHibernationMode() {
+		global $hibernatemode;
+		system("clear");
+				
+		if ($hibernatemode == "3") {
+			echo "Disabling hibernation... \n";
+			system("pmset -a hibernatemode 0");
+			if (is_file("/var/vm/sleepimage")) { echo "Hibernation file was found... removing.. \n\n"; system("rm -Rf /var/vm/sleepimage"); }
+			echo "Fix applied.. return to menu in 3 secs..\n";
+			echo "Connect your screen again to use it in extended mode after a reboot..\n";
+			system("sleep 3");
+			loadFixSystem();  			
+		}
+		if ($hibernatemode == "0") {
+			echo "Enabling hibernation... \n\n";
+			system("pmset -a hibernatemode 3");
+			echo "Fix applied.. return to menu in 3 secs..\n";
+			echo "Connect your screen again to use it in extended mode after a reboot..\n";
+			system("sleep 3");
+			loadFixSystem();  								
 		
+	}
+			
 
 	function fixes_airdrop() {
 		system("open $workpath/storage/apps/ShowAirDrop.app");
