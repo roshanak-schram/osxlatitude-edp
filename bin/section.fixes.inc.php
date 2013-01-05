@@ -118,7 +118,8 @@
 			echo "Fix applied.. return to menu in 3 secs..\n";
 			echo "Connect your screen again to use it in extended mode after a reboot..\n";
 			system("sleep 3");
-			loadFixSystem();  								
+			loadFixSystem(); 
+		} 								
 		
 	}
 			
