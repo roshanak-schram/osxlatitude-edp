@@ -31,7 +31,7 @@
 		echo "  6.  Add file/dir colors to console\n";
 		echo "  7.  Reset displays (fixes video corruption after mirror mode selection)\n";
 		echo "  8.  Enable Aidrop\n";
-		echo "  9.  Toogle Hibernation - Currently set to mode: $hibernationmode (0=off, 3 = on)\n"; 
+		echo "  9.  Toogle Hibernation - Currently set to mode: $hibernatemode (0=off, 3 = on)\n"; 
 		echo "  x.  <-- Go back to last menu \n";
 		echo "  q. Quit - don't do anything. \n\n";
 		echo "$footer\n\n";	
