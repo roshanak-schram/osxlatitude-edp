@@ -108,7 +108,6 @@
 			system("pmset -a hibernatemode 0");
 			if (is_file("/var/vm/sleepimage")) { echo "Hibernation file was found... removing.. \n\n"; system("rm -Rf /var/vm/sleepimage"); }
 			echo "Fix applied.. return to menu in 3 secs..\n";
-			echo "Connect your screen again to use it in extended mode after a reboot..\n";
 			system("sleep 3");
 			loadFixSystem();  			
 		}
@@ -116,7 +115,6 @@
 			echo "Enabling hibernation... \n\n";
 			system("pmset -a hibernatemode 3");
 			echo "Fix applied.. return to menu in 3 secs..\n";
-			echo "Connect your screen again to use it in extended mode after a reboot..\n";
 			system("sleep 3");
 			loadFixSystem(); 
 		} 								
