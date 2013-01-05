@@ -15,7 +15,7 @@
 
     $localrev	= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
     $localrev	= str_replace("Last Changed Rev: ", "", $localrev);
- 
+    $hibernatemode = exec("pmset -g | grep hibernatemode"); $hibernatemode = str_replace("hibernatemode", "", $hibernatemode); $hibernatemode = str_replace(" ", "", $hibernatemode);
  
 	$os			= getVersion();  	
 	$verbose 	= "1";
