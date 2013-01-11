@@ -21,7 +21,7 @@
                 <div id="installer_button_text" class="navbar_button_text"><center>Installer</div>
         </div>
 
-        <div id="update_button" class="navbar_button" style="left: 1040;" onmouseover="navbar_button_mouseover(this.id);" onmouseout="navbar_button_mouseout(this.id);">
+        <div id="update_button" class="navbar_button" style="left: 1040;" onmouseover="navbar_button_mouseover(this.id);" onmouseout="navbar_button_mouseout(this.id);" onclick="load('updateEDP');">
                 <div id="update_button_topbar" class="navbar_button_topbar"></div>
                 <div id="update_button_text" class="navbar_button_text"><center>Update</div>
         </div>
