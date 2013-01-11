@@ -44,6 +44,15 @@
 		}
 	}
 	
+	//Function to apply GMA950brightnessfix
+	function GMA950brightnessfixCheck() {
+		global $verbose; global $os; global $workpath; global $ee; global $cachepath; global $rootpath; global $modeldb; global $modelID;
+		$needfix = $modeldb[$modelID]["useGMA950brightfix"];
+		if ($needfix == "yes") {
+			if ($os == "lion") { system("cp -R $workpath/storage/fixes/gma950-brightness-fix/AppleIntelIntegratedFramebuffer.kext $ee"); }
+		}
+		
+	}	
 	//Function to build from existing config
 	function buildPresent() {
 		global $verbose; global $os; global $workpath; global $ee; global $cachepath; global $rootpath;
@@ -370,7 +379,8 @@
 
 		echo " Model selected: ".$modeldb[$modelID]["name"]." (".$modeldb[$modelID]["desc"].")\n";
 		echo " PS2 driver: ".$modeldb[$modelID]["ps2pack"]."\n";
-		echo " Audio driver: ".$modeldb[$modelID]["audiopack"]."\n";		
+		echo " Audio driver: ".$modeldb[$modelID]["audiopack"]."\n";
+		echo " GMA950 Brightness fix: ".$modeldb[$modelID]["useGMA950brightfix"]."\n";	
 		echo " Battery driver: ".$modeldb[$modelID]['batteryKext']."\n";
 		echo " Install NullCPUPowerManagement: ".$modeldb[$modelID]["nullcpu"]."\n";
 		echo " Install SleepEnabler: ".$modeldb[$modelID]["sleepEnabler"]."\n";
@@ -593,6 +603,9 @@ function copyKexts() {
 	
 	echo "  Checking if we need ACPIfix \n";
 	AppleACPIfixCheck();
+	
+	echo "  Checking if we need GMA950 Brightness fix \n";
+	GMA950brightnessfixCheck();
 	
 	echo "  Removing version control of kexts in $ee \n\n";
 	system("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
