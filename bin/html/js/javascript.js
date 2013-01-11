@@ -19,17 +19,18 @@
                 }
 
 
-		//Calculate and correction posetion of the console
-		var console_newleft = w-1200;
-		console_newleft = console_newleft/2;
-		document.getElementById('console_container').style.left = console_newleft;	
+                //Calculate and correction posetion of the console
+                var console_newleft = w-1200;
+                console_newleft = console_newleft/2;
+                document.getElementById('console_container').style.left = console_newleft;	
 	
-		//Calculate and correction posetion of the navbar
+                //Calculate and correction posetion of the navbar
                 var navbar_newleft = w-1180;
                 navbar_newleft = navbar_newleft/2;
                 document.getElementById('navbar_container').style.left = navbar_newleft;
 
         }
+        
         function navbar_button_mouseover(id) {
                 var topbar = id+'_topbar';
 		document.getElementById(id).style.background = '#222222';		
@@ -43,5 +44,6 @@
         }
 
         function load(page) {
-	        if (page == "configuration") { document.getElementById("console_actual").src = 'configuration.php'; }
+	        if (page == "configuration") 	{ document.getElementById("console_actual").src = 'configuration.php'; }
+	        if (page == "updateEDP")		{ document.getElementById("console_actual").src = 'update.php'; }
         }
