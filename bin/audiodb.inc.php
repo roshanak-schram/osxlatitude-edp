@@ -16,7 +16,7 @@ $audiodb = array(
                 notes		=> "Works on most models: No ID injection required (less stable)"
              ),
 
-		array( 	name 		=> "VoodooHDA #3 - Version 2.7.4", 
+		array( 	name 		=> "VoodooHDA #3 - Version 2.8", 
                 foldername 	=> "VoodooHDA3",
                 arch		=> "x86_x64",
                 notes		=> "Works on most models: ID injection required (more stable)"
@@ -50,12 +50,7 @@ $audiodb = array(
                 foldername 	=> "92HD87B1-applehda",
                 arch		=> "x86_x64",
                 notes	 	=> "Patched appleHDA for IDT 92HD87B1 (such as Dell Latitude E6520)"
-             ), 
-		array( 	name 		=> "VoodooHDA #4 - Version 2.8", 
-                foldername 	=> "VoodooHDA4",
-                arch		=> "x86_x64",
-                notes		=> "Works on most models: ID injection required (more stable)"
-             ), 
+             ),  
                                                                              
         );
 
