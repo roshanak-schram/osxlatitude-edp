@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SMbiosdate</key>
+	<string>06/27/07</string>
+	<key>SMbiosvendor</key>
+	<string>Apple Computer, Inc.</string>
+	<key>SMbiosversion</key>
+	<string>MB21.88Z.00A5.B07.0706270922</string>
+	<key>SMboardproduct</key>
+	<string>Mac-F4208CA9</string>
+	<key>SMfamily</key>
+	<string>MacBook</string>
+	<key>SMmanufacturer</key>
+	<string>Apple Computer, Inc.</string>
+	<key>SMmaximalclock</key>
+	<string>2.00 GHz</string>
+	<key>SMmemmanufacturer_1</key>
+	<string>Transcend Information</string>
+	<key>SMmemmanufacturer_2</key>
+	<string>Transcend Information</string>
+	<key>SMmempart_1</key>
+	<string>JM800QSU-2G</string>
+	<key>SMmempart_2</key>
+	<string>JM800QSU-2G</string>
+	<key>SMmemserial_1</key>
+	<string>00092C83</string>
+	<key>SMmemserial_2</key>
+	<string>00094E5F</string>
+	<key>SMmemspeed</key>
+	<string>800 Mhz</string>
+	<key>SMmemtype</key>
+	<string>19</string>
+	<key>SMproductname</key>
+	<string>MacBook2,1</string>
+	<key>SMserial</key>
+	<string>CK7273N2YA4</string>
+	<key>SMsystemversion</key>
+	<string>1.0</string>
+</dict>
+</plist>
