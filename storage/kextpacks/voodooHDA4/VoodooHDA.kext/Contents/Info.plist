@@ -51,7 +51,7 @@
 			<key>IOMatchCategory</key>
 			<string>VoodooHDADevice</string>
 			<key>IOPCIClassMatch</key>
-			<string>0x1e208086 0x04030000 0xffff0000</string>
+			<string>0x1e208086 0x27d88086 0x04030000 0xffff0000</string>
 			<key>IOProviderClass</key>
 			<string>IOPCIDevice</string>
 			<key>IOUserClientClass</key>
