@@ -14,13 +14,21 @@
 	z-index: 	5;
 	background-image: url('/images/console_topbar.png');
 }
-.console_pageshadow {
+.console_topshadow {
 	position: 	absolute;
 	width:		1200px;
 	height:		13;
 	top: 		0;
 	z-index:	2;
 	background-image: url('/images/console_topshadow.png');
+}
+.console_bottomshadow {
+	position: 	absolute;
+	width:		1200px;
+	height:		13;
+	top:		613;
+	z-index:	2;
+	background-image: url('/images/console_bottomshadow.png');
 }
 .console_pageshadow {
 	position: 	absolute;
@@ -34,7 +42,7 @@
 .console_actual {
 	position: 	absolute;
 	width:		1183px;
-	height:		300;
+	height:		500;
 	top:		46;
 	z-index: 	5;
 	left: 		9;
