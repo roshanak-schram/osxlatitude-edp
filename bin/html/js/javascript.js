@@ -40,18 +40,46 @@
         
         function navbar_button_mouseover(id) {
                 var topbar = id+'_topbar';
-		document.getElementById(id).style.background = '#222222';		
+                document.getElementById(id).style.background = '#222222';		
                 document.getElementById(topbar).style.background = '#A20013';
         }
 
         function navbar_button_mouseout(id) {
                 var topbar = id+'_topbar';
-                document.getElementById(topbar).style.background = '';
-                document.getElementById(id).style.background = '';
+
+                if (top.activepage == id) {
+                	document.getElementById(id).style.background = '#222222';		
+                	document.getElementById(topbar).style.background = '#A20013';                
+                }                
+                if (top.activepage != id) {
+                	document.getElementById(topbar).style.background = '';
+                	document.getElementById(id).style.background = '';
+                }
         }
 
-        function load(page) {
-	        if (page == "configuration") 	{ document.getElementById("console_actual").src = 'configuration.php'; }
-	        if (page == "updateEDP")		{ document.getElementById("console_actual").src = 'update.php'; }
+        function load(id, page) {
+	        top.activepage = id;
+	        
+	        //Deselect all menus
+	        navbarDeselect('config_button'); navbarDeselect('fixes_button'); navbarDeselect('tools_button'); navbarDeselect('installer_button'); navbarDeselect('update_button');
+	        
+            var topbar = id+'_topbar';            
+            
+            document.getElementById(id).style.background = '#222222';		
+            document.getElementById(topbar).style.background = '#A20013';
+                	        
+	        if (page == "configuration") 	{ document.getElementById("console_actual").src = 'configuration.php'; 	changeTopbarTitle('System Configuration'); }
+	        if (page == "updateEDP")		{ document.getElementById("console_actual").src = 'update.php'; 		changeTopbarTitle('Update EDP to latest version...'); }
 	        if (page == "test")				{ document.getElementById("console_actual").src = 'test.php'; }	        
         }
+        
+        function navbarDeselect(id) {
+                	var topbar = id+'_topbar';	        
+                	document.getElementById(topbar).style.background = '';
+                	document.getElementById(id).style.background = '';	        
+        }
+        
+        function changeTopbarTitle(new_title) {
+	    	document.getElementById("console_topbar_title").innerHTML = new_title;
+        }
+        
