@@ -16,7 +16,7 @@
                 <div id="tools_button_text" class="navbar_button_text"><center>Tools</div>
         </div>
 
-        <div id="installer_button" class="navbar_button" style="left: 930;" onmouseover="navbar_button_mouseover(this.id);" onmouseout="navbar_button_mouseout(this.id);">
+        <div id="installer_button" class="navbar_button" style="left: 930;" onmouseover="navbar_button_mouseover(this.id);" onmouseout="navbar_button_mouseout(this.id);" onclick="load('test');">
                 <div id="installer_button_topbar" class="navbar_button_topbar"></div>
                 <div id="installer_button_text" class="navbar_button_text"><center>Installer</div>
         </div>

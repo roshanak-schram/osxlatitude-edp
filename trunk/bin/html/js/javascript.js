@@ -28,6 +28,13 @@
                 var navbar_newleft = w-1180;
                 navbar_newleft = navbar_newleft/2;
                 document.getElementById('navbar_container').style.left = navbar_newleft;
+                
+                //Calculate and realign the console
+                document.getElementById('console_pageshadow').style.height = h-173;
+                document.getElementById('console_actual').style.height = h-200;
+                document.getElementById('console_bottomshadow').style.top = h-160;
+                
+                
 
         }
         
@@ -46,4 +53,5 @@
         function load(page) {
 	        if (page == "configuration") 	{ document.getElementById("console_actual").src = 'configuration.php'; }
 	        if (page == "updateEDP")		{ document.getElementById("console_actual").src = 'update.php'; }
+	        if (page == "test")				{ document.getElementById("console_actual").src = 'test.php'; }	        
         }
