@@ -1,0 +1,89 @@
+local-php-web-server
+Copyright (c) 2009-2010 Cyril Briquet. See NOTICE.
+
+
+local-php-web-server enables to easily run
+a JVM-deployed PHP web server on your local machine
+
+
+Features
+ * perfect to debug PHP applications on an EEE-style netbook
+ * no configuration required (works immediately)
+ * no network connectivity required (by the server)
+ * requires only ~12 MB of disk space
+ * based on Quercus and Jetty 
+
+
+[Quick start for OS X systems]
+
+First download and build the system (see Installation here below), if required
+
+Go to the local-php-web-server directory
+
+Right-click on startup-osx-desktop.sh, select Open With, select Other, select Enable: All Applications, select the Utilities directory in the application list just above, select Terminal in the application list to the right, click Always Open With, click Open
+
+Files from the user's desktop are now served (see Usage here below) 
+
+
+[Quick start for Windows systems]
+
+First install the software (see Installation here below)
+
+Go to the local-php-web-server directory
+
+Double-click on startup-windows-desktop.bat
+
+Files from the user's desktop are now served (see Usage here below) 
+
+
+[Usage]
+
+That's it, your PHP website is served from http://localhost:8080/index.php (if your PHP website's home page is index.php) 
+
+
+[Usage (shell command to specify the website directory)]
+
+Run on Linux/OSX/BSD/Unix systems
+
+    ./startup.sh /path/to/local/website/base/directory 
+
+Run on Windows systems
+
+    startup.bat c:\path\to\local\website\base\directory 
+
+
+[Installation (option 1: stable release)]
+
+Download a .zip file release from the release list
+
+Unzip it anywhere
+
+
+[Installation (option 2: development release)]
+
+Download from trunk
+
+    svn checkout http://local-php-web-server.googlecode.com/svn/trunk/ local-php-web-server 
+
+Build on Linux/OSX/BSD/Unix systems
+
+    ./build.sh 
+
+Build on Windows systems
+
+    build.bat 
+
+
+[Dependencies]
+
+Only requires Java JDK 6
+
+local-php-web-server is essentially a useful repackaging of
+
+    * the Quercus PHP5 web server that is run as an embedded Java web application
+    * within the Jetty servlet container
+    * configured by a simple custom wrapper class and a web.xml file 
+
+
+Contact: cyril.briquet@canopeer.org
+
