@@ -495,7 +495,27 @@ $modeldb = array(
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                     		 
                     ),                          
-                                                       
+
+                	array( 	name 			=> "Dell_Inspiron_6400", 
+                      		desc 			=> "Dell Inspiron 6400",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "0",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "0",
+                      		loadIOATAFamily	=> "",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "yes",
+                      		ethernet		=> "AppleBCM440XEthernet.kext",
+                      		audiopack		=> "1",                      		                      		
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "no",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                     		 
+                    ), 
+                                                                           
                 	array( 	name 			=> "Dell_Inspiron_9400", 
                       		desc 			=> "Dell Inspiron 9400",
                       		nullcpu 		=> "yes",
