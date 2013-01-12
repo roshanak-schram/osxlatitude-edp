@@ -67,7 +67,30 @@ $modeldb = array(
                     ), 
                     
                     
-					array( 	name 			=> "Dell_Vostro_410", 
+			array( 	name 			=> "Dell_Vostro_200", 
+                      		desc 			=> "Dell Vostro 200",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "1",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "",
+                      		loadIOATAFamily	=> "",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "yes",
+                      		patchCPU		=> "",
+                      		ethernet		=> "Intel82566MM.kext",
+                      		audiopack		=> "",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                      		 
+                    ),
+                                                                                                                                                                                                        
+                    
+                    
+			array( 	name 			=> "Dell_Vostro_410", 
                       		desc 			=> "Dell Vostro 410",
                       		nullcpu 		=> "no",
                       		sleepEnabler 	=> "no",                      		
