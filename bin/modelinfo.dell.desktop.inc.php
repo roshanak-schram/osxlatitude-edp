@@ -80,11 +80,11 @@ $modeldb = array(
                       		useACPIfix		=> "yes",
                       		patchCPU		=> "",
                       		ethernet		=> "Intel82566MM.kext",
-                      		audiopack		=> "",
+                      		audiopack		=> "2",
                       		supports_sl		=> "yes",
                       		supports_lion	=> "yes",
                       		supports_ml		=> "yes",                      		                      		                      		
-                      		customCham 		=> "",                      		
+                      		customCham 		=> "yes",                      		
                       		customKernel 	=> ""                      		 
                     ),
                                                                                                                                                                                                         
