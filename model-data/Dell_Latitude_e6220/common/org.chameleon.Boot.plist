@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CSTUsingSystemIO</key>
+	<string>Yes</string>
+	<key>EnableC4State</key>
+	<string>Yes</string>
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
+	<key>GenerateCStates</key>
+	<string>Yes</string>
+	<key>GeneratePStates</key>
+	<string>Yes</string>
+	<key>Graphics Mode</key>
+	<string>1366x768x32</string>
+	<key>Kernel</key>
+	<string>mach_kernel</string>
+	<key>Kernel Flags</key>
+	<string>-v darkwake=0</string>
+	<key>LegacyLogo</key>
+	<string>Yes</string>
+	<key>SystemType</key>
+	<string>2</string>
+	<key>Timeout</key>
+	<string>30</string>
+	<key>USBBusFix</key>
+	<string>Yes</string>
+	<key>UseKernelCache</key>
+	<string>Yes</string>
+</dict>
+</plist>

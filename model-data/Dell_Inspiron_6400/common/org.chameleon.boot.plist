@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
+	<key>GenerateCStates</key>
+	<string>Yes</string>
+	<key>GeneratePStates</key>
+	<string>Yes</string>
+	<key>Graphics Mode</key>
+	<string>1024x768x32</string>
+	<key>GraphicsEnabler</key>
+	<string>Yes</string>
+	<key>Instant Menu</key>
+	<string>Yes</string>
+	<key>Kernel</key>
+	<string>mach_kernel</string>
+	<key>Kernel Flags</key>
+	<string>-v</string>
+	<key>SMBIOS</key>
+	<string>/Extra/SMBios.plist</string>
+	<key>SystemType</key>
+	<string>2</string>
+	<key>UseKernelCache</key>
+	<string>Yes</string>
+	<key>arch</key>
+	<string>i386</string>
+</dict>
+</plist>
