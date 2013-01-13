@@ -31,20 +31,24 @@
 		//Confirm the build…
 		$doBuild = confirmBuild();
 		if ($doBuild == "y") {
-			global $cachepath;
+			global $cachepath; global $workpath; global $rootpath; global $modeldb; global $modelID; global $os;
 			system("clear");
 			
-			echo "Step 1) Copying Essential files to $workpath \n";
+			echo "Step 1) Download/Update local model data... \n";
+			$modelName = $modeldb[$modelID]["name"];
+			svnModeldata("$modelName");
+			
+			echo "Step 2) Copying Essential files to $workpath \n";
 			copyEssentials();
 			
-			echo "Step 2) Preparing kexts for myHack.kext \n";
+			echo "Step 3) Preparing kexts for myHack.kext \n";
 			copyKexts();
   			
   		
-			echo "Step 3) Call myFix to do the new build... \n";
+			echo "Step 4) Call myFix to do the new build... \n";
 			system("myfix -q -t $rootpath  && tput bel");
 
-			echo "Step 4) Doing sanity check... \n";
+			echo "Step 5) Doing sanity check... \n";
 			kernelcachefix();
 			
 			exit;
