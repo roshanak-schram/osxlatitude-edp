@@ -14,17 +14,21 @@
 	}
 	
 	//Function to check if the model is allready checked out, if the model is not checked out it will check it out
-	function svnModeldata("$model") {
+	function svnModeldata($model) {
 		global $workpath; global $rootpath;
 		$modelfolder = "$workpath/model-data/$model";
-		if (is_dir("$modelfolder")) { system("svn --non-interactive --username edp --password edp --force update $modelfolder"); }
-		else { 
+		if (is_dir("$modelfolder")) { 
+			echo "  Locale cache found for $model, updating cache....\n";
+			system("svn --non-interactive --username edp --password edp --force update $modelfolder");
+		}
+		else {
+			echo "  Locale cache NOT found for $model, downloading....\n"; 
 			system("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$model .");
 		}
 	}
 	
 	
-	//Function to check if myhack.kext exists in ale, and if it docent.. add it there….
+	//Function to check if myhack.kext exists in ale, and if it dosent for some weird reason... copy it there...
 	function myHackCheck() {
 		global $verbose; global $workpath; global $edpplugin; global $ee; global $slepath; global $rootpath;
 		if (!is_dir("$slepath/myHack.kext")) 	{
@@ -469,23 +473,23 @@ function copyEssentials() {
 		$file = "$workpath/SSDT-5.aml"; if (file_exists($file)) { system("rm $file"); }
 
 
-  		echo "  Copying COMMON system plists and dsdt.aml from $workpath/Models/$modelName/common to $workpath \n\n";
-  			$file = "$workpath/Models/$modelName/common/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
-  			$file = "$workpath/Models/$modelName/common/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-  			$file = "$workpath/Models/$modelName/common/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }
+  		echo "  Copying COMMON system plists and dsdt.aml from $workpath/model-data/$modelName/common to $workpath \n\n";
+  			$file = "$workpath/model-data/$modelName/common/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
+  			$file = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+  			$file = "$workpath/model-data/$modelName/common/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }
 		
-  		echo "  Copying OS Specific system plists and dsdt.aml from $workpath/Models/$modelName/$os to $workpath \n";
-  			$file = "$workpath/Models/$modelName/$os/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
-  			$file = "$workpath/Models/$modelName/$os/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-  			$file = "$workpath/Models/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }					
+  		echo "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $workpath \n";
+  			$file = "$workpath/model-data/$modelName/$os/smbios.plist"; 				if (file_exists($file)) { system("cp -f $file $workpath"); }
+  			$file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+  			$file = "$workpath/model-data/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system("cp -f $file $workpath"); }					
 
 		echo "  Checking if your model includes SSDT dump files - will copy if any exists..\n\n";
-			$file = "$workpath/Models/$modelName/common/SSDT.aml"; 		if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/common/SSDT-1.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/common/SSDT-2.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/common/SSDT-3.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/common/SSDT-4.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
-			$file = "$workpath/Models/$modelName/common/SSDT-5.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }			
+			$file = "$workpath/model-data/$modelName/common/SSDT.aml"; 		if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/model-data/$modelName/common/SSDT-1.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/model-data/$modelName/common/SSDT-2.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/model-data/$modelName/common/SSDT-3.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }
+			$file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; 	if (file_exists($file)) { system("cp -f $file $workpath"); }			
 }
 
 
@@ -575,7 +579,7 @@ function copyKexts() {
 	if ($modeldb[$modelID]['customCham'] == "yes" || $modeldb[$modelID]['customCham'] == "y") 	{
 		echo "  Copying custom chameleon to $rootpath.. \n";
 		system("rm -f $rootpath/boot");
-		system("cp $workpath/Models/$modelName/$os/boot $rootpath");
+		system("cp $workpath/model-data/$modelName/$os/boot $rootpath");
 	}
 
             	
@@ -583,7 +587,7 @@ function copyKexts() {
 	if ($modeldb[$modelID]['customKernel'] == "yes" || $modeldb[$modelID]['customKernel'] == "y") 	{
 		echo "  Copying custom made kernel to $rootpath.. \n";
 		system("rm -f $rootpath/custom_kernel");
-		system("cp $workpath/Models/$modelName/$os/custom_kernel $rootpath");
+		system("cp $workpath/model-data/$modelName/$os/custom_kernel $rootpath");
 	}			
 
 
@@ -603,13 +607,13 @@ function copyKexts() {
 
 
 	echo "  Copying common kexts to $ee.. \n\n";
-	$tf = "$workpath/Models/$modelName/common/Extensions";
+	$tf = "$workpath/model-data/$modelName/common/Extensions";
 
 	system("cp -Rf $tf/* $ee");
 		
 		
 	echo "  Copying $os kexts to $ee.. \n\n";
-	$tf = "$workpath/Models/$modelName/$os/Extensions";
+	$tf = "$workpath/model-data/$modelName/$os/Extensions";
 	//if (isEmptyDir("$tf") == "no") { system("cp -Rf $tf/* $ee"); };
 	system("cp -Rf $tf/* $ee");
 	
