@@ -12,6 +12,18 @@
 		  echo "   ---------------------------------------------------------------------------------------\n\n";
 		}		
 	}
+	
+	//Function to check if the model is allready checked out, if the model is not checked out it will check it out
+	function svnModeldata("$model") {
+		global $workpath; global $rootpath;
+		$modelfolder = "$workpath/model-data/$model";
+		if (is_dir("$modelfolder")) { system("svn --non-interactive --username edp --password edp --force update $modelfolder"); }
+		else { 
+			system("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$model .");
+		}
+	}
+	
+	
 	//Function to check if myhack.kext exists in ale, and if it docent.. add it there….
 	function myHackCheck() {
 		global $verbose; global $workpath; global $edpplugin; global $ee; global $slepath; global $rootpath;
