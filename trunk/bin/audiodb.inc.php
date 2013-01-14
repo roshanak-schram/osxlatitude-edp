@@ -16,10 +16,10 @@ $audiodb = array(
                 notes		=> "Works on most models: No ID injection required (less stable)"
              ),
 
-		array( 	name 		=> "VoodooHDA #3 - Version 2.8", 
+		array( 	name 		=> "VoodooHDA #3 - Version 2.8.1", 
                 foldername 	=> "VoodooHDA3",
                 arch		=> "x86_x64",
-                notes		=> "Works on most models: ID injection required (more stable)"
+                notes		=> "Latest VoodooHDA - should work with allmost any machine"
              ),  
 
         array(  name 		=> "AppleHDA.kext - STAC9200",
