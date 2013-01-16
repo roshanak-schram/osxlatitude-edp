@@ -598,7 +598,10 @@ function copyKexts() {
 		system("cp -R $workpath/storage/kexts/networking/$netkext $ee");
 	}
 		
-		
+
+	echo "  Copying custom kexts from $workpath/custom-kexts to $ee/\n";
+	system("cp -R $workpath/custom-kexts/* $ee");
+				
 	echo "  Copying standard kexts to $ee.. \n\n";
 	system("cp -R $workpath/storage/standard/common/Extensions/* $ee");
 					
