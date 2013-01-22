@@ -45,6 +45,29 @@ $modeldb = array(
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                     		 
                     ),
+                      
+                	array( 	name 			=> "HP_ProBook_6360b", 
+                      		desc 			=> "HP ProBook 6360b",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "0",
+                      		emulatedST 		=> "no",                      		
+                      		tscsync 		=> "no",                      		
+                      		batteryKext		=> "0",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",
+                      		patchCPU		=> "yes",                      		                    		
+                      		ethernet		=> "AppleIntelE1000e.kext",
+                      		audiopack		=> "",                      		                      		
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                   		 
+                    ),
+                                          
+
                                                                                                                                                                                      
              );
 
