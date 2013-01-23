@@ -1,5 +1,11 @@
 <?php
 
+	function updateCham() {
+		//Note: Overtime we will add a function to make sure that the user have the latest version of cham distrobuted with EDP - until then, we will force the update on each build
+		global $workpath; global $rootpath;
+		echo "  Updating Chameleon to latest versions from EDP \n";
+		system("cp -f $workpath/storage/boot $rootpath");
+	}
 	function checkSVNrevs() {
 		global $localrev; global $workpath;
 		
@@ -110,6 +116,7 @@
   		echo "  Calling myFix to generate new cache…\n";
   		system("myfix -q -t $rootpath && tput bel");
   		kernelcachefix();
+  		updateCham();
   		
   				
 	}
@@ -401,6 +408,7 @@
 		echo " Install NullCPUPowerManagement: ".$modeldb[$modelID]["nullcpu"]."\n";
 		echo " Install SleepEnabler: ".$modeldb[$modelID]["sleepEnabler"]."\n";
 		echo " Install VoodooTSCsync: ".$modeldb[$modelID]["tscsync"]."\n";
+		echo " Update Chameleon to latest version: Yes \n";
 		echo " Use custom kernel: ".$modeldb[$modelID]["customKernel"]."\n";
 		echo " Use custom chameleon: ".$modeldb[$modelID]["customCham"]."\n";
 		echo " Emulated speedstep: ".$modeldb[$modelID]["emulatedST"]."\n\n";
