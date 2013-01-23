@@ -48,7 +48,7 @@ $modeldb = array(
                       
                 	array( 	name 			=> "HP_ProBook_6360b", 
                       		desc 			=> "HP ProBook 6360b",
-                      		nullcpu 		=> "yes",
+                      		nullcpu 		=> "no",
                       		sleepEnabler 	=> "no",                      		
                       		ps2pack 		=> "0",
                       		emulatedST 		=> "no",                      		
