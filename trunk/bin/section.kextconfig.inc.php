@@ -50,6 +50,7 @@
 
 			echo "Step 5) Doing sanity check... \n";
 			kernelcachefix();
+			updateCham();
 			
 			exit;
 					
