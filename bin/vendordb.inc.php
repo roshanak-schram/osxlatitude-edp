@@ -1,4 +1,4 @@
-<?
+=<?
  
 global $vendordb; 
 $vendordb = array(
@@ -33,6 +33,9 @@ $vendordb = array(
 					array( 	name 			=> "LG, Desktops", 
                       		dbfile 			=> "modelinfo.lg.desktop.inc.php"                     		 
                     ),
+					array( 	name 			=> "Packard Bell, Desktops", 
+                      		dbfile 			=> "modelinfo.packardbell.desktop.inc.php"                     
+                    ),             
 					array( 	name 			=> "Samsung, Laptops", 
                       		dbfile 			=> "modelinfo.samsung.laptop.inc.php"                     		 
                     ),
