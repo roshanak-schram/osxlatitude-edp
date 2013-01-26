@@ -1,4 +1,4 @@
-=<?
+<?
  
 global $vendordb; 
 $vendordb = array(
