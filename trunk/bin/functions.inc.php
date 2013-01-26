@@ -503,7 +503,7 @@ function copyEssentials() {
 
 function copyKexts() {
 	//Get vars from config.inc.php
-	global $verbose; global $workpath; global $rootpath; global $slepath; global $ps2db; global $audiodb;
+	global $verbose; global $workpath; global $rootpath; global $slepath; global $ps2db; global $audiodb; global $incpath;
 	global $edpplugin; global $cachepath; global $modeldb; global $modelID; global $os; global $ee; global $batterydb;
 	
 	$modelName = $modeldb[$modelID]["name"];
@@ -606,9 +606,8 @@ function copyKexts() {
 		system("cp -R $workpath/storage/kexts/networking/$netkext $ee");
 	}
 		
+	
 
-	echo "  Copying custom kexts from $workpath/custom-kexts to $ee/\n";
-	system("cp -R $workpath/custom-kexts/* $ee");
 				
 	echo "  Copying standard kexts to $ee.. \n\n";
 	system("cp -R $workpath/storage/standard/common/Extensions/* $ee");
@@ -619,13 +618,11 @@ function copyKexts() {
 
 	echo "  Copying common kexts to $ee.. \n\n";
 	$tf = "$workpath/model-data/$modelName/common/Extensions";
-
 	system("cp -Rf $tf/* $ee");
 		
 		
 	echo "  Copying $os kexts to $ee.. \n\n";
 	$tf = "$workpath/model-data/$modelName/$os/Extensions";
-	//if (isEmptyDir("$tf") == "no") { system("cp -Rf $tf/* $ee"); };
 	system("cp -Rf $tf/* $ee");
 	
 	echo "  Checking if we need ACPIfix \n";
@@ -633,6 +630,17 @@ function copyKexts() {
 	
 	echo "  Checking if we need GMA950 Brightness fix \n";
 	GMA950brightnessfixCheck();
+	
+	
+	echo "  Applying custom plists, kexts etc. (you can ignore copy errors here, it just means the folder is empty)\n";
+		//Copying kexts
+		system("cp -R $incpath/Extensions/* $ee");
+		//Copying any .AML files to /Extra
+		system("cp -R $incpath/*.aml $workpath");
+		//Copying any plists files to /Extra
+		system("cp -R $incpath/*.plist $workpath");
+		
+		
 	
 	echo "  Removing version control of kexts in $ee \n\n";
 	system("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
