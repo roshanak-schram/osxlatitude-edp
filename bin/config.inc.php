@@ -12,7 +12,8 @@
 	$rootpath	= str_replace("Extra", "", "$workpath");
 	$slepath	= "".$rootpath."System/Library/Extensions";
 	$cachepath	= "".$rootpath."System/Library/Caches/com.apple.kext.caches/Startup";
-
+	$incpath	= "$workpath/include";
+	
     $localrev	= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
     $localrev	= str_replace("Last Changed Rev: ", "", $localrev);
     $hibernatemode = exec("pmset -g | grep hibernatemode"); $hibernatemode = str_replace("hibernatemode", "", $hibernatemode); $hibernatemode = str_replace(" ", "", $hibernatemode);
