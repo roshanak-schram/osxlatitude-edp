@@ -23,7 +23,7 @@ $modeldb = array(
                       		customCham 		=> "",                      		
                       		customKernel 	=> ""                      		 
                     ), 	                      
-                    array( 	name 			=> "Packard_Bell_iXtreme_M5850", 
+                    array( 	name 			=> "PackardBell_iXtreme_M5850", 
                       		desc 			=> "Packard Bell iXtreme M5850",
                       		nullcpu 		=> "yes",
                       		sleepEnabler 	=> "yes",                      		
