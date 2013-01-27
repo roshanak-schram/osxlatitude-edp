@@ -67,7 +67,26 @@ $modeldb = array(
                       		customKernel 	=> "no"                   		 
                     ),
                                           
-
+                	array( 	name 			=> "HP_Pavilion_dv6401eo", 
+                      		desc 			=> "HP Pavilion dv6401eo",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "0",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "yes",                      		
+                      		batteryKext		=> "0",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",
+                      		patchCPU		=> "no",                      		                    		
+                      		ethernet		=> "IntelPro100.kext",
+                      		audiopack		=> "2",                      		                      		
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "no",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                   		 
+                    ),
                                                                                                                                                                                      
              );
 
