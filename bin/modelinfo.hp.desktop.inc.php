@@ -14,6 +14,7 @@ $modeldb = array(
                       		loadIOATAFamily	=> "",
                       		loadNatit		=> "yes",
                       		useACPIfix		=> "yes",
+                      		useGMA950brightfix => "no",
                       		patchCPU		=> "",
                       		ethernet		=> "",
                       		audiopack		=> "1",
@@ -24,7 +25,29 @@ $modeldb = array(
                       		customKernel 	=> ""                      		 
                     ), 	
 
-
+					array( 	name 			=> "HP_Pavilion_m9040n", 
+                      		desc 			=> "HP Pavilion m9040n",
+                      		nullcpu 		=> "yes",
+                      		sleepEnabler 	=> "yes",                      		
+                      		ps2pack 		=> "",
+                      		emulatedST 		=> "yes",                      		
+                      		tscsync 		=> "",                      		
+                      		batteryKext		=> "",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "no",
+                      		useGMA950brightfix => "no",
+                      		patchCPU		=> "no",
+                      		ethernet		=> "AppleIntelE1000e.kext",
+                      		audiopack		=> "1",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                      		 
+                    ), 
+                    
+ 
 
 
                                                                                                                                                               
