@@ -4,6 +4,7 @@
 	include_once "../config.inc.php";
 	
 	//Get server vars
+	global $modelID;
 	$vendor 	= $_GET['vendor'];	if ($vendor == "") 	{ $vendor 	= $_POST['vendor']; }
 	$modelID 	= $_GET['model'];	if ($modelID == "") { $modelID 	= $_POST['model']; }
 	$action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
@@ -42,13 +43,12 @@
 
 
 
-
 <?php
 
 
 	//-------------------------> Do build page starts here
 	if ($action == 'dobuild') {
-	
+		if ($modelID == "") { echo "modelID is empty"; exit; }
 		//Filter the data from the confirmation page 
 		$sleepEnabler 		= $_POST['sleepEnabler']; 		if ($sleepEnabler == "on") 		{ $sleepEnabler = "yes"; } 			else { $sleepEnabler = "no"; }
 		$nullcpu 			= $_POST['nullcpu']; 			if ($nullcpu == "on") 			{ $nullcpu = "yes"; } 				else { $nullcpu = "no"; } 
@@ -63,7 +63,7 @@
 		$customKernel		= $_POST['customKernel']; 		if ($customKernel == "on")		{ $customKernel = "yes"; } 			else { $customKernel = "no"; }
 		
 		//Generate a multi dim. array used during the build process
-		global $modeldb; 
+		global $modeldb;
 		$modeldb = array(
 					//This one have to be empty, its used for when we do custom builds...
 					array( 	name 			=> $_POST['name'], 
@@ -86,43 +86,42 @@
                       		customKernel 	=> $customKernel                     		 
                     ),
              );
-                    
-        echo "Name: ".$modeldb[0]["name"]."<br>";            
-        echo "Desc: ".$modeldb[0]["desc"]."<br>";
-        echo "nullcpu: ".$modeldb[0]["nullcpu"]."<br>";
-        echo "sleepEnabler: ".$modeldb[0]["sleepEnabler"]."<br>";                                    
-        echo "ps2pack: ".$modeldb[0]["ps2pack"]."<br>";                    
-        echo "emulatedST: ".$modeldb[0]["emulatedST"]."<br>";
-        echo "tscsync: ".$modeldb[0]["tscsync"]."<br>";
-        echo "batteryKext: ".$modeldb[0]["batteryKext"]."<br>";
-        echo "loadIOATAFamily: ".$modeldb[0]["loadIOATAFamily"]."<br>";            		
-        echo "loadNatit: ".$modeldb[0]["loadNatit"]."<br>";
-        echo "useACPIfix: ".$modeldb[0]["useACPIfix"]."<br>";
-        echo "useGMA950brightfix: ".$modeldb[0]["useGMA950brightfix"]."<br>";
-        echo "patchCPU: ".$modeldb[0]["patchCPU"]."<br>";
-        echo "ethernet: ".$modeldb[0]["ethernet"]."<br>";
-        echo "wifikext: ".$modeldb[0]["wifikext"]."<br>";
-        echo "audiopack: ".$modeldb[0]["audiopack"]."<br>";
-        echo "customCham: ".$modeldb[0]["customCham"]."<br>";
-        echo "customKernel: ".$modeldb[0]["customKernel"]."<br>";
         
-		exit;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+        global $modelID; $modelID = "0";
+        global $modelName;
+        $modelName = $modeldb[$modelID]["name"];
+ 
+        EDPdoBuild();
+        echo "<script> top.toogleWait(); </script>";
+        
+        exit;	
 	}
 
 
 
+	function EDPdoBuild() {
+		myHackCheck(); global $modeldb; global $modelID; global $workpath; global $rootpath;
+        echo "<pre>\n";
+        echo "<b>Step 1) Download/Update local model data... </b><br>";
+			$modelName = $modeldb[$modelID]["name"];
+			svnModeldata("$modelName");
+			
+		echo "<br><b>Step 2) Copying Essential files to $workpath </b><br>";
+			copyEssentials();
+			
+		echo "<b>Step 3) Preparing kexts for myHack.kext </b><br>";
+			copyKexts();
+  			
+  		
+		echo "<br><b>Step 4) Call myFix to do the new build... </b><br>";
+			system_call("myfix -q -t /");
 
+		echo "<br><b>Step 5) Doing sanity check... </b><br>";
+			kernelcachefix();
+			updateCham();
+					
+		
+	}
 
 
 
@@ -186,7 +185,7 @@
 		echo "<br><div align='center'><table border=0 width='95%' cellpadding=0 style='border-collapse: collapse'>\n";
 		echo "<tr><td rowspan='4' width='1%'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$name.png'></td></tr>\n"
 		echo "<tr>\n";
-		echo "<td>&nbsp;&nbsp;<b>$desc</b> (ID: $modelID)</td>\n"
+		echo "<td>&nbsp;&nbsp;<b>$desc</b></td>\n"
 		echo "<td width='40%'>ROOT: $rootpath</td>\n"
 		echo "</tr>\n"
 		echo "<tr>\n"
@@ -329,8 +328,10 @@
 		echo "<input type='hidden' name='action' value='dobuild'>";
 		echo "<input type='hidden' name='name' value='".$modeldb[$modelID]["name"]."'>";
 		echo "<input type='hidden' name='desc' value='".$modeldb[$modelID]["desc"]."'>";
+		echo "<input type='hidden' name='model' value='$modelID'>";
 		
-		echo "<center><input type='submit' value='Do build!'><br><br>";
+		
+		echo "<center><input type='submit' value='Do build!' onclick='top.toogleWait();'><br><br>";
 		echo "</form>";		
 		
 

@@ -7,6 +7,34 @@
 
 <body onload="bootloader();" onresize="aligndesign();" background="../images/background.png">
 
+<div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 50000; left: 0px; top: 0px; background-image: url('/images/semi-transparent.png')" id="wait">
+<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%">
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><p align="center"><img border="0" src="images/spinning-wheel.gif" width="32" height="32"></p><p align="center"><i><font face="Arial">.. Please wait while processing...</font></i></td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+</table>	
+</div>
+
+<script>
+	function toogleWait() {
+		e = top.document.getElementById('wait');
+		if (e.style.display = 'none') { top.document.getElementById('wait').style.display = 'block'; return; }
+		if (e.style.display = 'block') { top.document.getElementById('wait').style.display = 'none'; return; }
+	}
+</script>
+
 
 <div id="topbar">
 		<?php
