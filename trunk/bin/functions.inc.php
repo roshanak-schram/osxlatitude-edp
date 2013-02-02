@@ -132,9 +132,9 @@
 
 	//Function to replace system_call() .. works with LWS also
 	function system_call($data) {
-		//ob_start();
+		global $edpmode;
 		passthru("$data");
-		//ob_flush();
+		if ($edpmode = "web") { echo str_repeat(' ', 254); flush(); }
 	}
 
 	
