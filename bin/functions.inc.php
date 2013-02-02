@@ -95,7 +95,7 @@
   		system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`"); 	
   				
   		echo "  Calling myFix to generate new cache…\n";
-  		system_call("myfix -q -t $rootpath && tput bel");
+  		system_call("myfix -q -t /");
   		kernelcachefix();  				
 		
 	}
@@ -123,7 +123,7 @@
   			system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`"); 	
   				
   		echo "  Calling myFix to generate new cache…\n";
-  		system_call("myfix -q -t $rootpath && tput bel");
+  		system_call("myfix -q -t /");
   		kernelcachefix();
   		updateCham();
   		
@@ -442,16 +442,13 @@ function AppleACPIfixCheck() {
 		//Check if ACPIfix is selected
 		if ($modeldb[$modelID]["useACPIfix"] == "yes") {
 			system_call("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $ee");
-			$kver1 = getKextVersion("$ee/AppleACPIPlatform.kext");
-			$kver2 = getKextVersion("$slepath/AppleACPIPlatform.kext");
-			if ($kver2 > $kver1) {
+
+			if (is_dir("$slepath/AppleACPIPlatform.kext")) { 
 				//Create backup folder
 				date_default_timezone_set('UTC');
 				$date = date("d-m-Y");
 				$backupfolder = "/backup/$date-AppleACPIPlatform.kext-$kver2";
 				system_call("mkdir /backup"); system_call("mkdir $backupfolder");
-				
-				echo "  NOTICE: A newer version of AppleACPIPlatform.kext was found in $slepath - the kext will be moved to $backupfolder \n";
 				system_call("mv $slepath/AppleACPIPlatform.kext $backupfolder");
 			}
 		}
@@ -541,13 +538,14 @@ function copyKexts() {
 			system_call("cp -R $workpath/storage/kextpacks/$ps2dir/. $ee/");
 		}				
 
-	echo "  Copying custom kexts from $workpath/custom-kexts to $ee/\n";
-		system_call("cp -R $workpath/custom-kexts/* $ee");
+	echo "  Copying custom kexts from $workpath/include/Extensions to $ee/\n";
+		system_call("cp -R $workpath/include/Extensions/* $ee");
 		
 		
-	echo "  Copying the Audio kexts to $ee \n";
+	
 		$audioid = $modeldb[$modelID]['audiopack']; $audiodir = $audiodb[$audioid]["foldername"];
-		if ($modeldb[$modelID]['audiopack'] != "") {
+		if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
+			echo "  Copying the Audio kexts to $ee <br>\n";
 			//Clean up
 			if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
 		
@@ -563,12 +561,18 @@ function copyKexts() {
 
 		
 					
-	echo "  Check if we need NullCPUPowerManagement.kext for disabling Apples native power management.. \n";
-	if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") { system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee"); }
+	
+	if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
+		echo "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. <br>\n";
+		system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee");
+	}
 
 				
-	echo "  Check if we need SleepEnabler.kext for enabling sleep...\n";
-	if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") { system_call("cp -R $workpath/storage/kexts/$os/SleepEnabler.kext $ee"); }
+	
+	if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
+		echo "  Check if we need SleepEnabler.kext for enabling sleep...\n"; 
+		system_call("cp -R $workpath/storage/kexts/$os/SleepEnabler.kext $ee");
+	}
 
 	
 	if ($modeldb[$modelID]['loadIOATAFamily'] == "yes") {
@@ -582,21 +586,26 @@ function copyKexts() {
 	}
 	
 		
-	echo "  Check if we need VoodooTSCSync.kext for syncing CPU cores...\n";
-	if ($modeldb[$modelID]['tscsync'] == "yes" || $modeldb[$modelID]['tscsync'] == "y") 	{ system_call("cp -R $workpath/storage/kexts/VoodooTSCSync.kext $ee"); }
+	
+	if ($modeldb[$modelID]['tscsync'] == "yes" || $modeldb[$modelID]['tscsync'] == "y") 	{
+		echo "  Check if we need VoodooTSCSync.kext for syncing CPU cores...<br>\n"; 
+		system_call("cp -R $workpath/storage/kexts/VoodooTSCSync.kext $ee");
+	}
 
 
-	echo "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu \n";
-	if ($modeldb[$modelID]['emulatedST'] == "yes" || $modeldb[$modelID]['emulatedST'] == "y") 	{ 
+	
+	if ($modeldb[$modelID]['emulatedST'] == "yes" || $modeldb[$modelID]['emulatedST'] == "y") 	{
+		echo "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu <br>\n"; 
 		system_call("cp -R $workpath/storage/kexts/VoodooPState.kext $ee");
 		system_call("cp $workpath/storage/LaunchAgents/PStateMenu.plist /Library/LaunchAgents");
 	} else { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
 
 								
 	//Copy battery kexts
-	$battid 	= $modeldb[$modelID]['batteryKext'];
-	if ($battid != "") {
-		$battkext = $batterydb[$battid]["kextname"];
+	
+	if ($modeldb[$modelID]['batteryKext'] != "" && $modeldb[$modelID]['batteryKext'] != "no") {
+		$battid 	= $modeldb[$modelID]['batteryKext'];
+		$battkext 	= $batterydb[$battid]["kextname"];
 		echo "  Copying Battery kext ($battkext) to $ee \n";
 		system_call("cp -R $workpath/storage/kexts/battery/$os/$battkext $ee/");
 	}	
@@ -620,10 +629,10 @@ function copyKexts() {
 
 
 	//Checking if system is using a common network kexts
-	if ($modeldb[$modelID]['ethernet'] != "") {
+	if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
 		$netkext = $modeldb[$modelID]['ethernet'];
-		echo "  Copying $netkext to $ee...\n";
-		system_call("cp -R $workpath/storage/kexts/networking/$netkext $ee");
+		//echo "  Copying $netkext to $ee...\n";
+		//system_call("cp -R $workpath/storage/kexts/networking/$netkext $ee");
 	}
 		
 	
