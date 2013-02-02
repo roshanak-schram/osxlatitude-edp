@@ -33,12 +33,12 @@
 	include_once "../wifidb.inc.php";
 	
 	
-	include "header.inc.php";
+
 ?>
 
 
 
-<body>
+
 
 
 
@@ -48,6 +48,9 @@
 
 	//-------------------------> Do build page starts here
 	if ($action == 'dobuild') {
+		header("Content-Type: text/event-stream\n\n");
+		while (ob_get_level()) ob_end_clean();
+		
 		if ($modelID == "") { echo "modelID is empty"; exit; }
 		//Filter the data from the confirmation page 
 		$sleepEnabler 		= $_POST['sleepEnabler']; 		if ($sleepEnabler == "on") 		{ $sleepEnabler = "yes"; } 			else { $sleepEnabler = "no"; }
@@ -92,31 +95,35 @@
         $modelName = $modeldb[$modelID]["name"];
  
         EDPdoBuild();
-        echo "<script> top.toogleWait(); </script>";
-        
+        echo "-----> DONE <-----";
         exit;	
 	}
 
 
 
 	function EDPdoBuild() {
-		myHackCheck(); global $modeldb; global $modelID; global $workpath; global $rootpath;
-        echo "<pre>\n";
-        echo "<b>Step 1) Download/Update local model data... </b><br>";
+		global $modeldb; global $modelID; global $workpath; global $rootpath;
+		
+		myHackCheck(); 
+        echo "Step 1) Download/Update local model data... \n";
+        	flush();
 			$modelName = $modeldb[$modelID]["name"];
 			svnModeldata("$modelName");
 			
-		echo "<br><b>Step 2) Copying Essential files to $workpath </b><br>";
+		echo "Step 2) Copying Essential files to $workpath \n";
+			flush();
 			copyEssentials();
 			
-		echo "<b>Step 3) Preparing kexts for myHack.kext </b><br>";
+		echo "Step 3) Preparing kexts for myHack.kext \n";
+			flush();
 			copyKexts();
   			
   		
-		echo "<br><b>Step 4) Call myFix to do the new build... </b><br>";
+		echo "Step 4) Call myFix to do the new build... \n";
+			flush();
 			system_call("myfix -q -t /");
 
-		echo "<br><b>Step 5) Doing sanity check... </b><br>";
+		echo "Step 5) Doing sanity check... \n";
 			kernelcachefix();
 			updateCham();
 					
@@ -133,6 +140,7 @@
 	//-------------------------> Here starts the Vendor and model selector - but only if $action is empty
 				
 	if ($action == "") {
+				include "header.inc.php";
 				echo "<br><br><br><br><br>";
 				echo "<span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
 				//Show the vendrop dropdown
@@ -177,6 +185,7 @@
 	//--------------------> Here starts the build confirmation page 
 	//Check if $action was set via GET or POST - if it is set, we asume that we are going to confirm the build
 	if ($action == "confirm") {
+		include "header.inc.php";
 		$name 		= $modeldb[$modelID]["name"];
 		$desc 		= $modeldb[$modelID]["desc"];
 		
@@ -331,7 +340,7 @@
 		echo "<input type='hidden' name='model' value='$modelID'>";
 		
 		
-		echo "<center><input type='submit' value='Do build!' onclick='top.toogleWait();'><br><br>";
+		echo "<center><input type='submit' value='Do build!'><br><br>";
 		echo "</form>";		
 		
 
