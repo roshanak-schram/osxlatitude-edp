@@ -1,0 +1,1 @@
+php bin/edp.php
