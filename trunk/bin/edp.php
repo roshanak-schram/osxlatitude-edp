@@ -17,9 +17,7 @@
 	//Include different sections
 	include "section.main.inc.php";
 	include "section.kextconfig.inc.php";
-	include "section.fixes.inc.php";
-	include "section.installer.inc.php";
-	include "section.tools.inc.php";
+
 
 
 	//Lets start by showing the main menu and get the results of the choice into $choice
