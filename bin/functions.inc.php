@@ -13,7 +13,7 @@
 		//Note: Overtime we will add a function to make sure that the user have the latest version of cham distrobuted with EDP - until then, we will force the update on each build
 		global $workpath; global $rootpath;
 		echo "  Updating Chameleon to latest versions from EDP \n";
-		system_call("cp -f $workpath/storage/boot $rootpath");
+		system_call("cp -f /Extra/storage/boot /");
 	}
 	function checkSVNrevs() {
 		global $localrev; global $workpath;
