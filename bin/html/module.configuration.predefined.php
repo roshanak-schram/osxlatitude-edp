@@ -194,18 +194,18 @@
 		echo "<br><div align='center'><table border=0 width='95%' cellpadding=0 style='border-collapse: collapse'>\n";
 		echo "<tr><td rowspan='4' width='1%'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$name.png'></td></tr>\n";
 		echo "<tr>\n";
-		echo "<td>&nbsp;&nbsp;<b>$desc</b></td>\n"
-		echo "<td width='40%'>ROOT: $rootpath</td>\n"
-		echo "</tr>\n"
-		echo "<tr>\n"
-		echo "<td>&nbsp;&nbsp;$os_string ($os)</td>\n"
-		echo "<td>EDP Path: $workpath</td>\n"
-		echo "</tr>\n"
-		echo "<tr>\n"
-		echo "<td>&nbsp;</td>\n"
-		echo "<td>SLE path: $slepath</td>\n"
-		echo "</tr>\n"
-		echo "</table></div>\n"
+		echo "<td>&nbsp;&nbsp;<b>$desc</b></td>\n";
+		echo "<td width='40%'>ROOT: $rootpath</td>\n";
+		echo "</tr>\n";
+		echo "<tr>\n";
+		echo "<td>&nbsp;&nbsp;$os_string ($os)</td>\n";
+		echo "<td>EDP Path: $workpath</td>\n";
+		echo "</tr>\n";
+		echo "<tr>\n";
+		echo "<td>&nbsp;</td>\n";
+		echo "<td>SLE path: $slepath</td>\n";
+		echo "</tr>\n";
+		echo "</table></div>\n";
 
 		
 		echo "<br><br>";
