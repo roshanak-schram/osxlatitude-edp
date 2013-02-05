@@ -533,7 +533,7 @@ function copyKexts() {
 		
 	echo "  Copying the PS2 controller kexts (mouse+keyboard driver) to $ee \n";
 		$ps2id 	= $modeldb[$modelID]['ps2pack'];
-		if ($ps2id != "") {
+		if ($ps2id != "" && $ps2id != "no") {
 			$ps2dir = $ps2db[$ps2id]["foldername"];
 			system_call("cp -R $workpath/storage/kextpacks/$ps2dir/. $ee/");
 		}				
