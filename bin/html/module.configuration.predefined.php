@@ -192,7 +192,7 @@
 		//Show the header
 		echo "<form action='module.configuration.predefined.php' method='post'>";
 		echo "<br><div align='center'><table border=0 width='95%' cellpadding=0 style='border-collapse: collapse'>\n";
-		echo "<tr><td rowspan='4' width='1%'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$name.png'></td></tr>\n"
+		echo "<tr><td rowspan='4' width='1%'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$name.png'></td></tr>\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;&nbsp;<b>$desc</b></td>\n"
 		echo "<td width='40%'>ROOT: $rootpath</td>\n"
