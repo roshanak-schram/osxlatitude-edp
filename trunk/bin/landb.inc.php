@@ -81,8 +81,25 @@ $landb = array(
                 supported	=> "",
                 supporturl	=> "",
                 notes 		=> ""
-             ),             
-             
+             ),     
+                     
+        array( 
+				name 		=> "AppleRTL8169Ethernet.kext", 
+                kextname	=> "AppleRTL8169Ethernet.kext",
+                arch		=> "x86_x64",
+                supported	=> "",
+                supporturl	=> "",
+                notes 		=> "Alternative Realtek Network kext."
+             ),  
+                        
+         array( 
+				name 		=> "AtherosL1cEthernet.kext", 
+                kextname	=> "AtherosL1cEthernet.kext",
+                arch		=> "x86_x64",
+                supported	=> "",
+                supporturl	=> "",
+                notes 		=> ""
+             ),                             
                                                                                                                     
         );
 
