@@ -361,9 +361,10 @@ function copyKexts() {
 		}
 		
 				
-	$lanid = $modeldb[$modelID]['ethernet']; $lankext = $landb[$lanid]["kextname"];
+	
 	if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
-		echo "  Copying the Lan kext to $ee ($lankext)\n";
+		$lanid = $modeldb[$modelID]['ethernet']; $lankext = $landb[$lanid]["kextname"];
+		echo "  Copying the Lan kext to $ee ($lankext - ID: $lanid)\n";
 		system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/");
 	}
 		
