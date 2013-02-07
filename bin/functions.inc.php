@@ -321,7 +321,7 @@ function copyEssentials() {
 function copyKexts() {
 	//Get vars from config.inc.php
 	global $verbose; global $workpath; global $rootpath; global $slepath; global $ps2db; global $audiodb; global $incpath;
-	global $edpplugin; global $cachepath; global $modeldb; global $modelID; global $os; global $ee; global $batterydb;
+	global $edpplugin; global $cachepath; global $modeldb; global $modelID; global $os; global $ee; global $batterydb; global $landb;
 	
 	$modelName = $modeldb[$modelID]["name"];
 
@@ -363,9 +363,9 @@ function copyKexts() {
 				
 	
 	if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
-		$lanid = $modeldb[$modelID]['ethernet']; $lankext = $landb[$lanid]["kextname"];
+		$lanid = $modeldb[$modelID]['ethernet']; $lankext = $landb[$lanid]['kextname'];
 		echo "  Copying the Lan kext to $ee ($lankext - ID: $lanid)\n";
-		system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/");
+		if ($lankext != "") { system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/"); }
 	}
 		
 		
