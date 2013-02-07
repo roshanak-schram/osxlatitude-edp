@@ -1,4 +1,4 @@
-<?
+z<?
  
 global $modeldb; 
 $modeldb = array(
@@ -37,7 +37,7 @@ $modeldb = array(
                       		loadIOATAFamily	=> "",
                       		loadNatit		=> "no",
                       		useACPIfix		=> "yes",                      		
-                      		ethernet		=> "RealtekRTL81xx.kext",
+                      		ethernet		=> "8",
                       		audiopack		=> "2",                      		                      		
                       		supports_sl		=> "yes",
                       		supports_lion	=> "yes",
