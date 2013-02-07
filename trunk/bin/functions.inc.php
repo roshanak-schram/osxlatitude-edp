@@ -7,7 +7,7 @@
         include_once "config.inc.php";
         global $edpmode;
 		system_call("svn --non-interactive --username edp --password edp --force update $workpath");
-		echo " Your EDP have been updated...<br>\n";
+		echo " Your EDP have been updated...\n";
 		exit;
 		
 	}
@@ -348,7 +348,7 @@ function copyKexts() {
 	
 		$audioid = $modeldb[$modelID]['audiopack']; $audiodir = $audiodb[$audioid]["foldername"];
 		if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
-			echo "  Copying the Audio kexts to $ee <br>\n";
+			echo "  Copying the Audio kexts to $ee \n";
 			//Clean up
 			if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
 		
@@ -363,15 +363,15 @@ function copyKexts() {
 				
 	$lankext = $landb[$lanid]["kextname"];
 	if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
-		echo "  Copying the Lan kext to $ee <br>\n";
-		system_call("cp -R $workpath/storage/kexts/$lankext $ee/");
+		echo "  Copying the Lan kext to $ee ($lankext)\n";
+		system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/");
 	}
 		
 		
 					
 	
 	if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
-		echo "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. <br>\n";
+		echo "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. \n";
 		system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee");
 	}
 
@@ -396,14 +396,14 @@ function copyKexts() {
 		
 	
 	if ($modeldb[$modelID]['tscsync'] == "yes" || $modeldb[$modelID]['tscsync'] == "y") 	{
-		echo "  Check if we need VoodooTSCSync.kext for syncing CPU cores...<br>\n"; 
+		echo "  Check if we need VoodooTSCSync.kext for syncing CPU cores...\n"; 
 		system_call("cp -R $workpath/storage/kexts/VoodooTSCSync.kext $ee");
 	}
 
 
 	
 	if ($modeldb[$modelID]['emulatedST'] == "yes" || $modeldb[$modelID]['emulatedST'] == "y") 	{
-		echo "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu <br>\n"; 
+		echo "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu \n"; 
 		system_call("cp -R $workpath/storage/kexts/VoodooPState.kext $ee");
 		system_call("cp $workpath/storage/LaunchAgents/PStateMenu.plist /Library/LaunchAgents");
 	} else { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
