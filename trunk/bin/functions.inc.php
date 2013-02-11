@@ -26,7 +26,7 @@
     		
 		if ($localrev < $remoterev) { 
 		  echo "\n   ---------------------------------------------------------------------------------------\n";
-			echo "        !!! There is an update of EDP, please run option 5 to download the update !!!\n";
+			echo "        !!! There is an update of EDP, please run option 2 to download the update !!!\n";
 		  echo "   ---------------------------------------------------------------------------------------\n\n";
 		}		
 	}
