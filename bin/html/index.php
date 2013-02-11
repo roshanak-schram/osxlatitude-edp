@@ -12,13 +12,13 @@
 <div id="topbar">
 		<?php
 			if ($i != "Home") {
-				echo "<div id='leftnav'><a href='index.php'><img alt='home' src='images/home.png' /></a></div>";
+				echo "<div id='leftnav'><a href='index.php'><img alt='home' src='images/home.png' />&nbsp;</a></div>";
 			}
-			else { echo "<div id='leftbutton'><a href='edp.news.php' class='noeffect'>Changelog</a> </div>"; }
+			else { }
 		?>
 	<div id="title">EDP <?="$edpversion";?></div>
 	
-	<div id="rightbutton"><a href="#" onclick="loadModule('workerapp.php?action=update-edp');" class="noeffect">Update!</a> </div>
+	<div id="rightbutton"><a href="#" onclick="loadModule('workerapp.php?action=close-edpweb');" class="noeffect">&nbsp; Close &nbsp;</a> </div>
 </div>
 <?php
 include "tributton.menu.inc.php";
@@ -26,11 +26,6 @@ include "tributton.menu.inc.php";
 
 
 <div id="content" style="width: 100%; height: 100%">
-
-
-
-
-
 	<ul class="pageitem" id="console_iframe_div" style="left: 275px">
 		<iframe id="console_iframe" style="padding: 2px;" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="welcome.php"></iframe>
 	</ul>
@@ -82,6 +77,11 @@ include "tributton.menu.inc.php";
     function loadModule(page) {
 	    top.document.getElementById('console_iframe').src = page;
     }
+    
+	function dothis() {
+		window.fluid.terminate();
+	}
+
 </script>
 
 </body>

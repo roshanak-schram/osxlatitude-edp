@@ -17,7 +17,7 @@
 <div id="topbar">
 	<div id="leftnav"><a href="index.php"><img alt="home" src="images/home.png" /></a></div>
 	<div id="title">EDP Changelog</div>
-	<div id="rightbutton"><a href="#" onclick="loadPage('update.php');" class="noeffect">Update!</a> </div>
+	<div id="rightbutton"><a href="#" onclick="loadModule('workerapp.php?action=close-edpweb');" class="noeffect">&nbsp; Close &nbsp;</a> </div>
 </div>
 <?php
 include "tributton.menu.inc.php";

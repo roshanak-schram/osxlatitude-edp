@@ -33,7 +33,10 @@
 				addMenuItem("loadModule('workerapp.php?action=install-istat2');", 	"icons/pie-chart.png", "Install Istat menus 2");				
 			}			
 			
-			
+			if ($i == "Home") {
+				addMenuItem("loadModule('workerapp.php?action=update-edp');", 	"icons/update.png", "Download EDP updates");
+				addMenuItem("loadModule('workerapp.php?action=changelog');", 	"icons/binocular.png", "Changelog");
+			}			
 			function addMenuItem($action, $icon, $title) {
 				echo "<li class='menu' onclick=\"$action\"><a href='#'><img alt='list' src='$icon' width='32px' height='32px'/><span class='name'>$title</span><span class='arrow'></span></a></li>";
 			}
