@@ -26,13 +26,25 @@
 	if ($action == "fix-reset-display") 	{ echo "<pre>"; fixes_reset_display(); exit; }
 	if ($action == "fix-airdrop") 			{ echo "<pre>"; fixes_airdrop(); exit; }
 	if ($action == "update-edp") 			{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); exit; }
-	
+	if ($action == "close-edpweb") 			{ echo "<pre>"; close-edpweb(); exit; }
+	if ($action == "changelog")				{ showChangelog(); exit; }
 	
 	
 	
 	
 	
 	//Functions called by this script
+	
+	function showChangelog() {
+		echo "<div id='content'>\n";
+		include "include/rss.php";
+		echo "</div>\n";
+	}
+	
+	//function close-edpweb() {
+	//	system_call("kill $(ps aux | grep 'jetty' | awk '{print $2}')");
+	//	echo "<script> alert('You may now close the window...'); window.close();</script>";
+	//}
 	
 	function runDellBiosCrack() 	{ global $workpath; system_call("open $workpath/bin/DELLBiosPWgen"); }
 	function fixes_slowconsole() 	{ system_call("sudo rm -rf /private/var/log/asl/*.asl"); echo "Fix applied.. <br>"; }

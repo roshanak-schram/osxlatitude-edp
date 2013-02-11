@@ -36,6 +36,7 @@ $channel["language"]    = $xml->language;
 
 foreach ($xml->channel->item as $item)
 {
+		$link = $item->link;
         $article = array();
         $article["channel"] = $blog_url;
         $article["comments"] = $item->comments;
@@ -47,21 +48,14 @@ foreach ($xml->channel->item as $item)
         echo "<li class='textbox'><span class='header'>\n";
         echo $article["title"] = $item->title;
         echo "</span>\n";
-        echo "$desc";
+        echo "<br>$desc";
         
+        
+        
+        echo "</li>";
         ?>
-        
-        
-        </li>
-<li class="menu">
-<a href="<?php echo $article["link"] = $item->link;?>">
-<img alt="Description" src="thumbs/safari.png" />
-<span class="name">More info...</span>
-<span class="comment"><?php echo $article["pubDate"] = $item->pubDate;?></span>
-<span class="arrow"></span>
-</a>
-             </li>
 </ul>
+<br>
 <?php
         $article["isPermaLink"] = $item->guid["isPermaLink"];
 
@@ -80,6 +74,7 @@ foreach ($xml->channel->item as $item)
         // add this article to the list
         $articles[$article["timestamp"]] = $article;
 }
+
 
 // at this point, $channel contains all the metadata about the RSS feed,
 // and $articles contains an array of articles for us to repurpose
