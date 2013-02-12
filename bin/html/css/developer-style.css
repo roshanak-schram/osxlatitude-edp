@@ -2,16 +2,30 @@
 body {
 	position: relative;
 	margin: 0;
+	background: #F4F4F4;
 	-webkit-text-size-adjust: none;
 	min-height: 416px;
 	font-family: helvetica,sans-serif;
 	-webkit-touch-callout: none;
 }
-.console_iframe_div {
-	position: 	absolute;
-	top:		10px;
-	left: 		250px;
+.edpmenu {
+	position: absolute;
+	width: 270px;
+	height: 10px;
+	z-index: 1;
+	left: 0px;
+	top: 76px;
+	background-color: #ECECEC;
+	border-right: 1px solid #000000;
 	
+}
+.console_iframe {
+	position: absolute;
+	width: 50%;
+	height: 100%;
+	z-index: 1;
+	left: 285px;
+	top: 76px;
 }
 
 .center {
