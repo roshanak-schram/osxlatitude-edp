@@ -7,9 +7,11 @@
 	global $edpmode; $edpmode = "web";
 ?>
 
-<body onload="bootloader();" onresize="aligndesign();" background="../images/background.png">
+<body onload="bootloader();" onresize="aligndesign();">
 
-<div id="topbar">
+
+
+<div id="topbar" class="black">
 		<?php
 			if ($i != "Home") {
 				echo "<div id='leftnav'><a href='index.php'><img alt='home' src='images/home.png' />&nbsp;</a></div>";
@@ -20,22 +22,17 @@
 	
 	<div id="rightbutton"><a href="#" onclick="loadModule('workerapp.php?action=close-edpweb');" class="noeffect">&nbsp; Close &nbsp;</a> </div>
 </div>
+	
+
+
 <?php
 include "tributton.menu.inc.php";
 ?>
 
+<iframe id="edpmenu" class="edpmenu" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?="$i";?>"></iframe>
 
-<div id="content" style="width: 100%; height: 100%">
-	<ul class="pageitem" id="console_iframe_div" style="left: 275px">
-		<iframe id="console_iframe" style="padding: 2px;" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="welcome.php"></iframe>
-	</ul>
+<iframe id="console_iframe" class="console_iframe" marginwidth="0" marginheight="0" border="0" frameborder="0" src="welcome.php"></iframe>
 
-	<iframe id="menu" style="position: 	absolute; top: 0px; left: 0px; height: 500px; width: 275px" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?="$i";?>"></iframe>
-
-
-
-	
-</div>
 
 
 <script charset="utf-8">
@@ -63,24 +60,22 @@ include "tributton.menu.inc.php";
         }
 
 
-        //Calculate and correction posetion of the console_iframe_div
-        var console_iframe_div_width = w-300;
-        var console_iframe_width = w-305;
-        var console_iframe_height = h-123;
-                
-        document.getElementById('console_iframe_div').style.width = console_iframe_div_width+'px';
+        //Calculate and correction of the console_iframe
+        var console_iframe_width = w-285;
+        var console_iframe_height = h-80;
         document.getElementById('console_iframe').style.width = console_iframe_width+'px';	
-        document.getElementById('console_iframe').style.height = console_iframe_height+'px';	
+        document.getElementById('console_iframe').style.height = console_iframe_height+'px';
+                
+        //Calculate and correction of menu dev
+        var edpmenu_div_height = h-76;
+        document.getElementById('edpmenu').style.height = edpmenu_div_height+'px';        
+	
         	
     }
     
     function loadModule(page) {
 	    top.document.getElementById('console_iframe').src = page;
     }
-    
-	function dothis() {
-		window.fluid.terminate();
-	}
 
 </script>
 
