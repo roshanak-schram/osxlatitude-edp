@@ -41,6 +41,7 @@ public class LocalPHPWebServer {
 		final Connector connector = new SelectChannelConnector();
 		connector.setPort(port);
 		connector.setHost(host);
+	       connector.setMaxIdleTime(10*60*1000);
 		server.setConnectors(new Connector[] { connector });
     
 		final WebAppContext webapp = new WebAppContext();
