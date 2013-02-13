@@ -2,7 +2,8 @@
 	include_once "header.inc.php";
 	include_once "../functions.inc.php";
 	include_once "../config.inc.php";
-	
+	include "include/watermark.inc.php";
+							
 	$action = $_GET['action'];
 	
 	

@@ -141,6 +141,7 @@
 				
 	if ($action == "") {
 				include "header.inc.php";
+				include "include/watermark.inc.php";
 				echo "<br><br><br><br><br>";
 				echo "<span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
 				//Show the vendrop dropdown
@@ -186,6 +187,7 @@
 	//Check if $action was set via GET or POST - if it is set, we asume that we are going to confirm the build
 	if ($action == "confirm") {
 		include "header.inc.php";
+		include "include/watermark.inc.php";
 		$name 		= $modeldb[$modelID]["name"];
 		$desc 		= $modeldb[$modelID]["desc"];
 		
