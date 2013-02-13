@@ -5,9 +5,9 @@
 
 	function updateEDP() {
         include_once "config.inc.php";
-        global $edpmode;
+        global $edpmode; global $workpath;
 		system_call("svn --non-interactive --username edp --password edp --force update $workpath");
-		echo " Your EDP have been updated...\n";
+		echo "\n .. Your EDP have been updated...\n";
 		exit;
 		
 	}
@@ -83,6 +83,7 @@
 		global $verbose; global $os; global $workpath; global $ee; global $cachepath; global $rootpath; global $modeldb; global $modelID;
 		$needfix = $modeldb[$modelID]["useGMA950brightfix"];
 		if ($needfix == "yes") {
+			echo "  Applying GMA950 Brightness fix \n";
 			if ($os == "lion") { system_call("cp -R $workpath/storage/fixes/gma950-brightness-fix/AppleIntelIntegratedFramebuffer.kext $ee"); }
 		}
 		
@@ -244,6 +245,7 @@ function AppleACPIfixCheck() {
 		
 		//Check if ACPIfix is selected
 		if ($modeldb[$modelID]["useACPIfix"] == "yes") {
+			echo "  Applying ACPI fix (Coolbook fix)\n";
 			system_call("cp -R $workpath/storage/fixes/coolbook-fix/AppleACPIPlatform.kext $ee");
 
 			if (is_dir("$slepath/AppleACPIPlatform.kext")) { 
@@ -456,10 +458,8 @@ function copyKexts() {
 	$tf = "$workpath/model-data/$modelName/$os/Extensions";
 	system_call("cp -Rf $tf/* $ee");
 	
-	echo "  Checking if we need ACPIfix \n";
+	//Applying fixes
 	AppleACPIfixCheck();
-	
-	echo "  Checking if we need GMA950 Brightness fix \n";
 	GMA950brightnessfixCheck();
 	
 	
