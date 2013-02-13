@@ -8,13 +8,20 @@ body {
 	font-family: helvetica,sans-serif;
 	-webkit-touch-callout: none;
 }
+.topbarmenu {
+	font-family: helvetica,sans-serif;
+	line-height: 1px;
+	height: 22px;
+	font-size: 9pt;
+	cursor: hand;	
+}
 .edpmenu {
 	position: absolute;
 	width: 270px;
 	height: 10px;
 	z-index: 1;
 	left: 0px;
-	top: 76px;
+	top: 69px;
 	background-color: #ECECEC;
 	border-right: 1px solid #000000;
 	
@@ -25,7 +32,7 @@ body {
 	height: 100%;
 	z-index: 1;
 	left: 285px;
-	top: 76px;
+	top: 69px;
 }
 
 .center {
