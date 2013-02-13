@@ -48,6 +48,9 @@ $vendordb = array(
 					array( 	name 			=> "Shuttle, Desktops", 
                       		dbfile 			=> "modelinfo.shuttle.desktop.inc.php"                     		 
                     ),                                                                                                  
+					array( 	name 			=> "Intel, Desktops", 
+                      		dbfile 			=> "modelinfo.intel.desktop.inc.php"                     		 
+                    )
              );
 
 
