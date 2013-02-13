@@ -1,7 +1,5 @@
 <?php
 	$i = $_GET['i'];
-	//include "header.inc.php";
-	
 ?>
 <div id="title" style="position: absolute; width: 235px; height: 23px; z-index: 2; left: 15px; top: 15px; border-bottom-style: solid; border-bottom-width: 1px">
 <b><font face="Arial" color="#476A83">&nbsp;<? echo "$i"; ?></font></b></div>
@@ -10,7 +8,7 @@
 		
 		<?php
 		
-			if ($i == "Configuration") { 
+			if ($i == "Configuration" || $i == "") { 
 				addMenuItem("loadModule('module.configuration.predefined.php');", "icons/tick.png", "Build from model database");
 			}
 
@@ -32,11 +30,7 @@
 				addMenuItem("loadModule('workerapp.php?action=install-lynx');", 	"icons/globe.png", "Install Lynx");							
 				addMenuItem("loadModule('workerapp.php?action=install-istat2');", 	"icons/pie-chart.png", "Install Istat menus 2");				
 			}			
-			
-			if ($i == "Home") {
-				addMenuItem("loadModule('workerapp.php?action=update-edp');", 	"icons/update.png", "Download EDP updates");
-				addMenuItem("loadModule('workerapp.php?action=changelog');", 	"icons/binocular.png", "Changelog");
-			}			
+					
 			function addMenuItem($action, $icon, $title) {
 				echo "<tr onclick=\"$action\" style='cursor: hand'><td width='36' height='38'><img alt='list' src='$icon' width='28px' height='28px'/></td><td onmouseover='mover(this)' onmouseout='mout(this)'><font face='Arial' size='2'>$title</font></td></tr>\n";
 			}
