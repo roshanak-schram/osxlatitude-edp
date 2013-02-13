@@ -25,6 +25,7 @@
 	if ($vendor == "12") { include "../modelinfo.samsung.desktop.inc.php"; }
 	if ($vendor == "13") { include "../modelinfo.shuttle.laptop.inc.php"; }			
 	if ($vendor == "14") { include "../modelinfo.shuttle.desktop.inc.php"; }
+	if ($vendor == "15") { include "../modelinfo.intel.desktop.inc.php"; }
 	
 	include_once "../ps2db.inc.php";
 	include_once "../audiodb.inc.php";
