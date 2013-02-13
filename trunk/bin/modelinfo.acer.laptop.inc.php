@@ -24,7 +24,26 @@ $modeldb = array(
                       		customKernel 	=> ""                      		 
                     ), 	
 
-
+                    array( 	name 			=> "Acer_Aspire_M5_581TG", 
+                      		desc 			=> "Acer Aspire M5 581TG",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "9",
+                      		emulatedST 		=> "no",                      		
+                      		tscsync 		=> "no",                      		
+                      		batteryKext		=> "0",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "",
+                      		patchCPU		=> "yes",
+                      		ethernet		=> "no",
+                      		audiopack		=> "no",
+                      		supports_sl		=> "yes",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		                      		                      		
+                      		customCham 		=> "",                      		
+                      		customKernel 	=> ""                      		 
+                    ), 
 
                     array( 	name 			=> "Acer_Travelmate_6291", 
                       		desc 			=> "Acer Travelmate 6291",
@@ -66,6 +85,7 @@ $modeldb = array(
                       		customCham 		=> "",                      		
                       		customKernel 	=> ""                      		 
                     ), 
+                    
                     
                     
                     
