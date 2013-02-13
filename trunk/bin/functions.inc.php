@@ -6,12 +6,12 @@
 	function updateEDP() {
         include_once "config.inc.php";
         global $edpmode; global $workpath;
-        echo "<pre>";
-        echo "Cleaning up $workpath using SVN \n";
+        echo "Cleaning up $workpath using SVN <br>";
         system_call("svn cleanup $workpath");
-        echo "Downloading latest sources from EDP's svn server\n";
+        echo "<br>Downloading latest sources from EDP's svn server<br>";
 		system_call("svn --non-interactive --username edp --password edp --force update $workpath");
-		echo "\n .. Your EDP have been updated...\n";
+		echo "<br> .. Your EDP have been updated...<br><br>.. Press COMMAND+R to reload EDP...<br>";
+		
 		exit;
 		
 	}
