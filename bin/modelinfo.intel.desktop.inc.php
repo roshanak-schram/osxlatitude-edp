@@ -28,7 +28,7 @@ $modeldb = array(
                           
                     array( 	name 			=> "Intel_NUC_DC3217IYE", 
                       		desc 			=> "Intel NUC DC3217IYE",
-                      		nullcpu 		=> "yes",
+                      		nullcpu 		=> "no",
                       		sleepEnabler 	=> "no",                      		
                       		ps2pack 		=> "no",
                       		emulatedST 		=> "no",                      		
