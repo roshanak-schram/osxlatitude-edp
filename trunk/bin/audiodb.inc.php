@@ -19,7 +19,7 @@ $audiodb = array(
 		array( 	name 		=> "VoodooHDA #3 - Version 2.8.1", 
                 foldername 	=> "VoodooHDA3",
                 arch		=> "x86_x64",
-                notes		=> "Latest VoodooHDA - should work with allmost any machine"
+                notes		=> "Latest VoodooHDA - should work with almost any machine"
              ),  
 
         array(  name 		=> "AppleHDA.kext - STAC9200",
