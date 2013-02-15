@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AppleOnboardPCATA</string>
+	<key>CFBundleGetInfoString</key>
+	<string>1.0.0, Copyright Apple Computer, Inc. 2004</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.driver.AppleOnboardPCATA</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Apple Onboard PC ATA Driver</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>AMD CS5535 ATA</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>AMD</string>
+			<key>IOClass</key>
+			<string>AppleAMDCS5535ATA</string>
+			<key>IOProviderClass</key>
+			<string>AppleOnboardPCATAChannel</string>
+		</dict>
+		<key>AMD CS5535 PCI</key>
+		<dict>
+			<key>ATA Channel Count</key>
+			<integer>1</integer>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>AMD</string>
+			<key>IOClass</key>
+			<string>AppleOnboardPCATARoot</string>
+			<key>IOPCIPrimaryMatch</key>
+			<string>0x002d100b</string>
+			<key>IOProbeScore</key>
+			<integer>10000</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+		<key>ATI IXP ATA</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>ATI</string>
+			<key>IOClass</key>
+			<string>AppleATIIXPATA</string>
+			<key>IOProviderClass</key>
+			<string>AppleOnboardPCATAChannel</string>
+		</dict>
+		<key>ATI IXP PCI</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>ATI</string>
+			<key>IOClass</key>
+			<string>AppleOnboardPCATARoot</string>
+			<key>IOPCIPrimaryMatch</key>
+			<string>0x43761002 0x43491002</string>
+			<key>IOProbeScore</key>
+			<string>10000</string>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+		<key>NVIDIA nForce ATA</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>NVIDIA</string>
+			<key>IOClass</key>
+			<string>AppleNVIDIAnForceATA</string>
+			<key>IOProviderClass</key>
+			<string>AppleOnboardPCATAChannel</string>
+		</dict>
+		<key>NVIDIA nForce PCI</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>NVIDIA</string>
+			<key>IOClass</key>
+			<string>AppleOnboardPCATARoot</string>
+			<key>IOPCIPrimaryMatch</key>
+			<string>0x005310de 0x00e510de 0x026510de 0x00d510de 0x006510de 0x01bc10de</string>
+			<key>IOProbeScore</key>
+			<integer>10000</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+		<key>ServerWorks ATA</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>ServerWorks</string>
+			<key>IOClass</key>
+			<string>AppleServerWorksATA</string>
+			<key>IOProviderClass</key>
+			<string>AppleOnboardPCATAChannel</string>
+		</dict>
+		<key>ServerWorks PCI</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleOnboardPCATA</string>
+			<key>Hardware Vendor</key>
+			<string>ServerWorks</string>
+			<key>IOClass</key>
+			<string>AppleOnboardPCATARoot</string>
+			<key>IOPCIPrimaryMatch</key>
+			<string>0x02121166 0x02131166 0x02171166 0x59511022 ox59551022</string>
+			<key>IOProbeScore</key>
+			<integer>10000</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOATAFamily</key>
+		<string>1.5.0d1</string>
+		<key>com.apple.iokit.IOPCIFamily</key>
+		<string>1.1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Local-Root</string>
+</dict>
+</plist>
