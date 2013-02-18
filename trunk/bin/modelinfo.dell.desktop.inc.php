@@ -84,7 +84,7 @@ $modeldb = array(
                       		supports_sl		=> "yes",
                       		supports_lion	=> "no",
                       		supports_ml		=> "no",                      		                      		                      		
-                      		customCham 		=> "yes",                      		
+                      		customCham 		=> "no",                      		
                       		customKernel 	=> ""                      		 
                     ),
                     
@@ -106,7 +106,7 @@ $modeldb = array(
                       		supports_sl		=> "yes",
                       		supports_lion	=> "yes",
                       		supports_ml		=> "yes",                      		                      		                      		
-                      		customCham 		=> "yes",                      		
+                      		customCham 		=> "no",                      		
                       		customKernel 	=> ""                      		 
                     ),
                                                                                                                                                                                                         
