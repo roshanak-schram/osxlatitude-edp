@@ -70,6 +70,27 @@ $modeldb = array(
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                      		 
                     ),                                                                                                                                                                   
+                    array( 	name 			=> "Samsung_np_900x4c", 
+                      		desc 			=> "Samsung NP900 X4C",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "9",
+                      		emulatedST 		=> "no",                      		
+                      		tscsync 		=> "no",                      		
+                      		batteryKext		=> "3",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "yes",
+                      		patchCPU		=> "yes",                      		                    		
+                      		ethernet		=> "8",
+                      		wifikext		=> "0",
+                      		audiopack		=> "2",                      		                      		
+                      		supports_sl		=> "no",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                      		 
+                    ),  
              );
 
 
