@@ -1,6 +1,6 @@
 <?php
 	$i = $_GET['i'];
-	if ($i == "") { $i="Config"; }
+	if ($i == "") { $i="Configuration"; }
 	
 	include "header.inc.php";
 	include_once "../config.inc.php";
