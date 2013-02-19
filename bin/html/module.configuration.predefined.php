@@ -119,14 +119,15 @@
 			flush();
 			copyKexts();
   			
-  		
-		echo "Step 4) Call myFix to do the new build... \n";
+		echo "Step 4) Updating chameleon.. \n";
 			flush();
-			system_call("myfix -q -t /");
-
-		echo "Step 5) Doing sanity check... \n";
-			kernelcachefix();
 			updateCham();
+			  		
+		echo "Step 5) Calling myFix to copy kexts and generate kernelcache - myfix will run in the background and can take anything from 1 to 10 minuts to finish, a clear indication that myfix is done is usually that your CPU usage drops... \n";
+			flush();
+			system_call("stty -tostop; myfix -q -t / >/Extra/myfix.log 2>&1 &");
+
+
 					
 		
 	}
