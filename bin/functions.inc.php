@@ -10,6 +10,7 @@
         system_call("svn cleanup $workpath");
         echo "<br>Downloading latest sources from EDP's svn server<br>";
 		system_call("svn --non-interactive --username edp --password edp --force update $workpath");
+		system_call("chmod -R 755 /Extra");
 		echo "<br> .. Your EDP have been updated...<br><br>.. Press COMMAND+R to reload EDP...<br>";
 		
 		exit;
