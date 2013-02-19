@@ -160,7 +160,7 @@
 
 				//Show the model dropdown, but only if $vendor is set
 				if ($vendor != "") {
-					echo "<li class='select'><td><select id='model' name='model' style='width:160px;'>";
+					echo "<li class='select'><td><select id='model' name='model'>";
 					if ($modelID == "") { echo "<option value='' selected>&nbsp;&nbsp;Select model...</option>\n"; }
 					$id = 1;
 					while ($modeldb[$id] != ""){
