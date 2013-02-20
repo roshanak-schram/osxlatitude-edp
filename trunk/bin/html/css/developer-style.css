@@ -1160,3 +1160,6 @@ select {
 .smallfield:last-child input {
 	-webkit-border-bottom-right-radius: 8px;
 }
+.topbarmenu td[onclick] {
+    cursor: pointer;
+}
