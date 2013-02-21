@@ -396,8 +396,10 @@ function copyKexts() {
 				
 	//Checking if we need to patch AHCI
 	if ($modeldb[$modelID]['patchAHCIml'] == "yes" || $modeldb[$modelID]['patchAHCIml'] == "y") {
+		echo "  Patching IOAHCIFamily.kext... \n";
 		if ($os == "ml") { patchAHCI(); }
 	}
+	else { echo "  Not patching IOAHCIFamily.kext.... \n"; }
 	
 	//Checking if we need Sleepenabler
 	if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
