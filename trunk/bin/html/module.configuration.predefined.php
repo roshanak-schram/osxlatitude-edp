@@ -65,6 +65,7 @@
 		$useGMA950brightfix	= $_POST['useGMA950brightfix']; if ($useGMA950brightfix == "on"){ $useGMA950brightfix = "yes"; } 	else { $useGMA950brightfix = "no"; }
 		$customCham			= $_POST['customCham']; 		if ($customCham == "on")		{ $customCham = "yes"; } 			else { $customCham= "no"; }
 		$customKernel		= $_POST['customKernel']; 		if ($customKernel == "on")		{ $customKernel = "yes"; } 			else { $customKernel = "no"; }
+		$patchAHCIml		= $_POST['patchAHCIml']; 		if ($patchAHCIml == "on")		{ $patchAHCIml = "yes"; } 			else { $patchAHCIml = "no"; }
 		
 		//Generate a multi dim. array used during the build process
 		global $modeldb;
@@ -82,6 +83,7 @@
                       		loadNatit		=> $loadNatit,
                       		useACPIfix		=> $useACPIfix,
                       		patchCPU		=> $patchCPU,
+                      		patchAHCIml		=> $patchAHCIml,
                       		useGMA950brightfix	=> $useGMA950brightfix,
                       		ethernet		=> $_POST['ethernet'],
                       		wifikext		=> $_POST['wifikext'],
@@ -118,6 +120,7 @@
 		echo "Step 3) Preparing kexts for myHack.kext \n";
 			flush();
 			copyKexts();
+			
   			
 		echo "Step 4) Updating chameleon.. \n";
 			flush();
@@ -333,7 +336,7 @@
 			checkbox("Use custom kernel:", "customKernel", $modeldb[$modelID]["customKernel"]);	
 			checkbox("GMA950 Brightness fix:", "useGMA950brightfix", $modeldb[$modelID]["useGMA950brightfix"]);
 			checkbox("Use ACPI fix (coolbook fix):", "useACPIfix", $modeldb[$modelID]["useACPIfix"]);
-			
+			checkbox("Use AHCI fix (Fix waiting for root device):", "patchAHCIml", $modeldb[$modelID]["patchAHCIml"]);
 		echo "</ul><br>";
 		
 		

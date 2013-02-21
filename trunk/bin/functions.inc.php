@@ -36,6 +36,16 @@
 		}		
 	}
 	
+	
+	
+	//Function to patch AHCI - see: http://www.insanelymac.com/forum/topic/280062-waiting-for-root-device-when-kernel-cache-used-only-with-some-disks-fix/page__st__60#entry1851722
+	function patchAHCI() {
+		system_call("cp -R /System/Library/Extensions/IOAHCIFamily.kext /Extra/Extensions");
+		system_call("perl /Extra/bin/patch-ahci-mlion.pl");
+	}
+	
+	
+	
 	//Function to check if the model is allready checked out, if the model is not checked out it will check it out
 	function svnModeldata($model) {
 		global $workpath; global $rootpath;
@@ -368,7 +378,7 @@ function copyKexts() {
 		}
 		
 				
-	
+	//Copying ethernet kexts
 	if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
 		$lanid = $modeldb[$modelID]['ethernet']; $lankext = $landb[$lanid]['kextname'];
 		echo "  Copying the Lan kext to $ee ($lankext - ID: $lanid)\n";
@@ -377,16 +387,21 @@ function copyKexts() {
 		
 		
 					
-	
+	//Checking if we need nullcpu
 	if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
 		echo "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. \n";
 		system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee");
 	}
 
 				
+	//Checking if we need to patch AHCI
+	if ($modeldb[$modelID]['patchAHCIml'] == "yes" || $modeldb[$modelID]['patchAHCIml'] == "y") {
+		if ($os == "ml") { patchAHCI(); }
+	}
 	
+	//Checking if we need Sleepenabler
 	if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
-		echo "  Check if we need SleepEnabler.kext for enabling sleep...\n"; 
+		echo "  Copying SleepEnabler.kext for enabling sleep...\n"; 
 		system_call("cp -R $workpath/storage/kexts/$os/SleepEnabler.kext $ee");
 	}
 
@@ -418,7 +433,6 @@ function copyKexts() {
 
 								
 	//Copy battery kexts
-	
 	if ($modeldb[$modelID]['batteryKext'] != "" && $modeldb[$modelID]['batteryKext'] != "no") {
 		$battid 	= $modeldb[$modelID]['batteryKext'];
 		$battkext 	= $batterydb[$battid]["kextname"];
