@@ -83,6 +83,11 @@ sub main()
 	printf "This patch is for OSX 10.8/10.8.x only\n";
 	exit(1);
     }
+    if ($osxvers eq "10.8.0") {
+	$relocation_offset=0x4ceb;
+	$kprintf_relocation_entry=1002;
+	$glob_arg1_operand="\xa5\x90\x00\x00";
+    }    
     if ($osxvers eq "10.8") {
 	$relocation_offset=0x4ceb;
 	$kprintf_relocation_entry=1002;
