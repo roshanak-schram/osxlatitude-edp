@@ -66,7 +66,29 @@ $modeldb = array(
                       		customCham 		=> "no",                      		
                       		customKernel 	=> "no"                   		 
                     ),
-                                          
+
+                    array( 	name 			=> "HP_Probook_5330m", 
+                      		desc 			=> "HP ProBook 5330m",
+                      		nullcpu 		=> "no",
+                      		sleepEnabler 	=> "no",                      		
+                      		ps2pack 		=> "0",
+                      		emulatedST 		=> "no",                      		
+                      		tscsync 		=> "no",                      		
+                      		batteryKext		=> "3",
+                      		loadIOATAFamily	=> "no",
+                      		loadNatit		=> "no",
+                      		useACPIfix		=> "yes",
+                      		patchCPU		=> "yes",                      		                    		
+                      		ethernet		=> "3",
+                      		wifikext		=> "0",
+                      		audiopack		=> "2",                      		                      		
+                      		supports_sl		=> "no",
+                      		supports_lion	=> "yes",
+                      		supports_ml		=> "yes",                      		
+                      		customCham 		=> "no",                      		
+                      		customKernel 	=> "no"                      		 
+                    ),
+                                                              
                 	array( 	name 			=> "HP_Pavilion_dv6401eo", 
                       		desc 			=> "HP Pavilion dv6401eo",
                       		nullcpu 		=> "yes",
