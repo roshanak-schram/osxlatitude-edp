@@ -100,6 +100,18 @@ $landb = array(
                 supporturl	=> "",
                 notes 		=> ""
              ),                             
+
+         array( 
+				name 		=> "AppleIntelE1000e #2", 
+                kextname	=> "AppleIntelE1000e2.kext",
+                arch		=> "x86_x64",
+                supported	=> "",
+                supporturl	=> "",
+                notes 		=> "Alternative Intel network card kext"
+             ),
+             
+
+
                                                                                                                     
         );
 
