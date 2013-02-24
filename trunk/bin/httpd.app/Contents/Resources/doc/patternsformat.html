@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Patterns Format</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Abyss Web Server  For  MacOS X   User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="IPv6 Addresses and Ranges"
+HREF="ipv6.html"><LINK
+REL="NEXT"
+TITLE="Regular Expressions"
+HREF="regex.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"><META
+NAME="AppleIcon"
+CONTENT="icon.png"><META
+NAME="AppleTitle"
+CONTENT="Abyss Web Server Help"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Abyss Web Server  For  MacOS X   User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ipv6.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="regex.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="PATTERNSFORMAT"
+></A
+>Appendix C. Patterns Format</H1
+><P
+>&#13;		When matching a string (a sequence of characters containing an extension or a virtual path) with a pattern, the following rules apply:
+
+		<UL
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>*</KBD
+> matches any sequence of characters with any length (zero or more),
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>?</KBD
+> matches any character,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>[</KBD
+>set<KBD
+CLASS="USERINPUT"
+>]</KBD
+> matches any character in the specified set,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>[!</KBD
+>set<KBD
+CLASS="USERINPUT"
+>]</KBD
+> or <KBD
+CLASS="USERINPUT"
+>[^</KBD
+>set<KBD
+CLASS="USERINPUT"
+>]</KBD
+> matches any character not in the specified set,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>\</KBD
+> suppresses the syntactic significance of a special character.
+
+				</P
+></LI
+></UL
+>
+
+	</P
+><P
+>&#13;		A set is made of characters or ranges. A range is formed by two characters with a <KBD
+CLASS="USERINPUT"
+>-</KBD
+> in the middle (as in <KBD
+CLASS="USERINPUT"
+>0-9</KBD
+> or <KBD
+CLASS="USERINPUT"
+>a-z</KBD
+>).
+
+	</P
+><P
+>&#13;		Preceding a special character with <KBD
+CLASS="USERINPUT"
+>\</KBD
+> makes it loose its syntactic significance
+
+		and match that character exactly. The special characters are <KBD
+CLASS="USERINPUT"
+>[]*?!^-\</KBD
+>.
+
+	</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3186"
+></A
+><P
+><B
+>Example C-1. Examples of Patterns</B
+></P
+><P
+>&#13;					<UL
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>*</KBD
+>: any string including the empty string matches with this pattern.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>*.*</KBD
+>: <KBD
+CLASS="USERINPUT"
+>list.txt</KBD
+> and <KBD
+CLASS="USERINPUT"
+>holiday.jpeg</KBD
+> match
+
+							while <KBD
+CLASS="USERINPUT"
+>my-directory</KBD
+> doesn't.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>/*.php</KBD
+>: <KBD
+CLASS="USERINPUT"
+>/hello.php</KBD
+> and <KBD
+CLASS="USERINPUT"
+>/mysite/scripts/test.php</KBD
+> match
+
+							but <KBD
+CLASS="USERINPUT"
+>/mysite/test2.pl</KBD
+> doesn't.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>/*/*.php</KBD
+>: <KBD
+CLASS="USERINPUT"
+>/mysite/test.php</KBD
+> and <KBD
+CLASS="USERINPUT"
+>/mysite/scripts/test.php</KBD
+> match
+
+							with this pattern while <KBD
+CLASS="USERINPUT"
+>/test.php</KBD
+> doesn't.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>mp?</KBD
+>: Any 3 character long string that begins with <KBD
+CLASS="USERINPUT"
+>mp</KBD
+> matches.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>?????</KBD
+>: Any 5 character long string matches.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>mp[2-4]</KBD
+>: Only <KBD
+CLASS="USERINPUT"
+>mp2</KBD
+>, <KBD
+CLASS="USERINPUT"
+>mp3</KBD
+>, and <KBD
+CLASS="USERINPUT"
+>mp4</KBD
+> match.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>mp[!2-4]</KBD
+>: All 3 character long strings that begin with <KBD
+CLASS="USERINPUT"
+>mp</KBD
+> match except <KBD
+CLASS="USERINPUT"
+>mp2</KBD
+>, <KBD
+CLASS="USERINPUT"
+>mp3</KBD
+>, and <KBD
+CLASS="USERINPUT"
+>mp4</KBD
+>.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>mp[2-4g]</KBD
+>: Only <KBD
+CLASS="USERINPUT"
+>mp2</KBD
+>, <KBD
+CLASS="USERINPUT"
+>mp3</KBD
+>, <KBD
+CLASS="USERINPUT"
+>mp4</KBD
+>, and <KBD
+CLASS="USERINPUT"
+>mpg</KBD
+> match.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>mp[2\-4]file</KBD
+>: Only <KBD
+CLASS="USERINPUT"
+>mp2file</KBD
+>, <KBD
+CLASS="USERINPUT"
+>mp-file</KBD
+>, and <KBD
+CLASS="USERINPUT"
+>mp4file</KBD
+> match.
+
+						</P
+></LI
+></UL
+>						
+
+				</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ipv6.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="regex.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>IPv6 Addresses and Ranges</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Regular Expressions</TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="COPYRIGHT"
+>Copyright © 2001-2012 Aprelium</DIV
+></BODY
+></HTML
+>

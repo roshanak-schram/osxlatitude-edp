@@ -1,0 +1,564 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Regular Expressions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Abyss Web Server  For  MacOS X   User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Patterns Format"
+HREF="patternsformat.html"><LINK
+REL="NEXT"
+TITLE="Uninstalling The Software"
+HREF="uninstall.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"><META
+NAME="AppleIcon"
+CONTENT="icon.png"><META
+NAME="AppleTitle"
+CONTENT="Abyss Web Server Help"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Abyss Web Server  For  MacOS X   User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="patternsformat.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="uninstall.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="REGEX"
+></A
+>Appendix D. Regular Expressions</H1
+><P
+>&#13;		Regular expressions in Abyss Web Server conform to the  PCRE syntax (Perl Compatible Regular Expressions). This appendix is a quick guide to understand the basics of regular expressions. For an extensive description of their syntax, refer to the PCREPATTERN section in <KBD
+CLASS="USERINPUT"
+><A
+HREF="http://pcre.org/pcre.txt"
+TARGET="_top"
+>http://pcre.org/pcre.txt</A
+></KBD
+>.
+
+	</P
+><P
+>&#13;		When matching a string (a sequence of characters) with a regular expression, the following rules apply:
+
+		<UL
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>.</KBD
+> matches any character,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>*</KBD
+> repeats the previous match zero or more times,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>+</KBD
+> repeats the previous match one or more times,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>?</KBD
+> repeats the previous match zero or one time at most,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>{</KBD
+>n<KBD
+CLASS="USERINPUT"
+>,</KBD
+>m<KBD
+CLASS="USERINPUT"
+>}</KBD
+> repeats the previous match n times at least and m times at most (n and m are positive integers),
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>{</KBD
+>n<KBD
+CLASS="USERINPUT"
+>}</KBD
+>
+
+                 repeats the previous match exactly n times,
+
+                </P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>{</KBD
+>n<KBD
+CLASS="USERINPUT"
+>,}</KBD
+> repeats the previous match n times at least,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>{,</KBD
+>m<KBD
+CLASS="USERINPUT"
+>}</KBD
+> repeats the previous match m times at most,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>^</KBD
+> is an anchor which matches with the beginning of a string,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>$</KBD
+> is an anchor which matches with the end of a string,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>[</KBD
+>set<KBD
+CLASS="USERINPUT"
+>]</KBD
+> matches any character in the specified set,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>[^</KBD
+>set<KBD
+CLASS="USERINPUT"
+>]</KBD
+> matches any character not in the specified set,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>\</KBD
+> suppresses the syntactic significance of a special character,
+
+				</P
+></LI
+><LI
+><P
+>&#13;					<KBD
+CLASS="USERINPUT"
+>(</KBD
+>expression<KBD
+CLASS="USERINPUT"
+>)</KBD
+> groups the characters between the parentheses
+
+					into a single unit and captures a match for later use as a backreference (<KBD
+CLASS="USERINPUT"
+>$1</KBD
+>, ... , <KBD
+CLASS="USERINPUT"
+>$9</KBD
+>).
+
+				</P
+></LI
+></UL
+>
+
+	</P
+><P
+>&#13;		A set is made of characters or ranges. A range is formed by two characters with a <KBD
+CLASS="USERINPUT"
+>-</KBD
+> in the middle (as in <KBD
+CLASS="USERINPUT"
+>0-9</KBD
+> or <KBD
+CLASS="USERINPUT"
+>a-z</KBD
+>).
+
+	</P
+><P
+>&#13;		Preceding a special character with <KBD
+CLASS="USERINPUT"
+>\</KBD
+> makes it loose its syntactic significance
+
+		and match that character exactly. Outside a set, the special characters are <KBD
+CLASS="USERINPUT"
+>()[]{}.*+?^$\</KBD
+>.
+
+		Inside a set, the special characters are <KBD
+CLASS="USERINPUT"
+>[]\-^</KBD
+>.
+
+	</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3311"
+></A
+><P
+><B
+>Example D-1. Examples of Regular Expressions</B
+></P
+><P
+>&#13;					<UL
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>abc</KBD
+>: any string containing the substring <KBD
+CLASS="USERINPUT"
+>abc</KBD
+> matches with this regular expression.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>abcd*</KBD
+>: any string containing the substring <KBD
+CLASS="USERINPUT"
+>abc</KBD
+> followed by zero or more <KBD
+CLASS="USERINPUT"
+>d</KBD
+> characters matches with this regular expression.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>abcd?</KBD
+>: any string containing the substring <KBD
+CLASS="USERINPUT"
+>abc</KBD
+> or <KBD
+CLASS="USERINPUT"
+>abcd</KBD
+> matches with this regular expression.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>ab(cd)?</KBD
+>: any string containing the substring <KBD
+CLASS="USERINPUT"
+>ab</KBD
+> or <KBD
+CLASS="USERINPUT"
+>abcd</KBD
+> matches with this regular expression.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>^/dir</KBD
+>: any string starting with the substring <KBD
+CLASS="USERINPUT"
+>/dir</KBD
+> matches with this regular expression.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>\.exe$</KBD
+>: any string ending with the substring <KBD
+CLASS="USERINPUT"
+>.exe</KBD
+> matches with this regular expression. Note here that the character <KBD
+CLASS="USERINPUT"
+>.</KBD
+> has been escaped to remove its special meaning.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>^/dir/.*\.exe$</KBD
+>: any string beginning with <KBD
+CLASS="USERINPUT"
+>/dir</KBD
+> and ending with <KBD
+CLASS="USERINPUT"
+>.exe</KBD
+> matches with this regular expression.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>^/dir/[^./]+\.exe$</KBD
+>: any string starting with <KBD
+CLASS="USERINPUT"
+>/dir</KBD
+> followed by 1 or more characters except <KBD
+CLASS="USERINPUT"
+>.</KBD
+> and <KBD
+CLASS="USERINPUT"
+>/</KBD
+>, and followed by <KBD
+CLASS="USERINPUT"
+>.exe</KBD
+> matches with this regular expression.
+
+						</P
+></LI
+></UL
+>						
+
+				</P
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3355"
+></A
+><P
+><B
+>Example D-2. Examples of Backreferences</B
+></P
+><P
+>&#13;					<UL
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>/dir/test.exe</KBD
+> matches with <KBD
+CLASS="USERINPUT"
+>^/dir/([^./]+)\.exe$</KBD
+>. This regular expression has a single group <KBD
+CLASS="USERINPUT"
+>([^./]+)</KBD
+> which defines the backreference <KBD
+CLASS="USERINPUT"
+>$1</KBD
+>. In this case, <KBD
+CLASS="USERINPUT"
+>$1</KBD
+>'s value is <KBD
+CLASS="USERINPUT"
+>test</KBD
+>.
+
+						</P
+></LI
+><LI
+><P
+>&#13;							<KBD
+CLASS="USERINPUT"
+>/dir/test.exec</KBD
+> matches with <KBD
+CLASS="USERINPUT"
+>/dir/([^./]+)\.(exe.*)$</KBD
+>. This regular expression has two groups: <KBD
+CLASS="USERINPUT"
+>([^./]+)</KBD
+> which defines the backreference <KBD
+CLASS="USERINPUT"
+>$1</KBD
+>, and <KBD
+CLASS="USERINPUT"
+>(exe.*)</KBD
+> which defines the backreference <KBD
+CLASS="USERINPUT"
+>$2</KBD
+>. In this case, <KBD
+CLASS="USERINPUT"
+>$1</KBD
+>'s value is <KBD
+CLASS="USERINPUT"
+>test</KBD
+> and <KBD
+CLASS="USERINPUT"
+>$2</KBD
+>'s value is <KBD
+CLASS="USERINPUT"
+>exec</KBD
+>.
+
+						</P
+></LI
+></UL
+>						
+
+				</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="patternsformat.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="uninstall.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Patterns Format</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Uninstalling The Software</TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="COPYRIGHT"
+>Copyright © 2001-2012 Aprelium</DIV
+></BODY
+></HTML
+>

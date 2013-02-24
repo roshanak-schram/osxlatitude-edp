@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>IPv6 Addresses and Ranges</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Abyss Web Server  For  MacOS X   User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="IP Addresses and Ranges Format"
+HREF="ipformat.html"><LINK
+REL="PREVIOUS"
+TITLE="IP Addresses and Ranges Format"
+HREF="ipformat.html"><LINK
+REL="NEXT"
+TITLE="Patterns Format"
+HREF="patternsformat.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"><META
+NAME="AppleIcon"
+CONTENT="icon.png"><META
+NAME="AppleTitle"
+CONTENT="IPv6 Addresses and Ranges"><META
+NAME="Description"
+CONTENT="IPv6 Addresses and Ranges"><META
+NAME="AppleOrder"
+CONTENT=""></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Abyss Web Server  For  MacOS X   User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ipformat.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix B. IP Addresses and Ranges Format</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="patternsformat.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="IPV6"
+>IPv6 Addresses and Ranges</A
+></H1
+><P
+>&#13;			An IPv6 address is made of 8 groups of 16-bit hexadecimal values separated by colons as in <KBD
+CLASS="USERINPUT"
+>2001:0db8:85a3:0000:0000:8a2e:0370:7334</KBD
+>.
+
+		</P
+><P
+>&#13;			IPv6 addresses can be abbreviated by omitting leading zeroes in 16-bit values and by replacing each group of consecutive zeroes by a double colon. As such, <KBD
+CLASS="USERINPUT"
+>2001:0db8:85a3:0000:0000:8a2e:0370:7334</KBD
+> is equivalent to <KBD
+CLASS="USERINPUT"
+>2001:db8:85a3::8a2e:370:7334</KBD
+>.
+
+		</P
+><P
+>&#13;			An IPv6 address range must conform to one of the following forms:
+
+			<UL
+><LI
+><P
+>&#13;						<KBD
+CLASS="USERINPUT"
+>*</KBD
+>: the range includes all valid IP addresses,
+
+					</P
+></LI
+><LI
+><P
+>&#13;						<KBD
+CLASS="USERINPUT"
+>ipA-ipB</KBD
+>: the range includes the IPv6 addresses between  <KBD
+CLASS="USERINPUT"
+>ipA</KBD
+> and <KBD
+CLASS="USERINPUT"
+>ipB</KBD
+>,
+
+					</P
+></LI
+><LI
+><P
+>&#13;						<KBD
+CLASS="USERINPUT"
+>ipA/n</KBD
+>: the range includes all the IPv6 addresses which first <KBD
+CLASS="USERINPUT"
+>n</KBD
+> bits are identical to the first <KBD
+CLASS="USERINPUT"
+>n</KBD
+> bits of <KBD
+CLASS="USERINPUT"
+>ipA</KBD
+>,
+
+					</P
+></LI
+><LI
+><P
+>&#13;						<KBD
+CLASS="USERINPUT"
+>ipA-ipB/n</KBD
+>: An IPv6 address that is included in this range is comprised between <KBD
+CLASS="USERINPUT"
+>ipA</KBD
+> and <KBD
+CLASS="USERINPUT"
+>ipB</KBD
+>, and has its first <KBD
+CLASS="USERINPUT"
+>n</KBD
+> bits identical to the first <KBD
+CLASS="USERINPUT"
+>n</KBD
+> bits of <KBD
+CLASS="USERINPUT"
+>ipA</KBD
+> and <KBD
+CLASS="USERINPUT"
+>ipB</KBD
+>.
+
+					</P
+></LI
+></UL
+>
+
+		</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ipformat.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="patternsformat.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>IP Addresses and Ranges Format</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ipformat.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Patterns Format</TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="COPYRIGHT"
+>Copyright © 2001-2012 Aprelium</DIV
+></BODY
+></HTML
+>
