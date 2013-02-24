@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Server Activity</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Abyss Web Server  For  MacOS X   User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Server Management"
+HREF="server.html"><LINK
+REL="PREVIOUS"
+TITLE="Server Statistics"
+HREF="serverstats.html"><LINK
+REL="NEXT"
+TITLE="General server configuration"
+HREF="servergeneral.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"><META
+NAME="AppleIcon"
+CONTENT="icon.png"><META
+NAME="AppleTitle"
+CONTENT="Server Activity"><META
+NAME="Description"
+CONTENT="Server Activity"><META
+NAME="AppleOrder"
+CONTENT=""></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Abyss Web Server  For  MacOS X   User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="serverstats.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Server Management</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="servergeneral.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SERVERACTIVITY"
+>Server Activity</A
+></H1
+><A
+NAME="SERVER-ACTIVITY"
+></A
+><P
+>&#13;			Open the console and select <B
+CLASS="GUILABEL"
+>Server Activity</B
+>. The console displays a dialog listing the current active connections. For each connection, the following properties are reported: 
+
+			<UL
+><LI
+><P
+>The IP address of the client</P
+></LI
+><LI
+><P
+>The HTTP verb of the request being served on the connection</P
+></LI
+><LI
+><P
+>The URL being served on the connection</P
+></LI
+><LI
+><P
+>The HTTP status code of  the response served on the connection</P
+></LI
+><LI
+><P
+>The elapsed time since the beginning of the service of the request associated to the connection</P
+></LI
+><LI
+><P
+>The amount of data sent so far as a response on the connection</P
+></LI
+></UL
+>
+
+		</P
+><P
+>&#13;			The list of the active connections is automatically refreshed every 10 seconds. Pressing the <B
+CLASS="GUIBUTTON"
+>Refresh</B
+> button forces an immediate update of the view.
+
+		</P
+><P
+>&#13;			Press <B
+CLASS="GUIBUTTON"
+>OK</B
+> to go back to the main console page.
+
+		</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>
+				Connections that are still established waiting for a subsequent request are shown with the text <B
+CLASS="GUILABEL"
+>Kept-alive connection</B
+>. These connections are actually made from HTTP/1.1 clients which support the HTTP keep-alive feature (serving more than a single request on one connection.)
+
+			</P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>
+				The listing may include the connection serving the URL associated with the <B
+CLASS="GUILABEL"
+>Server Activity</B
+> feature.
+
+			</P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="serverstats.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="servergeneral.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Server Statistics</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="server.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>General server configuration</TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="COPYRIGHT"
+>Copyright © 2001-2012 Aprelium</DIV
+></BODY
+></HTML
+>
