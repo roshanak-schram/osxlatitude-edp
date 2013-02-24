@@ -1,6 +1,7 @@
 <?php
 	$workpath	= "/Extra";
 	$edpversion = "5.1";
+	date_default_timezone_set('UTC');
 	
 	include_once "$workpath/bin/functions.inc.php";
 	
