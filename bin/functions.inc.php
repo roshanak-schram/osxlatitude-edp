@@ -19,7 +19,7 @@
 	function getConfig($name) {
 		global $edp_db;
 		$stmt = $edp_db->query("SELECT * FROM config where name = '$name'");
-		$stmt->execute();
+		$stmt->execute(); $bigrow = $stmt->fetchAll(); 
 		return "$bigrow[0]['value']";
 	}
 			
