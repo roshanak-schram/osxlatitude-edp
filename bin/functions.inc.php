@@ -14,7 +14,9 @@
 		exit;
 		
 	}
-	
+
+
+		
 	function updateCham() {
 		//Note: Overtime we will add a function to make sure that the user have the latest version of cham distrobuted with EDP - until then, we will force the update on each build
 		global $workpath; global $rootpath;
@@ -122,7 +124,8 @@
 	function system_call($data) {
 		global $edpmode;
 		passthru("$data");
-		if ($edpmode = "web") { echo str_repeat(' ', 254); flush(); }
+		echo str_repeat(' ', 254);
+		flush();
 	}
 
 	
@@ -145,12 +148,12 @@
 		return "$choice";
 	}
 
-        function patchAppleIntelCPUPowerManagement() {
-                global $workpath; global $ee; global $slepath;
-                echo "  Patching AppleIntelCPUPowerManagement.kext \n";
-                system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
-                system_call('perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-        }
+    function patchAppleIntelCPUPowerManagement() {
+	    global $workpath; global $ee; global $slepath;
+	    echo "  Patching AppleIntelCPUPowerManagement.kext \n";
+	    system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
+	    system_call('perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+    }
 	function copyKextToSLE($kext, $frompath) {
 		global $slepath; global $workpath;
 		
@@ -337,13 +340,7 @@ function copyKexts() {
 			echo "  Copying the Audio kexts to $ee \n";
 			//Clean up
 			if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
-		
-			//Hack for loading STAC9200 correctly durring boot
-			if ($audioid == "3") { 
-				if (is_dir("$slepath/AppleHDA.kext")) { system_call("rm -Rf $slepath/AppleHDA.kext"); }
-				system_call("cp -R $workpath/storage/kextpacks/$audiodir/HDAEnabler.kext $slepath/");
-				}
-				system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
+			system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
 		}
 		
 				
@@ -355,7 +352,13 @@ function copyKexts() {
 	}
 		
 		
-					
+	//Copying wifi kexts
+	if ($modeldb[$modelID]['wifikext'] != "" && $modeldb[$modelID]['wifikext'] != "no") {
+		$wifiID= $modeldb[$modelID]['wifikext']; $wififolder = $wifidb[$wifiID]['foldername']; $wifikextname = $wifidb[$wifiID]['kextname'];
+		echo "  Copying the wifi kext to $ee ($wifikextname)\n";
+		system_call("cp -R $workpath/storage/kextpacks/$wififolder/. $ee/");
+	}
+						
 	//Checking if we need nullcpu
 	if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
 		echo "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. \n";
