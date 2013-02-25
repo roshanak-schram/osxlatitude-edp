@@ -119,7 +119,7 @@
 			echo "<span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
 			//Show the vendrop dropdown
 			echo "<select name='vendor' id='vendor' onchange='showSerie();'>";
-			if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
+			if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
 				foreach($result as $row) {
 					if ($row[vendor] != "$last") {
 						$s = ""; if ($vendor == "$row[vendor]") { $s = "selected"; }
@@ -361,10 +361,10 @@
 	}
 	function showType() {
 		var a = document.getElementById("vendor");
-		var vendor = a.options[a.selectedIndex].value;
-		
+		var vendor = a.options[a.selectedIndex].value;	
 		var b = document.getElementById("serie");
-		var serie = b.options[a.selectedIndex].value;
+		var serie = b.options[b.selectedIndex].value;
+		
 		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&serie='+serie+'';
 	}
 	function showSerie() {
