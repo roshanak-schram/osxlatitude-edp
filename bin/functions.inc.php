@@ -363,7 +363,7 @@ function copyKexts() {
 		$wifid 		= $modeldb[$modelID]['wifikext'];
 		$wififolder 	= $wifidb[$wifid]['foldername'];
 		$wifikextname 	= $wifidb[$wifid]['kextname'];
-		if ($wififolder !=) {
+		if ($wififolder != "") {
 			echo "  Copying the wifi kext to $ee ($wifikextname)\n";
 			system_call("cp -R $workpath/storage/kextpacks/$wififolder/. $ee/");
 		}
