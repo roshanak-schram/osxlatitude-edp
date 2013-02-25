@@ -118,7 +118,7 @@
 			echo "<br><br><br><br><br>";
 			echo "<span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
 			//Show the vendrop dropdown
-			echo "<select name='vendor' id='vendor' onchange='showType();'>";
+			echo "<select name='vendor' id='vendor' onchange='showSerie();'>";
 			if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
 				foreach($result as $row) {
 					if ($row[vendor] != "$last") {
@@ -129,15 +129,27 @@
 				}				
 				echo "</select><span class='arrow'></span> </li>";
 
-
-				//Show the model dropdown, but only if $vendor is set
-				if ($vendor != "") {
-					$result = $edp_db->query("SELECT * FROM models where vendor = '$vendor' order by type");
+				
+				if ($vendor != "" && $serie == "") {
+					$result = $edp_db->query("SELECT * FROM models where vendor = '$vendor' order by serie");
+					echo "<li class='select'><td><select id='serie' name='serie' onchange='showType();'>";
+					echo "<option value='' selected>&nbsp;&nbsp;Select serie...</option>\n";
+					foreach($result as $row) {
+						if ($row[serie] != "$last" { echo "<option value='$row[serie]'>&nbsp;&nbsp;$row[vendor] $row[serie]</option>\n"; }
+						$last = $row[serie];
+					}						
+					echo "</select><span class='arrow'></span> </li>";					
+										
+				}
+				
+				//Show the model dropdown, but only if $vendor and $serie is set
+				if ($vendor != "" && $serie != "") {
+					$result = $edp_db->query("SELECT * FROM models where vendor = '$vendor' and serie = '$serie' order by type");
 					echo "<li class='select'><td><select id='model' name='model'>";
 					echo "<option value='' selected>&nbsp;&nbsp;Select model...</option>\n";
 					
 					foreach($result as $row) {
-						echo "<option value='$row[id]' selected>&nbsp;&nbsp;$row[desc] ($row[type])</option>\n";
+						echo "<option value='$row[id]'>&nbsp;&nbsp;$row[desc] ($row[type])</option>\n";
 					}						
 					echo "</select><span class='arrow'></span> </li>";
 				}
@@ -350,7 +362,15 @@
 	function showType() {
 		var a = document.getElementById("vendor");
 		var vendor = a.options[a.selectedIndex].value;
-		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'';
+		
+		var b = document.getElementById("serie");
+		var serie = b.options[a.selectedIndex].value;
+		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&serie='+serie+'';
+	}
+	function showSerie() {
+		var a = document.getElementById("vendor");
+		var vendor = a.options[a.selectedIndex].value;	
+		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'';			
 	}
 </script>
 
