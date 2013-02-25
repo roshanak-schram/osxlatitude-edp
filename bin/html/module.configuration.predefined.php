@@ -135,7 +135,7 @@
 					echo "<li class='select'><td><select id='serie' name='serie' onchange='showType();'>";
 					echo "<option value='' selected>&nbsp;&nbsp;Select serie...</option>\n";
 					foreach($result as $row) {
-						if ($row[serie] != "$last" { echo "<option value='$row[serie]'>&nbsp;&nbsp;$row[vendor] $row[serie]</option>\n"; }
+						if ($row[serie] != "$last") { echo "<option value='$row[serie]'>&nbsp;&nbsp;$row[vendor] $row[serie]</option>\n"; }
 						$last = $row[serie];
 					}						
 					echo "</select><span class='arrow'></span> </li>";					
