@@ -365,7 +365,8 @@
 		var vendor = a.options[a.selectedIndex].value;	
 		var b = document.getElementById("serie");
 		var serie = b.options[b.selectedIndex].value;
-		
+		alert(vendor);
+		alert(serie);
 		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&serie='+serie+'';
 	}
 	function showSerie() {
