@@ -1,7 +1,7 @@
 <?php
 
 	//SQLite stuff :)
-	$edp_db = new PDO("sqlite:$workpath/bin/edp.sqlite3");
+	$edp_db = new PDO("sqlite:edp.sqlite3");
 	$edp_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 	//Include general functions
