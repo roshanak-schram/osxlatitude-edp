@@ -5,6 +5,7 @@
 	//Get server vars
 	global $modelID;
 	$vendor 	= $_GET['vendor'];	if ($vendor == "") 	{ $vendor 	= $_POST['vendor']; }
+	$serie 		= $_GET['serie'];	if ($serie == "") 	{ $serie 	= $_POST['serie']; }
 	$modelID 	= $_GET['model'];	if ($modelID == "") { $modelID 	= $_POST['model']; }
 	$action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 	
