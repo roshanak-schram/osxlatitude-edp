@@ -113,9 +113,6 @@
 	//-------------------------> Here starts the Vendor and model selector - but only if $action is empty
 				
 	if ($action == "") {
-			echo "vendor: $vendor <br>";
-			echo "serie: $serie <br>";
-			echo "model: $model <br>";
     		$result = $edp_db->query("SELECT * FROM models order by vendor");
 			include "header.inc.php";
 			include "include/watermark.inc.php";
@@ -373,8 +370,6 @@
 		var vendor = a.options[a.selectedIndex].value;	
 		var b = document.getElementById("serie");
 		var serie = b.options[b.selectedIndex].value;
-		alert(vendor);
-		alert(serie);
 		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&serie='+serie+'';
 	}
 	function showSerie() {
