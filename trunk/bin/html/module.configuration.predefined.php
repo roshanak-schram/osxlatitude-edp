@@ -89,7 +89,8 @@
 			flush();
 			updateCham();
 			  		
-		echo "Step 5) Calling myFix to copy kexts and generate kernelcache - myfix will run in the background and can take anything from 1 to 10 minuts to finish, a clear indication that myfix is done is usually that your CPU usage drops... \n";
+		echo "Step 5) Calling myFix to copy kexts and generate kernelcache<br>";
+		echo " .. myfix will run in the background and can take anything from 1 to 10 minuts to finish, a clear indication that myfix is done is usually that your CPU usage drops... \n";
 			flush();
 			system_call("stty -tostop; sudo myfix -q -t / >$workpath/myfix.log 2>&1 &");
 
@@ -205,7 +206,9 @@
 			
 		//Show dropdown for Audio kexts
 			$result = $edp_db->query("SELECT * FROM audio");
-			echo "<li class='select'><select name='audiopack'>\n";
+			echo "<li class='select'>";
+			$d = ""; if ($mdrow[bundledAudio] == "yes") { $d = "DISABLED"; }
+			echo "<select name='audiopack' $d>\n";
 			if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected</option>\n"; }
 			else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }
 			foreach($result as $row) {
