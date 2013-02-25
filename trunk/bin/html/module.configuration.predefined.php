@@ -134,31 +134,36 @@
 				echo "</select><span class='arrow'></span> </li>";
 
 				
-				if ($vendor != "" && $serie == "") {
+				if ($vendor != "") {
 					$result = $edp_db->query("SELECT * FROM models where vendor = '$vendor' order by serie");
 					echo "<li class='select'><td><select id='serie' name='serie' onchange='showType();'>";
 					echo "<option value='' selected>&nbsp;&nbsp;Select serie...</option>\n";
 					foreach($result as $row) {
-						if ($row[serie] != "$last") { echo "<option value='$row[serie]'>&nbsp;&nbsp;$row[vendor] $row[serie]</option>\n"; }
+						if ($row[serie] != "$last") { 
+							$s = ""; if ($row[serie] == "$serie") { $s = "SELECTED"; }
+							echo "<option value='$row[serie]' $s>&nbsp;&nbsp;$row[vendor] $row[serie]</option>\n";
+						}
 						$last = $row[serie];
 					}						
 					echo "</select><span class='arrow'></span> </li>";					
 										
-				}
+
 				
-				//Show the model dropdown, but only if $vendor and $serie is set
-				if ($vendor != "" && $serie != "") {
-					$result = $edp_db->query("SELECT * FROM models where vendor = '$vendor' and serie = '$serie' order by type");
-					echo "<li class='select'><td><select id='model' name='model'>";
-					echo "<option value='' selected>&nbsp;&nbsp;Select model...</option>\n";
+					//Show the model dropdown, but only if $vendor and $serie is set
+					if ($vendor != "" && $serie != "") {
+						$result = $edp_db->query("SELECT * FROM models where vendor = '$vendor' and serie = '$serie' order by type");
+						echo "<li class='select'><td><select id='model' name='model'>";
+						echo "<option value='' selected>&nbsp;&nbsp;Select model...</option>\n";
 					
-					foreach($result as $row) {
-						echo "<option value='$row[id]'>&nbsp;&nbsp;$row[desc] ($row[type])</option>\n";
-					}						
-					echo "</select><span class='arrow'></span> </li>";
-				}
+						foreach($result as $row) {
+							echo "<option value='$row[id]'>&nbsp;&nbsp;$row[desc] ($row[type])</option>\n";
+							}						
+							echo "</select><span class='arrow'></span> </li>";
+							echo "<li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul>";
+						}
+
+				}				
 				
-				echo "<li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul>";
 	}
 	
 	//<-------------------- Here stops the vendor and model selector		
