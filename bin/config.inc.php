@@ -3,14 +3,22 @@
 	//SQLite stuff :)
 	$edp_db = new PDO("sqlite:$workpath/bin/edp.sqlite3");
 	$edp_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	//Include general functions
+	include_once "$workpath/bin/functions.inc.php";
 	
-	function getConfig($name) {
-		global $edp_db;
-		$stmt = $edp_db->query("SELECT * FROM config where name = '$name'");
-		$stmt->execute();
-		return "$bigrow[0]['value']";
-	}
-		
+
+	//Get Vars from config storage
+	$edpversion = getConfig('edpversion');
+	$verbose 	= getConfig('verbose');
+	
+	$workpath	= getConfig('workpath');
+	$ee			= getConfig('ee');
+	$rootpath	= getConfig('rootpath');
+	$slepath	= getConfig('slepath');
+	$cachepath	= getConfig('cachepath');
+	$incpath	= getConfig('incpath');
+			
 	//Generate multidimensional arrays - this is instead of re-writting all code and to keep support for console mode
 		//audio
 		$stmt = $edp_db->query("SELECT * FROM audio order by id");
@@ -28,27 +36,11 @@
 		$stmt = $edp_db->query("SELECT * FROM ps2 order by id");
 		$stmt->execute(); $ps2db = $stmt->fetchAll();		
 		
-		
-		
 
-
-	//Path of EDP
-	
-	
-	//Get Vars from config storage
-	$edpversion = getConfig('edpversion');
-	$verbose 	= getConfig('verbose');
-	
-	$workpath	= getConfig('workpath');
-	$ee			= getConfig('ee');
-	$rootpath	= getConfig('rootpath');
-	$slepath	= getConfig('slepath');
-	$cachepath	= getConfig('cachepath');
-	$incpath	= getConfig('incpath');
-	
+	//Set timezone to UTC
 	date_default_timezone_set('UTC');
 	
-	include_once "$workpath/bin/functions.inc.php";
+
 	
 	
 

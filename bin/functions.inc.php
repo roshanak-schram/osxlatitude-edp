@@ -16,7 +16,13 @@
 	}
 
 
-		
+	function getConfig($name) {
+		global $edp_db;
+		$stmt = $edp_db->query("SELECT * FROM config where name = '$name'");
+		$stmt->execute();
+		return "$bigrow[0]['value']";
+	}
+			
 	function updateCham() {
 		//Note: Overtime we will add a function to make sure that the user have the latest version of cham distrobuted with EDP - until then, we will force the update on each build
 		global $workpath; global $rootpath;
