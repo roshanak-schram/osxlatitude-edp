@@ -19,8 +19,8 @@
 	function getConfig($name) {
 		global $edp_db;
 		$stmt = $edp_db->query("SELECT * FROM config where name = '$name'");
-		$stmt->execute(); $bigrow = $stmt->fetchAll(); 
-		return "$bigrow[0]['value']";
+		$stmt->execute(); $bigrow = $stmt->fetchAll(); $row = $bigrow[0];
+		return $row[value];
 	}
 			
 	function updateCham() {
