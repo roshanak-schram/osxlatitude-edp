@@ -207,14 +207,19 @@
 		//Show dropdown for Audio kexts
 			$result = $edp_db->query("SELECT * FROM audio");
 			echo "<li class='select'>";
-			$d = ""; if ($mdrow[bundledAudio] == "yes") { $d = "DISABLED"; }
-			echo "<select name='audiopack' $d>\n";
-			if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected</option>\n"; }
-			else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }
-			foreach($result as $row) {
-				$s=""; if ("$mdrow[audiopack]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Audio kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
-		    }
+			//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
+			if ($mdrow[bundledAudio] == "yes") { 
+				echo "<select name='audiopack' DISABLED>\n";
+				echo "<option value='no'>&nbsp; Audio: Comes with patched AppleHDA...</option>\n";
+			}	
+			else {
+				if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected</option>\n"; }
+				else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }
+				foreach($result as $row) {
+					$s=""; if ("$mdrow[audiopack]" == "$row[id]") { $s = "SELECTED"; }
+					echo "<option value='$row[id]' $s>&nbsp; Audio kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
+				}
+			}
 			echo "</select><span class='arrow'></span> </li>\n";
 
 
