@@ -213,7 +213,7 @@
 				echo "<option value='no'>&nbsp; Audio: Comes with patched AppleHDA...</option>\n";
 			}
 			if ($mdrow[bundledAudio] == "" || $mdrow[bundledAudio] == "no") {	
-				echo "<select name='audiopack' DISABLED>\n";
+				echo "<select name='audiopack'>\n";
 				if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected</option>\n"; }
 				else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }
 				foreach($result as $row) {
