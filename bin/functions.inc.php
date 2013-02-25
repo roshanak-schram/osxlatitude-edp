@@ -315,7 +315,7 @@ function copyEssentials() {
 
 function copyKexts() {
 	//Get vars from config.inc.php
-	global $verbose; global $workpath; global $rootpath; global $slepath; global $ps2db; global $audiodb; global $incpath;
+	global $verbose; global $workpath; global $rootpath; global $slepath; global $ps2db; global $audiodb; global $incpath; global $wifidb;
 	global $edpplugin; global $cachepath; global $modeldb; global $modelID; global $os; global $ee; global $batterydb; global $landb;
 	
 	$modelName = $modeldb[$modelID]["name"];
@@ -360,9 +360,13 @@ function copyKexts() {
 		
 	//Copying wifi kexts
 	if ($modeldb[$modelID]['wifikext'] != "" && $modeldb[$modelID]['wifikext'] != "no") {
-		$wifiID= $modeldb[$modelID]['wifikext']; $wififolder = $wifidb[$wifiID]['foldername']; $wifikextname = $wifidb[$wifiID]['kextname'];
-		echo "  Copying the wifi kext to $ee ($wifikextname)\n";
-		system_call("cp -R $workpath/storage/kextpacks/$wififolder/. $ee/");
+		$wifid 		= $modeldb[$modelID]['wifikext'];
+		$wififolder 	= $wifidb[$wifid]['foldername'];
+		$wifikextname 	= $wifidb[$wifid]['kextname'];
+		if ($wififolder !=) {
+			echo "  Copying the wifi kext to $ee ($wifikextname)\n";
+			system_call("cp -R $workpath/storage/kextpacks/$wififolder/. $ee/");
+		}
 	}
 						
 	//Checking if we need nullcpu
