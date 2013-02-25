@@ -209,10 +209,11 @@
 			echo "<li class='select'>";
 			//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
 			if ($mdrow[bundledAudio] == "yes") { 
-				echo "<select name='audiopack' DISABLED>\n";
+				echo "<select name='audiopack' DISABLED SELECTED>\n";
 				echo "<option value='no'>&nbsp; Audio: Comes with patched AppleHDA...</option>\n";
-			}	
-			else {
+			}
+			if ($mdrow[bundledAudio] == "" || $mdrow[bundledAudio] == "no") {	
+				echo "<select name='audiopack' DISABLED>\n";
 				if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected</option>\n"; }
 				else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }
 				foreach($result as $row) {
