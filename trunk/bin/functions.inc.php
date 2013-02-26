@@ -15,6 +15,12 @@
 		
 	}
 
+	function writeToLog($logfile, $data) {
+		global $workpath;
+		$current = file_get_contents($logfile);
+		file_put_contents($logfile, $data, FILE_APPEND | LOCK_EX);
+		return;
+	}
 
 	function getConfig($name) {
 		global $edp_db;
@@ -56,9 +62,9 @@
 	function svnModeldata($model) {
 		global $workpath; global $rootpath;
 		$modelfolder = "$workpath/model-data/$model";
-		if (is_dir("$modelfolder")) { 
-			echo "  Locale cache found for $model, updating cache....\n";
-			system_call("svn --non-interactive --username edp --password edp --force update $modelfolder");
+		if (is_dir("$modelfolder")) {
+			writeToLog("$workpath/build.log", "Locale cache found for $model, updating cache....<br>");
+			system_call("svn --non-interactive --username edp --password edp --force update $modelfolder >>$workpath/build.log");
 		}
 		else {
 			echo "  Locale cache NOT found for $model, downloading....\n"; 
@@ -271,8 +277,8 @@ function kernelcachefix() {
 function copyEssentials() {
 		global $workpath; global $rootpath; global $modeldb; global $modelID; global $os;
 		$modelName = $modeldb[$modelID]["name"];
-			
-		echo "  Cleaning up by system...\n";
+		
+		writeToLog("$workpath/build.log", "Cleaning up by system...<br>");
 		edpCleaner();
 		
 		$file = "$workpath/smbios.plist";
@@ -292,18 +298,17 @@ function copyEssentials() {
 		$file = "$workpath/SSDT-4.aml"; if (file_exists($file)) { system_call("rm $file"); }
 		$file = "$workpath/SSDT-5.aml"; if (file_exists($file)) { system_call("rm $file"); }
 
-
-  		echo "  Copying COMMON system plists and dsdt.aml from $workpath/model-data/$modelName/common to $workpath \n\n";
+		writeToLog("$workpath/build.log", "  Copying COMMON system plists and dsdt.aml from $workpath/model-data/$modelName/common to $workpath<br>");
   			$file = "$workpath/model-data/$modelName/common/smbios.plist"; 				if (file_exists($file)) { system_call("cp -f $file $workpath"); }
   			$file = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system_call("cp -f $file $workpath"); }
   			$file = "$workpath/model-data/$modelName/common/dsdt.aml"; 					if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-		
-  		echo "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $workpath \n";
+
+		writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $workpath<br>");		
   			$file = "$workpath/model-data/$modelName/$os/smbios.plist"; 				if (file_exists($file)) { system_call("cp -f $file $workpath"); }
   			$file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; 	if (file_exists($file)) { system_call("cp -f $file $workpath"); }
   			$file = "$workpath/model-data/$modelName/$os/dsdt.aml"; 					if (file_exists($file)) { system_call("cp -f $file $workpath"); }					
 
-		echo "  Checking if your model includes SSDT dump files - will copy if any exists..\n\n";
+		writeToLog("$workpath/build.log", "  Checking if your model includes SSDT dump files - will copy if any exists..<br>");
 			$file = "$workpath/model-data/$modelName/common/SSDT.aml"; 		if (file_exists($file)) { system_call("cp -f $file $workpath"); }
 			$file = "$workpath/model-data/$modelName/common/SSDT-1.aml"; 	if (file_exists($file)) { system_call("cp -f $file $workpath"); }
 			$file = "$workpath/model-data/$modelName/common/SSDT-2.aml"; 	if (file_exists($file)) { system_call("cp -f $file $workpath"); }
@@ -320,30 +325,28 @@ function copyKexts() {
 	
 	$modelName = $modeldb[$modelID]["name"];
 
-
-	echo "  Start by cleaning up in $ee\n";
-	system_call("rm -Rf $ee/*");
+	writeToLog("$workpath/build.log", "  Start by cleaning up in $ee..<br>");
+		system_call("rm -Rf $ee/*");
 	
 	//Checking if we need to patch AppleIntelCPUPowerManagement.kext
 		$pathCPU = $modeldb[$modelID]["patchCPU"];
 		if ($pathCPU == "yes") { patchAppleIntelCPUPowerManagement(); }
 		
-		
-	echo "  Copying the PS2 controller kexts (mouse+keyboard driver) to $ee \n";
+	writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts (mouse+keyboard driver) to $ee<br>");		
 		$ps2id 	= $modeldb[$modelID]['ps2pack'];
 		if ($ps2id != "" && $ps2id != "no") {
 			$ps2dir = $ps2db[$ps2id]["foldername"];
 			system_call("cp -R $workpath/storage/kextpacks/$ps2dir/. $ee/");
 		}				
 
-	echo "  Copying custom kexts from $workpath/include/Extensions to $ee/\n";
+	writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
 		system_call("cp -R $workpath/include/Extensions/* $ee");
 		
 		
 	
 		$audioid = $modeldb[$modelID]['audiopack']; $audiodir = $audiodb[$audioid]["foldername"];
 		if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
-			echo "  Copying the Audio kexts to $ee \n";
+			writeToLog("$workpath/build.log", "  Copying the Audio kexts to $ee<br>");
 			//Clean up
 			if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
 			system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
@@ -353,7 +356,7 @@ function copyKexts() {
 	//Copying ethernet kexts
 	if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
 		$lanid = $modeldb[$modelID]['ethernet']; $lankext = $landb[$lanid]['kextname'];
-		echo "  Copying the Lan kext to $ee ($lankext - ID: $lanid)\n";
+		writeToLog("$workpath/build.log", "  Copying the Lan kext to $ee ($lankext - ID: $lanid)<br>");
 		if ($lankext != "") { system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/"); }
 	}
 		
@@ -364,53 +367,53 @@ function copyKexts() {
 		$wififolder 	= $wifidb[$wifid]['foldername'];
 		$wifikextname 	= $wifidb[$wifid]['kextname'];
 		if ($wififolder != "") {
-			echo "  Copying the wifi kext to $ee ($wifikextname)\n";
+			writeToLog("$workpath/build.log", "  Copying the wifi kext to $ee ($wifikextname)<br>");
 			system_call("cp -R $workpath/storage/kextpacks/$wififolder/. $ee/");
 		}
 	}
 						
 	//Checking if we need nullcpu
 	if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
-		echo "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. \n";
+		writeToLog("$workpath/build.log", "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. <br>");
 		system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee");
 	}
 
 				
 	//Checking if we need to patch AHCI
 	if ($modeldb[$modelID]['patchAHCIml'] == "yes" || $modeldb[$modelID]['patchAHCIml'] == "y") {
-		echo "  Patching IOAHCIFamily.kext for OS: $os... \n";
+		writeToLog("$workpath/build.log", "  Patching IOAHCIFamily.kext for OS: $os... <br>");
 		if ($os == "ml") { patchAHCI(); }
 	}
 	else { echo "  Not patching IOAHCIFamily.kext for OS: $os.... \n"; }
 	
 	//Checking if we need Sleepenabler
 	if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
-		echo "  Copying SleepEnabler.kext for enabling sleep...\n"; 
+		writeToLog("$workpath/build.log", "  Copying SleepEnabler.kext for enabling sleep...<br>");
 		system_call("cp -R $workpath/storage/kexts/$os/SleepEnabler.kext $ee");
 	}
 
 	
 	if ($modeldb[$modelID]['loadIOATAFamily'] == "yes") {
-		echo "  Copying IOATAFamily.kext to $ee.. \n";
+		writeToLog("$workpath/build.log", "  Copying IOATAFamily.kext to $ee.. <br>");
 		system_call("cp -R $workpath/storage/kexts/IOATAFamily.kext $ee");
 	}
 
 	if ($modeldb[$modelID]['loadNatit'] == "yes") {
-		echo "  Copying Natit.kext to $ee.. \n";
+		writeToLog("$workpath/build.log", "  Copying Natit.kext to $ee.. <br>");	
 		system_call("cp -R $workpath/storage/kexts/natit.kext $ee");
 	}
 	
 		
 	
 	if ($modeldb[$modelID]['tscsync'] == "yes" || $modeldb[$modelID]['tscsync'] == "y") 	{
-		echo "  Check if we need VoodooTSCSync.kext for syncing CPU cores...\n"; 
+		writeToLog("$workpath/build.log", "  Check if we need VoodooTSCSync.kext for syncing CPU cores...<br>");
 		system_call("cp -R $workpath/storage/kexts/VoodooTSCSync.kext $ee");
 	}
 
 
 	
 	if ($modeldb[$modelID]['emulatedST'] == "yes" || $modeldb[$modelID]['emulatedST'] == "y") 	{
-		echo "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu \n"; 
+		writeToLog("$workpath/build.log", "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu <br>");	
 		system_call("cp -R $workpath/storage/kexts/VoodooPState.kext $ee");
 		system_call("cp $workpath/storage/LaunchAgents/PStateMenu.plist /Library/LaunchAgents");
 	} else { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
@@ -420,7 +423,7 @@ function copyKexts() {
 	if ($modeldb[$modelID]['batteryKext'] != "" && $modeldb[$modelID]['batteryKext'] != "no") {
 		$battid 	= $modeldb[$modelID]['batteryKext'];
 		$battkext 	= $batterydb[$battid]["kextname"];
-		echo "  Copying Battery kext ($battkext) to $ee \n";
+		writeToLog("$workpath/build.log", "  Copying Battery kext ($battkext) to $ee <br>");		
 		system_call("cp -R $workpath/storage/kexts/battery/$os/$battkext $ee/");
 	}	
 		
@@ -428,7 +431,7 @@ function copyKexts() {
 				
 	//Check if we need a custom version of chameleon
 	if ($modeldb[$modelID]['customCham'] == "yes" || $modeldb[$modelID]['customCham'] == "y") 	{
-		echo "  Copying custom chameleon to $rootpath.. \n";
+		writeToLog("$workpath/build.log", "  Copying custom chameleon to $rootpath.. <br>");	
 		system_call("rm -f $rootpath/boot");
 		system_call("cp $workpath/model-data/$modelName/$os/boot $rootpath");
 	}
@@ -436,7 +439,7 @@ function copyKexts() {
             	
 	//Check if we need a custom made kernel
 	if ($modeldb[$modelID]['customKernel'] == "yes" || $modeldb[$modelID]['customKernel'] == "y") 	{
-		echo "  Copying custom made kernel to $rootpath.. \n";
+		writeToLog("$workpath/build.log", "  Copying custom made kernel to $rootpath.. <br>");	
 		system_call("rm -f $rootpath/custom_kernel");
 		system_call("cp $workpath/model-data/$modelName/$os/custom_kernel $rootpath");
 	}			
@@ -444,29 +447,25 @@ function copyKexts() {
 		
 	
 
-				
-	echo "  Copying standard kexts to $ee.. \n\n";
-	system_call("cp -R $workpath/storage/standard/common/Extensions/* $ee");
-					
-	echo "  Copying $os kexts to $ee.. \n\n";
-	system_call("cp -R $workpath/storage/standard/$os/Extensions/* $ee");
+	writeToLog("$workpath/build.log", "  Copying standard kexts to $ee.. <br>");					
+		system_call("cp -R $workpath/storage/standard/common/Extensions/* $ee");
 
+	writeToLog("$workpath/build.log", "  Copying $os kexts to $ee.. <br>");					
+		system_call("cp -R $workpath/storage/standard/$os/Extensions/* $ee");
 
-	echo "  Copying common kexts to $ee.. \n\n";
-	$tf = "$workpath/model-data/$modelName/common/Extensions";
-	system_call("cp -Rf $tf/* $ee");
+	writeToLog("$workpath/build.log", "  Copying common kexts to $ee..<br>");
+		$tf = "$workpath/model-data/$modelName/common/Extensions";
+		system_call("cp -Rf $tf/* $ee");
 		
-		
-	echo "  Copying $os kexts to $ee.. \n\n";
-	$tf = "$workpath/model-data/$modelName/$os/Extensions";
-	system_call("cp -Rf $tf/* $ee");
+	writeToLog("$workpath/build.log", "  Copying $os kexts to $ee.. <br>");		
+		$tf = "$workpath/model-data/$modelName/$os/Extensions";
+		system_call("cp -Rf $tf/* $ee");
 	
-	//Applying fixes
-	AppleACPIfixCheck();
-	GMA950brightnessfixCheck();
+	writeToLog("$workpath/build.log", "  Applying fixes... <br>");	
+		AppleACPIfixCheck();
+		GMA950brightnessfixCheck();
 	
-	
-	echo "  Applying custom plists, kexts etc. (you can ignore copy errors here, it just means the folder is empty)\n";
+	writeToLog("$workpath/build.log", "  Applying custom plists, kexts etc.");	
 		//Copying kexts
 		system_call("cp -R $incpath/Extensions/* $ee");
 		//Copying any .AML files to /Extra
@@ -475,8 +474,7 @@ function copyKexts() {
 		system_call("cp -R $incpath/*.plist $workpath");
 		
 		
-	
-	echo "  Removing version control of kexts in $ee \n\n";
+	writeToLog("$workpath/build.log", "  Removing version control of kexts in $ee");	
 	system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
 				
 	

@@ -21,6 +21,7 @@ $donateurl = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mail
                 <td width="90" onclick="load('index.php?i=Tools')"><img src="icons/tools.png" width="38"></td>
                 <td width="90" onclick="loadModule('workerapp.php?action=update-edp');"><img src="icons/Installer.png" width="38"></td>
                 <td width="90" onclick="loadModule('workerapp.php?action=changelog');"><img src="icons/changelog.png" width="38"></td>
+                <td width="90" onclick="loadModule('workerapp.php?action=credits');"><img src="icons/credits.png" width="38"></td>
                 <td>&nbsp;</td>
                 <td width="90" onclick="window.open('<?= "$donateurl"; ?>')"><img src="icons/paypal.png" width="38"></td>
             </tr>
@@ -30,6 +31,7 @@ $donateurl = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mail
                 <td onclick="load('index.php?i=Tools')">Tools</td>
                 <td onclick="load('index.php?i=Configuration')">Update</td>
                 <td onclick="loadModule('workerapp.php?action=changelog');">Changelog</td>
+                <td onclick="loadModule('workerapp.php?action=credits');">Credits</td>
                 <td>&nbsp;</td>
                 <td onclick="window.open('<?= $donateurl; ?>');">Donate</td>
             </tr>

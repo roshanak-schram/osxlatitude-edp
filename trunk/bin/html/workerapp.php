@@ -87,22 +87,12 @@ if ($action == "fix-airdrop") {
     fixes_airdrop();
     exit;
 }
-if ($action == "update-edp") {
-    echo "<pre>";
-    global $edpmode;
-    $edpmode = "web";
-    updateEDP();
-    exit;
-}
-if ($action == "close-edpweb") {
-    echo "<pre>";
-    close - edpweb();
-    exit;
-}
-if ($action == "changelog") {
-    showChangelog();
-    exit;
-}
+if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); exit; }
+if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
+if ($action == "changelog") 	{ showChangelog(); exit; }
+if ($action == "credits") 		{ showCredits(); exit; }
+if ($action == "showBuildLog")	{ showBuildLog(); exit ; }
+
 
 //Functions called by this script
 
@@ -188,6 +178,23 @@ function fixes_toogleHibernationMode() {
         system_call("pmset -a hibernatemode 3");
         echo "Fix applied..<br>";
     }
+}
+
+function showCredits() {
+	include "header.inc.php";
+	include "include/watermark.inc.php";
+	include "credits.inc.php";	
+}
+
+function showBuildLog() {
+	global $workpath;
+	include "header.inc.php";
+	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";
+	echo "<span class='console'>";
+	include "include/watermark.inc.php";
+	include "$workpath/build.log";
+	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { setTimeout(\"location.reload(true);\",timeoutPeriod); } </script>\n";
+
 }
 
 ?>
