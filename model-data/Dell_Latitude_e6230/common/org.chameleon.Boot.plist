@@ -17,7 +17,7 @@
 	<key>GraphicsEnabler</key>
 	<string>Yes</string>
 	<key>Kernel Flags</key>
-	<string>-v</string>
+	<string>ahcidisk=1 debug=8</string>
 	<key>SystemType</key>
 	<string>2</string>
 	<key>Timeout</key>
