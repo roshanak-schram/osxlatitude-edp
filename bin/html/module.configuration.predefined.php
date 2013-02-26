@@ -13,8 +13,8 @@
 
 	//-------------------------> Do build page starts here
 	if ($action == 'dobuild') {
-		header("Content-Type: text/event-stream\n\n");
-		while (ob_get_level()) ob_end_clean();
+		//header("Content-Type: text/event-stream\n\n");
+		//while (ob_get_level()) ob_end_clean();
 		
 		if ($modelID == "") { echo "modelID is empty"; exit; }
 		//Filter the data from the confirmation page 
