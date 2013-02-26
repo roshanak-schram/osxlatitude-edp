@@ -5,11 +5,15 @@ body {
 	background: #F4F4F4;
 	-webkit-text-size-adjust: none;
 	min-height: 416px;
-	font-family: helvetica,sans-serif;
+	font-family: 'Lucida Grande';
 	-webkit-touch-callout: none;
 }
+.console {
+	font-family: 'Lucida Grande';
+	font-size: 10pt;
+}
 .topbarmenu {
-	font-family: helvetica,sans-serif;
+	font-family: 'Lucida Grande';
 	line-height: 1px;
 	height: 22px;
 	font-size: 9pt;

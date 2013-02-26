@@ -2,6 +2,9 @@
 	include_once "../functions.inc.php";
 	include_once "../config.inc.php";
 	
+	include "header.inc.php";
+	include "include/watermark.inc.php";
+		
 	//Get server vars
 	global $modelID;
 	$vendor 	= $_GET['vendor'];	if ($vendor == "") 	{ $vendor 	= $_POST['vendor']; }
@@ -13,8 +16,11 @@
 
 	//-------------------------> Do build page starts here
 	if ($action == 'dobuild') {
+	
+		echo "<span class='console'>";
 		//header("Content-Type: text/event-stream\n\n");
 		//while (ob_get_level()) ob_end_clean();
+		
 		
 		if ($modelID == "") { echo "modelID is empty"; exit; }
 		//Filter the data from the confirmation page 
@@ -61,46 +67,46 @@
         global $modelName;
         $modelName = $modeldb[$modelID]["name"];
  
-        EDPdoBuild();
-        echo "-----> DONE <-----";
-        exit;	
+        EDPdoBuild();	
 	}
 
 
 
 	function EDPdoBuild() {
 		global $modeldb; global $modelID; global $workpath; global $rootpath;
-		
-		myHackCheck(); 
-        echo "Step 1) Download/Update local model data... <br>";
-        	flush();
-			$modelName = $modeldb[$modelID]["name"];
-			svnModeldata("$modelName");
-			
-		echo "Step 2) Copying Essential files to $workpath <br>";
-			flush();
-			copyEssentials();
-			
-		echo "Step 3) Preparing kexts for myHack.kext <br>";
-			flush();
-			copyKexts();
-			
-  			
-		echo "Step 4) Updating chameleon.. <br>";
-			flush();
-			updateCham();
-			  		
-		echo "Step 5) Calling myFix to copy kexts and generate kernelcache<br>";
-		echo " .. myfix will run in the background and can take anything from 1 to 10 minuts to finish, a clear indication that myfix is done is usually that your CPU usage drops... \n";
-			flush();
-			system_call("stty -tostop; sudo myfix -q -t / >$workpath/myfix.log 2>&1 &");
 
-		echo "<script> setTimeout(alert('reloading'), 10000) </script>";
+		//Start by defining our log file and cleaning it..
+		$log = "$workpath/build.log";
+		if (is_file("$log")) { system_call("rm -Rf $log"); system_call("<br>echo Building....<br><br> >$log"); }
 		
-		
+		//Check if myhack is up2date and ready for combat
+			myHackCheck();
+			
+			//Step 1
+			writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update local model data... </b><br>");
+				$modelName = $modeldb[$modelID]["name"];
+				svnModeldata("$modelName");
 
-					
-		
+			//Step 2
+			writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files to $workpath </b><br>");
+				copyEssentials();
+
+			//Step 3
+			writeToLog("$workpath/build.log", "<br><b>Step 3) Preparing kexts for myHack.kext </b><br>");
+				copyKexts();
+			
+			//Step 4
+			writeToLog("$workpath/build.log", "<br><br><b>Step 4) Updating chameleon.. </b><br>");
+				updateCham();
+				
+			//Step 5
+			writeToLog("$workpath/build.log", "<br><b>Step 5) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
+				system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
+				
+			echo "<script> document.location.href = 'workerapp.php?action=showBuildLog'; </script>";
+
+			exit;
+        		
 	}
 
 
@@ -181,8 +187,6 @@
 		$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
 		$stmt->execute();
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-		include "header.inc.php";
-		include "include/watermark.inc.php";
 		
 		
 		//Show the header
@@ -191,15 +195,15 @@
 		echo "<tr><td rowspan='4' width='1%'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png'></td></tr>\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;&nbsp;<b>$mdrow[desc]</b></td>\n";
-		echo "<td width='40%'>ROOT: $rootpath</td>\n";
+		echo "<td width='40%'>&nbsp;</td>\n";
 		echo "</tr>\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;&nbsp;$os_string ($os)</td>\n";
-		echo "<td>EDP path: $workpath</td>\n";
+		echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;</td>\n";
-		echo "<td>SLE path: $slepath</td>\n";
+		echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 		echo "</table></div>\n";
 
