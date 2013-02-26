@@ -72,21 +72,21 @@
 		global $modeldb; global $modelID; global $workpath; global $rootpath;
 		
 		myHackCheck(); 
-        echo "Step 1) Download/Update local model data... \n";
+        echo "Step 1) Download/Update local model data... <br>";
         	flush();
 			$modelName = $modeldb[$modelID]["name"];
 			svnModeldata("$modelName");
 			
-		echo "Step 2) Copying Essential files to $workpath \n";
+		echo "Step 2) Copying Essential files to $workpath <br>";
 			flush();
 			copyEssentials();
 			
-		echo "Step 3) Preparing kexts for myHack.kext \n";
+		echo "Step 3) Preparing kexts for myHack.kext <br>";
 			flush();
 			copyKexts();
 			
   			
-		echo "Step 4) Updating chameleon.. \n";
+		echo "Step 4) Updating chameleon.. <br>";
 			flush();
 			updateCham();
 			  		
@@ -95,6 +95,9 @@
 			flush();
 			system_call("stty -tostop; sudo myfix -q -t / >$workpath/myfix.log 2>&1 &");
 
+		echo "<script> setTimeout(alert('reloading'), 10000) </script>";
+		
+		
 
 					
 		
