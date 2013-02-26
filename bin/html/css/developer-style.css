@@ -109,6 +109,7 @@ a:hover .arrow {
 	max-width: 77%;
 }.checkbox .name {
 	max-width: 190px;
+	font-family: 'Lucida Grande';
 }.radiobutton .name {
 	max-width: 190px;
 }
@@ -474,6 +475,7 @@ fieldset {
 	overflow: hidden;
 	border-top: 1px solid #878787;
 	width: auto;
+	font-family: 'Lucida Grande';
 }
 .pageitem li:first-child:hover, .pageitem li:first-child a, .radiobutton:first-child input, .select:first-child select, li.button:first-child input, .bigfield:first-child input {
 	-webkit-border-top-left-radius: 8px;

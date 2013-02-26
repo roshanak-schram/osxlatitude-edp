@@ -116,8 +116,7 @@
     		$result = $edp_db->query("SELECT * FROM models order by vendor");
 			include "header.inc.php";
 			include "include/watermark.inc.php";
-			echo "<br><br><br><br><br>";
-			echo "<span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
+			echo "<p><span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
 			//Show the vendrop dropdown
 			echo "<select name='vendor' id='vendor' onchange='showSerie();'>";
 			if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
@@ -156,7 +155,7 @@
 							echo "<option value='$row[id]'>&nbsp;&nbsp;$row[desc] ($row[type])</option>\n";
 							}						
 							echo "</select><span class='arrow'></span> </li>";
-							echo "<li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul>";
+							echo "<li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul></p>";
 						}
 
 				}				
@@ -193,7 +192,7 @@
 		echo "</tr>\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;&nbsp;$os_string ($os)</td>\n";
-		echo "<td>EDP Path: $workpath</td>\n";
+		echo "<td>EDP path: $workpath</td>\n";
 		echo "</tr>\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;</td>\n";
@@ -206,7 +205,7 @@
 
 
 
-		echo "<span class='graytitle'>Kernel Extentions (kexts / Drivers)</span>\n";
+		echo "<span class='graytitle'>Kernel Extentions (kexts / drivers)</span>\n";
 		echo "<ul class='pageitem'>";
 				
 		//Show dropdown for PS2 kexts
