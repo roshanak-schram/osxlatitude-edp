@@ -24,8 +24,9 @@ Thanx
 
  
 		if ($number_updates > "0") { 
-			echo "<script>";
-			echo "alert('There is $number_updates updates waiting...'); window.fluid.dockBadge = '$number_updates';";
-			ecoh "</script>";
+			echo "<script> \n";
+			echo "	window.fluid.dockBadge = '$number_updates';  \n";			
+			echo "	alert('There is $number_updates updates waiting...'); \n";
+			echo "</script> \n";
 		}
 	?>
