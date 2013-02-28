@@ -45,7 +45,6 @@ $donateurl = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mail
         <script charset="utf-8">
             function bootloader() {
                 aligndesign();
-                checkUpdates();
             }
         </script>
     </body>

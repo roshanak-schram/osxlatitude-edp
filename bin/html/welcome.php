@@ -14,3 +14,18 @@ Please report any issues to lsb@osxlatitude.com <br><br>
 Thanx
 <br>
 //EDP-Team
+
+
+	<?php
+		$remoterev      = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
+		$remoterev      = str_replace("Last Changed Rev: ", "", $remoterev);
+		$number_updates = ($remoterev - $localrev);	
+			
+
+ 
+		if ($number_updates > "0") { 
+			echo "<script>";
+			echo "alert('There is $number_updates updates waiting...'); window.fluid.dockBadge = '$number_updates';";
+			ecoh "</script>";
+		}
+	?>
