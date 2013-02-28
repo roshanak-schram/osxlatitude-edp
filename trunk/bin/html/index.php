@@ -12,6 +12,10 @@ global $edpmode;
 $edpmode = "web";
 $donateurl = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mail%40r2x2%2ecom&lc=US&item_name=OSXlatitude%20Donation&item_number=OSXLatitude%20Donation&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest";
 
+  //Check if there is updates and change the badge for the edpweb app
+  if ($number_updates>"0") { echo "<script type='text/javascript'> window.fluid.dockBadge = '$number_updates' </script> "; }
+                
+                
 ?>
     <body onload="bootloader();" onresize="aligndesign();">
         <table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
