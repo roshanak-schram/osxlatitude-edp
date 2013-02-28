@@ -6,7 +6,10 @@ function checkUpdates() {
 		global $localrev; global $workpath;
 		$remoterev      = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
 		$remoterev      = str_replace("Last Changed Rev: ", "", $remoterev);
-		$number_updates = ($remoterev - $localrev); 
+		$number_updates = ($remoterev - $localrev);	
+			
+		echo "alert('localrev: $localrev - remoterev: $remoterev - number_updates: $number_updates');   ";
+ 
 		if ($number_updates > "0") { echo "alert('There is $number_updates updates waiting...'); window.fluid.dockBadge = '$number_updates';"; }
 	?>
 	return;
