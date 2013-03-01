@@ -20,7 +20,8 @@
 				addMenuItem("loadModule('workerapp.php?action=fix-biometric');", 		"icons/key.png", 		"Biometric reader");
 				addMenuItem("loadModule('workerapp.php?action=fix-console-colors');", 	"icons/paint.png", 		"Console colors");								
 				addMenuItem("loadModule('workerapp.php?action=fix-reset-display');",	"icons/monitor.png", 	"Reset displays");
-				addMenuItem("loadModule('workerapp.php?action=fix-airdrop');", 			"icons/share.png", 		"Enable Aidrop");					
+				addMenuItem("loadModule('workerapp.php?action=fix-airdrop');", 			"icons/share.png", 		"Enable Airdrop");	
+				addMenuItem("loadModule('workerapp.php?action=fix-spdisplays');", 			"icons/monitor.png", 		"Fix spdisplays_display");				
 			}
 						
 			if ($i == "Tools") { 

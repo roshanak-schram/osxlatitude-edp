@@ -87,6 +87,11 @@ if ($action == "fix-airdrop") {
     fixes_airdrop();
     exit;
 }
+if ($action == "fix-spdisplays") {
+    echo "<pre>";
+    fixes_spdisplays();
+    exit;
+}
 if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); exit; }
 if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "changelog") 	{ showChangelog(); exit; }
