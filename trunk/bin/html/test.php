@@ -1,3 +1,0 @@
-<?
-include "../functions.inc.php";
-?>
