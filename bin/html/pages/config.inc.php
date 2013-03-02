@@ -19,7 +19,8 @@ foreach($result as $row) {
 // Calculate the percentage per vendor
 foreach($vendors as $i => $vendor) {
 	if($total != 0) {
-		$vendors[$i]['share'] = round(($vendor['count']/$total)*100, 1);
+		$c = round(($vendor['count']/$total)*100, 1);
+		$vendors[$i]['share'] = round($c, 0);
 	} else {
 		$vendors[$i]['share'] = 0;
 	}
