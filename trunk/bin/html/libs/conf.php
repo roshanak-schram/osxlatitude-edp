@@ -6,38 +6,38 @@
 $jsFiles = array(
     'jQuery' => array(
         'name' => 'jquery.min.js',
-        'path' => 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/'),
+        'path' => '/javascript/'),
 
     'mootools' => array(
         'name' => 'mootools-yui-compressed.js',
-        'path' => 'https://ajax.googleapis.com/ajax/libs/mootools/1.4.5/'),
+        'path' => '/javascript/'),
 
     'prototype' => array(
         'name' => 'prototype.js',
-        'path' => 'https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/'),
+        'path' => '/javascript/'),
 
     'highcharts' => array(
         'name' => 'highcharts.js',
-        'path' => 'http://code.highcharts.com/'),
+        'path' => '/javascript/'),
 
     'highchartsMootoolsAdapter' => array(
         'name' => 'mootools-adapter.js',
-        'path' => 'http://code.highcharts.com/adapters/'),
+        'path' => '/javascript/'),
 
     'highchartsPrototypeAdapter' => array(
         'name' => 'prototype-adapter.js',
-        'path' => 'http://code.highcharts.com/adapters/'),
+        'path' => '/javascript/'),
 
     'highstock' => array(
         'name' => 'highstock.js',
-        'path' => 'http://code.highcharts.com/stock/'),
+        'path' => '/javascript/'),
 
     'highstockMootoolsAdapter' => array(
         'name' => 'mootools-adapter.js',
-        'path' => 'http://code.highcharts.com/stock/adapters/'),
+        'path' => ''),
 
     'highstockPrototypeAdapter' => array(
         'name' => 'prototype-adapter.js',
-        'path' => 'http://code.highcharts.com/stock/adapters/'),
+        'path' => '/javascript/'),
 
 );
