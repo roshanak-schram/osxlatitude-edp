@@ -16,6 +16,8 @@ $edpmode = "web";
                 
 ?>
     <body onload="bootloader();" onresize="aligndesign();">
+<div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 10000; left: 50px; top: 0px; background-image: url('images/semi-transparent.png')" id="wait">&nbsp;</div>
+
         <table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
             <tr style="vertical-align: bottom;"  class="topbarmenu" align="center" style='cursor: hand'>
                 <td width="80" onclick="loader('Configuration')"><img src="icons/sysprefs.png" width="40"></td>
@@ -39,6 +41,7 @@ $edpmode = "web";
 
         <iframe id="edpmenu" class="edpmenu" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?= "$i"; ?>"></iframe>
         <iframe id="console_iframe" class="console_iframe" marginwidth="0" marginheight="0" border="0" frameborder="0" src="show.php?i=pages/welcome.inc.php"></iframe>
+
 
     </body>
 </html>

@@ -6,20 +6,36 @@ function bootloader() {
 	aligndesign();
 }
             
-            
-function aligndesign() {
+function getHeight() {
 		if (document.body && document.body.offsetWidth) {
-    		w = document.body.offsetWidth;
         	h = document.body.offsetHeight;
         }
         if (document.compatMode == 'CSS1Compat' && document.documentElement && document.documentElement.offsetWidth) {
-        	w = document.documentElement.offsetWidth;
         	h = document.documentElement.offsetHeight;
         }
         if (window.innerWidth && window.innerHeight) {
-        	w = window.innerWidth;
             h = window.innerHeight;
         }
+        return h;
+}            
+
+function getWidth() {
+		if (document.body && document.body.offsetWidth) {
+    		w = document.body.offsetWidth;
+        }
+        if (document.compatMode == 'CSS1Compat' && document.documentElement && document.documentElement.offsetWidth) {
+        	w = document.documentElement.offsetWidth;
+        }
+        if (window.innerWidth && window.innerHeight) {
+        	w = window.innerWidth;
+        }
+        
+        return w;
+}
+
+function aligndesign() {
+		var h = getHeight();
+		var w = getWidth();
 
         //Calculate and correction of the console_iframe
         var console_iframe_width = w - 285;
@@ -30,6 +46,10 @@ function aligndesign() {
         //Calculate and correction of menu dev
         var edpmenu_div_height = h - 69;
         document.getElementById('edpmenu').style.height = edpmenu_div_height + 'px';
+        
+        //Recalculate the wait layer
+        document.getElementById('wait').style.width = w + 'px';
+        document.getElementById('wait').style.height = h + 'px';        
 }
 
 function load(page) {
@@ -40,7 +60,11 @@ function loadModule(page) {
 	top.document.getElementById('console_iframe').src = page;
 }
 
-
+function waitToggle() {
+	var obj = top.document.getElementById('wait');
+	if (obj.style.display == 'none') { obj.style.display = 'block'; return; }
+	if (obj.style.display == 'block') { obj.style.display = 'none'; return; }
+}
 function loader(action) {
 	var sidebar = top.document.getElementById('edpmenu');
 	var console = top.document.getElementById('console_iframe');
