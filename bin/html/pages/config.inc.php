@@ -36,7 +36,7 @@ $chart->chart->plotShadow = false;
 $chart->title->text = "EDP model support stats";
 
 $chart->tooltip->formatter = new HighchartJsExpr("function() {
-    return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';}");
+    return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage) +' %';}");
 
 $chart->plotOptions->pie->allowPointSelect = 1;
 $chart->plotOptions->pie->cursor = "pointer";
@@ -45,7 +45,7 @@ $chart->plotOptions->pie->dataLabels->color = "#000000";
 $chart->plotOptions->pie->dataLabels->connectorColor = "#000000";
 
 $chart->plotOptions->pie->dataLabels->formatter = new HighchartJsExpr("function() {
-    return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %'; }");
+    return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage) +' %'; }");
 
 
 
