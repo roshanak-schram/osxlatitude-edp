@@ -7,46 +7,44 @@ $workpath = "/Extra";
 $edp_db = new PDO("sqlite:/$workpath/bin/edp.sqlite3");
 $edp_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+
+
+//Initiate preloader
+session_start();
+$remoterev 		= $_SESSION['remoterev'];
+$number_updates = $_SESSION['number_updates'];
+$audiodb		= $_SESSION['audiodb'];
+$batterydb		= $_SESSION['batterydb'];		
+$landb			= $_SESSION['landb'];
+$wifidb			= $_SESSION['wifidb'];
+$ps2db			= $_SESSION['ps2db'];
+
+$edpversion		= $_SESSION['edpversion'];
+$verbose		= $_SESSION['verbose'];
+$ee				= $_SESSION['ee'];
+$rootpath		= $_SESSION['rootpath'];				
+$slepath		= $_SESSION['slepath'];
+$cachepath		= $_SESSION['cachepath'];
+$incpath		= $_SESSION['incpath'];
+
+
 // Include general functions
 require_once "$workpath/bin/functions.inc.php";
 
-// Get Vars from config storage
-$edpversion = getConfig('edpversion');
-$verbose    = getConfig('verbose');
-$ee         = getConfig('ee');
-$rootpath   = getConfig('rootpath');
-$slepath    = getConfig('slepath');
-$cachepath  = getConfig('cachepath');
-$incpath    = getConfig('incpath');
+//Checking if ONE of the pre-loaded vars is set, if not we will include loader.php to load them
+if ($remoterev == "" || $rootpath == "") {
+	include "html/loader.php";
+}
 
-// Generate multidimensional arrays - this is instead of re-writting all code and to keep support for console mode
-// Audio
-$stmt = $edp_db->query("SELECT * FROM audio order by id");
-$stmt->execute(); $audiodb = $stmt->fetchAll();
 
-// Battery
-$stmt = $edp_db->query("SELECT * FROM battery order by id");
-$stmt->execute(); $batterydb = $stmt->fetchAll();
 
-// Ethernet
-$stmt = $edp_db->query("SELECT * FROM ethernet order by id");
-$stmt->execute(); $landb = $stmt->fetchAll();
-
-// Wifi
-$stmt = $edp_db->query("SELECT * FROM wifi order by id");
-$stmt->execute(); $wifidb = $stmt->fetchAll();
-
-// PS2
-$stmt = $edp_db->query("SELECT * FROM ps2 order by id");
-$stmt->execute(); $ps2db = $stmt->fetchAll();
 
 //Set timezone to UTC
 date_default_timezone_set('UTC');
 
 //Get system vars
 //$workpath	= getenv('PWD');  //Old detection.. not used anymore.. but we'll keep it around for now....
-$localrev = exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
-$localrev = str_replace("Last Changed Rev: ", "", $localrev);
+
 
 $hibernatemode = exec("pmset -g | grep hibernatemode");
 $hibernatemode = str_replace("hibernatemode", "", $hibernatemode);

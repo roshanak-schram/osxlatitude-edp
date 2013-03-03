@@ -16,26 +16,34 @@ $edpmode = "web";
                 
 ?>
     <body onload="bootloader();" onresize="aligndesign();">
-<div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 10000; left: 50px; top: 0px; background-image: url('images/semi-transparent.png')" id="wait">&nbsp;</div>
+<div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 10000; left: 50px; top: 0px; background-image: url('images/semi-transparent.png')" id="wait">
+<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" height="100%">
+	<tr><td height="48%" width="48%"></td><td height="48%"></td><td height="48%" width="48%"></td></tr>
+	<tr><td width="48%">&nbsp;</td><td><p align="center"><img border="0" src="images/loading.gif" width="80" height="80"><br><br><font color="#FFFFFF">Loading....</font><font></td><td width="48%">&nbsp;</td></tr>
+	<tr><td height="48%" width="48%">&nbsp;</td><td height="48%">&nbsp;</td><td height="48%" width="48%">&nbsp;</td></tr>
+</table>	
+</div>
 
         <table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
             <tr style="vertical-align: bottom;"  class="topbarmenu" align="center" style='cursor: hand'>
                 <td width="80" onclick="loader('Configuration')"><img src="icons/sysprefs.png" width="40"></td>
-                <td width="80" onclick="loader('Fixes')"><img src="icons/fixes.png" width="38"></td>
-                <td width="80" onclick="loader('Tools')"><img src="icons/tools.png" width="38"></td>
-                <td width="80" onclick="loader('Update');"><img src="icons/Installer.png" width="38"></td>
-                <td width="80" onclick="loader('Credits');"><img src="icons/credits.png" width="38"></td>
+                <td width="80" onclick="loader('Fixes')"><img src="icons/fixes.png" width="40"></td>
+                <td width="80" onclick="loader('Tools')"><img src="icons/tools.png" width="40"></td>
+                <td width="80" onclick="loader('Update');"><img src="icons/Installer.png" width="40"></td>
+                <td width="80" onclick="loader('Credits');"><img src="icons/credits.png" width="40"></td>
                 <td>&nbsp;</td>
-                <td width="80" onclick="window.open('<?= "$donateurl"; ?>')"><img src="icons/paypal.png" width="38"></td>
+                <td width="80" onclick="window.open('<?= "$donateurl"; ?>')"><img src="icons/paypal.png" width="40"></td>
+                <td width="80" onclick="closeedp();"><img src="icons/exit.png" width="40"></td>
             </tr>
             <tr class="topbarmenu" align="center" style='cursor: hand'>
                 <td onclick="loader('Configuration')">Config</td>
                 <td onclick="loader('Fixes')">Fixes</td>
-                <td onclick="loadwe('Tools')">Tools</td>
+                <td onclick="loader('Tools')">Tools</td>
                 <td onclick="loader('Update')">Update</td>
                 <td onclick="loader('Credits');">Credits</td>
                 <td>&nbsp;</td>
                 <td onclick="window.open('<?= $donateurl; ?>');">Donate</td>
+                <td onclick="closeedp();">Exit</td>
             </tr>
         </table>
 
@@ -45,3 +53,10 @@ $edpmode = "web";
 
     </body>
 </html>
+
+<script>
+	function closeedp() {
+		top.document.location.href='workerapp.php?action=goto_hell';
+		
+	}
+</script>
