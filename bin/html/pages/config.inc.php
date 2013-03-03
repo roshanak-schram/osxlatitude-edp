@@ -15,7 +15,6 @@ foreach($result as $row) {
 	$vendors[] = $tmp;
 	$total += $row['count'];
 }
-
 // Calculate the percentage per vendor
 foreach($vendors as $i => $vendor) {
 	if($total != 0) {
@@ -33,7 +32,7 @@ $chart->chart->renderTo = "container";
 $chart->chart->plotBackgroundColor = '#F4F4F4';
 $chart->chart->plotBorderWidth = '0px';
 $chart->chart->plotShadow = false;
-$chart->title->text = "EDP model support stats";
+$chart->title->text = "We currently have $total systems in EDP";
 
 $chart->tooltip->formatter = new HighchartJsExpr("function() {
     return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage) +' %';}");
