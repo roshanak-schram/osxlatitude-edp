@@ -1,11 +1,24 @@
 <?php
 
+$action = $_GET['action'];
+
+if ($action == "goto_hell") {
+	session_start();
+	session_destroy();
+	echo "If the window does not close automatically you may close it now";
+	echo "<script> top.window.close(); </script>";
+	
+	exit;
+	
+}
+
+
 include_once "header.inc.php";
 include_once "../functions.inc.php";
 include_once "../config.inc.php";
 include "include/watermark.inc.php";
 
-$action = $_GET['action'];
+
 
 if ($action == "") {
     echo "No action defined..";
@@ -87,12 +100,13 @@ if ($action == "fix-airdrop") {
     fixes_airdrop();
     exit;
 }
+
 if ($action == "fix-spdisplays") {
     echo "<pre>";
     fixes_spdisplays();
     exit;
 }
-if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); exit; }
+if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); echo "<script> window.fluid.dockBadge = ''; </script> \n"; exit; }
 if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "changelog") 	{ showChangelog(); exit; }
 if ($action == "showBuildLog")	{ showBuildLog(); exit ; }
@@ -116,10 +130,6 @@ function showChangelog() {
     echo "</div>\n";
 }
 
-//function close-edpweb() {
-//	system_call("kill $(ps aux | grep 'jetty' | awk '{print $2}')");
-//	echo "<script> alert('You may now close the window...'); window.close();</script>";
-//}
 
 function runDellBiosCrack() {
     global $workpath;
