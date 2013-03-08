@@ -4,7 +4,7 @@ echo "You need to put the check on manually!"
 sleep 2
 cd /Library/LaunchDaemons
 
-sudo cp storage/com.nvram.root.plist /Library/LaunchDaemons/com.nvram.root.plist
+sudo cp /Extra/bin/fixes/storage/com.nvram.root.plist /Library/LaunchDaemons/com.nvram.root.plist
 sudo chown root:wheel /Library/LaunchDaemons/com.nvram.root.plist
 
 # Put iCloud fix on!
