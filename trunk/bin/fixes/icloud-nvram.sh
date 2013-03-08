@@ -18,5 +18,5 @@ sudo rm nvram*
 
 # Finished!
 echo "\nnvram file created! You can restart your computer now!\n"
-echo "After restart verify that Find My Mac check box is still selected. 
+echo "After restart verify that Find My Mac check box is still selected."
 echo "If so the edit is working successfully."
