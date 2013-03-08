@@ -2,15 +2,15 @@
 include_once "../config.inc.php";
 ?>
 
+<p><span class='graytitle'>Fixes, the solution for a problem!</span>
+	<ul class="pageitem">
+		<li class="textbox">
+			<p>
+			This section contains solution for the most common Hackintosh problems. If you still miss a fix, you can post it on our forum.
+			<br><br>
+			For more information about a fix, you can choose the fix in the submenu. It won't apply the fix immediately.
+			</p>
+		</li>
+	</ul>
+</p>
 
-<br>
-<ul class="pageitem">
-	<li class="textbox"><b>Fixes.. the solution to a problem</b>
-	<br>
-	This section contains solutions to alot of the daily problems you might run into, you can click more on each of the fixes to get more info before applying.
-	<br>
-	
-	</li>
-</ul>
-	
-	
