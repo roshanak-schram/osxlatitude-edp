@@ -106,6 +106,19 @@ if ($action == "fix-spdisplays") {
     fixes_spdisplays();
     exit;
 }
+
+if ($action == "fix-icloud-recoveryhd") {
+    echo "<pre>";
+    fixes_icloud_recoveryhd();
+    exit;
+}
+
+if ($action == "fix-icloud-nvram") {
+    echo "<pre>";
+    fixes_icloud_nvram();
+    exit;
+}
+
 if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); echo "<script> window.fluid.dockBadge = ''; </script> \n"; exit; }
 if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "changelog") 	{ showChangelog(); exit; }
@@ -193,6 +206,19 @@ function fixes_toogleHibernationMode() {
         echo "Fix applied..<br>";
     }
 }
+
+function fixes_spdisplays() {
+    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
+}	
+
+function fixes_icloud_recoveryhd() {
+    system_call("/Extra/bin/fixes/icloud-recoveryhd.sh");
+}	
+	
+function fixes_icloud_nvram() {
+    system_call("/Extra/bin/fixes/icloud-nvram.sh");
+}	
+	
 
 
 function showBuildLog() {
