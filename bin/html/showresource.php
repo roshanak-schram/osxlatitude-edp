@@ -14,7 +14,6 @@ $bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 		
 ?>
 
-<br><br>
 <span class="graytitle"><center><?="$row[name]";?></center></span>
 <br>
 <ul class="pageitem">
@@ -29,6 +28,6 @@ $bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 <br>
 <br>
 <ul class="pageitem">
-<li class="button"><input name="Submit input" type="submit" onclick="document.location.href='<?="$row[action]";?>'" value="OK, i understand.. go ahead!" /></li>
+<li class="button"><input name="Submit input" type="submit" onclick="document.location.href='<?="$row[action]";?>'" value="OK, I understand.. go ahead!" /></li>
 </ul>
 
