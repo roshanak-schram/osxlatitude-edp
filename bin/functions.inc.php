@@ -55,14 +55,7 @@ function patchAHCI() {
     system_call("cp -R /System/Library/Extensions/IOAHCIFamily.kext /Extra/Extensions");
     system_call("perl /Extra/bin/fixes/patch-ahci-mlion.pl");
 }
-	
-/**
- * Fix the cosmetic spdisplays problem
- */
-function fixes_spdisplays() {
-    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
-}
-	
+
 /**
  * Function to check if the model is allready checked out
  * if the model is not checked out it will check it out
