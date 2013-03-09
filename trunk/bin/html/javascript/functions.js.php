@@ -60,6 +60,10 @@ function loadModule(page) {
 	top.document.getElementById('console_iframe').src = page;
 }
 
+function loadPageInConsole(page) {
+	top.document.getElementById('console_iframe').src = page;
+}
+
 function waitToggle() {
 	var obj = top.document.getElementById('wait');
 	if (obj.style.display == 'none') { obj.style.display = 'block'; return; }
