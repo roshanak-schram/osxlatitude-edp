@@ -33,7 +33,7 @@ $edpmode = "web";
                 <td width="80"><a href='https://code.google.com/p/osxlatitude-edp/issues/list' target='_blank'><img src="icons/issues.png" width="40"></a></td>
                 <td width="80" onclick="loader('Credits');"><img src="icons/credits.png" width="40"></td>
                 <td>&nbsp;</td>
-                <td width="80" onclick="window.open('<?= "$donateurl"; ?>')"><img src="icons/paypal.png" width="40"></td>
+                <td width="80"><a href='<?= "$donateurl"; ?>' target='_blank'><img src="icons/paypal.png" width="40"></a></td>
                 <td width="80" onclick="closeedp();"><img src="icons/exit.png" width="40"></td>
             </tr>
             <tr class="topbarmenu" align="center" style='cursor: hand'>
@@ -44,7 +44,7 @@ $edpmode = "web";
                 <td>Issues</td>
                 <td onclick="loader('Credits');">Credits</td>
                 <td>&nbsp;</td>
-                <td onclick="window.open('<?= $donateurl; ?>');">Donate</td>
+                <td>Donate</td>
                 <td onclick="closeedp();">Exit</td>
             </tr>
         </table>
