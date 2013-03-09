@@ -30,7 +30,7 @@ $edpmode = "web";
                 <td width="80" onclick="loader('Fixes')"><img src="icons/fixes.png" width="40"></td>
                 <td width="80" onclick="loader('Tools')"><img src="icons/tools.png" width="40"></td>
                 <td width="80" onclick="loader('Update');"><img src="icons/Installer.png" width="40"></td>
-                <td width="80" onclick="loadPageInConsole('https://code.google.com/p/osxlatitude-edp/issues/list');"><img src="icons/issues.png" width="40"></td>
+                <td width="80"><a href='https://code.google.com/p/osxlatitude-edp/issues/list' target='_blank'><img src="icons/issues.png" width="40"></a></td>
                 <td width="80" onclick="loader('Credits');"><img src="icons/credits.png" width="40"></td>
                 <td>&nbsp;</td>
                 <td width="80" onclick="window.open('<?= "$donateurl"; ?>')"><img src="icons/paypal.png" width="40"></td>
@@ -41,7 +41,7 @@ $edpmode = "web";
                 <td onclick="loader('Fixes')">Fixes</td>
                 <td onclick="loader('Tools')">Tools</td>
                 <td onclick="loader('Update')">Update</td>
-                <td onclick="loadPageInConsole('https://code.google.com/p/osxlatitude-edp/issues/list')">Issues</td>
+                <td><a href='https://code.google.com/p/osxlatitude-edp/issues/list' target='_blank'>Issues</a></td>
                 <td onclick="loader('Credits');">Credits</td>
                 <td>&nbsp;</td>
                 <td onclick="window.open('<?= $donateurl; ?>');">Donate</td>
