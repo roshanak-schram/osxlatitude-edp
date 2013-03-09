@@ -41,7 +41,7 @@ $edpmode = "web";
                 <td onclick="loader('Fixes')">Fixes</td>
                 <td onclick="loader('Tools')">Tools</td>
                 <td onclick="loader('Update')">Update</td>
-                <td><a href='https://code.google.com/p/osxlatitude-edp/issues/list' target='_blank'>Issues</a></td>
+                <td>Issues</td>
                 <td onclick="loader('Credits');">Credits</td>
                 <td>&nbsp;</td>
                 <td onclick="window.open('<?= $donateurl; ?>');">Donate</td>
