@@ -18,6 +18,12 @@ function writeToLog($logfile, $data) {
     file_put_contents($logfile, $data, FILE_APPEND | LOCK_EX);
 }
 
+function lastMinFixes() {
+	global $workpath;
+	writeToLog("$workpath/build.log", "Clearing boot-args in NVRAM...<br>");
+	system_call("nvram -d boot-args");
+}
+
 function getConfig($name) {
     global $edp_db;
     
