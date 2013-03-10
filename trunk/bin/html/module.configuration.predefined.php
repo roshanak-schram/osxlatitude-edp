@@ -98,9 +98,12 @@
 			//Step 4
 			writeToLog("$workpath/build.log", "<br><br><b>Step 4) Updating chameleon.. </b><br>");
 				updateCham();
-				
+			
+			writeToLog("$workpath/build.log", "<br><b>Step 5) Applying last minut fixes...</b><br>");
+				lastMinFixes();
+					
 			//Step 5
-			writeToLog("$workpath/build.log", "<br><b>Step 5) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
+			writeToLog("$workpath/build.log", "<br><b>Step 6) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
 				system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
 				
 			echo "<script> document.location.href = 'workerapp.php?action=showBuildLog'; </script>";
