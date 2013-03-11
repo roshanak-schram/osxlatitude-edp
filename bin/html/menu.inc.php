@@ -9,11 +9,9 @@
 <head>
 	<link href="css/sidebar.css" rel="stylesheet" media="screen" type="text/css" />
 </head>
-<body background="images/sidebar_bg.png">
-
-
+<body style="background-color:#F6F6F6;">
 <? //Write out the standard menu - un-categorized items ?>
-<div id='title' class='edpmenu_title_text' style='margin-top: 10px'>&nbsp;&nbsp;<?="$i";?></div>
+<div id='title' class='edpmenu_title_text' style='margin-top: 10px;'>&nbsp;&nbsp;<?="$i";?></div>
 <? generateMenu("$i", ""); ?>
 
 
@@ -76,5 +74,4 @@ function addMenuItem($action, $icon, $title) {
 	    top.document.getElementById('console_iframe').src = page;
     }
 </script>
-
 </body>
