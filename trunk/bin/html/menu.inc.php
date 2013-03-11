@@ -19,7 +19,7 @@ if ($i == "") { $i = "Configuration"; }
 $result = $edp_db->query("SELECT * FROM resources where menu = '$i' order by name");
 foreach($result as $row) {
 	if ($row[status] == "active") {
-		addMenuItem("loadModule('showresource.php?id=$row[id]');", "icons/$row[icon]", "$row[name]");
+		addMenuItem("loadModule('showresource.php?id=$row[id]');", "icons/sidebar/$row[icon]", "$row[name]");
 	}
 }
 
