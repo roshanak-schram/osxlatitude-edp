@@ -72,11 +72,11 @@ function waitToggle() {
 function loader(action) {
 	var sidebar = top.document.getElementById('edpmenu');
 	var console = top.document.getElementById('console_iframe');
-	
+	if (action == "EDP") 	{ sidebar.src = 'menu.inc.php?i=EDP'; console.src = 'show.php?i=pages/edp.inc.php'; }	
 	if (action == "Configuration") 	{ sidebar.src = 'menu.inc.php?i=Configuration'; console.src = 'show.php?i=pages/config.inc.php'; }
 	if (action == "Fixes") 			{ sidebar.src = 'menu.inc.php?i=Fixes'; 		console.src = 'show.php?i=pages/fixes.inc.php'; }
 	if (action == "Tools") 			{ sidebar.src = 'menu.inc.php?i=Tools'; 		console.src = 'show.php?i=pages/tools.inc.php'; }
-	if (action == "Update") 		{ sidebar.src = 'menu.inc.php?i=Update'; 		console.src = 'show.php?i=pages/update.inc.php'; }
+	if (action == "Applications") 	{ sidebar.src = 'menu.inc.php?i=Applications'; 	console.src = 'show.php?i=pages/apps.inc.php'; }
 	if (action == "Credits") 		{ sidebar.src = 'menu.inc.php?i=Credits'; 		console.src = 'show.php?i=pages/credits.inc.php'; }
 }
 
