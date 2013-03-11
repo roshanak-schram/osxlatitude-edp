@@ -16,7 +16,7 @@ $bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 
 
 <div class="pageitem_top">
-<!--<img src="icons/edp2.png">--><?="$row[name]";?>
+<img src="icons/installer.png"><span><?="$row[name]";?></span>
 </div>
 <div class="pageitem_bottom">
 

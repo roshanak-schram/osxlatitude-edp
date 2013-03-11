@@ -1168,7 +1168,6 @@ select {
 }
 
 .pageitem_top {
-	font-style:bold;
 	-webkit-border-radius: 8px 8px 0px 0px;
 		background: rgb(30,87,153); /* Old browsers */
 		background: -moz-linear-gradient(top, rgb(30,87,153) 0%, rgb(239,238,241) 0%, rgb(213,217,220) 100%); /* FF3.6+ */
@@ -1181,12 +1180,8 @@ select {
 	border-left: #92979D solid 1px;
 	border-right: #92979D solid 1px;
 
-	font-size: 16pt;
 	color:#3A3D40;
-	padding-top: 30px;
-	padding-bottom:30px;
-	padding-left:10px;
-	height: auto;
+	height: 60px;
 	width: auto;
 	margin-left:10px;
 	margin-right:15px;
@@ -1194,10 +1189,22 @@ select {
 }
 
 .pageitem_top img {
-	height:60px;
-	width:60px;
-	visibility: hidden;
+	height:40px;
+	width:40px;
+	float:left;
+	padding-top:10px;
+	padding-left:15px;
+	margin:0px;
 }
+
+.pageitem_top span {
+	padding-top: 20px;
+	padding-left:15px;
+	padding-right:15px;
+	float:left;
+	font-size: 16pt;
+	font-style:bold;
+}	
 
 .pageitem_bottom {
 	-webkit-border-radius: 0px 0px 8px 8px;
