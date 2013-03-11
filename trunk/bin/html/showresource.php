@@ -13,21 +13,18 @@ $bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 		
 		
 ?>
-<br>
-<span class="graytitle"><?="$row[name]";?></span>
-<br>
-<ul class="pageitem">
-	<li class="textbox">
-	<span class="header">Description</span>
-	<?="$row[description]";?>
-	<br>
-	
-	</li>
-</ul>
 
-<br>
-<br>
+
+<div class="pageitem_top">
+<!--<img src="icons/edp2.png">--><?="$row[name]";?>
+</div>
+<div class="pageitem_bottom">
+
+	<?="$row[description]";?>
+
+</div>
 <ul class="pageitem">
 <li class="button"><input name="Submit input" type="submit" onclick="document.location.href='<?="$row[action]";?>'" value="OK, I understand.. go ahead!" /></li>
 </ul>
+
 
