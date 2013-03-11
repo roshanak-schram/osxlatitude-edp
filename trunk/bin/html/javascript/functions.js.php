@@ -38,13 +38,13 @@ function aligndesign() {
 		var w = getWidth();
 
         //Calculate and correction of the console_iframe
-        var console_iframe_width = w - 285;
+        var console_iframe_width = w - 266;
         var console_iframe_height = h - 69;
         document.getElementById('console_iframe').style.width = console_iframe_width + 'px';
         document.getElementById('console_iframe').style.height = console_iframe_height + 'px';
 
         //Calculate and correction of menu dev
-        var edpmenu_div_height = h - 69;
+        var edpmenu_div_height = h - 68;
         document.getElementById('edpmenu').style.height = edpmenu_div_height + 'px';
         
         //Recalculate the wait layer

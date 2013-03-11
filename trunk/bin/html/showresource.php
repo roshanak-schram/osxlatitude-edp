@@ -13,8 +13,8 @@ $bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 		
 		
 ?>
-
-<span class="graytitle"><center><?="$row[name]";?></center></span>
+<br>
+<span class="graytitle"><?="$row[name]";?></span>
 <br>
 <ul class="pageitem">
 	<li class="textbox">
