@@ -3,10 +3,15 @@
 
 	$i = $_GET['i'];
 	include "header.inc.php";
-	include "include/watermark.inc.php"; 
-	
-	include "$i"; 
-
+	//include "include/watermark.inc.php"; 
 ?>
+<br>
+<ul class="pageitem">
+	<li class="textbox">
+<?	
+	include "$i"; 
+?>
+	</li>
+</ul>
 
 

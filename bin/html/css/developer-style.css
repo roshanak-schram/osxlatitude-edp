@@ -2,7 +2,7 @@
 body {
 	position: relative;
 	margin: 0;
-	background: #F4F4F4;
+	background-image: url('/images/console_bg.png');
 	-webkit-text-size-adjust: none;
 	min-height: 416px;
 	font-family: 'Lucida Grande';
@@ -21,21 +21,18 @@ body {
 }
 .edpmenu {
 	position: absolute;
-	width: 270px;
+	width: 255px;
 	height: 10px;
 	z-index: 1;
 	left: 0px;
-	top: 69px;
-	background-color: #ECECEC;
-	border-right: 1px solid #000000;
-	
+	top: 68px;	
 }
 .console_iframe {
 	position: absolute;
 	width: 50%;
 	height: 100%;
 	z-index: 1;
-	left: 285px;
+	left: 265px;
 	top: 69px;
 }
 

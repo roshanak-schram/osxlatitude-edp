@@ -3,6 +3,7 @@ include_once "../config.inc.php";
 ?>
 
 <p><span class='graytitle'>Fixes, the solution for a problem!</span>
+	<br><br>
 	<ul class="pageitem">
 		<li class="textbox">
 			<p>

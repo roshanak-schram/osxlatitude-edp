@@ -16,12 +16,13 @@ $edpmode = "web";
                 
 ?>
     <body onload="bootloader();" onresize="aligndesign();">
+    	
 <div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 10000; left: 50px; top: 0px; background-image: url('images/semi-transparent.png')" id="wait">
-<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" height="100%">
-	<tr><td height="48%" width="48%"></td><td height="48%"></td><td height="48%" width="48%"></td></tr>
-	<tr><td width="48%">&nbsp;</td><td><p align="center"><img border="0" src="images/loading.gif" width="80" height="80"><br><br><font color="#FFFFFF">Loading....</font><font></td><td width="48%">&nbsp;</td></tr>
-	<tr><td height="48%" width="48%">&nbsp;</td><td height="48%">&nbsp;</td><td height="48%" width="48%">&nbsp;</td></tr>
-</table>	
+	<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" height="100%">
+		<tr><td height="48%" width="48%"></td><td height="48%"></td><td height="48%" width="48%"></td></tr>
+		<tr><td width="48%">&nbsp;</td><td><p align="center"><img border="0" src="images/spinning-wheel.gif"><br><br><font color="#FFFFFF">Loading....</font><font></td><td width="48%">&nbsp;</td></tr>
+		<tr><td height="48%" width="48%">&nbsp;</td><td height="48%">&nbsp;</td><td height="48%" width="48%">&nbsp;</td></tr>
+	</table>	
 </div>
 
         <table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
@@ -49,7 +50,8 @@ $edpmode = "web";
             </tr>
         </table>
 
-        <iframe id="edpmenu" class="edpmenu" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?= "$i"; ?>"></iframe>
+		<iframe id="edpmenu" class="edpmenu" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?= "$i"; ?>"></iframe>
+
         <iframe id="console_iframe" class="console_iframe" marginwidth="0" marginheight="0" border="0" frameborder="0" src="show.php?i=pages/welcome.inc.php"></iframe>
 
 

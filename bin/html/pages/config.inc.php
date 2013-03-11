@@ -29,7 +29,7 @@ foreach($vendors as $i => $vendor) {
 $chart = new Highchart();
 
 $chart->chart->renderTo = "container";
-$chart->chart->plotBackgroundColor = '#F4F4F4';
+$chart->chart->plotBackgroundColor = '#FFFFFF';
 $chart->chart->plotBorderWidth = '0px';
 $chart->chart->plotShadow = false;
 $chart->title->text = "We currently have $total systems in EDP";
@@ -73,8 +73,10 @@ $chart->series[] = $vendor_chart;
          echo '<script type="text/javascript" src="' . $script . '"></script>';
       }
     ?>
-<p><span class='graytitle'>Build from model database</span>
+<p><span class='graytitle'>Configuration</span>
+	<br><br>
 	<ul class="pageitem">
+		<span class='graytitle'>Build from model database</span>
 		<li class="textbox"><p>EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy to choose the right configuration - however - you always have the option to adjust the schematics before doing a build.<br>
 		<br>Doing a build means that EDP will copy a combination of kexts, dsdt and plists needed to boot your system.
 		<br>To start a new build, you can choose the option 'Build from model database' in the menu on the left side.</p>
@@ -93,7 +95,7 @@ $chart->series[] = $vendor_chart;
  $(document).ready(function() {
 $( "rect" ).each(function( index ) {
   if($(this).attr("fill")=="#FFFFFF") { 
-	  $(this).attr("fill", "#F4F4F4");
+	  $(this).attr("fill", "#FFFFFF");
   }
 });
  });
