@@ -9,7 +9,7 @@
 <head>
 	<link href="css/sidebar.css" rel="stylesheet" media="screen" type="text/css" />
 </head>
-<body style="background-color:#F6F6F6;">
+<body background="images/sidebar_bg.png">
 <? //Write out the standard menu - un-categorized items ?>
 <div id='title' class='edpmenu_title_text' style='margin-top: 10px;'>&nbsp;&nbsp;<?="$i";?></div>
 <? generateMenu("$i", ""); ?>
