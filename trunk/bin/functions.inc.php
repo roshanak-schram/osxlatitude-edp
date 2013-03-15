@@ -59,7 +59,6 @@ function checkSVNrevs() {
  */
 function patchAHCI() {
 	global $workpath;
-	system_call("cd /Extra/bin; perl ahci-generate-patch-config.pl");
     system_call("cp -R /System/Library/Extensions/IOAHCIFamily.kext /Extra/Extensions");
     system_call("perl /Extra/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
 }
