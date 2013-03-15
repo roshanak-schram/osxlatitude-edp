@@ -58,8 +58,10 @@ function checkSVNrevs() {
  * @see http://www.insanelymac.com/forum/topic/280062-waiting-for-root-device-when-kernel-cache-used-only-with-some-disks-fix/page__st__60#entry1851722
  */
 function patchAHCI() {
+	global $workpath;
+	system_call("cd /Extra/bin; perl ahci-generate-patch-config.pl");
     system_call("cp -R /System/Library/Extensions/IOAHCIFamily.kext /Extra/Extensions");
-    system_call("perl /Extra/bin/fixes/patch-ahci-mlion.pl");
+    system_call("perl /Extra/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
 }
 
 /**
