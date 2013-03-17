@@ -133,7 +133,6 @@ if ($action == "") {
 	
     		$result = $edp_db->query("SELECT * FROM models order by vendor");
 			include "header.inc.php";
-			include "include/watermark.inc.php";
 			echo "<p><span class='graytitle'></span><ul class='pageitem'><li class='select'>";
 			//Show the vendrop dropdown
 			echo "<select name='vendor' id='vendor' onchange='showSerie();'>";
