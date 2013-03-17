@@ -51,15 +51,11 @@ if ($showtype == "standalone") {
 
 //Write out the config - we will use the current config based on the - this HTML is common for all show types
 echo "<ul class='pageitem'>";
-	checkbox("ACPICodec.dylib:", "ChamModuleACPICodec", $chamModConfig['ACPICodec']);	
-	checkbox("FileNVRAM.dylib:", "ChamModuleFileNVRAM", $chamModConfig['FileNVRAM']);	
-	checkbox("KernelPatcher.dylib:", "ChamModuleKernelPatcher", $chamModConfig['KernelPatcher']);
-	checkbox("Keylayout.dylib:", "ChamModulekeylayout", $chamModConfig['Keylayout']);
-	checkbox("klibc.dylib:", "ChamModuleklibc", "yes");
-	checkbox("Resolution.dylib:", "ChamModuleResolution", $chamModConfig['Resolution']);
-	checkbox("Sata.dylib:", "ChamModuleSata", $chamModConfig['Sata']);
-	checkbox("uClibcxx.dylib:", "ChamModuleuClibcxx", "yes");	
-		
+$result = $edp_db->query("SELECT * FROM chammods order by name");
+foreach($result as $row) {
+	$name = "$row[name]";
+	checkbox("$name: $row[description]", "$row[edpname]", $chamModConfig[$name]);
+}
 echo "</ul><br>";
 
 
