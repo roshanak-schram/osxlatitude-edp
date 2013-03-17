@@ -1,5 +1,55 @@
 <?php
 
+//------------------> EDPweb functions -----------------------------------------------------------------------------------------------
+
+function checkbox($title, $formname, $status) {
+	if ($status == "yes") { $c = "checked"; }
+	echo "<li class='checkbox'><span class='name'>$title</span><input name='$formname' type='checkbox' $c/> </li>\n";
+}
+
+//<-----------------------------------------------------------------------------------------------------------------------------------
+
+
+function copyChamModules($chamModConfig) {
+	global $workpath;
+	$modpathFROM 	= "$workpath/storage/modules";
+	$modpathTO 		= "$workpath/modules/";
+	
+	//Cleaning existing modules folder
+	system_call("rm -Rf /Extra/modules/*");
+	
+	//Copying modules
+	if ($chamModConfig['ACPICodec'] == "on") 		{ system_call("cp -Rf $modpathFROM/ACPICodec.dylib $modpathTO"); }
+	if ($chamModConfig['FileNVRAM'] == "on") 		{ system_call("cp -Rf $modpathFROM/FileNVRAM.dylib $modpathTO"); }
+	if ($chamModConfig['KernelPatcher'] == "on") 	{ system_call("cp -Rf $modpathFROM/KernelPatcher.dylib $modpathTO"); }
+	if ($chamModConfig['Keylayout'] == "on") 		{ system_call("cp -Rf $modpathFROM/Keylayout.dylib $modpathTO"); }		
+	if ($chamModConfig['klibc'] == "on") 			{ system_call("cp -Rf $modpathFROM/klibc.dylib $modpathTO"); }
+	if ($chamModConfig['Resolution'] == "on") 		{ system_call("cp -Rf $modpathFROM/Resolution.dylib $modpathTO"); }	
+	if ($chamModConfig['Sata'] == "on") 			{ system_call("cp -Rf $modpathFROM/Sata.dylib $modpathTO"); }
+	if ($chamModConfig['uClibcxx'] == "on") 		{ system_call("cp -Rf $modpathFROM/uClibcxx.dylib $modpathTO"); }	
+}
+
+function chamModGetConfig() {
+	global $workpath;
+	$modpath = "$workpath/modules";
+
+	$array = array(
+		"ACPICodec" => (is_file("$modpath/ACPICodec.dylib") === TRUE ? "yes" : "no"),
+		"FileNVRAM" => (is_file("$modpath/FileNVRAM.dylib") === TRUE ? "yes" : "no"),
+		"KernelPatcher" => (is_file("$modpath/KernelPatcher.dylib") === TRUE ? "yes" : "no"),
+		"Keylayout" => (is_file("$modpath/Keylayout.dylib") === TRUE ? "yes" : "no"),
+		"klibc" => (is_file("$modpath/klibc.dylib") === TRUE ? "yes" : "no"),
+		"Resolution" => (is_file("$modpath/Resolution.dylib") === TRUE ? "yes" : "no"),
+		"Sata" => (is_file("$modpath/Sata.dylib") === TRUE ? "yes" : "no"),
+		"uClibcxx" => (is_file("$modpath/uClibcxx.dylib") === TRUE ? "yes" : "no"),
+					
+ 	);
+ 	return $array;	
+}
+
+
+	
+	
 function updateEDP() {
     include_once "config.inc.php";
     global $workpath;

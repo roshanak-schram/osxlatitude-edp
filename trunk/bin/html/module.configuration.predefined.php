@@ -3,7 +3,7 @@
 	include_once "../config.inc.php";
 	
 	include "header.inc.php";
-	include "include/watermark.inc.php";
+
 		
 	//Get server vars
 	global $modelID;
@@ -122,13 +122,19 @@
 		    
 
 			
-	//-------------------------> Here starts the Vendor and model selector - but only if $action is empty
+//-------------------------> Here starts the Vendor and model selector - but only if $action is empty
 				
-	if ($action == "") {
+if ($action == "") {
+	
+	//Write out the top menu
+	echo "<div class='pageitem_top'><img src='icons/installer.png'><span>Select a model your wish to configure for:</span></div>\n";
+	echo "<div class='pageitem_bottom'>\n";
+	echo "EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. <br>Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.";
+	
     		$result = $edp_db->query("SELECT * FROM models order by vendor");
 			include "header.inc.php";
 			include "include/watermark.inc.php";
-			echo "<p><span class='graytitle'>Select a model your wish to configure for:</span><ul class='pageitem'><li class='select'>";
+			echo "<p><span class='graytitle'></span><ul class='pageitem'><li class='select'>";
 			//Show the vendrop dropdown
 			echo "<select name='vendor' id='vendor' onchange='showSerie();'>";
 			if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
@@ -341,10 +347,6 @@
 
 
 
-	function checkbox($title, $formname, $status) {
-		if ($status == "yes") { $c = "checked"; }
-		echo "<li class='checkbox'><span class='name'>$title</span><input name='$formname' type='checkbox' $c/> </li>\n";
-	}
 	
 	
 	//<------------------------------ Here ends the model confirmation page
