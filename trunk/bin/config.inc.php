@@ -11,7 +11,7 @@ $edp_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //Initiate preloader
 session_start();
-$remoterev 		= $_SESSION['remoterev'];
+//$remoterev 		= $_SESSION['remoterev'];
 $number_updates = $_SESSION['number_updates'];
 $audiodb		= $_SESSION['audiodb'];
 $batterydb		= $_SESSION['batterydb'];		
@@ -32,7 +32,7 @@ $incpath		= $_SESSION['incpath'];
 require_once "$workpath/bin/functions.inc.php";
 
 //Checking if ONE of the pre-loaded vars is set, if not we will include loader.php to load them
-if ($remoterev == "" || $rootpath == "") {
+if ($rootpath == "") {
 	include "html/loader.php";
 }
 
