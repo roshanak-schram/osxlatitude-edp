@@ -457,7 +457,7 @@ function copyKexts() {
     //Checking if we need USB Roolback fix
     if ($modeldb[$modelID]['usbRollBack'] == "yes" || $modeldb[$modelID]['usbRollBack'] == "y") {
     	writeToLog("$workpath/build.log", "  Copying USB Roolback kexts... <br>");
-    	system_call("cp -R $workpath/storage/kextpacks/usb_rollback $ee");
+    	system_call("cp -R $workpath/storage/kextpacks/usb_rollback/* $ee");
     } 
     
     
