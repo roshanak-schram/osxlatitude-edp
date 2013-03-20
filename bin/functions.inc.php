@@ -192,22 +192,6 @@ function GMA950brightnessfixCheck() {
     }
 }	
 	
-/**
- * Build from existing config
- */
-function buildPresent() {
-    global $ee;
-
-    system_call("clear");
-    echo "Doing build based on existing configuration \n\n";
-
-    echo "  Removing version control of kexts in $ee \n";
-    system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
-
-    echo "  Calling myFix to generate new cache…\n";
-    system_call("myfix -q -t /");
-    kernelcachefix();
-}
 
 /**
  * replace system_call() .. works with LWS also
@@ -467,10 +451,16 @@ function copyKexts() {
         if ($os == "ml") {
             patchAHCI();
         }
-    } else {
-        echo "  Not patching IOAHCIFamily.kext for OS: $os.... \n";
-    }
-
+    } 
+    
+    
+    //Checking if we need USB Roolback fix
+    if ($modeldb[$modelID]['usbRollBack'] == "yes" || $modeldb[$modelID]['usbRollBack'] == "y") {
+    	writeToLog("$workpath/build.log", "  Copying USB Roolback kexts... <br>");
+    	system_call("cp -R $workpath/storage/kextpacks/usb_rollback $ee");
+    } 
+    
+    
     //Checking if we need Sleepenabler
     if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
         writeToLog("$workpath/build.log", "  Copying SleepEnabler.kext for enabling sleep...<br>");
