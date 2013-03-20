@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DSDT</key>
+	<string>/Extra/DSDT.aml</string>
+	<key>DropSSDT</key>
+	<string>Yes</string>
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
+	<key>GeneratePStates</key>
+	<string>Yes</string>
+	<key>GraphicsEnabler</key>
+	<string>No</string>
+	<key>Kernel Flags</key>
+	<string>-v</string>
+	<key>SystemType</key>
+	<string>2</string>
+	<key>Timeout</key>
+	<string>3</string>
+	<key>UseKernelCache</key>
+	<string>No</string>
+</dict>
+</plist>

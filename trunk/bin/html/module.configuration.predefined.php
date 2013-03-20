@@ -36,6 +36,7 @@
 		$customCham			= $_POST['customCham']; 		if ($customCham == "on")		{ $customCham = "yes"; } 			else { $customCham= "no"; }
 		$customKernel		= $_POST['customKernel']; 		if ($customKernel == "on")		{ $customKernel = "yes"; } 			else { $customKernel = "no"; }
 		$patchAHCIml		= $_POST['patchAHCIml']; 		if ($patchAHCIml == "on")		{ $patchAHCIml = "yes"; } 			else { $patchAHCIml = "no"; }
+		$usbRollBack		= $_POST['usbRollBack']; 		if ($usbRollBack == "on")		{ $usbRollBack = "yes"; } 			else { $usbRollBack = "no"; }
 		
 		//Generate a multi dim. array used during the build process
 		global $modeldb;
@@ -58,7 +59,8 @@
                       		ethernet		=> $_POST['ethernet'],
                       		wifikext		=> $_POST['wifikext'],
                       		audiopack		=> $_POST['audiopack'],                    		                      		                      		
-                      		customCham 		=> $customCham,                      		
+                      		customCham 		=> $customCham,
+                      		usbRollBack		=> $usbRollBack,                     		
                       		customKernel 	=> $customKernel                     		 
                     ),
              );
@@ -327,6 +329,7 @@ if ($action == "") {
 			checkbox("GMA950 Brightness fix:", "useGMA950brightfix", "$mdrow[useGMA950brightfix]");
 			checkbox("Use ACPI fix (coolbook fix):", "useACPIfix", "$mdrow[useACPIfix]");
 			checkbox("Use AHCI fix (Fix waiting for root device):", "patchAHCIml", "$mdrow[patchAHCIml]");
+			checkbox("Use Rollback USB Drivers:", "usbRollBack", "$mdrow[usbRollBack]");
 		echo "</ul><br>";
 		
 		
