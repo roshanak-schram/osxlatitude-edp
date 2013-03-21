@@ -5,10 +5,10 @@
 //Checking remote svn version and comparing to local
 $localrev 		= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
 $localrev 		= str_replace("Last Changed Rev: ", "", $localrev);
-$remoterev      = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
-$remoterev      = str_replace("Last Changed Rev: ", "", $remoterev);
+//$remoterev      = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
+//$remoterev      = str_replace("Last Changed Rev: ", "", $remoterev);
 $number_updates = ($remoterev - $localrev);	
-$_SESSION['remoterev'] 		= $remoterev;
+//$_SESSION['remoterev'] 		= $remoterev;
 $_SESSION['localrev'] 		= $localrev;
 $_SESSION['number_updates'] = $number_updates;		
 

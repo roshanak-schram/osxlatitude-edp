@@ -38,6 +38,8 @@
 		$patchAHCIml		= $_POST['patchAHCIml']; 		if ($patchAHCIml == "on")		{ $patchAHCIml = "yes"; } 			else { $patchAHCIml = "no"; }
 		$usbRollBack		= $_POST['usbRollBack']; 		if ($usbRollBack == "on")		{ $usbRollBack = "yes"; } 			else { $usbRollBack = "no"; }
 		
+					
+	
 		//Generate a multi dim. array used during the build process
 		global $modeldb;
 		$modeldb = array(
@@ -61,10 +63,21 @@
                       		audiopack		=> $_POST['audiopack'],                    		                      		                      		
                       		customCham 		=> $customCham,
                       		usbRollBack		=> $usbRollBack,                     		
-                      		customKernel 	=> $customKernel                     		 
+                      		customKernel 	=> $customKernel,
+                      		ACPICodec 		=> $_POST['ChamModuleACPICodec'],
+                      		FileNVRAM 		=> $_POST['ChamModuleFileNVRAM'],
+                      		KernelPatcher 	=> $_POST['ChamModuleKernelPatcher'],
+                      		Keylayout 		=> $_POST['ChamModulekeylayout'],
+                      		klibc 			=> $_POST['ChamModuleklibc'],
+                      		Resolution 		=> $_POST['ChamModuleResolution'],
+                      		Sata 			=> $_POST['ChamModuleSata'],
+                      		uClibcxx 		=> $_POST['ChamModuleuClibcxx']                    		 
                     ),
              );
-        
+
+		     
+		//($ChamModuleACPICodec == "on" ? "yes" : "no")
+		   
         global $modelID; $modelID = "0";
         global $modelName;
         $modelName = $modeldb[$modelID]["name"];
@@ -98,8 +111,10 @@
 				copyKexts();
 			
 			//Step 4
-			writeToLog("$workpath/build.log", "<br><br><b>Step 4) Updating chameleon.. </b><br>");
+			writeToLog("$workpath/build.log", "<br><br><b>Step 4) Applying Chameleon settings.. </b><br>");
 				updateCham();
+				writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
+				copyChamModules($modeldb[$modelID]);
 			
 			writeToLog("$workpath/build.log", "<br><b>Step 5) Applying last minut fixes...</b><br>");
 				lastMinFixes();
@@ -131,7 +146,7 @@ if ($action == "") {
 	//Write out the top menu
 	echo "<div class='pageitem_top'><img src='icons/installer.png'><span>Select a model your wish to configure for:</span></div>\n";
 	echo "<div class='pageitem_bottom'>\n";
-	echo "EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. <br>Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.";
+	echo "EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. <br><br>Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.";
 	
     		$result = $edp_db->query("SELECT * FROM models order by vendor");
 			include "header.inc.php";
@@ -213,7 +228,6 @@ if ($action == "") {
 
 		<? //Show the tabs bar ?>
 		<div id="tabs">
-<!--		<div class="pageitem_menu">-->
                     <div id="menutabs">
                         <ul>
                         		<li><a href="#tabs-0">Generel</a></li>
@@ -331,17 +345,19 @@ if ($action == "") {
 
 
 		//----------------------> Chameleon tab
-		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon</span>";
+		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon bootloader configuration</span>";
 		echo "<ul class='pageitem'>";				
 			checkbox("Update Chameleon to latest version", "updateCham", "yes");	
 			checkbox("Use custom chameleon", "customCham", "$mdrow[customCham]");
 		echo "</ul><br>";
-
+		
+echo "<span class='graytitle'>Modules</span>";
 echo "<ul class='pageitem'>";
+
 $result = $edp_db->query("SELECT * FROM chammods order by name");
 foreach($result as $row1) {
-	$name = "$row1[name]";
-	checkbox("$name: $row1[description]", "$row1[edpname]", $mdrow[$name]);
+	$name = "$row1[name]"; $edpname = $row1[edpname];
+	checkbox("$name: $row1[description]", "$edpname", $mdrow[$edpname]);
 }
 echo "</ul><br>";
 				
@@ -369,8 +385,8 @@ echo "</ul><br>";
 		echo "<input type='hidden' name='desc' value='$mdrow[desc]'>";
 		echo "<input type='hidden' name='model' value='$modelID'>";
 		
-		
-		echo "<center><input type='submit' value='Do build!'><br><br>";
+		echo "</div><br>";
+		echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
 		echo "</form>";		
 		
 
@@ -405,7 +421,7 @@ echo "</ul><br>";
 		var vendor = '<?php echo "$vendor";?>';
 		var a = document.getElementById("model");
 		var model = a.options[a.selectedIndex].value;
-		if (model == "") { alert('Please select a model before continueing..'); return; }
+		if (model == "") { alert('Please select a model before continuing..'); return; }
 		document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&model='+model+'&action=confirm';		
 	}
 	function showType() {

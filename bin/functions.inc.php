@@ -228,8 +228,6 @@ function getChoice() {
 
 function patchAppleIntelCPUPowerManagement() {
     global $ee, $slepath;
-    
-    echo "  Patching AppleIntelCPUPowerManagement.kext \n";
     system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
     system_call('perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 }
