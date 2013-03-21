@@ -1301,6 +1301,7 @@ select {
 }
 
 #menutabs {
+    background-color: #e4e4e4;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e4e4e4)); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top,  #ffffff 0%,#e4e4e4 100%);  /* Chrome10+,Safari5.1+ */
     font-size: 10pt;
@@ -1332,7 +1333,8 @@ select {
     margin-top: -1px;
 }
 
-#menutabs ul li a {
+#menutabs ul li a {    
+    outline: 0 none;
     outline-color: transparent;
     display: block;
     line-height: 23px;
@@ -1349,9 +1351,9 @@ select {
     border-left: 1px solid white;
 }
 
-#menutabs ul li.ui-state-active a {
+#menutabs ul li.ui-state-active a {    
     color: #494949;
     background-color: #e4e4e4;
     border-left: 1px solid #D5D5D5;
-    border-top: 1px solid #D5D5D5;
+    border-top: 1px solid #D5D5D5;    
 }
