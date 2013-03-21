@@ -214,16 +214,30 @@ if ($action == "") {
 		echo "<form action='module.configuration.predefined.php' method='post'>";
 
 
+                ?>
+                <div class="pageitem_top"><img src="http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/<?php echo $mdrow[name]; ?>.png"><span><b><?php echo $mdrow[desc]; ?></b> - <?php echo $os_string; ?></span></div>
+		<div id="tabs">
+<!--		<div class="pageitem_menu">-->
+                    <div id="menutabs">
+                        <ul>
+                            <li><a href="#tabs-1">Overview - Kernel Extentions</a></li>
+                            <li><a href="#tabs-2">CPU & Power options</a></li>
+                            <li><a href="#tabs-3">Chameleon</a></li>
+                            <li><a href="#tabs-4">Fixes</a></li>
+                        </ul>
+                    </div>
+                <?php
 
-		echo "<div class='pageitem_top'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png'><span><b>$mdrow[desc]</b> - $os_string</span></div>\n";
-		echo "<div id=\"tabs\">\n";
-		echo "<div class=\"pageitem_menu\">\n";
-		echo "<ul>\n";
-		echo "<li><a href=\"#tabs-1\">Overview - Kernel Extentions</a></li>\n";
-		echo "<li><a href=\"#tabs-2\">CPU & Power options</a></li>\n";
-		echo "<li><a href=\"#tabs-3\">Chameleon</a></li>\n";
-		echo "<li><a href=\"#tabs-4\">Fixes</a></li>\n";		
-		echo "</ul></div>\n";
+//		echo "<div class='pageitem_top'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png'><span><b>$mdrow[desc]</b> - $os_string</span></div>\n";
+//		echo "<div id=\"tabs\">\n";
+//		//echo "<div class=\"pageitem_menu\">\n";
+//                echo "<div class=\"tabs\">\n";
+//		echo "<ul>\n";
+//		echo "<li><a href=\"#tabs-1\">Overview - Kernel Extentions</a></li>\n";
+//		echo "<li><a href=\"#tabs-2\">CPU & Power options</a></li>\n";
+//		echo "<li><a href=\"#tabs-3\">Chameleon</a></li>\n";
+//		echo "<li><a href=\"#tabs-4\">Fixes</a></li>\n";		
+//		echo "</ul></div>\n";
 		
 		
 		

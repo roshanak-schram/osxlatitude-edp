@@ -1209,21 +1209,23 @@ select {
 }	
 
 .pageitem_bottom {
-	-webkit-border-radius: 0px 0px 8px 8px;
-	border: #878787 solid 1px;
-	background-color:white;
-	font-size: 10pt;
-	overflow: hidden;
-	padding: 0;
-	position: relative;
-	display: block;
-	height: auto;
-	width: auto;
-	margin-left:10px;
-	margin-right:15px;
-	margin-bottom:15px;
-	padding:10px;
-	list-style: none;
+    -webkit-border-radius: 0px 0px 8px 8px;
+    border: #878787 solid 1px;
+    background-color:white;
+    font-size: 10pt;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    display: block;
+    height: auto;
+    width: auto;
+    margin-left:10px;
+    margin-right:15px;
+    margin-bottom:15px;
+    padding:10px;
+    list-style: none;
+    float: none;
+    clear: both;
 }
 
 
@@ -1296,4 +1298,60 @@ select {
 	width: auto;
 	margin: 3px 9px 17px;
 	list-style: none;
+}
+
+#menutabs {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e4e4e4)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#e4e4e4 100%);  /* Chrome10+,Safari5.1+ */
+    font-size: 10pt;
+    font-family: 'Helvetica';
+    margin-left:10px;
+    margin-right:15px;
+    border-left: #878787 solid 1px;
+    border-right: #878787 solid 1px;
+    line-height: 23px;
+    border-top: #A8A8A8 solid 1px;
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+#menutabs ul {
+    margin-left:10px;
+    margin-right:15px;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    font-size: 0px;
+    height: 23px;
+}
+
+#menutabs li {
+    display: inline-block;
+    border-left: 1px solid #878787;
+    border-top: 1px solid transparent;
+    margin-top: -1px;
+}
+
+#menutabs ul li a {
+    outline-color: transparent;
+    display: block;
+    line-height: 23px;
+    color: #494949;
+    text-decoration: none;    
+    padding-left: 25px;
+    padding-right: 25px;
+    border-left: 1px solid white;
+    font-size: 10pt;
+}
+
+#menutabs ul li:last-child a {
+    border-right: 1px solid #878787;
+    border-left: 1px solid white;
+}
+
+#menutabs ul li.ui-state-active a {
+    color: #494949;
+    background-color: #e4e4e4;
+    border-left: 1px solid #D5D5D5;
+    border-top: 1px solid #D5D5D5;
 }
