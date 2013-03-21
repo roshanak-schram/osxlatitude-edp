@@ -194,24 +194,24 @@ if ($action == "") {
 	//--------------------> Here starts the build confirmation page 
 	//Check if $action was set via GET or POST - if it is set, we asume that we are going to confirm the build
 	if ($action == "confirm") {
+		
+		//Fetch standard model info
 		$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
 		$stmt->execute();
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
 		
 		//Load the tabs
-		echo "<script src=\"http://code.jquery.com/jquery-1.9.1.js\"></script>\n";
-		echo "<script src=\"http://code.jquery.com/ui/1.10.1/jquery-ui.js\"></script>\n";
-  
-
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
         
 
 		
 		echo "<form action='module.configuration.predefined.php' method='post'>";
 
-		//Show the tabs bar
+		
     ?>
-                <div class="pageitem_top"><img src="http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/<?php echo $mdrow[name]; ?>.png"><span><b><?php echo $mdrow[desc]; ?></b> - <?php echo $os_string; ?></span></div>
+    <div class="pageitem_top"><img src="http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/<?php echo $mdrow[name]; ?>.png"><span><b><?php echo $mdrow[desc]; ?></b> - <?php echo $os_string; ?></span></div>
+
+		<? //Show the tabs bar ?>
 		<div id="tabs">
 <!--		<div class="pageitem_menu">-->
                     <div id="menutabs">
