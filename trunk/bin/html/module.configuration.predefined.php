@@ -198,30 +198,47 @@ if ($action == "") {
 		$stmt->execute();
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
 		
-		
+		//Load the tabs
+		echo "<script src=\"http://code.jquery.com/jquery-1.9.1.js\"></script>\n";
+		echo "<script src=\"http://code.jquery.com/ui/1.10.1/jquery-ui.js\"></script>\n";
+  
+
+		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
+        
+		?>
+
+
+
+		<?php	
 		//Show the header
 		echo "<form action='module.configuration.predefined.php' method='post'>";
-		echo "<br><div align='center'><table border=0 width='95%' cellpadding=0 style='border-collapse: collapse'>\n";
-		echo "<tr><td rowspan='4' width='1%'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png'></td></tr>\n";
-		echo "<tr>\n";
-		echo "<td>&nbsp;&nbsp;<b>$mdrow[desc]</b></td>\n";
-		echo "<td width='40%'>&nbsp;</td>\n";
-		echo "</tr>\n";
-		echo "<tr>\n";
-		echo "<td>&nbsp;&nbsp;$os_string ($os)</td>\n";
-		echo "<td>&nbsp;</td>\n";
-		echo "</tr>\n";
-		echo "<tr>\n";
-		echo "<td>&nbsp;</td>\n";
-		echo "<td>&nbsp;</td>\n";
-		echo "</tr>\n";
-		echo "</table></div>\n";
+
+
+
+		echo "<div class='pageitem_top'><img src='http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png'><span><b>$mdrow[desc]</b> - $os_string</span></div>\n";
+		echo "<div id=\"tabs\">\n";
+		echo "<div class=\"pageitem_menu\">\n";
+		echo "<ul>\n";
+		echo "<li><a href=\"#tabs-1\">Overview - Kernel Extentions</a></li>\n";
+		echo "<li><a href=\"#tabs-2\">CPU & Power options</a></li>\n";
+		echo "<li><a href=\"#tabs-3\">Chameleon</a></li>\n";
+		echo "<li><a href=\"#tabs-4\">Fixes</a></li>\n";		
+		echo "</ul></div>\n";
+		
+		
+		
+		echo "<div class='pageitem_bottom'>\n";
+
+
 
 		
-		echo "<br><br>";
 
 
 
+		
+
+		
+		echo "<div id=\"tabs-1\">\n";
 		echo "<span class='graytitle'>Kernel Extentions (kexts / drivers)</span>\n";
 		echo "<ul class='pageitem'>";
 				
@@ -301,36 +318,35 @@ if ($action == "") {
 			checkbox("Use patched IOATAFamily.kext:", "loadIOATAFamily", "$mdrow[loadIOATAFamily]");
 			checkbox("Load natit.kext:", "loadNatit", "$mdrow[loadNatit]");						
 			
-		echo "</ul><br>";
+		echo "</ul><br></div>";
 		
 
 
 
-
-		echo "<span class='graytitle'>CPU & Power options</span>";
+		echo "<div id=\"tabs-2\"><span class='graytitle'>CPU & Power options</span>";
 		echo "<ul class='pageitem'>";
 			checkbox("Patch AppleIntelCPUPowerManagement.kext:", "patchCPU", "$mdrow[patchCPU]");
 			checkbox("Emulated speedstep:", "emulatedST", "$mdrow[emulatedST]");
 			checkbox("Install VoodooTSCsync:", "tscsync", "$mdrow[tscsync]");
 			checkbox("Install NullCPUPowerManagement:", "nullcpu", "$mdrow[nullcpu]");	
 			checkbox("Install Sleepenabler:", "sleepEnabler", "$mdrow[sleepEnabler]");		
-		echo "</ul><br>";
+		echo "</ul><br></div>";
 
 
-		echo "<span class='graytitle'>Chameleon</span>";
+		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon</span>";
 		echo "<ul class='pageitem'>";				
 			checkbox("Update Chameleon to latest version:", "updateCham", "yes");	
 			checkbox("Use custom chameleon:", "customCham", "$mdrow[customCham]");
-		echo "</ul><br>";
+		echo "</ul><br></div>";
 		
-		echo "<span class='graytitle'>Fixes</span>";
+		echo "<div id=\"tabs-4\"><span class='graytitle'>Fixes</span>";
 		echo "<ul class='pageitem'>";				
 			checkbox("Use custom kernel:", "customKernel", "$mdrow[customKernel]");	
 			checkbox("GMA950 Brightness fix:", "useGMA950brightfix", "$mdrow[useGMA950brightfix]");
 			checkbox("Use ACPI fix (coolbook fix):", "useACPIfix", "$mdrow[useACPIfix]");
 			checkbox("Use AHCI fix (Fix waiting for root device):", "patchAHCIml", "$mdrow[patchAHCIml]");
 			checkbox("Use Rollback USB Drivers:", "usbRollBack", "$mdrow[usbRollBack]");
-		echo "</ul><br>";
+		echo "</ul><br></div>";
 		
 		
 		//Send standard vars
