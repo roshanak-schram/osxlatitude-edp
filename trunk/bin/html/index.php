@@ -13,7 +13,7 @@ $edpmode = "web";
                 
                 
 ?>
-    <body onload="bootloader();" onresize="aligndesign();">
+    <body onload="bootloader();" onresize="aligndesign();" background="images/console_bg.png">
     	
 <div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 10000; left: 50px; top: 0px; background-image: url('images/semi-transparent.png')" id="wait">
 	<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" height="100%">
