@@ -1,7 +1,7 @@
 <?php
 include_once "../config.inc.php";
 include_once "header.inc.php";
-include_once "include/watermark.inc.php";
+
 
 //Fetch ID
 $id = $_GET['id'];
