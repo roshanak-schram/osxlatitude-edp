@@ -217,8 +217,8 @@ if ($action == "") {
                     <div id="menutabs">
                         <ul>
                         		<li><a href="#tabs-0">Generel</a></li>
-                            <li><a href="#tabs-1">Kernel Extentions</a></li>
-                            <li><a href="#tabs-2">CPU & Power options</a></li>
+                            <li><a href="#tabs-1">Kext / Drivers</a></li>
+                            <li><a href="#tabs-2">CPU & Power</a></li>
                             <li><a href="#tabs-3">Chameleon</a></li>
                             <li><a href="#tabs-4">Fixes</a></li>
                         </ul>
@@ -313,38 +313,38 @@ if ($action == "") {
 			echo "</select><span class='arrow'></span> </li>\n";
 			
 			
-			
-			checkbox("Use patched IOATAFamily.kext:", "loadIOATAFamily", "$mdrow[loadIOATAFamily]");
-			checkbox("Load natit.kext:", "loadNatit", "$mdrow[loadNatit]");						
-			
 		echo "</ul><br></div>";
 		
 
 
 
-		echo "<div id=\"tabs-2\"><span class='graytitle'>CPU & Power options</span>";
+		echo "<div id=\"tabs-2\"><span class='graytitle'>CPU & Power</span>";
 		echo "<ul class='pageitem'>";
-			checkbox("Patch AppleIntelCPUPowerManagement.kext:", "patchCPU", "$mdrow[patchCPU]");
-			checkbox("Emulated speedstep:", "emulatedST", "$mdrow[emulatedST]");
-			checkbox("Install VoodooTSCsync:", "tscsync", "$mdrow[tscsync]");
-			checkbox("Install NullCPUPowerManagement:", "nullcpu", "$mdrow[nullcpu]");	
-			checkbox("Install Sleepenabler:", "sleepEnabler", "$mdrow[sleepEnabler]");		
+			checkbox("Patch AppleIntelCPUPowerManagement.kext", "patchCPU", "$mdrow[patchCPU]");
+			checkbox("Emulated speedstep", "emulatedST", "$mdrow[emulatedST]");
+			checkbox("Install VoodooTSCsync", "tscsync", "$mdrow[tscsync]");
+			checkbox("Install NullCPUPowerManagement", "nullcpu", "$mdrow[nullcpu]");	
+			checkbox("Install Sleepenabler", "sleepEnabler", "$mdrow[sleepEnabler]");		
 		echo "</ul><br></div>";
 
-
+		//----------------------> Chameleon tab
 		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon</span>";
 		echo "<ul class='pageitem'>";				
-			checkbox("Update Chameleon to latest version:", "updateCham", "yes");	
-			checkbox("Use custom chameleon:", "customCham", "$mdrow[customCham]");
+			checkbox("Update Chameleon to latest version", "updateCham", "yes");	
+			checkbox("Use custom chameleon", "customCham", "$mdrow[customCham]");
 		echo "</ul><br></div>";
+	
+	
 		
 		echo "<div id=\"tabs-4\"><span class='graytitle'>Fixes</span>";
 		echo "<ul class='pageitem'>";				
-			checkbox("Use custom kernel:", "customKernel", "$mdrow[customKernel]");	
-			checkbox("GMA950 Brightness fix:", "useGMA950brightfix", "$mdrow[useGMA950brightfix]");
-			checkbox("Use ACPI fix (coolbook fix):", "useACPIfix", "$mdrow[useACPIfix]");
-			checkbox("Use AHCI fix (Fix waiting for root device):", "patchAHCIml", "$mdrow[patchAHCIml]");
-			checkbox("Use Rollback USB Drivers:", "usbRollBack", "$mdrow[usbRollBack]");
+			checkbox("Use custom kernel", "customKernel", "$mdrow[customKernel]");	
+			checkbox("GMA950 Brightness fix", "useGMA950brightfix", "$mdrow[useGMA950brightfix]");
+			checkbox("Use ACPI fix (coolbook fix)", "useACPIfix", "$mdrow[useACPIfix]");
+			checkbox("Use AHCI fix (Fix waiting for root device)", "patchAHCIml", "$mdrow[patchAHCIml]");
+			checkbox("Use patched IOATAFamily.kext (Fix waiting for root device)", "loadIOATAFamily", "$mdrow[loadIOATAFamily]");
+			checkbox("Use Rollback USB Drivers", "usbRollBack", "$mdrow[usbRollBack]");
+			checkbox("Load natit.kext (Make Apple NVIDIA kexts work)", "loadNatit", "$mdrow[loadNatit]");	
 		echo "</ul><br></div>";
 		
 		
