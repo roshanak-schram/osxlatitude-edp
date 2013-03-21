@@ -224,179 +224,46 @@ if ($action == "") {
 
 		
     ?>
-    <div class="pageitem_top"><img src="http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/<?php echo $mdrow[name]; ?>.png"><span><b><?php echo $mdrow[desc]; ?></b> - <?php echo $os_string; ?></span></div>
+<div class="pageitem_top"><img src="http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/<?php echo $mdrow[name]; ?>.png"><span><b><?php echo $mdrow[desc]; ?></span></div>
 
-		<? //Show the tabs bar ?>
-		<div id="tabs">
-                    <div id="menutabs">
-                        <ul>
-                        		<li><a href="#tabs-0">Generel</a></li>
-                            <li><a href="#tabs-1">Kext / Drivers</a></li>
-                            <li><a href="#tabs-2">CPU & Power</a></li>
-                            <li><a href="#tabs-3">Chameleon</a></li>
-                            <li><a href="#tabs-4">Fixes</a></li>
-                        </ul>
-                    </div>
+<? //Show the tabs bar ?>
+	<div id="tabs">
+		<div id="menutabs">
+        	<ul>
+            	<li><a href="#tabs-0">Overview</a></li>
+                <li><a href="#tabs-1">Kext / Drivers</a></li>
+                <li><a href="#tabs-2">CPU & Power</a></li>
+                <li><a href="#tabs-3">Chameleon</a></li>
+                <li><a href="#tabs-4">Fixes</a></li>
+            </ul>
+        </div>
 <?php
 		
-		echo "<div class='pageitem_bottom'>\n";
+echo "<div class='pageitem_bottom'><br>\n";
 
-	echo "<div id=\"tabs-0\">\n";
-		echo "<span class='graytitle'>Generel</span>\n";
-		echo "<ul class='pageitem'>";
-		echo ".. comming soon ..<br>";
-		echo "</ul><br></div>";	
-
-
+//Include tabs
+include "include/module.configuration.overview.inc.php";
+include "include/module.configuration.kexts.inc.php";
+include "include/module.configuration.cpu.inc.php";
+include "include/module.configuration.chameleon.inc.php";		
+include "include/module.configuration.fixes.inc.php";
 		
 
+	
+	
+//Send standard vars
+echo "<input type='hidden' name='action' value='dobuild'>";
+echo "<input type='hidden' name='name' value='$mdrow[name]'>";
+echo "<input type='hidden' name='desc' value='$mdrow[desc]'>";
+echo "<input type='hidden' name='model' value='$modelID'>";
 		
-		echo "<div id=\"tabs-1\">\n";
-		echo "<span class='graytitle'>Kernel Extentions (kexts / drivers)</span>\n";
-		echo "<ul class='pageitem'>";
-				
-		//Show dropdown for PS2 kexts
-			$result = $edp_db->query("SELECT * FROM ps2");
-			echo "<li class='select'><select name='ps2pack'>";
-			if ("$mdrow[ps2pack]" == "" || "$mdrow[ps2pack]" == "no") { echo "<option value='no' SELECTED>&nbsp; PS2 kext: None selected</option>\n"; }
-			else { echo "<option value='no'>&nbsp; PS2 kext: None selected</option>\n"; }
-			foreach($result as $row) {
-				$s=""; if ("$mdrow[ps2pack]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; PS2 kext: $row[name] ($row[notes])</option>\n";
-		    }
-			echo "</select><span class='arrow'></span> </li>";
-			
-			
-			
-		//Show dropdown for Audio kexts
-			$result = $edp_db->query("SELECT * FROM audio");
-			echo "<li class='select'>";
-			//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
-			if ($mdrow[bundledAudio] == "yes") { 
-				echo "<select name='audiopack' DISABLED SELECTED>\n";
-				echo "<option value='no'>&nbsp; Audio: Comes with patched AppleHDA...</option>\n";
-			}
-			if ($mdrow[bundledAudio] == "" || $mdrow[bundledAudio] == "no") {	
-				echo "<select name='audiopack'>\n";
-				if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected</option>\n"; }
-				else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }
-				foreach($result as $row) {
-					$s=""; if ("$mdrow[audiopack]" == "$row[id]") { $s = "SELECTED"; }
-					echo "<option value='$row[id]' $s>&nbsp; Audio kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
-				}
-			}
-			echo "</select><span class='arrow'></span> </li>\n";
-
-
-
-		//Show dropdown for Ethernet (lan) Kexts
-			$result = $edp_db->query("SELECT * FROM ethernet");
-			echo "<li class='select'><select name='ethernet'>\n";
-			if ("$mdrow[ethernet]" == "" || "$mdrow[ethernet]" == "no") { echo "<option value='no' SELECTED>&nbsp; Ethernet kext: Not selected</option>"; }
-			else { echo "<option value='no'>&nbsp; Ethernet kext: Don't load</option>\n"; }
-			foreach($result as $row) {
-				$s=""; if ("$mdrow[ethernet]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Ethernet kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
-		    }			
-			echo "</select><span class='arrow'></span> </li>\n";
-			
-
-			
-		//Show dropdown for Wifi Kexts
-			$result = $edp_db->query("SELECT * FROM wifi");
-			echo "<li class='select'><select name='wifikext'>\n";
-			if ("$mdrow[wifikext]" == "" || "$mdrow[wifikext]" == "no") { echo "<option value='no' SELECTED>&nbsp; Wifi kext: Not selected</option>\n"; }			
-			else { echo "<option value='no'>&nbsp; Wifi kext: Don't load</option>\n"; }
-			foreach($result as $row) {
-				$s=""; if ("$mdrow[wifikext]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Wifi kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
-		    }
-			echo "</select><span class='arrow'></span> </li>\n";
-			
-
-									
-		//Show dropdown for Battery kexts
-			$result = $edp_db->query("SELECT * FROM battery");
-			echo "<li class='select'><select name='batteryKext'>\n";
-			if ("$mdrow[batteryKext]" == "" || "$mdrow[batteryKext]" == "no") { echo "<option value='no' SELECTED>&nbsp; Battery kext: Not selected</option>\n"; }
-			else { echo "<option value='no'>&nbsp; Battery kext: Don't load</option>\n"; }	
-			foreach($result as $row) {
-				$s=""; if ("$mdrow[batteryKext]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Battery kext: $row[name] ($row[arch])</option>\n";
-		    }			
-			echo "</select><span class='arrow'></span> </li>\n";
-			
-			
-		echo "</ul><br></div>";
+echo "</div><br>";
+echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
+echo "</form>";		
 		
 
-
-
-		echo "<div id=\"tabs-2\"><span class='graytitle'>CPU & Power</span>";
-		echo "<ul class='pageitem'>";
-			checkbox("Patch AppleIntelCPUPowerManagement.kext", "patchCPU", "$mdrow[patchCPU]");
-			checkbox("Emulated speedstep", "emulatedST", "$mdrow[emulatedST]");
-			checkbox("Install VoodooTSCsync", "tscsync", "$mdrow[tscsync]");
-			checkbox("Install NullCPUPowerManagement", "nullcpu", "$mdrow[nullcpu]");	
-			checkbox("Install Sleepenabler", "sleepEnabler", "$mdrow[sleepEnabler]");		
-		echo "</ul><br></div>";
-
-
-
-
-		//----------------------> Chameleon tab
-		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon bootloader configuration</span>";
-		echo "<ul class='pageitem'>";				
-			checkbox("Update Chameleon to latest version", "updateCham", "yes");	
-			checkbox("Use custom chameleon", "customCham", "$mdrow[customCham]");
-		echo "</ul><br>";
-		
-echo "<span class='graytitle'>Modules</span>";
-echo "<ul class='pageitem'>";
-
-$result = $edp_db->query("SELECT * FROM chammods order by name");
-foreach($result as $row1) {
-	$name = "$row1[name]"; $edpname = $row1[edpname];
-	checkbox("$name: $row1[description]", "$edpname", $mdrow[$edpname]);
+exit;
 }
-echo "</ul><br>";
-				
-		
-		
-		echo "</div>";
-	
-	
-		
-		echo "<div id=\"tabs-4\"><span class='graytitle'>Fixes</span>";
-		echo "<ul class='pageitem'>";				
-			checkbox("Use custom kernel", "customKernel", "$mdrow[customKernel]");	
-			checkbox("GMA950 Brightness fix", "useGMA950brightfix", "$mdrow[useGMA950brightfix]");
-			checkbox("Use ACPI fix (coolbook fix)", "useACPIfix", "$mdrow[useACPIfix]");
-			checkbox("Use AHCI fix (Fix waiting for root device)", "patchAHCIml", "$mdrow[patchAHCIml]");
-			checkbox("Use patched IOATAFamily.kext (Fix waiting for root device)", "loadIOATAFamily", "$mdrow[loadIOATAFamily]");
-			checkbox("Use Rollback USB Drivers", "usbRollBack", "$mdrow[usbRollBack]");
-			checkbox("Load natit.kext (Make Apple NVIDIA kexts work)", "loadNatit", "$mdrow[loadNatit]");	
-		echo "</ul><br></div>";
-		
-		
-		//Send standard vars
-		echo "<input type='hidden' name='action' value='dobuild'>";
-		echo "<input type='hidden' name='name' value='$mdrow[name]'>";
-		echo "<input type='hidden' name='desc' value='$mdrow[desc]'>";
-		echo "<input type='hidden' name='model' value='$modelID'>";
-		
-		echo "</div><br>";
-		echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
-		echo "</form>";		
-		
-
-		exit;
-	}
-
-
-
-	
-	
 	//<------------------------------ Here ends the model confirmation page
 
 ?>
