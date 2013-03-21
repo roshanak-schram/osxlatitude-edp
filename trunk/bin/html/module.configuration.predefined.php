@@ -327,12 +327,27 @@ if ($action == "") {
 			checkbox("Install Sleepenabler", "sleepEnabler", "$mdrow[sleepEnabler]");		
 		echo "</ul><br></div>";
 
+
+
+
 		//----------------------> Chameleon tab
 		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon</span>";
 		echo "<ul class='pageitem'>";				
 			checkbox("Update Chameleon to latest version", "updateCham", "yes");	
 			checkbox("Use custom chameleon", "customCham", "$mdrow[customCham]");
-		echo "</ul><br></div>";
+		echo "</ul><br>";
+
+echo "<ul class='pageitem'>";
+$result = $edp_db->query("SELECT * FROM chammods order by name");
+foreach($result as $row1) {
+	$name = "$row1[name]";
+	checkbox("$name: $row1[description]", "$row1[edpname]", $mdrow[$name]);
+}
+echo "</ul><br>";
+				
+		
+		
+		echo "</div>";
 	
 	
 		
