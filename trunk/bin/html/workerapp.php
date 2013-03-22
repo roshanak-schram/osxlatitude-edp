@@ -272,11 +272,7 @@ function showBuildLog() {
 	echo "<body onload=\"JavaScript:timedRefresh(10000);\">";	
 	echoPageItemTOP("icons/big/logs.png", "Building configuration...");
 	echo "<div class='pageitem_bottom'>\n";	
-	echo "<ul class='pageitem'>\n";
-	echo "<li class='textbox'>\n";
-	include "$workpath/build.log";		
-	echo "</li>\n";
-	echo "</ul>\n";	
+	include "$workpath/build.log";			
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { setTimeout(\"location.reload(true);\",timeoutPeriod); } </script>\n";
 }
 
