@@ -269,13 +269,15 @@ function fixes_toggle_hidpi() {
 
 function showBuildLog() {
 	global $workpath;
-	include "header.inc.php";
-	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";
-	echo "<span class='console'>";
-	include "include/watermark.inc.php";
-	include "$workpath/build.log";
+	echo "<body onload=\"JavaScript:timedRefresh(10000);\">";	
+	echoPageItemTOP("icons/big/logs.png", "Building configuration...");
+	echo "<div class='pageitem_bottom'>\n";	
+	echo "<ul class='pageitem'>\n";
+	echo "<li class='textbox'>\n";
+	include "$workpath/build.log";		
+	echo "</li>\n";
+	echo "</ul>\n";	
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { setTimeout(\"location.reload(true);\",timeoutPeriod); } </script>\n";
-
 }
 
 ?>
