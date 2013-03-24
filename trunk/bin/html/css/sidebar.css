@@ -1,5 +1,5 @@
 .edpmenu_title_text {	
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 	color: #868B92;
 	font-weight: bold;
 	font-size: 8pt;
@@ -13,7 +13,7 @@
 }
 	
 .edpmenu_menuoption_text {
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 	color: #000000;
 	font-size: 8pt;
 	cursor: hand; cursor: pointer;

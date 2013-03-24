@@ -5,16 +5,16 @@ body {
 	background-color: transparent;
 	-webkit-text-size-adjust: none;
 	min-height: 416px;
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 	-webkit-touch-callout: none;
 }
 .console {
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 	font-size: 10pt;
 	background-color: transparent;
 }
 .topbarmenu {
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 	line-height: 1px;
 	height: 22px;
 	font-size: 9pt;
@@ -112,7 +112,7 @@ a:hover .arrow {
 	max-width: 77%;
 }.checkbox .name {
 	max-width: 190px;
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 }.radiobutton .name {
 	max-width: 190px;
 }
@@ -133,6 +133,8 @@ a:hover .arrow {
 	max-width:55%
 }
 .textbox textarea {
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
+	border: #878787 solid 0px;
 	width: 280px;
 }
 .bigfield input{
@@ -174,7 +176,9 @@ a:hover .arrow {
 	max-width:70%
 }
 .textbox textarea {
-	width: 440px;
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
+	width: 100%;
+	border: #878787 solid 0px;
 }
 #tributton a:first-child, #duobutton a:first-child {
 	width: 152px;
@@ -478,7 +482,7 @@ fieldset {
 	overflow: hidden;
 	border-top: 1px solid #878787;
 	width: auto;
-	font-family: 'Lucida Grande';
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
 }
 .pageitem li:first-child:hover, .pageitem li:first-child a, .radiobutton:first-child input, .select:first-child select, li.button:first-child input, .bigfield:first-child input {
 	-webkit-border-top-left-radius: 8px;
@@ -1118,6 +1122,8 @@ select {
 	background: none;
 }
 .textbox textarea {
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode';
+	border: #878787 solid 0px;
 	padding: 0;
 	margin-top: 5px;
 	font-size: medium;
