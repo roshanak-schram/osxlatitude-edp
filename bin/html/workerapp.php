@@ -169,7 +169,6 @@ if ($action == "fix-airdrop") {
 if ($action == "fix-spdisplays") {
     echo "<pre>";
     system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
-}
     exit;
 }
 
