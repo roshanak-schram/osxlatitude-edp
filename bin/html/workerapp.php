@@ -73,6 +73,10 @@ if ($action == "showCredits") {
 }
 
 
+
+
+
+
 if ($action == "dellBiosCrack") {
     global $workpath;
     system_call("open $workpath/bin/DELLBiosPWgen");
@@ -106,14 +110,12 @@ if ($action == "install-istat2") {
 
 if ($action == "fix-touch-sle") {
     echo "<pre>";
-    global $slepath;
-    echo "<br><br>Touching $slepath... <br><br>Notice: This might tricker a kernelcache rebuild...<br><br>";
-    system_call("touch $slepath");
+    fixes_touch_sle();
     exit;
 }
-if ($action == "toggle-hibernation") {
+if ($action == "toogle-hibernation") {
     echo "<pre>";
-    fixes_toggleHibernationMode();
+    fixes_toogleHibernationMode();
     exit;
 }
 if ($action == "console-slow-start") {
@@ -153,12 +155,8 @@ if ($action == "fix-console-colors") {
 }
 if ($action == "fix-reset-display") {
     echo "<pre>";
-    system_call("rm -f /Library/Preferences/com.apple.window*");
-    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.window*");
-    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.pref*");
-    echo "Fix applied..<br>";
-    echo "Connect your screen again to use it in extended mode after a reboot..<br>";
-    exit;
+    fixes_reset_display();
+    exit;
 }
 if ($action == "fix-airdrop") {
     echo "<pre>";
@@ -170,30 +168,29 @@ if ($action == "fix-airdrop") {
 
 if ($action == "fix-spdisplays") {
     echo "<pre>";
-    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
+    system_call("rm -f /Library/Preferences/com.apple.window*");
+    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.window*");
+    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.pref*");
+    echo "Fix applied..<br>";
+    echo "Connect your screen again to use it in extended mode after a reboot..<br>";
     exit;
 }
 
 if ($action == "fix-icloud-recoveryhd") {
     echo "<pre>";
-    system_call("/Extra/bin/fixes/icloud-recoveryhd.sh");
+    fixes_icloud_recoveryhd();
     exit;
 }
 
 if ($action == "fix-icloud-nvram") {
     echo "<pre>";
-    system_call("/Extra/bin/fixes/icloud-nvram.sh");
+    fixes_icloud_nvram();
     exit;
 }
 
 if ($action == "toggle-hidpi") {
     echo "<pre>";
-    echo "Enabling HiDPI mode in Mountain Lion.<br><br>";
-    system_call("sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool YES");
-    system_call("sudo defaults delete /Library/Preferences/com.apple.windowserver DisplayResolutionDisabled");
-    echo "<br>HiDPI mode enabled! Please logout and back in for this to take effect..<br>";
-    echo "Go to [Apple menu --> System Preferences --> Displays --> Display --> Scaled] after logging back in.<br>";
-    echo "You will see a bunch of 'HiDPI' resolutions in the list to choose from.";
+    fixes_toggle_hidpi();
     exit;
 }
 
@@ -206,7 +203,7 @@ if ($action == "showBuildLog")	{ showBuildLog(); exit ; }
 //Functions called by this script
 
 function showChangelog() {
-	echoPageItemTOP("icons/big/xcode.png", "Changelog for EDP");
+	echoPageItemTOP("icons/big/xcode.png", "Changelog for EDP...");
     echo "<div class='pageitem_bottom'>\n";
     
     $url = "http://pipes.yahoo.com/pipes/pipe.run?_id=fcf8f5975800dd5f04a86cdcdcef7c4d&_render=rss";
@@ -222,7 +219,13 @@ function showChangelog() {
     echo "</div>\n";
 }
 
-function fixes_toggleHibernationMode() {
+
+function fixes_touch_sle() {
+    global $slepath;
+    echo "<br><br>Touching $slepath... <br><br>Notice: This might tricker a kernelcache rebuild...<br><br>";
+    system_call("touch $slepath");
+}
+function fixes_toogleHibernationMode() {
     global $hibernatemode;
     
     if ($hibernatemode == "3") {
@@ -241,6 +244,28 @@ function fixes_toggleHibernationMode() {
         echo "Fix applied..<br>";
     }
 }
+
+function fixes_spdisplays() {
+    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
+}	
+
+function fixes_icloud_recoveryhd() {
+    system_call("/Extra/bin/fixes/icloud-recoveryhd.sh");
+}	
+	
+function fixes_icloud_nvram() {
+    system_call("/Extra/bin/fixes/icloud-nvram.sh");
+}	
+	
+	
+function fixes_toggle_hidpi() {
+    echo "Enabling HiDPI mode in Mountain Lion.<br><br>";
+    system_call("sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool YES");
+    system_call("sudo defaults delete /Library/Preferences/com.apple.windowserver DisplayResolutionDisabled");
+    echo "<br>HiDPI mode enabled! Please logout and back in for this to take effect..<br>";
+    echo "Go to [Apple menu --> System Preferences --> Displays --> Display --> Scaled] after logging back in.<br>";
+    echo "You will see a bunch of 'HiDPI' resolutions in the list to choose from.";
+}	
 
 function showBuildLog() {
 	global $workpath;
