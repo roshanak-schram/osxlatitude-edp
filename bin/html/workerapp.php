@@ -168,11 +168,8 @@ if ($action == "fix-airdrop") {
 
 if ($action == "fix-spdisplays") {
     echo "<pre>";
-    system_call("rm -f /Library/Preferences/com.apple.window*");
-    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.window*");
-    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.pref*");
-    echo "Fix applied..<br>";
-    echo "Connect your screen again to use it in extended mode after a reboot..<br>";
+    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
+}
     exit;
 }
 
@@ -245,9 +242,6 @@ function fixes_toogleHibernationMode() {
     }
 }
 
-function fixes_spdisplays() {
-    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
-}	
 
 function fixes_icloud_recoveryhd() {
     system_call("/Extra/bin/fixes/icloud-recoveryhd.sh");
@@ -266,6 +260,13 @@ function fixes_toggle_hidpi() {
     echo "Go to [Apple menu --> System Preferences --> Displays --> Display --> Scaled] after logging back in.<br>";
     echo "You will see a bunch of 'HiDPI' resolutions in the list to choose from.";
 }	
+function fixes_reset_display() {
+    system_call("rm -f /Library/Preferences/com.apple.window*");
+    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.window*");
+    system_call("rm -f ~/Library/Preferences/ByHost/com.apple.pref*");
+    echo "Fix applied..<br>";
+    echo "Connect your screen again to use it in extended mode after a reboot..<br>";
+}
 
 function showBuildLog() {
 	global $workpath;
