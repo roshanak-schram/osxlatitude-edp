@@ -157,8 +157,7 @@ if ($action == "fix-reset-display") {
     system_call("rm -f ~/Library/Preferences/ByHost/com.apple.window*");
     system_call("rm -f ~/Library/Preferences/ByHost/com.apple.pref*");
     echo "Fix applied..<br>";
-    echo "Connect your screen again to use it in extended mode after a
-reboot..<br>";
+    echo "Connect your screen again to use it in extended mode after a reboot..<br>";
     exit;
 }
 if ($action == "fix-airdrop") {
