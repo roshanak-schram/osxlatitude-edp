@@ -1,14 +1,7 @@
 <?php
 include_once "libs/Highchart.php";
 
-
-
-
-
-
-
-//-------------------------------------------------------------------------------------------------> Highchart stuff.......
-
+//----------------------------------------------------------------------------> Highchart stuff....... //
 
 //Get data from db
 $result = $edp_db->query("SELECT `vendor`, COUNT(*) AS `count` FROM `models` GROUP BY `vendor` ORDER BY `count` DESC");
@@ -32,7 +25,6 @@ foreach($vendors as $i => $vendor) {
 	}
 }
 
-
 $chart = new Highchart();
 
 $chart->chart->renderTo = "container";
@@ -53,10 +45,6 @@ $chart->plotOptions->pie->dataLabels->connectorColor = "#000000";
 $chart->plotOptions->pie->dataLabels->formatter = new HighchartJsExpr("function() {
     return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage) +' %'; }");
 
-
-
-
-
 // Make the array for the chart
 $vendor_chart_data = array();
 foreach($vendors as $vendor) {
@@ -72,36 +60,22 @@ $vendor_chart = array(
 	'data' => $vendor_chart_data,
 );
 
-
 $chart->series[] = $vendor_chart;
 
 foreach ($chart->getScripts() as $script) {
 	echo '<script type="text/javascript" src="' . $script . '"></script>';
 }
 
-
-
-
-//<---------------------------------- Highchart stuff end...
-
-
-
-
-      
-
+//<---------------------------------- Highchart stuff end... //
 
 
 //-----------------------------------------------------------------> Start rendering the page
-echoPageItemTOP("icons/big/edp.png", "Welcome to EDP..");
+echoPageItemTOP("icons/big/edp.png", "Welcome to EDP");
 echo "<div class='pageitem_bottom'>\n";
 	
 ?>
-<span class='graytitle'></span>
-	<ul class="pageitem">
-		<li class="textbox"><p>EDP is a uniq control panel for your hackintosh that makes it easy to maintain and configure your machine - EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy to choose the right configuration</p>
-		</li>
-	</ul>
-</p>
+EDP is a unique control panel for your hackintosh that makes it easy to maintain and configure your system. EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy to choose the right configuration</p>
+	
 	<br><br>
 
     <div id="container"></div>
@@ -119,8 +93,5 @@ $( "rect" ).each(function( index ) {
 });
  });
  
- //Hack hide the watermark
- document.getElementById('watermark').style.display = 'none';
- 
- 
-    </script>
+
+ </script>
