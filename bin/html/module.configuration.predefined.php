@@ -65,6 +65,7 @@
                       		customCham 		=> $customCham,
                       		usbRollBack		=> $usbRollBack,                     		
                       		customKernel 	=> $customKernel,
+                      		fakesmc			=> $_POST['fakesmc'],
                       		ACPICodec 		=> $_POST['ChamModuleACPICodec'],
                       		FileNVRAM 		=> $_POST['ChamModuleFileNVRAM'],
                       		KernelPatcher 	=> $_POST['ChamModuleKernelPatcher'],
