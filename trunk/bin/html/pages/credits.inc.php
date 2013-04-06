@@ -1,3 +1,8 @@
+<script> 
+//Reference to the edp javascript core
+var edp = top.edp;
+</script>
+
 <?php
 //-----------------------------------------------------------------> Start rendering the page
 echoPageItemTOP("icons/big/credits.png", "Credits");
