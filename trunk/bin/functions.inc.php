@@ -374,7 +374,7 @@ function copyEssentials() {
 
 function copyKexts() {
     //Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb;
+    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb; global $fakesmcdb;
 
     $modelName = $modeldb[$modelID]["name"];
 
