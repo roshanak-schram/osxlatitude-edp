@@ -2,6 +2,16 @@
 		echo "<div id=\"tabs-1\">\n";
 		echo "<span class='graytitle'>Kernel Extentions (kexts / drivers)</span>\n";
 		echo "<ul class='pageitem'>";
+
+		//Show dropdown for FakeSMC kexts
+			$result = $edp_db->query("SELECT * FROM fakesmc");
+			echo "<li class='select'><select name='fakesmc'>";
+			foreach($result as $row) {
+				$s=""; if ("$mdrow[ps2pack]" == "$row[id]") { $s = "SELECTED"; }
+				echo "<option value='$row[id]' $s>&nbsp; FakeSMC: $row[name] ($row[notes])</option>\n";
+		    }
+			echo "</select><span class='arrow'></span> </li>";
+
 				
 		//Show dropdown for PS2 kexts
 			$result = $edp_db->query("SELECT * FROM ps2");

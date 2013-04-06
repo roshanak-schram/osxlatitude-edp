@@ -40,6 +40,10 @@ $stmt->execute(); $wifidb = $stmt->fetchAll();
 $stmt = $edp_db->query("SELECT * FROM ps2 order by id");
 $stmt->execute(); $ps2db = $stmt->fetchAll();
 
+//Populate PS2 array
+$stmt = $edp_db->query("SELECT * FROM fakesmc order by id");
+$stmt->execute(); $fakesmcdb = $stmt->fetchAll();
+
 
 
 $localrev 		= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");

@@ -74,15 +74,7 @@ function lastMinFixes() {
 	system_call("nvram -d boot-args");
 }
 
-function getConfig($name) {
-    global $edp_db;
-    
-    $stmt = $edp_db->query("SELECT * FROM config where name = '$name'");
-    $stmt->execute();
-    $bigrow = $stmt->fetchAll();
 
-    return $bigrow[0]['value'];
-}
 			
 function updateCham() {
     // Note: Overtime we will add a function to make sure that the user have the latest version 
@@ -416,6 +408,14 @@ function copyKexts() {
         system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
     }
 
+    //Copying FakeSMC kextpack
+    $fakesmcid = $modeldb[$modelID]['fakesmc'];
+    $fakesmcdir = $fakesmcdb[$fakesmcid]["foldername"];
+    if ($modeldb[$modelID]['fakesmc'] != "" && $modeldb[$modelID]['fakesmc'] != "no") {
+        writeToLog("$workpath/build.log", "  Copying the FakeSMC kexts to $ee<br>");
+        system_call("cp -R $workpath/storage/kextpacks/$fakesmcdir/. $ee/");
+    }
+
     //Copying ethernet kexts
     if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
         $lanid = $modeldb[$modelID]['ethernet'];
@@ -509,7 +509,7 @@ function copyKexts() {
         system_call("rm -f $rootpath/custom_kernel");
         system_call("cp $workpath/model-data/$modelName/$os/custom_kernel $rootpath");
     }
-
+    
     writeToLog("$workpath/build.log", "  Copying standard kexts to $ee.. <br>");
     system_call("cp -R $workpath/storage/standard/common/Extensions/* $ee");
 
