@@ -13,7 +13,8 @@ $edpmode = "web";
                 
                 
 ?>
-    <body onload="bootloader();" onresize="aligndesign();" background="images/console_bg.png">
+	<script src="/edp.core.js.php" type="text/javascript"></script>
+    <body onload="edp.bootloader();" onresize="aligndesign();" background="images/console_bg.png">
     	
 <div style="position: absolute; display: none; width: 100%; height: 100%; z-index: 10000; left: 50px; top: 0px; background-image: url('images/semi-transparent.png')" id="wait">
 	<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" height="100%">
@@ -23,7 +24,7 @@ $edpmode = "web";
 	</table>	
 </div>
 
-        <table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
+<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
             <tr style="vertical-align: bottom;"  class="topbarmenu" align="center" style='cursor: hand'>
             	<td width="80" onclick="loader('EDP')"><img src="icons/big/edp.png" width="38"></td>
                 <td width="80" onclick="loader('Applications')"><img src="icons/big/apps.png" width="40"></td>
@@ -54,6 +55,7 @@ $edpmode = "web";
 		<iframe id="edpmenu" class="edpmenu" marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?= "$i"; ?>"></iframe>
 
         <iframe id="console_iframe" class="console_iframe" marginwidth="0" marginheight="0" border="0" frameborder="0" src="show.php?i=pages/edp.inc.php"></iframe>
+
 
 
     </body>
