@@ -344,6 +344,7 @@ function copyEssentials() {
 
     $file = "$workpath/dsdt.aml";
     if (file_exists($file)) { system_call("rm $file"); }
+        
 
     //Remove old SSDT table files
     $file = "$workpath/SSDT.aml";   if (file_exists($file)) { system_call("rm $file"); }
@@ -370,6 +371,19 @@ function copyEssentials() {
     $file = "$workpath/model-data/$modelName/common/SSDT-3.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
     $file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
     $file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }			
+
+
+    //Copy essentials from /Extra/include
+    writeToLog("$workpath/build.log", "  Checking if we have any essential files in /Extra/include that will be used instead...<br>");
+    if (is_file("$workpath/include/smbios.plist")) 				{ system_call("cp -f $workpath/include/smbios.plist /Extra"); }
+    if (is_file("$workpath/include/org.chameleon.Boot.plist")) 	{ system_call("cp -f $workpath/include/org.chameleon.Boot.plist /Extra"); }
+    if (is_file("$workpath/include/dsdt.aml")) 					{ system_call("cp -f $workpath/include/dsdt.aml /Extra"); }
+    if (is_file("$workpath/include/SSDT.aml")) 					{ system_call("cp -f $workpath/include/SSDT.aml /Extra"); }
+    if (is_file("$workpath/include/SSDT-1.aml")) 				{ system_call("cp -f $workpath/include/SSDT-1.aml /Extra"); }
+    if (is_file("$workpath/include/SSDT-2.aml")) 				{ system_call("cp -f $workpath/include/SSDT-2.aml /Extra"); }
+    if (is_file("$workpath/include/SSDT-3.aml")) 				{ system_call("cp -f $workpath/include/SSDT-3.aml /Extra"); }    
+    if (is_file("$workpath/include/SSDT-4.aml")) 				{ system_call("cp -f $workpath/include/SSDT-4.aml /Extra"); }
+    if (is_file("$workpath/include/SSDT-5.aml")) 				{ system_call("cp -f $workpath/include/SSDT-5.aml /Extra"); }    
 }
 
 function copyKexts() {
