@@ -6,13 +6,17 @@
 			$i=0;
 			while ($optdb[$i] != "") {
 				$id = $optdb[$i]['id']; $name = $optdb[$i]['name']; $arch = $optdb[$i]['arch']; $notes = $optdb[$i]['notes'];
-				$status = isOPTinUse("$id");
-				if ($status == "yes") { $c = "checked"; $v = "on"; } else { $v = "off"; }
+				$status = ""; $status = isOPTinUse("$id");
+				if ($status == "yes") { $c = ""; $c = "checked"; }
 				echo "<li class='checkbox'><span class='name'>$notes ($arch)</span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
 				$i++;
 			}	
 		echo "</ul><br></form></div>";
 		echo "<input type='hidden' name='optionalpacks' id='optionalpacks'>";
+		
+		
+		
+		
 		function isOPTinUse($id) {
 			global $modelID; global $edp_db;
 			$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
