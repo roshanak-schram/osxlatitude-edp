@@ -5,12 +5,22 @@
 		echo "<ul class='pageitem'><form name='optionalcheck'>";
 			$i=0;
 			while ($optdb[$i] != "") {
+				//resetting vars
+				$id = ""; $name = ""; $arch = ""; $notes = ""; $status = ""; $c = "";
+				
+				//Getting vars from the optional multidim. array
 				$id = $optdb[$i]['id']; $name = $optdb[$i]['name']; $arch = $optdb[$i]['arch']; $notes = $optdb[$i]['notes'];
-				$status = ""; $status = isOPTinUse("$id");
-				if ($status == "yes") { $c = ""; $c = "checked"; }
+				
+				//Checking wether we are using the optional pack in our model
+				$status = isOPTinUse("$id");
+				
+				//If the status is "yes" we will set $c as checked
+				if ($status == "yes") { $c = "checked"; }
+				
 				echo "<li class='checkbox'><span class='name'>$notes ($arch)</span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
 				$i++;
 			}	
+			
 		echo "</ul><br></form></div>";
 		echo "<input type='hidden' name='optionalpacks' id='optionalpacks'>";
 		
