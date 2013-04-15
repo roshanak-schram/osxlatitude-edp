@@ -1,0 +1,55 @@
+<?php
+
+
+		echo "<div id=\"tabs-5\"><span class='graytitle'>Optional</span>";
+		echo "<ul class='pageitem'><form name='optionalcheck'>";
+			$i=0;
+			while ($optdb[$i] != "") {
+				$id = $optdb[$i]['id']; $name = $optdb[$i]['name']; $arch = $optdb[$i]['arch']; $notes = $optdb[$i]['notes'];
+				$status = isOPTinUse("$id");
+				if ($status == "yes") { $c = "checked"; $v = "on"; } else { $v = "off"; }
+				echo "<li class='checkbox'><span class='name'>$notes ($arch)</span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
+				$i++;
+			}	
+		echo "</ul><br></form></div>";
+		echo "<input type='hidden' name='optionalpacks' id='optionalpacks'>";
+		function isOPTinUse($id) {
+			global $modelID; global $edp_db;
+			$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
+			$stmt->execute();
+			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
+
+			$data = $row[optionalpacks];
+			//If nothing is defined in the modelsdb just return blank
+			if ($data == "") { return "no"; }
+			
+			$array 	= explode(',', $data);
+			foreach($array as $opt) {
+				if ($opt == $id) { return "yes"; }				
+			}
+			return "no";
+		}
+		
+?> 
+
+<script>
+
+//Init the updateOPT - this will fill a hidden input field with the values from the optional checkboxes
+updateOPT();
+
+function updateOPT() {
+	var optionalcheck = document.forms[0];
+	
+	var total = '';
+	for (i = 0; i < optionalcheck.optionalbox.length; i++) {
+		if (optionalcheck.optionalbox[i].checked) {
+			var v = optionalcheck.optionalbox[i].value;
+			total = total+','+v;
+		}
+		
+	}
+	document.getElementById("optionalpacks").value = total;
+	
+}	
+
+</script>

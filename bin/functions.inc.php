@@ -10,6 +10,34 @@ function checkbox($title, $formname, $status) {
 //<-----------------------------------------------------------------------------------------------------------------------------------
 
 
+
+class builder {
+
+	public function copyOptinalKextPack($id) {
+		if ($id != "") {
+			global $edp_db; global $workpath; global $ee;
+			$stmt = $edp_db->query("SELECT * FROM optionalpacks where id = '$id'");
+			$stmt->execute();
+			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
+			if ($row[foldername] != "") {
+				$folder = "$workpath/storage/kextpacks/$row[foldername]";
+				system_call("cp -R $folder/. $ee");
+				return;
+			}
+		}
+	}
+	
+		
+}
+
+
+$builder = new builder();
+
+
+
+
+
+
 function copyChamModules($chamModConfig) {
 	global $workpath;
 	$modpathFROM 	= "$workpath/storage/modules";
@@ -389,6 +417,9 @@ function copyEssentials() {
 function copyKexts() {
     //Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb; global $fakesmcdb;
+    
+    //Get our class(s)
+    global $builder;
 
     $modelName = $modeldb[$modelID]["name"];
 
@@ -472,7 +503,17 @@ function copyKexts() {
     	system_call("cp -R $workpath/storage/kextpacks/usb_rollback/* $ee");
     } 
     
-    
+    //Copy optinal kexts
+    $data = $modeldb[$modelID]['optionalpacks'];
+    $array 	= explode(',', $data);
+    writeToLog("$workpath/build.log", "  Copying optinal kextpacks...<br>");
+    foreach($array as $id) {
+    	echo "ID: $id <br>";
+	   	if ($id != "") {
+	   		$builder->copyOptinalKextPack($id);
+	   	}
+	}
+
     //Checking if we need Sleepenabler
     if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
         writeToLog("$workpath/build.log", "  Copying SleepEnabler.kext for enabling sleep...<br>");

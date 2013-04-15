@@ -38,8 +38,7 @@
 		$customKernel		= $_POST['customKernel']; 		if ($customKernel == "on")		{ $customKernel = "yes"; } 			else { $customKernel = "no"; }
 		$patchAHCIml		= $_POST['patchAHCIml']; 		if ($patchAHCIml == "on")		{ $patchAHCIml = "yes"; } 			else { $patchAHCIml = "no"; }
 		$usbRollBack		= $_POST['usbRollBack']; 		if ($usbRollBack == "on")		{ $usbRollBack = "yes"; } 			else { $usbRollBack = "no"; }
-		
-					
+						
 	
 		//Generate a multi dim. array used during the build process
 		global $modeldb;
@@ -73,7 +72,8 @@
                       		klibc 			=> $_POST['ChamModuleklibc'],
                       		Resolution 		=> $_POST['ChamModuleResolution'],
                       		Sata 			=> $_POST['ChamModuleSata'],
-                      		uClibcxx 		=> $_POST['ChamModuleuClibcxx']                    		 
+                      		uClibcxx 		=> $_POST['ChamModuleuClibcxx'],
+                      		optionalpacks	=> $_POST['optionalpacks']                    		 
                     ),
              );
 
@@ -196,6 +196,7 @@ if ($action == "confirm") {
                 <li><a href="#tabs-2">CPU & Power</a></li>
                 <li><a href="#tabs-3">Chameleon</a></li>
                 <li><a href="#tabs-4">Fixes</a></li>
+                <li><a href="#tabs-5">Optinal</a></li>
             </ul>
         </div>
 <?php
@@ -208,7 +209,7 @@ include "include/module.configuration.kexts.inc.php";
 include "include/module.configuration.cpu.inc.php";
 include "include/module.configuration.chameleon.inc.php";		
 include "include/module.configuration.fixes.inc.php";
-		
+include "include/module.configuration.optional.inc.php";		
 
 	
 	
