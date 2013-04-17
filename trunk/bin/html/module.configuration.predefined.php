@@ -182,7 +182,7 @@ if ($action == "confirm") {
 
 		
 		echo "<form action='module.configuration.predefined.php' method='post'>";
-		echoPageItemTOP("http://www-dev.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png", "$mdrow[desc]");
+		echoPageItemTOP("http://www.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png", "$mdrow[desc]");
 	
 		
     ?>
