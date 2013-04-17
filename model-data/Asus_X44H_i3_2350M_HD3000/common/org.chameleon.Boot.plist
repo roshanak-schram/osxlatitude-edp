@@ -6,6 +6,8 @@
 	<string>/Extra/DSDT.aml</string>
 	<key>DropSSDT</key>
 	<string>Yes</string>
+	<key>EthernetBuiltIn</key>
+	<string>Yes</string>
 	<key>Instant Menu</key>
 	<string>Yes</string>
 	<key>PciRoot</key>
