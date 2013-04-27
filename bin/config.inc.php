@@ -3,6 +3,9 @@
 // Main vars
 $workpath = "/Extra";
 
+//Check if db exists, and if not.. download it... 
+if (!is_file("$workpath/bin/edp.sqlite3")) { EDPdbUpdate(); }
+
 // SQLite stuff :)
 $edp_db = new PDO("sqlite:/$workpath/bin/edp.sqlite3");
 $edp_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -89,5 +92,10 @@ function getConfig($name) {
     $bigrow = $stmt->fetchAll();
 
     return $bigrow[0]['value'];
+}
+
+function EDPdbUpdate() {
+	global $workpath;
+	system_call("cd $workpath/bin; rm -Rf edp.sqlite3; curl -O http://www.osxlatitude.com/dbupdate.php");
 }
 ?>
