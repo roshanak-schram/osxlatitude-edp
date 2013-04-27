@@ -81,16 +81,17 @@ function updateEDP() {
     include_once "config.inc.php";
     global $workpath;
     
-    echo "Cleaning up $workpath using SVN <br>";
+    echo "Cleaning up $workpath using SVN <br>\n";
     system_call("svn cleanup $workpath");
-    echo "<br>Downloading latest sources from EDP's svn server<br>";
+    
+    echo "<br>Downloading latest sources from EDP's svn server<br>\n";
     system_call("svn --non-interactive --username edp --password edp --force update $workpath");
 
-    echo "Updating database... <br>";
+    echo "Updating database... <br>\n";
     system_call("rm -Rf /Extra/bin/edp.sqlite3; curl -o /Extra/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
 
     system_call("chmod -R 755 /Extra");
-    echo "<br> .. Your EDP have been updated...<br><br>.. Press COMMAND+R to reload EDP...<br>";
+    echo "<br> .. Your EDP have been updated...<br><br>.. Press COMMAND+R to reload EDP...<br>\n";
 
     exit;
 }
