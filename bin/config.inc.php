@@ -96,6 +96,6 @@ function getConfig($name) {
 
 function EDPdbUpdate() {
 	global $workpath;
-	system_call("cd $workpath/bin; rm -Rf edp.sqlite3; curl -O http://www.osxlatitude.com/dbupdate.php");
+	system("cd $workpath/bin; rm -Rf edp.sqlite3; curl -O http://www.osxlatitude.com/dbupdate.php");
 }
 ?>
