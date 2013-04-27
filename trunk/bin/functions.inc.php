@@ -81,6 +81,7 @@ function updateEDP() {
     include_once "config.inc.php";
     global $workpath;
     
+    echo "<pre>";;
     echo "Cleaning up $workpath using SVN <br>\n";
     system_call("svn cleanup $workpath");
     
