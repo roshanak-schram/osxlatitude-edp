@@ -1,4 +1,10 @@
 <?php
+$workpath = "/Extra";
+
+//Check if db exists, and if not.. download it... 
+if (!is_file("$workpath/bin/edp.sqlite3")) { system("curl -o /Extra/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php"); }
+
+
 include_once "config.inc.php";
 include_once "functions.inc.php";
 $os_string = "";
