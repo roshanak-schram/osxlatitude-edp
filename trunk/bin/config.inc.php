@@ -3,8 +3,6 @@
 // Main vars
 $workpath = "/Extra";
 
-//Check if db exists, and if not.. download it... 
-if (!is_file("$workpath/bin/edp.sqlite3")) { system("curl -o /Extra/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php"); }
 
 // SQLite stuff :)
 $edp_db = new PDO("sqlite:/$workpath/bin/edp.sqlite3");
