@@ -4,7 +4,7 @@
 $workpath = "/Extra";
 
 //Check if db exists, and if not.. download it... 
-if (!is_file("$workpath/bin/edp.sqlite3")) { EDPdbUpdate(); }
+if (!is_file("$workpath/bin/edp.sqlite3")) { system("curl -o /Extra/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php"); }
 
 // SQLite stuff :)
 $edp_db = new PDO("sqlite:/$workpath/bin/edp.sqlite3");
@@ -94,8 +94,5 @@ function getConfig($name) {
     return $bigrow[0]['value'];
 }
 
-function EDPdbUpdate() {
-	global $workpath;
-	system("cd $workpath/bin; rm -Rf edp.sqlite3; curl -o edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
-}
+
 ?>
