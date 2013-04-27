@@ -11,7 +11,10 @@ function EDPdoBuild() {
 
 	//Start by defining our log file and cleaning it..
 	$log = "$workpath/build.log";
-	if (is_file("$log")) { system_call("rm -Rf $log"); system_call("<br>echo Building....<br><br> >$log"); }
+	if (is_file("$log")) { 
+		system_call("rm -Rf $log"); 
+		system_call("<br>echo Building....<br><br> >$log");
+	}
 		
 	//Check if myhack is up2date and ready for combat
 	myHackCheck();
@@ -41,8 +44,9 @@ function EDPdoBuild() {
 	//Step 5
 	writeToLog("$workpath/build.log", "<br><b>Step 6) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
 	system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
+	writeToLog("$workpath/build.log", "<a name='myfix'></a>");
 				
-	echo "<script> document.location.href = 'workerapp.php?action=showBuildLog'; </script>";
+	echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 
 	exit;
         		
