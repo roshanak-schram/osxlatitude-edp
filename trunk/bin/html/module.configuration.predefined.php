@@ -196,7 +196,7 @@ if ($action == "confirm") {
                 <li><a href="#tabs-2">CPU & Power</a></li>
                 <li><a href="#tabs-3">Chameleon</a></li>
                 <li><a href="#tabs-4">Fixes</a></li>
-                <li><a href="#tabs-5">Optinal</a></li>
+                <li><a href="#tabs-5">Optional</a></li>
             </ul>
         </div>
 <?php
