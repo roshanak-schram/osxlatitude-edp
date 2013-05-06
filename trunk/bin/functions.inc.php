@@ -211,9 +211,7 @@ function GMA950brightnessfixCheck() {
     
     if ($needfix == "yes") {
         echo "  Applying GMA950 Brightness fix \n";
-        if ($os == "lion") {
-            system_call("cp -R $workpath/storage/fixes/gma950-brightness-fix/AppleIntelIntegratedFramebuffer.kext $ee");
-        }
+        system_call("cp -R $workpath/storage/fixes/gma950-brightness-fix/AppleIntelIntegratedFramebuffer.kext $ee");
     }
 }	
 	
