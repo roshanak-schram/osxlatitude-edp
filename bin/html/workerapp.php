@@ -227,7 +227,7 @@ function showChangelog() {
 
 function fixes_touch_sle() {
     global $slepath;
-    echo "<br><br>Touching $slepath... <br><br>Notice: This might tricker a kernelcache rebuild...<br><br>";
+    echo "<br><br>Touching $slepath... <br><br>Notice: This might trigger a kernelcache rebuild...<br><br>";
     system_call("touch $slepath");
 }
 function fixes_toogleHibernationMode() {
