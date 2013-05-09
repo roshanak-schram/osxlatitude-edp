@@ -107,7 +107,7 @@ if ($action == "") {
 	echoPageItemTOP("icons/big/config.png", "Select a model your wish to configure for:");
 
 	echo "<div class='pageitem_bottom'>\n";
-	echo "EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. <br><br>Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.";
+	echo "EDP's internal database contains 'best practice' schematics for 80+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. <br><br>Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.";
 	
     		$result = $edp_db->query("SELECT * FROM models order by vendor");
 			include "header.inc.php";

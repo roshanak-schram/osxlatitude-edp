@@ -74,7 +74,7 @@ echoPageItemTOP("icons/big/edp.png", "Welcome to EDP");
 echo "<div class='pageitem_bottom'>\n";
 	
 ?>
-EDP is a unique control panel for your hackintosh that makes it easy to maintain and configure your system. EDP's internal database contains 'best practice' schematics for 50+ systems - this makes it easy to choose the right configuration</p>
+EDP is a unique control panel for your hackintosh that makes it easy to maintain and configure your system. EDP's internal database contains 'best practice' schematics for 80+ systems - this makes it easy to choose the right configuration</p>
 	
 	<br><br>
 
