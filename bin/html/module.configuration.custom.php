@@ -37,7 +37,7 @@ function doCustomBuild() {
 	
 	if ($useIncExtentions == "yes") { 
 		writeToLog("$workpath/build.log", "Copying $incpath/Extensions to $ee <br>");
-		system_call("cp -R $workpath/include/Extensions/* $ee");
+		system_call("cp -R $workpath/include/Extensions/*.kext $ee");
 	}	
 	
 	if ($useIncDSDT == "yes") {
