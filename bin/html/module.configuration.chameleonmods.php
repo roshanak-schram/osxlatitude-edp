@@ -1,7 +1,6 @@
 <?php
 include_once "../functions.inc.php";
 include_once "../config.inc.php";
-include_once "include/functions.edpweb.inc.php";
 
 //Fetch the show type
 $showtype 	= $_GET['showtype']; if (!$showtype) { $showtype = $_POST['showtype']; }
@@ -21,7 +20,7 @@ if ($action == "update") {
   	    	    	    		
     );
 
-    copyChamModules($chamModConfig);
+    $chamModules->copyChamModules($chamModConfig);
     $chamModConfig = "";
 }
 
@@ -34,7 +33,7 @@ if ($action == "update") {
 if ($showtype == "standalone") {
 
 	//Get the current config
-	$chamModConfig = chamModGetConfig();
+	$chamModConfig = $chamModules->chamModGetConfig();
 	
 	//Write out the header
 	include "header.inc.php";

@@ -5,8 +5,6 @@ $id 	= $_GET['id'];
 $url 	= $_GET['url'];
 
 if ($action == "goto_hell") {
-	session_start();
-	session_destroy();
 	echo "If the window does not close automatically you may close it now";
 	echo "<script>top.window.close();</script>";
 	
@@ -18,7 +16,7 @@ if ($action == "goto_hell") {
 include_once "header.inc.php";
 include_once "../functions.inc.php";
 include_once "../config.inc.php";
-include_once "include/functions.edpweb.inc.php";
+
 
 ?>
 
@@ -199,7 +197,7 @@ if ($action == "toggle-hidpi") {
     exit;
 }
 
-if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; updateEDP(); echo "<script> window.fluid.dockBadge = ''; </script> \n"; exit; }
+if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; $edp->update(); echo "<script> window.fluid.dockBadge = ''; </script> \n"; exit; }
 if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "changelog") 	{ showChangelog(); exit; }
 if ($action == "showBuildLog")	{ showBuildLog(); exit ; }

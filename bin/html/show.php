@@ -4,7 +4,7 @@
 	$i = $_GET['i'];
 	include_once "../config.inc.php";
 	include_once "header.inc.php";
-	include_once "include/functions.edpweb.inc.php";
+	include_once "../functions.inc.php";
 
 	include "$i"; 
 ?>
