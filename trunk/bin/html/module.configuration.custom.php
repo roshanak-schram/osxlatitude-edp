@@ -1,7 +1,6 @@
 <?php
 	include_once "../functions.inc.php";
 	include_once "../config.inc.php";
-	include_once "include/functions.edpweb.inc.php";
 		
 	include "header.inc.php";
 
@@ -20,7 +19,7 @@
 		
 
 function doCustomBuild() {
-	global $useIncExtentions; global $useIncDSDT; global $useIncSSDT; global $useIncSMBIOS; global $useIncCHAM; global $workpath;
+	global $useIncExtentions; global $useIncDSDT; global $useIncSSDT; global $useIncSMBIOS; global $useIncCHAM; global $workpath; global $edp;
 	$incpath = "$workpath/include"; global $ee;
 
 
@@ -33,22 +32,22 @@ function doCustomBuild() {
 	
 	
 	//Step 1
-	writeToLog("$workpath/build.log", "<br><b>Step 1) Checking if you have selected any sources from $incpath </b><br>");
+	$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Checking if you have selected any sources from $incpath </b><br>");
 	
 	if ($useIncExtentions == "yes") { 
-		writeToLog("$workpath/build.log", "Copying $incpath/Extensions to $ee <br>");
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/Extensions to $ee <br>");
 		system_call("cp -R $workpath/include/Extensions/*.kext $ee");
 	}	
 	
 	if ($useIncDSDT == "yes") {
-		writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to $workpath <br>");
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to $workpath <br>");
 		system_call("cp -f $workpath/include/dsdt.aml /Extra");
 	} 	
 	
 	
 	
 	if ($useIncSSDT == "yes") {
-		writeToLog("$workpath/build.log", "Copying SSDT files to $workpath <br>");
+		$edp->writeToLog("$workpath/build.log", "Copying SSDT files to $workpath <br>");
     	if (is_file("$workpath/include/SSDT.aml")) 					{ system_call("cp -f $workpath/include/SSDT.aml /Extra"); }
     	if (is_file("$workpath/include/SSDT-1.aml")) 				{ system_call("cp -f $workpath/include/SSDT-1.aml /Extra"); }
     	if (is_file("$workpath/include/SSDT-2.aml")) 				{ system_call("cp -f $workpath/include/SSDT-2.aml /Extra"); }
@@ -57,19 +56,19 @@ function doCustomBuild() {
     	if (is_file("$workpath/include/SSDT-5.aml")) 				{ system_call("cp -f $workpath/include/SSDT-5.aml /Extra"); } 		
 	}
 	if ($useIncSMBIOS == "yes")	{
-		writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to $workpath <br>"); 
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to $workpath <br>"); 
 		system_call("cp -f $workpath/include/smbios.plist /Extra");
 	}
 	
 	if ($useIncCHAM == "yes") { 
-		writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to $workpath <br>");
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to $workpath <br>");
 		system_call("cp -f $workpath/include/org.chameleon.Boot.plist /Extra");
 	}		
 
 
-	writeToLog("$workpath/build.log", "<br><b>Step 2) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
+	$edp->writeToLog("$workpath/build.log", "<br><b>Step 2) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
 	system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
-	writeToLog("$workpath/build.log", "<a name='myfix'></a>");
+	$edp->writeToLog("$workpath/build.log", "<a name='myfix'></a>");
 				
 	echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 	

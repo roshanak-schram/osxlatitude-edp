@@ -52,21 +52,14 @@ $stmt->execute(); $optdb = $stmt->fetchAll();
 
 $localrev 		= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
 $localrev 		= str_replace("Last Changed Rev: ", "", $localrev);
-//$remoterev      = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
-//$remoterev      = str_replace("Last Changed Rev: ", "", $remoterev);
-//$number_updates = ($remoterev - $localrev);	
-//$_SESSION['remoterev'] 		= $remoterev;
 
-// Include general functions
+
+// Include general functions and classes
 require_once "$workpath/bin/functions.inc.php";
 
 
 //Set timezone to UTC
 date_default_timezone_set('UTC');
-
-//Get system vars
-//$workpath	= getenv('PWD');  //Old detection.. not used anymore.. but we'll keep it around for now....
-
 
 $hibernatemode = exec("pmset -g | grep hibernatemode");
 $hibernatemode = str_replace("hibernatemode", "", $hibernatemode);

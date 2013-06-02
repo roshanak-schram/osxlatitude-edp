@@ -1,7 +1,6 @@
 <?php
 	include_once "../functions.inc.php";
 	include_once "../config.inc.php";
-	include_once "include/functions.edpweb.inc.php";
 		
 	include "header.inc.php";
 
@@ -84,7 +83,7 @@
         global $modelName;
         $modelName = $modeldb[$modelID]["name"];
  
-        EDPdoBuild();	
+        $builder->EDPdoBuild();	
 	}
 
 
