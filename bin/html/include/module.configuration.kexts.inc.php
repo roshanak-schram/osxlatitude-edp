@@ -7,7 +7,7 @@
 			$result = $edp_db->query("SELECT * FROM fakesmc");
 			echo "<li class='select'><select name='fakesmc'>";
 			foreach($result as $row) {
-				$s=""; if ("$mdrow[ps2pack]" == "$row[id]") { $s = "SELECTED"; }
+				$s=""; if ("$mdrow[fakesmc]" == "$row[id]") { $s = "SELECTED"; }
 				echo "<option value='$row[id]' $s>&nbsp; FakeSMC: $row[name] ($row[notes])</option>\n";
 		    }
 			echo "</select><span class='arrow'></span> </li>";
