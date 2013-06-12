@@ -13,7 +13,7 @@ include_once "functions.inc.php";
 $os_string = "";
 $os = getVersion();
 
-if ($os == "ml" || $os == "lion") {
+if ($os == "lion" || $os == "ml" || $os == "mav") {
     system("open /Extra/storage/apps/EDPweb.app");
 } else {
     system("open http://127.0.0.1:11250/");
