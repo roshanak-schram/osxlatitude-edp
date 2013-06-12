@@ -194,8 +194,11 @@ function getVersion() {
     if ($v == "10.8.3") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
     if ($v == "10.8.4") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
     if ($v == "10.8.5") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.6") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.7") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }				
+    if ($v == "10.9") 	{ $r="mav"; $os_string = "OSX Maverick $v"; }	
+    if ($v == "10.9.0") { $r="mav"; $os_string = "OSX Maverick $v"; }	
+    if ($v == "10.9.1") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.2") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.3") { $r="mav"; $os_string = "OSX Maverick $v"; }				
     return $r;
 }
 	
