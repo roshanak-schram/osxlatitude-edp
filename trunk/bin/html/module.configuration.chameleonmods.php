@@ -16,7 +16,8 @@ if ($action == "update") {
     	"klibc" => $_POST['ChamModuleklibc'],	
     	"Resolution" => $_POST['ChamModuleResolution'],
     	"Sata" => $_POST['ChamModuleSata'],	
-    	"uClibcxx" => $_POST['ChamModuleuClibcxx'],	
+    	"uClibcxx" => $_POST['ChamModuleuClibcxx'],
+    	"HDAEnabler" => $_POST['ChamHDAEnabler'],
   	    	    	    		
     );
 
