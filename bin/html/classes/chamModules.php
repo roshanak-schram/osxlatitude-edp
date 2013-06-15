@@ -19,7 +19,9 @@ class chamModules {
 		if ($chamModConfig['klibc'] == "on") 			{ system_call("cp -Rf $modpathFROM/klibc.dylib $modpathTO"); }
 		if ($chamModConfig['Resolution'] == "on") 		{ system_call("cp -Rf $modpathFROM/Resolution.dylib $modpathTO"); }	
 		if ($chamModConfig['Sata'] == "on") 			{ system_call("cp -Rf $modpathFROM/Sata.dylib $modpathTO"); }
-		if ($chamModConfig['uClibcxx'] == "on") 		{ system_call("cp -Rf $modpathFROM/uClibcxx.dylib $modpathTO"); }	
+		if ($chamModConfig['uClibcxx'] == "on") 		{ system_call("cp -Rf $modpathFROM/uClibcxx.dylib $modpathTO"); }
+		if ($chamModConfig['HDAEnabler'] == "on") 		{ system_call("cp -Rf $modpathFROM/HDAEnabler.dylib $modpathTO"); }
+			
 	}
 
 
@@ -37,6 +39,8 @@ class chamModules {
 			"Resolution" => (is_file("$modpath/Resolution.dylib") === TRUE ? "yes" : "no"),
 			"Sata" => (is_file("$modpath/Sata.dylib") === TRUE ? "yes" : "no"),
 			"uClibcxx" => (is_file("$modpath/uClibcxx.dylib") === TRUE ? "yes" : "no"),
+			"HDAEnabler" => (is_file("$modpath/HDAEnabler.dylib") === TRUE ? "yes" : "no"),
+			
 		);
 		return $array;	
 	}
