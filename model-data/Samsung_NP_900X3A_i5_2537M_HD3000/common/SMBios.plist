@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Copyright</key>
-	<string>SMBios by 7ender @ InMac.org	Created with Champlist.app</string>
 	<key>SMbiosvendor</key>
 	<string>Apple Inc.</string>
 	<key>SMbiosversion</key>
@@ -16,5 +14,7 @@
 	<string>MacBookPro8,2</string>
 	<key>SMserial</key>
 	<string>QT2FR8KGDMGG</string>
+	<key>EDPmodel</key>
+	<value>Samsung_NP_900X3A_i5_2537M_HD3000</value>		
 </dict>
 </plist>

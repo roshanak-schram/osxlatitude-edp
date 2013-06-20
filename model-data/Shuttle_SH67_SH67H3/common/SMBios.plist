@@ -22,5 +22,7 @@
 	<string>C02JX3S5DJD0</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<value>Shuttle_SH67_SH67H3</value>
 </dict>
 </plist>

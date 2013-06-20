@@ -36,5 +36,7 @@
 	<string>C02G7959DC79</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<value>Samsung_R530_JT02</value>		
 </dict>
 </plist>

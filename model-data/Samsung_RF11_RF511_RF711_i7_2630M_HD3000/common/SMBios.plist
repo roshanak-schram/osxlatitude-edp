@@ -16,5 +16,7 @@
 	<string>MacBookPro8,2</string>
 	<key>SMserial</key>
 	<string>QT2FR8KGDMGG</string>
+	<key>EDPmodel</key>
+	<value>Samsung_RF11_RF511_RF711_i7_2630M_HD3000</value>	
 </dict>
 </plist>

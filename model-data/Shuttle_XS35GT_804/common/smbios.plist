@@ -22,5 +22,7 @@
 	<string>C02GM65KDD6H</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<value>Shuttle_XS35GT_804</value>
 </dict>
 </plist>
