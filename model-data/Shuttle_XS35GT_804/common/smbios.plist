@@ -4,6 +4,8 @@
 <dict>
 	<key>Credits</key>
 	<string>Created with Champlist</string>
+	<key>EDPmodel</key>
+	<string>Shuttle_XS35GT_804</string>
 	<key>SMbiosdate</key>
 	<string>11/07/11</string>
 	<key>SMbiosvendor</key>
@@ -22,7 +24,5 @@
 	<string>C02GM65KDD6H</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
-	<key>EDPmodel</key>
-	<value>Shuttle_XS35GT_804</value>
 </dict>
 </plist>
