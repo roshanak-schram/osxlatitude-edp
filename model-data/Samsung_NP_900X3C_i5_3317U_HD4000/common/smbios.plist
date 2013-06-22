@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>Copyright</key>
-    <string>SMBios by 7ender @ InMac.org	Created with Champlist.app</string>
     <key>EDPmodel</key>
     <string>Samsung_NP_900X3C_i5_3317U_HD4000</string>
     <key>SMbiosvendor</key>
