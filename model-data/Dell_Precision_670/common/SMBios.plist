@@ -20,5 +20,7 @@
 	<string>CK832574XYL</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<string>Dell_Precision_670</string>
 </dict>
 </plist>

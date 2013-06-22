@@ -22,5 +22,7 @@
 	<string>C02HL9T1DH2G</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<string>Dell_Latitude_E6520-intel</string>
 </dict>
 </plist>

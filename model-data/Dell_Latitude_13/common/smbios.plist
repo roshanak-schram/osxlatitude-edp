@@ -20,5 +20,7 @@
 	<string>C0927HZQ66D</string>
 	<key>SMsystemversion</key>
 	<string>1.47f2</string>
+	<key>EDPmodel</key>
+	<string>Dell_Latitude_13</string>
 </dict>
 </plist>

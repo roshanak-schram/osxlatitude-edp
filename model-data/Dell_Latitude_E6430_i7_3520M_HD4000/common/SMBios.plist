@@ -16,5 +16,7 @@
 	<string>MacBookPro8,2</string>
 	<key>SMserial</key>
 	<string>QT2FR8KGDMGG</string>
+	<key>EDPmodel</key>
+	<string>Dell_Latitude_E6430_i7_3520M_HD4000</string>
 </dict>
 </plist>

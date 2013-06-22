@@ -20,5 +20,7 @@
 	<string>CK937M6TXYL</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<string>Dell_Vostro_410</string>
 </dict>
 </plist>

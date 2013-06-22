@@ -28,5 +28,7 @@
 	<string>W8746M0AZ63</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<string>Dell_Latitude_D630-intel2</string>
 </dict>
 </plist>

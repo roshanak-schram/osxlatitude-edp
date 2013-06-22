@@ -16,5 +16,7 @@
 	<string>MacBookPro8,2</string>
 	<key>SMserial</key>
 	<string>QT2FR8KGDMGG</string>
+	<key>EDPmodel</key>
+	<string>Dell_Precision_M4600_i7_2640M_NVQ_1000M</string>
 </dict>
 </plist>

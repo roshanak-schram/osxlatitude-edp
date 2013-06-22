@@ -26,5 +26,7 @@
 	<string>5W4ZPC123</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<string>Dell_Latitude_D820-intel</string>
 </dict>
 </plist>

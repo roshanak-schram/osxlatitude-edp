@@ -28,5 +28,7 @@
 	<string>CK937E190TF</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
+	<key>EDPmodel</key>
+	<string>Dell_Optiplex_745</string>
 </dict>
 </plist>
