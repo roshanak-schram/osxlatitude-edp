@@ -23,16 +23,26 @@ function echoPageItemTOP($icon, $text) {
 
 //<-----------------------------------------------------------------------------------------------------------------------------------
 
+//--- Get Value from Key in SMbios.plist
+include_once __DIR__ . '/vendor/CFPropertyList/CFPropertyList.php';
 
+function getValueFromSmbios($key, $default = null) {
+    global $workpath;
 
+    $file = $workpath . '/smbios.plist';
 
+    if (file_exists($file)) {
+        $plist = new CFPropertyList\CFPropertyList($file, CFPropertyList\CFPropertyList::FORMAT_XML);
+        $dict  = $plist->toArray();
 
+        if (array_key_exists($key, $dict)) {
+            return $dict[$key];
+        }
+    }
 
-
-
-
-
-
+    return $default;
+}
+//---
 
 			
 function updateCham() {
@@ -41,8 +51,6 @@ function updateCham() {
     echo "  Updating Chameleon to latest versions from EDP \n";
     system_call("cp -f /Extra/storage/boot /");
 }
-
-
 
 
 function checkSVNrevs() {
