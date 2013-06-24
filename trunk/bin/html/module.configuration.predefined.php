@@ -148,8 +148,9 @@ if ($action == "") {
 						foreach($result as $row) {
 							echo "<option value='$row[id]'>&nbsp;&nbsp;$row[desc] ($row[type])</option>\n";
 							}						
-							echo "</select><span class='arrow'></span> </li>";
-							echo "<li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul></p>";
+							echo "</select><span class='arrow'></span> </li></ul>";
+							echo "<p><B><center>After clicking 'Continue' EDP will download the latest model data for your machine.<br>- This may take a few minuts -	</center></p><br>";
+							echo "<ul class='pageitem'><li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul></p>";
 						}
 
 				}				
@@ -177,7 +178,7 @@ if ($action == "confirm") {
 
 		//Download model data
 		$modelName = $mdrow[name];
-		echo "<div id='model_download' style='display: block'>";
+		echo "<div id='model_download' style='display: none'>";
 		svnModeldata("$modelName");
 		echo "</div>";
 		
