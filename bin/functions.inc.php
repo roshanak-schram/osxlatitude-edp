@@ -73,7 +73,7 @@ function EDPdoBuild() {
 
 	//Step 2
 	writeToLog("$workpath/build.log", "<br><b>Step 3) Preparing kexts for myHack.kext </b><br>");
-				copyKexts();
+	copyKexts();
 			
 	//Step 3
 	writeToLog("$workpath/build.log", "<br><br><b>Step 4) Applying Chameleon settings.. </b><br>");
@@ -345,7 +345,7 @@ function copyEssentials() {
 
 function copyKexts() {
     //Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb; global $fakesmcdb; global $edp;
+    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
     
     //Get our class(s)
     global $builder;
@@ -379,7 +379,13 @@ function copyKexts() {
         if (is_dir("$slepath/HDAEnabler.kext")) {
             system_call("rm -Rf $slepath/HDAEnabler.kext");
         }
-        system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/");
+        if ($audioid == "buildin") {
+        	if (is_dir("$workpath/model-data/$modelName/$os/applehda")) { system_call("cp -R $workpath/model-data/$modelName/$os/applehda/. $ee/"); }
+        	else { 
+        		if (is_dir("$workpath/model-data/$modelName/common/applehda")) { system_call("cp -R $workpath/model-data/$modelName/common/applehda/. $ee/"); }
+        	}
+	        
+        } else { system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/"); }   
     }
 
     //Copying FakeSMC kextpack
