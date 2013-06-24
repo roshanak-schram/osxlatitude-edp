@@ -201,7 +201,8 @@ function getVersion() {
     if ($v == "10.8.2") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
     if ($v == "10.8.3") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
     if ($v == "10.8.4") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.5") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
+    if ($v == "10.8.5") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
+    if ($v == "10.8.6") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }    	
     if ($v == "10.9") 	{ $r="mav"; $os_string = "OSX Maverick $v"; }	
     if ($v == "10.9.0") { $r="mav"; $os_string = "OSX Maverick $v"; }	
     if ($v == "10.9.1") { $r="mav"; $os_string = "OSX Maverick $v"; }
@@ -312,7 +313,7 @@ function copyKexts() {
     $modelName = $modeldb[$modelID]["name"];
 
     $edp->writeToLog("$workpath/build.log", "  Start by cleaning up in $ee..<br>");
-    system_call("rm -Rf $ee/*");
+    system_call("rm -Rf $ee/*.kext");
 
     //Checking if we need to patch AppleIntelCPUPowerManagement.kext
     $pathCPU = $modeldb[$modelID]["patchCPU"];
