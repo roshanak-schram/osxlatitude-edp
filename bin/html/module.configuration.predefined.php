@@ -177,7 +177,9 @@ if ($action == "confirm") {
 
 		//Download model data
 		$modelName = $mdrow[name];
+		echo "<div id='model_download' style='display: block'>";
 		svnModeldata("$modelName");
+		echo "</div>";
 		
 		//Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
