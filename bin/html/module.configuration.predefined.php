@@ -174,6 +174,10 @@ if ($action == "confirm") {
 		$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
 		$stmt->execute();
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+
+		//Download model data
+		$modelName = $mdrow[name];
+		svnModeldata("$modelName");
 		
 		//Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
