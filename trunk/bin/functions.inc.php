@@ -135,10 +135,8 @@ function svnModeldata($model) {
     $modelfolder = "$workpath/model-data/$model";
     
     if (is_dir("$modelfolder")) {
-        $edp->writeToLog("$workpath/build.log", "Locale cache found for $model, updating cache....<br>");
-        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder >>$workpath/build.log");
+        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder");
     } else {
-        echo "  Locale cache NOT found for $model, downloading....\n";
         system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$model .");
     }
 }
