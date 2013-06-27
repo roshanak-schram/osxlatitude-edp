@@ -2,21 +2,18 @@
 
 class builder {
 
-	//Copies a Optional kextpack from /Extra/storage/kextpacks to /Extra/Extensions based on the ID, the ID is a reference in the db
-	//It will not return any values after completing nor does it do any checking as to if the kext was copied
-	public function copyOptinalKextPack($id) {
-		if ($id != "") {
+	//Returns foldername from ID, table must have "foldername"
+	public function getKextpackNameFromID($table, $id) {
+		if ($table != "" && $id != "") {
 			global $edp_db; global $workpath; global $ee;
-			$stmt = $edp_db->query("SELECT * FROM optionalpacks where id = '$id'");
+			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
 			$stmt->execute();
 			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-			if ($row[foldername] != "") {
-				$folder = "$workpath/storage/kextpacks/$row[foldername]";
-				system_call("cp -R $folder/. $ee");
-				return;
-			}
-		}
+			return $row[foldername];
+		}		
 	}
+	
+
 	
 
 

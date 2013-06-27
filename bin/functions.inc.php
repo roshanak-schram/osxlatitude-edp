@@ -120,6 +120,25 @@ function patchAHCI() {
     system_call("perl /Extra/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
 }
 
+
+/**
+ * This function will download a kextpack from SVN if requested (or update it if allready exists) 
+ */
+function kextpackLoader($name) {
+	global $edp_db, $workpath, $edp;
+	if ($name != "") {
+		$workfolder = "$workpath/storage/kpsvn/$name";
+		if (is_dir("$workfolder")) {
+			system_call("svn --non-interactive --username edp --password edp --force update $workfolder");
+		}
+		else {
+			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name .");
+		}
+	}
+} 
+
+
+ 
 /**
  * Function to check if the model is allready checked out
  * if the model is not checked out it will check it out
@@ -361,6 +380,7 @@ function copyKexts() {
         patchAppleIntelCPUPowerManagement();
     }
 
+    //Copying PS2 kexts
     $edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts (mouse+keyboard driver) to $ee<br>");
     $ps2id = $modeldb[$modelID]['ps2pack'];
     if ($ps2id != "" && $ps2id != "no") {
@@ -368,9 +388,11 @@ function copyKexts() {
         system_call("cp -R $workpath/storage/kextpacks/$ps2dir/. $ee/");
     }
 
+    //Copying custom kexts from inside include folder
     $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
     system_call("cp -R $workpath/include/Extensions/* $ee");
 
+    //Copying audio kexts
     $audioid = $modeldb[$modelID]['audiopack'];
     $audiodir = $audiodb[$audioid]["foldername"];
     if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
@@ -437,17 +459,27 @@ function copyKexts() {
     	$edp->writeToLog("$workpath/build.log", "  Copying USB Roolback kexts... <br>");
     	system_call("cp -R $workpath/storage/kextpacks/usb_rollback/* $ee");
     } 
+
+
+
     
     //Copy optinal kexts
     $data = $modeldb[$modelID]['optionalpacks'];
     $array 	= explode(',', $data);
     $edp->writeToLog("$workpath/build.log", "  Copying optinal kextpacks...<br>");
     foreach($array as $id) {
-    	echo "ID: $id <br>";
-	   	if ($id != "") {
-	   		$builder->copyOptinalKextPack($id);
-	   	}
+	    //Getting foldername from ID
+        $name = $builder->getKextpackNameFromID("optionalpacks", "$id");
+        
+    	//Syncing kextpack to local storage
+    	kextpackLoader("$name");
+
+    	//Copying the kextpack to /Extra/Extentions
+		$folder = "$workpath/storage/kpsvn/$name";
+		system_call("cp -R $folder/. $ee");
 	}
+
+
 
     //Checking if we need Sleepenabler
     if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
