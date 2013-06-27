@@ -362,6 +362,9 @@ function copyEssentials() {
     if (is_file("$workpath/include/SSDT-5.aml")) 				{ system_call("cp -f $workpath/include/SSDT-5.aml /Extra"); }    
 }
 
+
+
+//Copying kexts 
 function copyKexts() {
     //Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
@@ -380,13 +383,24 @@ function copyKexts() {
         patchAppleIntelCPUPowerManagement();
     }
 
-    //Copying PS2 kexts
-    $edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts (mouse+keyboard driver) to $ee<br>");
+
+
+    //New function for copying PS2 kexts from kextpacks
     $ps2id = $modeldb[$modelID]['ps2pack'];
     if ($ps2id != "" && $ps2id != "no") {
-        $ps2dir = $ps2db[$ps2id]["foldername"];
-        system_call("cp -R $workpath/storage/kextpacks/$ps2dir/. $ee/");
-    }
+    	$name = $ps2db[$ps2id]["foldername"];
+         
+    	//Syncing kextpack to local storage
+    	kextpackLoader("$name");
+
+    	//Copying the kextpack to /Extra/Extentions
+    	$edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
+		if ($name != "") { system_call("cp -R $workpath/storage/kpsvn/$name/. $ee"); }
+	}
+	
+	
+
+
 
     //Copying custom kexts from inside include folder
     $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
@@ -466,7 +480,7 @@ function copyKexts() {
     //Copy optinal kexts
     $data = $modeldb[$modelID]['optionalpacks'];
     $array 	= explode(',', $data);
-    $edp->writeToLog("$workpath/build.log", "  Copying optinal kextpacks...<br>");
+    
     foreach($array as $id) {
 	    //Getting foldername from ID
         $name = $builder->getKextpackNameFromID("optionalpacks", "$id");
@@ -475,8 +489,8 @@ function copyKexts() {
     	kextpackLoader("$name");
 
     	//Copying the kextpack to /Extra/Extentions
-		$folder = "$workpath/storage/kpsvn/$name";
-		system_call("cp -R $folder/. $ee");
+		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $workpath/storage/kpsvn/$name to $ee<br>");
+		if ($name != "") { system_call("cp -R $workpath/storage/kpsvn/$name/. $ee"); }
 	}
 
 
