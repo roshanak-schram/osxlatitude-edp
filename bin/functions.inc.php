@@ -448,9 +448,9 @@ function copyKexts() {
 
 
     	
-    //Copying audio kexts
+    //New function for copying audio kexts
     $audioid = $modeldb[$modelID]['audiopack'];
-    $audiodir = $audiodb[$audioid]["foldername"];
+    $audiodir = $audiodb[$audioid]["foldername"]; $name = $audiodir;
     if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
         $edp->writeToLog("$workpath/build.log", "  Copying the Audio kexts to $ee<br>");
         //Clean up
@@ -463,9 +463,15 @@ function copyKexts() {
         		if (is_dir("$workpath/model-data/$modelName/common/applehda")) { system_call("cp -R $workpath/model-data/$modelName/common/applehda/. $ee/"); }
         	}
 	        
-        } else { system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/"); }   
+        } else { 
+        	//Syncing kextpack to local storage
+        	kextpackLoader("$name");
+        	system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+        }   
     }
-
+    //Resetting $name
+	$name = ""; 
+	
 
 
     //Copying ethernet kexts
