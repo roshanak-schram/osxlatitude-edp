@@ -454,9 +454,7 @@ function copyKexts() {
     if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
         $edp->writeToLog("$workpath/build.log", "  Copying the Audio kexts to $ee<br>");
         //Clean up
-        if (is_dir("$slepath/HDAEnabler.kext")) {
-            system_call("rm -Rf $slepath/HDAEnabler.kext");
-        }
+        if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
         if ($audioid == "buildin") {
         	if (is_dir("$workpath/model-data/$modelName/$os/applehda")) { system_call("cp -R $workpath/model-data/$modelName/$os/applehda/. $ee/"); }
         	else { 
@@ -466,6 +464,7 @@ function copyKexts() {
         } else { 
         	//Syncing kextpack to local storage
         	kextpackLoader("$name");
+        	$edp->writeToLog("$workpath/build.log", "  Copying the $name kextpack ($workpath/storage/kpsvn/$name) to $ee<br>");
         	system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
         }   
     }
