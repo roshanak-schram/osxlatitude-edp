@@ -132,7 +132,7 @@ function kextpackLoader($name) {
 			system_call("svn --non-interactive --username edp --password edp --force update $workfolder");
 		}
 		else {
-			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >/Extra/kpload.log");
+			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >>/Extra/kpload.log");
 		}
 	}
 } 
