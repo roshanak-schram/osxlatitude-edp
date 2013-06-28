@@ -45,6 +45,45 @@ function getValueFromSmbios($key, $default = null) {
 }
 //---
 
+//--- Get EDP builder Model / Vendor / Serie values for the user to select from
+function builderGetVendorValues() {
+    global $edp_db;
+
+    $result = $edp_db->query('SELECT DISTINCT vendor FROM models ORDER BY vendor');
+    $return = '';
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['vendor'] . '">&nbsp;&nbsp;' . $row['vendor'] . '</option>';
+    }
+
+    return $return;
+}
+function builderGetSerieValues($vendor) {
+    global $edp_db;
+
+    $result = $edp_db->query('SELECT DISTINCT serie, vendor FROM models WHERE vendor = "' . $vendor . '" ORDER BY serie');
+    $return = '';
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['serie'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['serie'] . '</option>';
+    }
+
+    return '<option value="" >&nbsp;&nbsp;Select serie...</option>' . $return;
+}
+function builderGetModelValues($vendor, $serie) {
+    global $edp_db;
+
+    $result = $edp_db->query('SELECT * FROM models WHERE vendor = "' . $vendor . '" AND serie = "' . $serie . '" ORDER BY type');
+    $return = '';
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['type'] . ')</option>';
+    }
+
+    return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
+}
+//---
+
 			
 function updateCham() {
     // Note: Overtime we will add a function to make sure that the user have the latest version 
