@@ -36,7 +36,6 @@
 		$customCham			= $_POST['customCham']; 		if ($customCham == "on")		{ $customCham = "yes"; } 			else { $customCham= "no"; }
 		$customKernel		= $_POST['customKernel']; 		if ($customKernel == "on")		{ $customKernel = "yes"; } 			else { $customKernel = "no"; }
 		$patchAHCIml		= $_POST['patchAHCIml']; 		if ($patchAHCIml == "on")		{ $patchAHCIml = "yes"; } 			else { $patchAHCIml = "no"; }
-		$usbRollBack		= $_POST['usbRollBack']; 		if ($usbRollBack == "on")		{ $usbRollBack = "yes"; } 			else { $usbRollBack = "no"; }
 						
 	
 		//Generate a multi dim. array used during the build process
@@ -60,8 +59,7 @@
                       		ethernet		=> $_POST['ethernet'],
                       		wifikext		=> $_POST['wifikext'],
                       		audiopack		=> $_POST['audiopack'],                    		                      		                      		
-                      		customCham 		=> $customCham,
-                      		usbRollBack		=> $usbRollBack,                     		
+                      		customCham 		=> $customCham,                    		
                       		customKernel 	=> $customKernel,
                       		fakesmc			=> $_POST['fakesmc'],
                       		ACPICodec 		=> $_POST['ChamModuleACPICodec'],

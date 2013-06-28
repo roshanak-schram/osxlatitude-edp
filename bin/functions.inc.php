@@ -389,13 +389,14 @@ function copyKexts() {
     $ps2id = $modeldb[$modelID]['ps2pack'];
     if ($ps2id != "" && $ps2id != "no") {
     	$name = $ps2db[$ps2id]["foldername"];
-         
-    	//Syncing kextpack to local storage
-    	kextpackLoader("$name");
+        if ($name != "") {  
+    		//Syncing kextpack to local storage
+    		kextpackLoader("$name");
 
-    	//Copying the kextpack to /Extra/Extentions
-    	$edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
-		if ($name != "") { system_call("cp -R $workpath/storage/kpsvn/$name/. $ee"); }
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
+    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    	}
 	}
 	
 	
@@ -467,13 +468,7 @@ function copyKexts() {
         }
     } 
     
-    
-    //Checking if we need USB Roolback fix
-    if ($modeldb[$modelID]['usbRollBack'] == "yes" || $modeldb[$modelID]['usbRollBack'] == "y") {
-    	$edp->writeToLog("$workpath/build.log", "  Copying USB Roolback kexts... <br>");
-    	system_call("cp -R $workpath/storage/kextpacks/usb_rollback/* $ee");
-    } 
-
+   
 
 
     
@@ -484,13 +479,14 @@ function copyKexts() {
     foreach($array as $id) {
 	    //Getting foldername from ID
         $name = $builder->getKextpackNameFromID("optionalpacks", "$id");
-        
-    	//Syncing kextpack to local storage
-    	kextpackLoader("$name");
+        if ($name != "") { 
+    		//Syncing kextpack to local storage
+    		kextpackLoader("$name");
 
-    	//Copying the kextpack to /Extra/Extentions
-		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $workpath/storage/kpsvn/$name to $ee<br>");
-		if ($name != "") { system_call("cp -R $workpath/storage/kpsvn/$name/. $ee"); }
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $workpath/storage/kpsvn/$name to $ee<br>");
+    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    	}
 	}
 
 
