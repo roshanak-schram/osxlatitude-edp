@@ -428,6 +428,25 @@ function copyKexts() {
 	//Resetting $name
 	$name = "";    
     
+
+
+    //New function for copying fakesmc kexts from kextpacks
+    $fakesmcid = $modeldb[$modelID]['fakesmc'];
+    $name = $fakesmcdb[$fakesmcid]["foldername"]; 
+    if ($modeldb[$modelID]['fakesmc'] != "" && $modeldb[$modelID]['fakesmc'] != "no" && $name != "") {   
+    	//Syncing kextpack to local storage
+    	kextpackLoader("$name");   
+    		
+    	//Copying the kextpack to /Extra/Extentions
+    	$edp->writeToLog("$workpath/build.log", "  Copying the fakesmc kext ($workpath/storage/kpsvn/$name) to $ee<br>");
+    	system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    }
+	//Resetting $name
+	$name = ""; 
+	
+    
+
+
     	
     //Copying audio kexts
     $audioid = $modeldb[$modelID]['audiopack'];
@@ -447,13 +466,7 @@ function copyKexts() {
         } else { system_call("cp -R $workpath/storage/kextpacks/$audiodir/. $ee/"); }   
     }
 
-    //Copying FakeSMC kextpack
-    $fakesmcid = $modeldb[$modelID]['fakesmc'];
-    $fakesmcdir = $fakesmcdb[$fakesmcid]["foldername"];
-    if ($modeldb[$modelID]['fakesmc'] != "" && $modeldb[$modelID]['fakesmc'] != "no") {
-        $edp->writeToLog("$workpath/build.log", "  Copying the FakeSMC kexts to $ee<br>");
-        system_call("cp -R $workpath/storage/kextpacks/$fakesmcdir/. $ee/");
-    }
+
 
     //Copying ethernet kexts
     if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
