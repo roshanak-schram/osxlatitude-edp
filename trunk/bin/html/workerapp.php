@@ -9,27 +9,31 @@ if ($action == "goto_hell") {
 	echo "<script>top.window.close();</script>";
 	
 	exit;
-	
 }
 
-
-include_once "header.inc.php";
 include_once "../functions.inc.php";
 include_once "../config.inc.php";
 
+// Ajax Methods
+//--- Builder page ajax actions
+if ($action == "builderSerieValues") {
+    echo builderGetSerieValues($_GET['vendor']);
+    exit;
+}
+if ($action == "builderModelValues") {
+    echo builderGetModelValues($_GET['vendor'], $_GET['serie']);
+    exit;
+}
+//---
 
-?>
 
-<script> 
-//Reference to the edp javascript core
-var edp = top.edp;
-</script>
+// Non Ajax methods below
+include_once "header.inc.php";
 
-
-<?
-
-
-
+?><script> 
+    //Reference to the edp javascript core
+    var edp = top.edp;
+</script><?
 
 if ($action == "") {
     echo "No action defined..";
