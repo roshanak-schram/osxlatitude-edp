@@ -385,6 +385,15 @@ function copyKexts() {
 
 
 
+
+	
+	
+
+
+
+
+
+
     //New function for copying PS2 kexts from kextpacks
     $ps2id = $modeldb[$modelID]['ps2pack'];
     if ($ps2id != "" && $ps2id != "no") {
@@ -397,16 +406,29 @@ function copyKexts() {
     		$edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
     		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
     	}
+	} 
+	//Resetting $name
+	$name = "";
+	
+
+
+    //New function for copying Wifi kexts from kextpacks
+    if ($modeldb[$modelID]['wifikext'] != "" && $modeldb[$modelID]['wifikext'] != "no") {
+        $wifid = $modeldb[$modelID]['wifikext'];
+        $name = $wifidb[$wifid]['foldername'];
+        if ($name != "") {
+    		//Syncing kextpack to local storage
+    		kextpackLoader("$name");   
+    		
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying the Wifi kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
+    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    	}
 	}
-	
-	
-
-
-
-    //Copying custom kexts from inside include folder
-    $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
-    system_call("cp -R $workpath/include/Extensions/* $ee");
-
+	//Resetting $name
+	$name = "";    
+    
+    	
     //Copying audio kexts
     $audioid = $modeldb[$modelID]['audiopack'];
     $audiodir = $audiodb[$audioid]["foldername"];
@@ -443,16 +465,12 @@ function copyKexts() {
         }
     }
 
-    //Copying wifi kexts
-    if ($modeldb[$modelID]['wifikext'] != "" && $modeldb[$modelID]['wifikext'] != "no") {
-        $wifid = $modeldb[$modelID]['wifikext'];
-        $wififolder = $wifidb[$wifid]['foldername'];
-        $wifikextname = $wifidb[$wifid]['kextname'];
-        if ($wififolder != "") {
-            $edp->writeToLog("$workpath/build.log", "  Copying the wifi kext to $ee ($wifikextname)<br>");
-            system_call("cp -R $workpath/storage/kextpacks/$wififolder/. $ee/");
-        }
-    }
+
+
+
+
+
+
 
     //Checking if we need nullcpu
     if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
@@ -556,6 +574,13 @@ function copyKexts() {
     $tf = "$workpath/model-data/$modelName/$os/Extensions";
     system_call("cp -Rf $tf/* $ee");
 
+
+    //Copying custom kexts from inside include folder
+    $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
+    system_call("cp -R $workpath/include/Extensions/* $ee");
+    
+    
+    
     $edp->writeToLog("$workpath/build.log", "  Applying fixes... <br>");
     AppleACPIfixCheck();
     GMA950brightnessfixCheck();
