@@ -37,7 +37,7 @@
 				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] ($row[arch]) - $row[notes]</option>\n";
 			}			
 			if (is_dir("/Extra/model-data/$mdrow[name]/common/applehda") || is_dir("/Extra/model-data/$mdrow[name]/$os/applehda")) { 
-				echo "<option value='buildin' SELECTED>&nbsp; Audio: Use predefined audio..</option>\n";
+				echo "<option value='buildin' SELECTED>&nbsp; Audio: AppleHDA.</option>\n";
 			}
 			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";			
 			echo "</select><span class='arrow'></span> </li>\n";

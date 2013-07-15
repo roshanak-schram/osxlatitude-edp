@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Credits</key>
+	<string>Created with Champlist</string>
+	<key>EDPmodel</key>
+	<string>Shuttle_XS35GT_804</string>
 	<key>SMbiosdate</key>
 	<string>04/22/11</string>
 	<key>SMbiosvendor</key>
@@ -17,7 +21,7 @@
 	<key>SMproductname</key>
 	<string>MacBookPro8,1</string>
 	<key>SMserial</key>
-	<string>C02J591JDH2G</string>
+	<string>C02H3812DH2G</string>
 	<key>SMsystemversion</key>
 	<string>1.0</string>
 </dict>
