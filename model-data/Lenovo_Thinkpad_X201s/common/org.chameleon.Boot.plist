@@ -2,10 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Credits</key>
-	<string>Created with Champlist</string>
 	<key>DSDT</key>
-	<string>/Extra/DSDT2.aml</string>
+	<string>/Extra/DSDT.aml</string>
 	<key>DropSSDT</key>
 	<string>Yes</string>
 	<key>EthernetBuiltIn</key>
@@ -17,7 +15,7 @@
 	<key>Graphics Mode</key>
 	<string>1440x900x32</string>
 	<key>Kernel Flags</key>
-	<string>-v</string>
+	<string></string>
 	<key>SystemType</key>
 	<string>2</string>
 	<key>Timeout</key>
