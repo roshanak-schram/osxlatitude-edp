@@ -8,14 +8,8 @@
 	<string>Yes</string>
 	<key>EthernetBuiltIn</key>
 	<string>Yes</string>
-	<key>GenerateCStates</key>
-	<string>Yes</string>
-	<key>GeneratePStates</key>
-	<string>Yes</string>
 	<key>Graphics Mode</key>
 	<string>1440x900x32</string>
-	<key>Kernel Flags</key>
-	<string></string>
 	<key>SystemType</key>
 	<string>2</string>
 	<key>Timeout</key>
