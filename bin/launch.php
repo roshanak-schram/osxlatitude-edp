@@ -2,9 +2,14 @@
 
 $workpath = "/Extra";
 
-//Check if db exists, and if not.. download it... 
+//Check if db exists, and if not.. download it...
 if (!file_exists("$workpath/bin/edp.sqlite3")) {
     system("curl -o $workpath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
+
+    if (!file_exists("$workpath/bin/edp.sqlite3")) {
+        // Nope still no good use backup!
+        system("cp $workpath/bin/edp.sqlite3 $workpath/bin/backup/edp.sqlite3");
+    }
 }
 
 include_once "config.inc.php";
