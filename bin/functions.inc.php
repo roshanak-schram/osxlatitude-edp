@@ -609,16 +609,31 @@ function copyKexts() {
 
 
     //Copying ethernet kexts
-    if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
+  /*  if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
         $lanid = $modeldb[$modelID]['ethernet'];
         $lankext = $landb[$lanid]['kextname'];
         $edp->writeToLog("$workpath/build.log", "  Copying the Lan kext to $ee ($lankext - ID: $lanid)<br>");
         if ($lankext != "") {
             system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/");
         }
-    }
-
-
+    }*/
+    
+//New function for copying ethernet kexts from kextpacks
+    if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
+        $lanid = $modeldb[$modelID]['ethernet'];
+        $lankext = $landb[$lanid]['name'];
+        $name = $landb[$lanid]['foldername'];
+        if ($name != "") {
+    		//Syncing kextpack to local storage
+    		kextpackLoader("$name");   
+    		
+    		if ($lankext != "") {
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying the Ethernet kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
+            system_call("cp -R $workpath/storage/kpsvn/$name/$lankext $ee/");
+       	 }	
+       }
+	}
 
 
 
