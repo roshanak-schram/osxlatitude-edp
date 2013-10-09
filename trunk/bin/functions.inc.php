@@ -272,9 +272,10 @@ function patchAppleIntelCPUPowerManagement() {
  * Patch AirPortAtheros40.kext for the card AR5B95/AR5B195 from Lion onwards
  */
 function patchWiFiAR9285() {
-	echo "  Applying AR9285 WiFi Fix for AR5B195/AR5B95\n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+	echo "  Applying AR9285 WiFi Fix for AR5B195/AR5B95 Test 1\n";
+
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
     }
     else { echo "  AirPortAtheros40.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
@@ -284,8 +285,8 @@ function patchWiFiAR9285() {
  */
 function patchWiFiAR9287() {
 	echo "  Applying AR9287 WiFi Fix for AR5B197\n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
     }
     else { echo "  AirPortAtheros40.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
@@ -295,20 +296,20 @@ function patchWiFiAR9287() {
  */
 function patchWiFiBTBCM4352() {
 	echo "  Applying BCM4352 WiFi Fix for BCM94352HMB card\n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");
     }
     else { echo "  AirPortBrcm4360.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
    
     echo "  Applying BCM20702A1 Bluetooth Fix for BCM94352HMB card\n";
-    $file = "$slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404 dict\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOClass string \"BroadcomBluetoothHCIControllerUSBTransport\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOProviderClass string \"IOUSBDevice\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:LMPLoggingEnabled bool \"NO\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idProduct integer \"13316\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idVendor integer \"5075\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    $file = "/System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404 dict\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOClass string \"BroadcomBluetoothHCIControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOProviderClass string \"IOUSBDevice\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:LMPLoggingEnabled bool \"NO\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idProduct integer \"13316\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idVendor integer \"5075\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     }
     else { echo "  BroadcomBluetoothHostControllerUSBTransport.kext not found for patching in System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/\n"; }
     
@@ -319,8 +320,8 @@ function patchWiFiBTBCM4352() {
  */
 function patchDW13957WiFiBCM43224() {
 	echo "  Applying BCM43224 WiFi Fix for Dell DW1395, DW1397 \n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
     }
      else { echo "  AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
@@ -330,8 +331,8 @@ function patchDW13957WiFiBCM43224() {
  */
 function patchDW13957WiFiBCM4311() {
 	echo "  Applying BCM4311 WiFi Fix for Dell DW1395, DW1397 \n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
     }
      else { echo "  AppleAirPortBrcm4311.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
@@ -341,9 +342,9 @@ function patchDW13957WiFiBCM4311() {
  */
 function patchWiFiBCM43224() {
 	echo "  Applying BCM43224 WiFi Fix for BCM943224 HMS and BCM943225 HMB \n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4353\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4353\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
     }
      else { echo "  AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
@@ -353,8 +354,8 @@ function patchWiFiBCM43224() {
  */
 function patchWiFiBCM4331() {
 	echo "  Applying BCM4331 WiFi Fix for BCM943225 HMB \n";
-	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" $slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
+	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist";   if (file_exists($file)) {
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
     }
      else { echo "  AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
@@ -502,11 +503,13 @@ function copyEssentials() {
 //Copying kexts 
 function copyKexts() {
     //Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
+    global $workpath, $rootpath, $slepathfull, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
     
     //Get our class(s)
     global $builder;
 
+	$slepathfull = "/System/Library/Extensions";
+	
     $modelName = $modeldb[$modelID]["name"];
 
     $edp->writeToLog("$workpath/build.log", "  Start by cleaning up in $ee..<br>");
@@ -550,14 +553,31 @@ function copyKexts() {
     //New function for copying Wifi kexts from kextpacks
     if ($modeldb[$modelID]['wifikext'] != "" && $modeldb[$modelID]['wifikext'] != "no") {
         $wifid = $modeldb[$modelID]['wifikext'];
-        $name = $wifidb[$wifid]['foldername'];
+        $name = $wifidb[$wifid]['kextname'];
         if ($name != "") {
     		//Syncing kextpack to local storage
-    		kextpackLoader("$name");   
+    		//kextpackLoader("$name");  
+    		
+    		$edp->writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
+    		
+    		if($wifid == "0")
+    			patchWiFiAR9285();
+    		else if($wifid == "1")
+    			patchWiFiAR9287();
+    		else if($wifid == "2")
+    			patchWiFiBTBCM4352();
+    		else if($wifid == "3")
+    			patchDW13957WiFiBCM43224();
+    		else if($wifid == "4")
+    			patchDW13957WiFiBCM4311();
+    		else if($wifid == "5")
+    			patchWiFiBCM43224();
+    		else if($wifid == "6")
+    			patchWiFiBCM4331();
     		
     		//Copying the kextpack to /Extra/Extentions
-    		$edp->writeToLog("$workpath/build.log", "  Copying the Wifi kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
-    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    		//$edp->writeToLog("$workpath/build.log", "  Copying the Wifi kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
+    		//system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
     	}
 	}
 	//Resetting $name
