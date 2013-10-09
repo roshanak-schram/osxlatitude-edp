@@ -704,7 +704,7 @@ function copyKexts() {
     		kextpackLoader("Others"); 
         $edp->writeToLog("$workpath/build.log", "  Copying Natit.kext to $ee.. <br>");
         //system_call("cp -R $workpath/storage/kexts/natit.kext $ee");
-        system_call("cp -R $workpath/storage/kpsvn/PowerMgmt/natit.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/Others/Natit.kext $ee");
     }
 
     if ($modeldb[$modelID]['tscsync'] == "yes" || $modeldb[$modelID]['tscsync'] == "y") {
@@ -765,11 +765,16 @@ function copyKexts() {
         system_call("cp $workpath/model-data/$modelName/$os/custom_kernel $rootpath");
     }
     
-    $edp->writeToLog("$workpath/build.log", "  Copying standard kexts to $ee.. <br>");
+    $edp->writeToLog("$workpath/build.log", "  Copying standard common kexts to $ee.. <br>");
     system_call("cp -R $workpath/storage/standard/common/Extensions/* $ee");
 
     $edp->writeToLog("$workpath/build.log", "  Copying $os kexts to $ee.. <br>");
     system_call("cp -R $workpath/storage/standard/$os/Extensions/* $ee");
+    
+    $edp->writeToLog("$workpath/build.log", "  Copying standard kexts to $ee.. <br>");
+    if ($os != "sl") {//skip on Snow leopard
+            system_call("cp -R $workpath/storage/standard/Extensions/* $ee");
+        }
 
     $edp->writeToLog("$workpath/build.log", "  Copying common kexts to $ee..<br>");
     $tf = "$workpath/model-data/$modelName/common/Extensions";
