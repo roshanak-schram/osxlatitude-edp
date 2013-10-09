@@ -642,8 +642,11 @@ function copyKexts() {
 
     //Checking if we need nullcpu
     if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
+    	//Syncing kextpack to local storage
+    		kextpackLoader("PowerMgmt"); 
         $edp->writeToLog("$workpath/build.log", "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. <br>");
-        system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee");
+        //system_call("cp -R $workpath/storage/kexts/NullCPUPowerManagement.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/PowerMgmt/NullCPUPowerManagement.kext $ee");
     }
 
     //Checking if we need to patch AHCI
@@ -679,28 +682,45 @@ function copyKexts() {
 
     //Checking if we need Sleepenabler
     if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
+    		//Syncing kextpack to local storage
+    		kextpackLoader("PowerMgmt"); 
+    		
         $edp->writeToLog("$workpath/build.log", "  Copying SleepEnabler.kext for enabling sleep...<br>");
-        system_call("cp -R $workpath/storage/kexts/$os/SleepEnabler.kext $ee");
+        //system_call("cp -R $workpath/storage/kexts/$os/SleepEnabler.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/PowerMgmt/SleepEnabler.kext $ee");
     }
 
     if ($modeldb[$modelID]['loadIOATAFamily'] == "yes") {
+    	//Syncing kextpack to local storage
+    		kextpackLoader("Others"); 
+    		
         $edp->writeToLog("$workpath/build.log", "  Copying IOATAFamily.kext to $ee.. <br>");
-        system_call("cp -R $workpath/storage/kexts/IOATAFamily.kext $ee");
+        //system_call("cp -R $workpath/storage/kexts/IOATAFamily.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/Others/IOATAFamily.kext $ee");
     }
 
     if ($modeldb[$modelID]['loadNatit'] == "yes") {
+    	//Syncing kextpack to local storage
+    		kextpackLoader("Others"); 
         $edp->writeToLog("$workpath/build.log", "  Copying Natit.kext to $ee.. <br>");
-        system_call("cp -R $workpath/storage/kexts/natit.kext $ee");
+        //system_call("cp -R $workpath/storage/kexts/natit.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/PowerMgmt/natit.kext $ee");
     }
 
     if ($modeldb[$modelID]['tscsync'] == "yes" || $modeldb[$modelID]['tscsync'] == "y") {
+    	//Syncing kextpack to local storage
+    		kextpackLoader("PowerMgmt"); 
         $edp->writeToLog("$workpath/build.log", "  Check if we need VoodooTSCSync.kext for syncing CPU cores...<br>");
-        system_call("cp -R $workpath/storage/kexts/VoodooTSCSync.kext $ee");
+        //system_call("cp -R $workpath/storage/kexts/VoodooTSCSync.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/PowerMgmt/VoodooTSCSync.kext $ee");
     }
 
     if ($modeldb[$modelID]['emulatedST'] == "yes" || $modeldb[$modelID]['emulatedST'] == "y") {
+    	//Syncing kextpack to local storage
+    		kextpackLoader("PowerMgmt"); 
         $edp->writeToLog("$workpath/build.log", "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu <br>");
-        system_call("cp -R $workpath/storage/kexts/VoodooPState.kext $ee");
+        //system_call("cp -R $workpath/storage/kexts/VoodooPState.kext $ee");
+        system_call("cp -R $workpath/storage/kpsvn/PowerMgmt/VoodooPState.kext $ee");
         system_call("cp $workpath/storage/LaunchAgents/PStateMenu.plist /Library/LaunchAgents");
     } else {
         system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist");
