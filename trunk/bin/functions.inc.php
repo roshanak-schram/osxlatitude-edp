@@ -176,7 +176,6 @@ function kextpackLoader($name) {
 	}
 } 
 
-
  
 /**
  * Function to check if the model is allready checked out
@@ -261,8 +260,13 @@ function downloadAndRun($url, $filetype, $filename, $execpath) {
 
 function patchAppleIntelCPUPowerManagement() {
     global $ee, $slepath;
-    system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
-    system_call('perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+    
+    $patchedInfoFile = "/System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist";
+    if (!file_exists($patchedInfoFile)) {
+    //system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
+    system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist");  
+    }
 }
 
 // WiFI and Bluetooth Kext Patching

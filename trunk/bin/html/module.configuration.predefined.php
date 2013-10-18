@@ -195,10 +195,10 @@ if ($action == "") {
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
 
 		//Download model data
-		$modelName = $mdrow[name];
+		/*$modelName = $mdrow[name];
 		echo "<div id='model_download' style='display: none'>";
 		svnModeldata("$modelName");
-		echo "</div>";
+		echo "</div>";*/
 		
 		//Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
