@@ -35,14 +35,21 @@ class builder {
 			system_call("<br>echo Building....<br><br> >$log");
 		}
 		
+		
+		echo "<div id='model_download'>";
+		echo "<p><B><center>Please wait for few minutes(will take approx 2-15 mnts which depends on your speed), while we download the files of your model................</center></p><br>";
+		echo "<p><B><center>When the download is finished then you will automatically redirected to build process and its Log</center></p><br>";
+		echo "</div>";
+		
 		//Check if myhack is up2date and ready for combat
 		myHackCheck();
 			
+		
 		//Step 1
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update local model data... </b><br>");
 		$modelName = $modeldb[$modelID]["name"];
 		svnModeldata("$modelName");
-
+			
 		//Step 2
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files to $workpath </b><br>");
 		copyEssentials();
