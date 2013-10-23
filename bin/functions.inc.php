@@ -559,9 +559,7 @@ function copyKexts() {
         $wifid = $modeldb[$modelID]['wifikext'];
         $name = $wifidb[$wifid]['kextname'];
         if ($name != "") {
-    		//Syncing kextpack to local storage
-    		//kextpackLoader("$name");  
-    		
+        	
     		$edp->writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
     		
     		if($wifid == "0")
@@ -579,9 +577,14 @@ function copyKexts() {
     		else if($wifid == "6")
     			patchWiFiBCM4331();
     		
-    		//Copying the kextpack to /Extra/Extentions
-    		//$edp->writeToLog("$workpath/build.log", "  Copying the Wifi kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
-    		//system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    		//Syncing kextpack to local storage
+    		if($wifid < 3)
+    		{
+    			kextpackLoader("BluetoothFWUploader"); 
+    			//Copying the kextpack to /Extra/Extentions
+    			$edp->writeToLog("$workpath/build.log", "  Copying the Bluetooth kext ($workpath/storage/kpsvn/BluetoothFWUploader) to $ee<br>");
+    			system_call("cp -R $workpath/storage/kpsvn/BluetoothFWUploader/. $ee");
+    		}
     	}
 	}
 	//Resetting $name
