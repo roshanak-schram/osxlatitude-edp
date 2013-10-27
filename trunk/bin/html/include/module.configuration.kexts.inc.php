@@ -31,15 +31,17 @@
 			$result = $edp_db->query("SELECT * FROM audio");
 			echo "<li class='select'>";
 			//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
-			echo "<select name='audiopack'>\n";			
+			echo "<select name='audiopack'>\n";	
+			if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected, may be using AppleHDA</option>"; }
+			else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }		
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[audiopack]" == "$row[id]") { $s = "SELECTED"; }
 				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] ($row[arch]) - $row[notes]</option>\n";
 			}			
-			if (is_dir("/Extra/model-data/$mdrow[name]/common/applehda") || is_dir("/Extra/model-data/$mdrow[name]/$os/applehda")) { 
+			/*if (is_dir("/Extra/EDP/model-data/$mdrow[name]/common/applehda") || is_dir("/Extra/EDP/model-data/$mdrow[name]/$os/applehda")) { 
 				echo "<option value='buildin' SELECTED>&nbsp; Audio: AppleHDA.</option>\n";
 			}
-			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";			
+			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";*/			
 			echo "</select><span class='arrow'></span> </li>\n";
 
 

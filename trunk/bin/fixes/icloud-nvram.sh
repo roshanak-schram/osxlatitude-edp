@@ -3,7 +3,7 @@ echo "This fix will fix the iCloud Find my Mac problem."
 echo "You need to put the check on manually!\n"
 sleep 2
 cd /Library/LaunchDaemons
-sudo cp /Extra/bin/fixes/storage/com.nvram.root.plist /Library/LaunchDaemons/com.nvram.root.plist
+sudo cp /Extra/EDP/bin/fixes/storage/com.nvram.root.plist /Library/LaunchDaemons/com.nvram.root.plist
 sudo chown root:wheel /Library/LaunchDaemons/com.nvram.root.plist
 
 # Put iCloud fix on!

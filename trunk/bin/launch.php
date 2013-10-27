@@ -1,6 +1,10 @@
 <?php
 
-$workpath = "/Extra";
+if(is_dir("/Extra/EDP")) {
+$workpath = "/Extra/EDP";
+}
+else { $workpath = "/Extra"; };
+
 
 //Check if db exists, and if not.. download it...
 if (!file_exists("$workpath/bin/edp.sqlite3")) {
@@ -21,8 +25,7 @@ $os = getVersion();
 if ($os == "lion" || $os == "ml" || $os == "mav") {
 	//EDP app is not being closed automatically after we click close, so we manually close this and open again when we launch it
 	system("sudo killall EDP"); 
-	//
-    system("open /Extra/storage/apps/EDPweb.app");
+    system("open $workpath/storage/apps/EDPweb.app");
 } else {
     system("open http://127.0.0.1:11250/");
 }

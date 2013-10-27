@@ -1,7 +1,12 @@
 <?php
 
 // Main vars
+if(is_dir("/Extra/EDP")) {
+$workpath = "/Extra/EDP";
+}
+else {
 $workpath = "/Extra";
+}
 
 
 // SQLite stuff :)

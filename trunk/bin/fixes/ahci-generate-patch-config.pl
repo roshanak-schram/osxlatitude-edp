@@ -172,7 +172,7 @@ sub dump_patches()
 
 #    print STDERR Data::Dumper->Dump([\@patches], ['*patches']);
 
-    open (FILE, "> /Extra/bin/fixes/patch-ahci.config") or die "can't open /Extra/bin/fixes/patch-ahci.config: $!";
+    open (FILE, "> /Extra/EDP/bin/fixes/patch-ahci.config") or die "can't open /Extra/EDP/bin/fixes/patch-ahci.config: $!";
     print FILE Data::Dumper->Dump([\@patches], ['*patches']);
     close FILE        
 }
@@ -193,7 +193,7 @@ sub main()
 	printf "OS version: %s\n", $osxvers;
     }
 
-    if ($err = read_config("/Extra/bin/fixes/patch-ahci.config")) {
+    if ($err = read_config("/Extra/EDP/bin/fixes/patch-ahci.config")) {
 	printf "No existing patch config file was found; a new one will be generated.\n";
     }
     $patch = {};

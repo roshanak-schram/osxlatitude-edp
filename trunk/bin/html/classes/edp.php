@@ -15,10 +15,10 @@ class edp {
     	system_call("svn --non-interactive --username edp --password edp --force update $workpath");
 
     	echo "\nUpdating database... <br><br>\n";
-    	system_call("rm -Rf /Extra/bin/edp.sqlite3");
-    	system_call("curl -o /Extra/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
+    	system_call("rm -Rf $workpath/bin/edp.sqlite3");
+    	system_call("curl -o $workpath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
 
-    	system_call("chmod -R 755 /Extra");
+    	system_call("chmod -R 755 $workpath");
     	echo "\n<br> .. Your EDP have been updated...<br><br>.. Press COMMAND+R to reload EDP...<br>\n";
 
     	exit;

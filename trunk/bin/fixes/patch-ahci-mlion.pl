@@ -104,7 +104,7 @@ sub main()
 	printf "This patch is for OSX 10.8/10.8.x only\n";
 	exit(1);
     }
-    if ($err = read_config("/Extra/bin/fixes/patch-ahci.config")) {
+    if ($err = read_config("/Extra/EDP/bin/fixes/patch-ahci.config")) {
 	printf(STDERR "%s\n", $err);
 	printf "\nThis script requires the configuration file patch-ahci.config to\nspecify the patches.  The script ahci-generate-patch-config.pl can\nbe run to auto-generate the patches.\n";
 	exit(1);
