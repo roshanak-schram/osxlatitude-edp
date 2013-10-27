@@ -20,7 +20,7 @@
 
 function doCustomBuild() {
 	global $useIncExtentions; global $useIncDSDT; global $useIncSSDT; global $useIncSMBIOS; global $useIncCHAM; global $workpath; global $edp;
-	$incpath = "$workpath/include"; global $ee;
+	$incpath = "/Extra/include"; global $ee;
 
 
 	//Start by defining our log file and cleaning it..
@@ -36,33 +36,33 @@ function doCustomBuild() {
 	
 	if ($useIncExtentions == "yes") { 
 		$edp->writeToLog("$workpath/build.log", "Copying $incpath/Extensions to $ee <br>");
-		system_call("cp -R $workpath/include/Extensions/*.kext $ee");
+		system_call("cp -R /Extra/include/Extensions/*.kext $ee");
 	}	
 	
 	if ($useIncDSDT == "yes") {
-		$edp->writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to $workpath <br>");
-		system_call("cp -f $workpath/include/dsdt.aml /Extra");
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to /Extra<br>");
+		system_call("cp -f /Extra/include/dsdt.aml /Extra");
 	} 	
 	
 	
 	
 	if ($useIncSSDT == "yes") {
-		$edp->writeToLog("$workpath/build.log", "Copying SSDT files to $workpath <br>");
-    	if (is_file("$workpath/include/SSDT.aml")) 					{ system_call("cp -f $workpath/include/SSDT.aml /Extra"); }
-    	if (is_file("$workpath/include/SSDT-1.aml")) 				{ system_call("cp -f $workpath/include/SSDT-1.aml /Extra"); }
-    	if (is_file("$workpath/include/SSDT-2.aml")) 				{ system_call("cp -f $workpath/include/SSDT-2.aml /Extra"); }
-    	if (is_file("$workpath/include/SSDT-3.aml")) 				{ system_call("cp -f $workpath/include/SSDT-3.aml /Extra"); }    
-    	if (is_file("$workpath/include/SSDT-4.aml")) 				{ system_call("cp -f $workpath/include/SSDT-4.aml /Extra"); }
-    	if (is_file("$workpath/include/SSDT-5.aml")) 				{ system_call("cp -f $workpath/include/SSDT-5.aml /Extra"); } 		
+		$edp->writeToLog("$workpath/build.log", "Copying SSDT files to /Extra<br>");
+    	if (is_file("/Extra/include/SSDT.aml")) 					{ system_call("cp -f /Extra/include/SSDT.aml /Extra"); }
+    	if (is_file("/Extra/include/SSDT-1.aml")) 				{ system_call("cp -f /Extra/include/SSDT-1.aml /Extra"); }
+    	if (is_file("/Extra/include/SSDT-2.aml")) 				{ system_call("cp -f /Extra/include/SSDT-2.aml /Extra"); }
+    	if (is_file("/Extra/include/SSDT-3.aml")) 				{ system_call("cp -f /Extra/include/SSDT-3.aml /Extra"); }    
+    	if (is_file("/Extra/include/SSDT-4.aml")) 				{ system_call("cp -f /Extra/include/SSDT-4.aml /Extra"); }
+    	if (is_file("/Extra/include/SSDT-5.aml")) 				{ system_call("cp -f /Extra/include/SSDT-5.aml /Extra"); } 		
 	}
 	if ($useIncSMBIOS == "yes")	{
-		$edp->writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to $workpath <br>"); 
-		system_call("cp -f $workpath/include/smbios.plist /Extra");
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to /Extra<br>"); 
+		system_call("cp -f /Extra/include/smbios.plist /Extra");
 	}
 	
 	if ($useIncCHAM == "yes") { 
-		$edp->writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to $workpath <br>");
-		system_call("cp -f $workpath/include/org.chameleon.Boot.plist /Extra");
+		$edp->writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to /Extra<br>");
+		system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra");
 	}		
 
 

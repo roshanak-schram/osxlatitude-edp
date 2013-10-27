@@ -1,9 +1,9 @@
-echo "Cleaning up /Extra using SVN \n"
-svn cleanup /Extra
+echo "Cleaning up /Extra/EDP using SVN \n"
+svn cleanup /Extra/EDP
 echo "Downloading latest sources from EDP's svn server \n"
 svn --non-interactive --username edp --password edp --force update /Extra
 
-cd /Extra/bin
+cd /Extra/EDP/bin
 
 rm -Rf edp.sqlite3
 
@@ -14,4 +14,4 @@ else
     cp backup/edp.sqlite3 ./edp.sqlite3
 fi
 
-chmod -R 755 /Extra
+chmod -R 755 /Extra/EDP

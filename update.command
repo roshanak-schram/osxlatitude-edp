@@ -1,1 +1,1 @@
-sudo /Extra/bin/update.sh
+sudo /Extra/EDP/bin/update.sh

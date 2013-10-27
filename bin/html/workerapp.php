@@ -179,7 +179,7 @@ if ($action == "fix-airdrop") {
 
 if ($action == "fix-spdisplays") {
     echo "<pre>";
-    system_call("/Extra/bin/fixes/Color-LCD-fix.sh");
+    system_call("$workpath/bin/fixes/Color-LCD-fix.sh");
     exit;
 }
 
@@ -254,11 +254,11 @@ function fixes_toogleHibernationMode() {
 
 
 function fixes_icloud_recoveryhd() {
-    system_call("/Extra/bin/fixes/icloud-recoveryhd.sh");
+    system_call("$workpath/bin/fixes/icloud-recoveryhd.sh");
 }	
 	
 function fixes_icloud_nvram() {
-    system_call("/Extra/bin/fixes/icloud-nvram.sh");
+    system_call("$workpath/bin/fixes/icloud-nvram.sh");
 }	
 	
 	

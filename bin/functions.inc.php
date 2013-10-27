@@ -89,7 +89,8 @@ function updateCham() {
     // Note: Overtime we will add a function to make sure that the user have the latest version 
     // of cham distrobuted with EDP - until then, we will force the update on each build    
     echo "  Updating Chameleon to latest versions from EDP \n";
-    system_call("cp -f /Extra/storage/boot /");
+    //system_call("cp -f /Extra/EDP/storage/boot /");
+     system_call("cp -f $workpath/storage/boot /");
 }
 
 
@@ -156,7 +157,8 @@ function checkSVNrevs() {
 function patchAHCI() {
 	global $workpath;
     system_call("cp -R /System/Library/Extensions/IOAHCIFamily.kext /Extra/Extensions");
-    system_call("perl /Extra/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
+    //system_call("perl /Extra/EDP/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
+    system_call("perl $workpath/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
 }
 
 
@@ -171,7 +173,7 @@ function kextpackLoader($name) {
 			system_call("svn --non-interactive --username edp --password edp --force update $workfolder");
 		}
 		else {
-			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >>/Extra/kpload.log");
+			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >>$workpath/kpload.log");
 		}
 	}
 } 
@@ -436,7 +438,7 @@ function kernelcachefix() {
     $chkdir = $rootpath . "/System/Library/Caches/com.apple.kext.caches/Startup";
     $kerncachefile = $rootpath . "/System/Library/Caches/com.apple.kext.caches/Startup/kernelcache";
 
-    if (!is_dir("$chkdir") && $workpath == "/Extra") {
+    if (!is_dir("$chkdir") && ($workpath == "/Extra/EDP" || $workpath == "/Extra")) {
         system_call("mkdir $chkdir");
         if (file_exists($kerncachefile)) {
             echo "\n\nWARNING: Falling back to EDP kernelcache generation - myfix was not successfull.. \n\n";
@@ -452,54 +454,71 @@ function copyEssentials() {
     $edp->writeToLog("$workpath/build.log", "Cleaning up by system...<br>");
     edpCleaner();
 
-    $file = "$workpath/smbios.plist";
+	$extrapath = "/Extra";
+	
+    $file = "$extrapath/smbios.plist";
     if (file_exists($file)) { system_call("rm $file"); }
 
-    $file = "$workpath/org.chameleon.Boot.plist";
+    $file = "$extrapath/org.chameleon.Boot.plist";
     if (file_exists($file)) { system_call("rm $file"); }
 
-    $file = "$workpath/dsdt.aml";
+    $file = "$extrapath/dsdt.aml";
     if (file_exists($file)) { system_call("rm $file"); }
         
 
     //Remove old SSDT table files
-    $file = "$workpath/SSDT.aml";   if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$workpath/SSDT-1.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$workpath/SSDT-2.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$workpath/SSDT-3.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$workpath/SSDT-4.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$workpath/SSDT-5.aml"; if (file_exists($file)) { system_call("rm $file"); }
+    $file = "$extrapath/SSDT.aml";   if (file_exists($file)) { system_call("rm $file"); }
+    $file = "$extrapath/SSDT-1.aml"; if (file_exists($file)) { system_call("rm $file"); }
+    $file = "$extrapath/SSDT-2.aml"; if (file_exists($file)) { system_call("rm $file"); }
+    $file = "$extrapath/SSDT-3.aml"; if (file_exists($file)) { system_call("rm $file"); }
+    $file = "$extrapath/SSDT-4.aml"; if (file_exists($file)) { system_call("rm $file"); }
+    $file = "$extrapath/SSDT-5.aml"; if (file_exists($file)) { system_call("rm $file"); }
 
-    $edp->writeToLog("$workpath/build.log", "  Copying COMMON system plists and dsdt.aml from $workpath/model-data/$modelName/common to $workpath<br>");
-    $file = "$workpath/model-data/$modelName/common/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $workpath"); }
+    $edp->writeToLog("$workpath/build.log", "  Copying COMMON system plists and dsdt.aml from $workpath/model-data/$modelName/common to $extrapath<br>");
+    $file = "$workpath/model-data/$modelName/common/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/common/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
 
-    $edp->writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $workpath<br>");		
-    $file = "$workpath/model-data/$modelName/$os/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $workpath"); }					
+    $edp->writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $extrapath<br>");		
+    $file = "$workpath/model-data/$modelName/$os/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }					
 
+	// set UseKernelCache to Yes from org.chameleon.Boot.plist
+	system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
+	
     $edp->writeToLog("$workpath/build.log", "  Checking if your model includes SSDT dump files - will copy if any exists..<br>");
-    $file = "$workpath/model-data/$modelName/common/SSDT.aml";   if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-1.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-2.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-3.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; if (file_exists($file)) { system_call("cp -f $file $workpath"); }			
+    $file = "$workpath/model-data/$modelName/common/SSDT.aml";   if (file_exists($file)) 
+    { 
+    	system_call("cp -f $file $extrapath");
+    	// set DropSSDT to Yes from org.chameleon.Boot.plist
+		system("sudo /usr/libexec/PlistBuddy -c \"set DropSSDT Yes\" $extrapath/org.chameleon.Boot.plist"); 
+    }
+    $file = "$workpath/model-data/$modelName/common/SSDT-1.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/common/SSDT-2.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/common/SSDT-3.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }			
 
+	// Copy Themes folder from EDP workpath to Extra
+    if (!is_dir("/Extra/Themes")) {
+        $edp->writeToLog("$workpath/build.log", "  Copying themes folder to /Extra<br>");
+    	system_call("mkdir /Extra/Themes");
+		//system_call("cp -R /Extra/EDP/Themes/. /Extra/Themes");
+		system_call("cp -R $workpath/Themes/. /Extra/Themes");
+     }
 
     //Copy essentials from /Extra/include
     $edp->writeToLog("$workpath/build.log", "  Checking if we have any essential files in /Extra/include that will be used instead...<br>");
-    if (is_file("$workpath/include/smbios.plist")) 				{ system_call("cp -f $workpath/include/smbios.plist /Extra"); }
-    if (is_file("$workpath/include/org.chameleon.Boot.plist")) 	{ system_call("cp -f $workpath/include/org.chameleon.Boot.plist /Extra"); }
-    if (is_file("$workpath/include/dsdt.aml")) 					{ system_call("cp -f $workpath/include/dsdt.aml /Extra"); }
-    if (is_file("$workpath/include/SSDT.aml")) 					{ system_call("cp -f $workpath/include/SSDT.aml /Extra"); }
-    if (is_file("$workpath/include/SSDT-1.aml")) 				{ system_call("cp -f $workpath/include/SSDT-1.aml /Extra"); }
-    if (is_file("$workpath/include/SSDT-2.aml")) 				{ system_call("cp -f $workpath/include/SSDT-2.aml /Extra"); }
-    if (is_file("$workpath/include/SSDT-3.aml")) 				{ system_call("cp -f $workpath/include/SSDT-3.aml /Extra"); }    
-    if (is_file("$workpath/include/SSDT-4.aml")) 				{ system_call("cp -f $workpath/include/SSDT-4.aml /Extra"); }
-    if (is_file("$workpath/include/SSDT-5.aml")) 				{ system_call("cp -f $workpath/include/SSDT-5.aml /Extra"); }    
+    if (is_file("/Extra/include/smbios.plist")) 				{ system_call("cp -f /Extra/include/smbios.plist /Extra"); }
+    if (is_file("/Extra/include/org.chameleon.Boot.plist")) 	{ system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra"); }
+    if (is_file("/Extra/include/dsdt.aml")) 					{ system_call("cp -f /Extra/include/dsdt.aml /Extra"); }
+    if (is_file("/Extra/include/SSDT.aml")) 					{ system_call("cp -f /Extra/include/SSDT.aml /Extra"); }
+    if (is_file("/Extra/include/SSDT-1.aml")) 				{ system_call("cp -f /Extra/include/SSDT-1.aml /Extra"); }
+    if (is_file("/Extra/include/SSDT-2.aml")) 				{ system_call("cp -f /Extra/include/SSDT-2.aml /Extra"); }
+    if (is_file("/Extra/include/SSDT-3.aml")) 				{ system_call("cp -f /Extra/include/SSDT-3.aml /Extra"); }    
+    if (is_file("/Extra/include/SSDT-4.aml")) 				{ system_call("cp -f /Extra/include/SSDT-4.aml /Extra"); }
+    if (is_file("/Extra/include/SSDT-5.aml")) 				{ system_call("cp -f /Extra/include/SSDT-5.aml /Extra"); }    
 }
 
 
