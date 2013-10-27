@@ -482,7 +482,14 @@ function copyEssentials() {
     $edp->writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $extrapath<br>");		
     $file = "$workpath/model-data/$modelName/$os/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }					
+    $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    
+    // If its mavericks then copy the file from ml folder
+    if($os == "mav" && !is_dir("$workpath/model-data/$modelName/$os")) {
+    $file = "$workpath/model-data/$modelName/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    $file = "$workpath/model-data/$modelName/ml/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    }				
 
 	// set UseKernelCache to Yes from org.chameleon.Boot.plist
 	system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
