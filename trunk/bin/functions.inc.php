@@ -277,37 +277,39 @@ function patchAppleIntelCPUPowerManagement() {
 /*
  * Patch AirPortAtheros40.kext for the card AR5B95/AR5B195 from Lion onwards
  */
-function patchWiFiAR9285() {
-	echo "  Applying AR9285 WiFi Fix for AR5B195/AR5B95 Test 1\n";
+function patchWiFiAR9285AndAR9287() {
+	echo "  Applying AR9285/AR9287 WiFi Fix for AR5B195/AR5B95 and AR5B197\n";
 
+	$patchedInfoFile = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
 	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/KextPatched.plist"); 
     }
     else { echo "  AirPortAtheros40.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+  }
 }
 
-/*
- * Patch AirPortAtheros40.kext for the card AR5B197 from Lion onwards
- */
-function patchWiFiAR9287() {
-	echo "  Applying AR9287 WiFi Fix for AR5B197\n";
-	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist";   if (file_exists($file)) {
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
-    }
-    else { echo "  AirPortAtheros40.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
-}
 
 /*
  * Patch AirPortBrcm4360.kext and BroadcomBluetoothHostControllerUSBTransport.kext for the card BCM94352HMB from Mountain Lion 10.8.5 onwards
  */
 function patchWiFiBTBCM4352() {
 	echo "  Applying BCM4352 WiFi Fix for BCM94352HMB card\n";
+	
+	$patchedInfoFile = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
 	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/KextPatched.plist");
     }
     else { echo "  AirPortBrcm4360.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+    }
    
     echo "  Applying BCM20702A1 Bluetooth Fix for BCM94352HMB card\n";
+    $patchedInfoFile = "/System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
     $file = "/System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404 dict\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
@@ -316,8 +318,10 @@ function patchWiFiBTBCM4352() {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:LMPLoggingEnabled bool \"NO\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idProduct integer \"13316\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idVendor integer \"5075\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/KextPatched.plist");
     }
     else { echo "  BroadcomBluetoothHostControllerUSBTransport.kext not found for patching in System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/\n"; }
+  }
     
 }
 
@@ -326,10 +330,14 @@ function patchWiFiBTBCM4352() {
  */
 function patchDW13957WiFiBCM43224() {
 	echo "  Applying BCM43224 WiFi Fix for Dell DW1395, DW1397 \n";
+	$patchedInfoFile = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
 	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
     }
      else { echo "  AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+  }
 }
 
 /*
@@ -337,10 +345,14 @@ function patchDW13957WiFiBCM43224() {
  */
 function patchDW13957WiFiBCM4311() {
 	echo "  Applying BCM4311 WiFi Fix for Dell DW1395, DW1397 \n";
+	$patchedInfoFile = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
 	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/KextPatched.plist");
     }
      else { echo "  AppleAirPortBrcm4311.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+  }
 }
 
 /*
@@ -348,11 +360,15 @@ function patchDW13957WiFiBCM4311() {
  */
 function patchWiFiBCM43224() {
 	echo "  Applying BCM43224 WiFi Fix for BCM943224 HMS and BCM943225 HMB \n";
+	$patchedInfoFile = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
 	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4353\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
     }
      else { echo "  AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+   }
 }
 
 /*
@@ -360,10 +376,14 @@ function patchWiFiBCM43224() {
  */
 function patchWiFiBCM4331() {
 	echo "  Applying BCM4331 WiFi Fix for BCM943225 HMB \n";
+	$patchedInfoFile = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
 	$file = "/System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" /System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/KextPatched.plist");
     }
      else { echo "  AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+   }
 }
 
 //<-----------------------------------------------------------------------------------------------------------------------------------
@@ -484,12 +504,13 @@ function copyEssentials() {
     $file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     
-    // If its mavericks then copy the file from ml folder
+    // If its mavericks then copy the file from ml folder for now
     if($os == "mav" && !is_dir("$workpath/model-data/$modelName/$os")) {
+    $edp->writeToLog("$workpath/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder..<br>");
     $file = "$workpath/model-data/$modelName/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     $file = "$workpath/model-data/$modelName/ml/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-    }				
+    }						
 
 	// set UseKernelCache to Yes from org.chameleon.Boot.plist
 	system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
@@ -545,24 +566,9 @@ function copyKexts() {
     $edp->writeToLog("$workpath/build.log", "  Start by cleaning up in $ee..<br>");
     system_call("rm -Rf $ee/*.kext");
 
-    //Checking if we need to patch AppleIntelCPUPowerManagement.kext
-    $pathCPU = $modeldb[$modelID]["patchCPU"];
-    if ($pathCPU == "yes") {
-        patchAppleIntelCPUPowerManagement();
-    }
-
-
-
-
-	
-	
-
-
-
-
-
-
-    //New function for copying PS2 kexts from kextpacks
+    /*********************** Begin Kexts related to Hardware *****************************/
+    
+    //copying PS2 kexts from kextpacks
     $ps2id = $modeldb[$modelID]['ps2pack'];
     if ($ps2id != "" && $ps2id != "no") {
     	$name = $ps2db[$ps2id]["foldername"];
@@ -579,8 +585,7 @@ function copyKexts() {
 	$name = "";
 	
 
-
-    //New function for copying Wifi kexts from kextpacks
+    //copying Wifi/BT kexts from kextpacks/ patch Wifi/BT Kexts
     if ($modeldb[$modelID]['wifikext'] != "" && $modeldb[$modelID]['wifikext'] != "no") {
         $wifid = $modeldb[$modelID]['wifikext'];
         $name = $wifidb[$wifid]['kextname'];
@@ -588,10 +593,8 @@ function copyKexts() {
         	
     		$edp->writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
     		
-    		if($wifid == "0")
-    			patchWiFiAR9285();
-    		else if($wifid == "1")
-    			patchWiFiAR9287();
+    		if($wifid == "0" || $wifid == "1")
+    			patchWiFiAR9285AndAR9287();
     		else if($wifid == "2")
     			patchWiFiBTBCM4352();
     		else if($wifid == "3")
@@ -617,8 +620,7 @@ function copyKexts() {
 	$name = "";    
     
 
-
-    //New function for copying fakesmc kexts from kextpacks
+    //copying fakesmc kexts from kextpacks
     $fakesmcid = $modeldb[$modelID]['fakesmc'];
     $name = $fakesmcdb[$fakesmcid]["foldername"]; 
     if ($modeldb[$modelID]['fakesmc'] != "" && $modeldb[$modelID]['fakesmc'] != "no" && $name != "") {   
@@ -632,11 +634,8 @@ function copyKexts() {
 	//Resetting $name
 	$name = ""; 
 	
-    
-
-
     	
-    //New function for copying audio kexts
+    //copying audio kexts
     $audioid = $modeldb[$modelID]['audiopack'];
     $audiodir = $audiodb[$audioid]["foldername"]; $name = $audiodir;
     if ($modeldb[$modelID]['audiopack'] != "" && $modeldb[$modelID]['audiopack'] != "no") {
@@ -660,18 +659,7 @@ function copyKexts() {
 	$name = ""; 
 	
 
-
-    //Copying ethernet kexts
-  /*  if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
-        $lanid = $modeldb[$modelID]['ethernet'];
-        $lankext = $landb[$lanid]['kextname'];
-        $edp->writeToLog("$workpath/build.log", "  Copying the Lan kext to $ee ($lankext - ID: $lanid)<br>");
-        if ($lankext != "") {
-            system_call("cp -R $workpath/storage/kexts/networking/$lankext $ee/");
-        }
-    }*/
-    
-//New function for copying ethernet kexts from kextpacks
+	//copying ethernet kexts from kextpacks
     if ($modeldb[$modelID]['ethernet'] != "" && $modeldb[$modelID]['ethernet'] != "no") {
         $lanid = $modeldb[$modelID]['ethernet'];
         $lankext = $landb[$lanid]['name'];
@@ -688,10 +676,51 @@ function copyKexts() {
        }
 	}
 
+	//copying battery kexts from kextpacks
+    if ($modeldb[$modelID]['batteryKext'] != "" && $modeldb[$modelID]['batteryKext'] != "no") {
+        $battid = $modeldb[$modelID]['batteryKext'];
+        $name = $batterydb[$battid]['foldername'];
+        if ($name != "") {
+    		//Syncing kextpack to local storage
+    		kextpackLoader("$name");   
+    		
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying the Battery kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
+    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    	}
+	}
+	
+	//Resetting $name
+	$name = ""; 
+	
+	
+	 //Copy optional kexts
+    $data = $modeldb[$modelID]['optionalpacks'];
+    $array 	= explode(',', $data);
+    
+    foreach($array as $id) {
+	    //Getting foldername from ID
+        $name = $builder->getKextpackNameFromID("optionalpacks", "$id");
+        if ($name != "") { 
+    		//Syncing kextpack to local storage
+    		kextpackLoader("$name");
+
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $workpath/storage/kpsvn/$name to $ee<br>");
+    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
+    	}
+	}
 
 
-
-
+ /*********************** End Kexts related to Hardware *****************************/
+ 
+/*********************** Begin Fixes and Patches *****************************/
+  
+	//Checking if we need to patch AppleIntelCPUPowerManagement.kext
+    $pathCPU = $modeldb[$modelID]["patchCPU"];
+    if ($pathCPU == "yes") {
+        patchAppleIntelCPUPowerManagement();
+    }
 
     //Checking if we need nullcpu
     if ($modeldb[$modelID]['nullcpu'] == "yes" || $modeldb[$modelID]['nullcpu'] == "y") {
@@ -710,28 +739,6 @@ function copyKexts() {
         }
     } 
     
-   
-
-
-    
-    //Copy optinal kexts
-    $data = $modeldb[$modelID]['optionalpacks'];
-    $array 	= explode(',', $data);
-    
-    foreach($array as $id) {
-	    //Getting foldername from ID
-        $name = $builder->getKextpackNameFromID("optionalpacks", "$id");
-        if ($name != "") { 
-    		//Syncing kextpack to local storage
-    		kextpackLoader("$name");
-
-    		//Copying the kextpack to /Extra/Extentions
-    		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $workpath/storage/kpsvn/$name to $ee<br>");
-    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
-    	}
-	}
-
-
 
     //Checking if we need Sleepenabler
     if ($modeldb[$modelID]['sleepEnabler'] == "yes" || $modeldb[$modelID]['sleepEnabler'] == "y") {
@@ -779,30 +786,6 @@ function copyKexts() {
         system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist");
     }
 
-    //Copy battery kexts
-    /*if ($modeldb[$modelID]['batteryKext'] != "" && $modeldb[$modelID]['batteryKext'] != "no") {
-        $battid = $modeldb[$modelID]['batteryKext'];
-        $battkext = $batterydb[$battid]["kextname"];
-        $edp->writeToLog("$workpath/build.log", "  Copying Battery kext ($battkext) to $ee <br>");
-        system_call("cp -R $workpath/storage/kexts/battery/$os/$battkext $ee/");
-    }*/
-
-	//New function for copying battery kexts from kextpacks
-    if ($modeldb[$modelID]['batteryKext'] != "" && $modeldb[$modelID]['batteryKext'] != "no") {
-        $battid = $modeldb[$modelID]['batteryKext'];
-        $name = $batterydb[$battid]['foldername'];
-        if ($name != "") {
-    		//Syncing kextpack to local storage
-    		kextpackLoader("$name");   
-    		
-    		//Copying the kextpack to /Extra/Extentions
-    		$edp->writeToLog("$workpath/build.log", "  Copying the Battery kexts ($workpath/storage/kpsvn/$name) to $ee<br>");
-    		system_call("cp -R $workpath/storage/kpsvn/$name/. $ee");
-    	}
-	}
-	
-	//Resetting $name
-	$name = ""; 
 	
     //Check if we need a custom version of chameleon
     if ($modeldb[$modelID]['customCham'] == "yes" || $modeldb[$modelID]['customCham'] == "y") {
@@ -818,6 +801,15 @@ function copyKexts() {
         system_call("cp $workpath/model-data/$modelName/$os/custom_kernel $rootpath");
     }
     
+    $edp->writeToLog("$workpath/build.log", "  Applying fixes... <br>");
+    AppleACPIfixCheck();
+    GMA950brightnessfixCheck();
+    
+    /*********************** End Fixes and Patches *****************************/
+
+
+	/*********************** Begin Common and Custom kexts *****************************/
+
     $edp->writeToLog("$workpath/build.log", "  Copying standard common kexts to $ee.. <br>");
     system_call("cp -R $workpath/storage/standard/common/Extensions/* $ee");
 
@@ -842,11 +834,6 @@ function copyKexts() {
     $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
     system_call("cp -R $workpath/include/Extensions/* $ee");
     
-    
-    
-    $edp->writeToLog("$workpath/build.log", "  Applying fixes... <br>");
-    AppleACPIfixCheck();
-    GMA950brightnessfixCheck();
 
     $edp->writeToLog("$workpath/build.log", "  Applying custom plists, kexts etc.");
     //Copying kexts
@@ -856,6 +843,9 @@ function copyKexts() {
     //Copying any plists files to /Extra
     system_call("cp -R $incpath/*.plist $workpath");
 
+	/*********************** End Common and Custom kexts *****************************/
+	
+	
     $edp->writeToLog("$workpath/build.log", "  Removing version control of kexts in $ee");
     system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
 }
