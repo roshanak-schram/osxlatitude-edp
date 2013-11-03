@@ -312,8 +312,8 @@ function patchWiFiBTBCM4352() {
 	if (!file_exists($patchedInfoFile)) {
     $file = "/System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist";   if (file_exists($file)) {
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404 dict\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOClass string \"BroadcomBluetoothHCIControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOClass string \"BroadcomBluetoothHostControllerUSBTransport\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOProviderClass string \"IOUSBDevice\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:LMPLoggingEnabled bool \"NO\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idProduct integer \"13316\"\" /System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
@@ -499,12 +499,12 @@ function copyEssentials() {
     $file = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/common/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
 
-    $edp->writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $extrapath<br>");		
+    $edp->writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $extrapath if it has<br>");		
     $file = "$workpath/model-data/$modelName/$os/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     
-    // If its mavericks then copy the file from ml folder for now
+    // If its mavericks then copy the files from ml folder for now
     if($os == "mav" && !is_dir("$workpath/model-data/$modelName/$os")) {
     $edp->writeToLog("$workpath/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder..<br>");
     $file = "$workpath/model-data/$modelName/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
@@ -528,25 +528,25 @@ function copyEssentials() {
     $file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }			
 
-	// Copy Themes folder from EDP workpath to Extra
-    if (!is_dir("/Extra/Themes")) {
-        $edp->writeToLog("$workpath/build.log", "  Copying themes folder to /Extra<br>");
-    	system_call("mkdir /Extra/Themes");
-		//system_call("cp -R /Extra/EDP/Themes/. /Extra/Themes");
-		system_call("cp -R $workpath/Themes/. /Extra/Themes");
-     }
 
-    //Copy essentials from /Extra/include
-    $edp->writeToLog("$workpath/build.log", "  Checking if we have any essential files in /Extra/include that will be used instead...<br>");
-    if (is_file("/Extra/include/smbios.plist")) 				{ system_call("cp -f /Extra/include/smbios.plist /Extra"); }
-    if (is_file("/Extra/include/org.chameleon.Boot.plist")) 	{ system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra"); }
-    if (is_file("/Extra/include/dsdt.aml")) 					{ system_call("cp -f /Extra/include/dsdt.aml /Extra"); }
-    if (is_file("/Extra/include/SSDT.aml")) 					{ system_call("cp -f /Extra/include/SSDT.aml /Extra"); }
-    if (is_file("/Extra/include/SSDT-1.aml")) 				{ system_call("cp -f /Extra/include/SSDT-1.aml /Extra"); }
-    if (is_file("/Extra/include/SSDT-2.aml")) 				{ system_call("cp -f /Extra/include/SSDT-2.aml /Extra"); }
-    if (is_file("/Extra/include/SSDT-3.aml")) 				{ system_call("cp -f /Extra/include/SSDT-3.aml /Extra"); }    
-    if (is_file("/Extra/include/SSDT-4.aml")) 				{ system_call("cp -f /Extra/include/SSDT-4.aml /Extra"); }
-    if (is_file("/Extra/include/SSDT-5.aml")) 				{ system_call("cp -f /Extra/include/SSDT-5.aml /Extra"); }    
+    //Copy essentials from /Extra/include if user has
+    $edp->writeToLog("$workpath/build.log", "  Checking if we have any essential files in $incpath that will be used instead...<br>");
+    if (is_file("$incpath/smbios.plist")) 				{ system_call("cp -f $incpath/smbios.plist /Extra"); }
+    if (is_file("$incpath/org.chameleon.Boot.plist")) 	{ system_call("cp -f $incpath/org.chameleon.Boot.plist /Extra"); }
+    if (is_file("$incpath/dsdt.aml")) 					{ system_call("cp -f $incpath/dsdt.aml /Extra"); }
+    if (is_file("$incpath/SSDT.aml")) 					{ system_call("cp -f $incpath/SSDT.aml /Extra"); }
+    if (is_file("$incpath/SSDT-1.aml")) 				{ system_call("cp -f $incpath/SSDT-1.aml /Extra"); }
+    if (is_file("$incpath/SSDT-2.aml")) 				{ system_call("cp -f $incpath/SSDT-2.aml /Extra"); }
+    if (is_file("$incpath/SSDT-3.aml")) 				{ system_call("cp -f $incpath/SSDT-3.aml /Extra"); }    
+    if (is_file("$incpath/SSDT-4.aml")) 				{ system_call("cp -f $incpath/SSDT-4.aml /Extra"); }
+    if (is_file("$incpath/SSDT-5.aml")) 				{ system_call("cp -f $incpath/SSDT-5.aml /Extra"); }   
+    
+    // Copy Themes folder from EDP workpath to Extra
+    if (!is_dir("/Extra/Themes")) {
+        $edp->writeToLog("$workpath/build.log", "  Copying Standard themes folder to /Extra<br>");
+    	system_call("mkdir /Extra/Themes");
+		system_call("cp -R $workpath/Themes/. /Extra/Themes");
+     } 
 }
 
 
@@ -821,27 +821,37 @@ function copyKexts() {
             system_call("cp -R $workpath/storage/standard/Extensions/* $ee");
         }
 
+	// From Model data
     $edp->writeToLog("$workpath/build.log", "  Copying common kexts to $ee..<br>");
     $tf = "$workpath/model-data/$modelName/common/Extensions";
     system_call("cp -Rf $tf/* $ee");
-
+	// From Model data
     $edp->writeToLog("$workpath/build.log", "  Copying $os kexts to $ee.. <br>");
     $tf = "$workpath/model-data/$modelName/$os/Extensions";
     system_call("cp -Rf $tf/* $ee");
 
 
-    //Copying custom kexts from inside include folder
-    $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
-    system_call("cp -R $workpath/include/Extensions/* $ee");
+    //Copying custom kexts from include folder
+   /* $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
+    system_call("cp -R $workpath/include/Extensions/* $ee");*/
     
 
-    $edp->writeToLog("$workpath/build.log", "  Applying custom plists, kexts etc.");
+    $edp->writeToLog("$workpath/build.log", "  Copying custom kexts and Themes from $incpatch to /Extra");
     //Copying kexts
     system_call("cp -R $incpath/Extensions/* $ee");
-    //Copying any .AML files to /Extra
-    system_call("cp -R $incpath/*.aml $workpath");
+    
+    // Copy Custom Themes folder from $incpatch to /Extra
+    if (is_dir("$incpath/Themes")) {
+        $edp->writeToLog("$workpath/build.log", "  Copying Custom themes folder to /Extra<br>");
+        system_call("rm -rf /Extra/Themes");
+        system_call("mkdir /Extra/Themes");
+		system_call("cp -R $incpath/Themes/. /Extra/Themes");
+     }
+     
+    /*//Copying any .AML files to /Extra
+    system_call("cp -R $incpath/*.aml /Extra");
     //Copying any plists files to /Extra
-    system_call("cp -R $incpath/*.plist $workpath");
+    system_call("cp -R $incpath/*.plist /Extra");*/
 
 	/*********************** End Common and Custom kexts *****************************/
 	
