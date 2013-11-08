@@ -459,6 +459,12 @@ function getVersion() {
     return $r;
 }
 	
+function getMacOSXVersion() {
+		$path = "/System/Library/CoreServices/SystemVersion";
+    	$ver = exec("defaults read $path ProductVersion");
+    	return $ver;
+}
+
 function AppleACPIfixCheck() {
     global $ee, $workpath, $slepath, $modeldb, $modelID;
 
@@ -846,7 +852,16 @@ function copyKexts() {
     		//Syncing kextpack to local storage
     		if(!is_dir("$kpsvn/$categ"));
     			system_call("mkdir $kpsvn/$categ");
-    			
+    		
+    		if($id == "5") {
+			//Choose new version 
+    		if(getMacOSXVersion() >= "10.8.5")
+    			kextpackLoader("$categ/GenericXHCIUSB3_New");
+    		//chooose old version
+    		else if(getMacOSXVersion() < "10.8.5")
+    			kextpackLoader("$categ/$name");
+    		}
+    		else	
     		kextpackLoader("$categ/$name");
 
     		//Copying the kextpack to /Extra/Extentions
