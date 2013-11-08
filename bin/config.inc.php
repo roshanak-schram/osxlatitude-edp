@@ -43,7 +43,7 @@ $stmt = $edp_db->query("SELECT * FROM wifi order by id");
 $stmt->execute(); $wifidb = $stmt->fetchAll();
 
 //Populate PS2 array
-$stmt = $edp_db->query("SELECT * FROM ps2 order by id");
+$stmt = $edp_db->query("SELECT * FROM ps2New order by id");
 $stmt->execute(); $ps2db = $stmt->fetchAll();
 
 //Populate Fakesmc array

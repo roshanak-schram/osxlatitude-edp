@@ -25,7 +25,7 @@ $os = getVersion();
 if ($os == "lion" || $os == "ml" || $os == "mav") {
 	//EDP app is not being closed automatically after we click close, so we manually close this and open again when we launch it
 	system("sudo killall EDP"); 
-    system("open $workpath/storage/apps/EDPweb.app");
+    system("open $workpath/apps/EDPweb.app");
 } else {
     system("open http://127.0.0.1:11250/");
 }
