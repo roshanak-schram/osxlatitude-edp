@@ -509,39 +509,49 @@ function copyEssentials() {
 
 	$extrapath = "/Extra";
 	
-    $file = "$extrapath/smbios.plist";
-    if (file_exists($file)) { system_call("rm $file"); }
-
-    $file = "$extrapath/org.chameleon.Boot.plist";
-    if (file_exists($file)) { system_call("rm $file"); }
-
-    $file = "$extrapath/dsdt.aml";
-    if (file_exists($file)) { system_call("rm $file"); }
-        
-
-    //Remove old SSDT table files
-    $file = "$extrapath/SSDT.aml";   if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$extrapath/SSDT-1.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$extrapath/SSDT-2.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$extrapath/SSDT-3.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$extrapath/SSDT-4.aml"; if (file_exists($file)) { system_call("rm $file"); }
-    $file = "$extrapath/SSDT-5.aml"; if (file_exists($file)) { system_call("rm $file"); }
-
-    $edp->writeToLog("$workpath/build.log", "  Copying COMMON system plists and dsdt.aml from $workpath/model-data/$modelName/common to $extrapath<br>");
-    $file = "$workpath/model-data/$modelName/common/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/common/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-
-    $edp->writeToLog("$workpath/build.log", "  Copying OS Specific system plists and dsdt.aml from $workpath/model-data/$modelName/$os to $extrapath if it has<br>");		
-    $file = "$workpath/model-data/$modelName/$os/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/$os/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    $edp->writeToLog("$workpath/build.log", "  Copying System plists and dsdt.aml from $workpath/model-data/$modelName to $extrapath<br>");
     
+    $file1 = "$workpath/model-data/$modelName/common/SMBios.plist"; $file2 = "$workpath/model-data/$modelName/$os/SMBios.plist"; 
+    if((file_exists($file1)) || (file_exists($file2))) {
+    	//Remove existing file from /Extra
+    	if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
+    	//Copy file from common folder if exists
+    	if(file_exists($file1))
+    	system_call("cp -f $file1 $extrapath"); 
+    	//Copy file from os folder if exists
+    	if(file_exists($file2))
+    	system_call("cp -f $file2 $extrapath");
+    }
+    
+    $file1 = "$workpath/model-data/$modelName/common/org.chameleon.Boot.plist"; $file2 = "$workpath/model-data/$modelName/$os/org.chameleon.Boot.plist"; 
+    if((file_exists($file1)) || (file_exists($file2))) {
+    	//Remove existing file from /Extra
+    	if (file_exists("$extrapath/org.chameleon.Boot.plist")) { system_call("rm $extrapath/org.chameleon.Boot.plist"); }
+    	//Copy file from common folder if exists
+    	if(file_exists($file1))
+    	system_call("cp -f $file1 $extrapath"); 
+    	//Copy file from os folder if exists
+    	if(file_exists($file2))
+    	system_call("cp -f $file2 $extrapath");
+    }
+    
+    $file1 = "$workpath/model-data/$modelName/common/dsdt.aml"; $file2 = "$workpath/model-data/$modelName/$os/dsdt.aml"; 
+    if((file_exists($file1)) || (file_exists($file2))) {
+    	//Remove existing file from /Extra
+    	if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
+    	//Copy file from common folder if exists
+    	if(file_exists($file1))
+    	system_call("cp -f $file1 $extrapath"); 
+    	//Copy file from os folder if exists
+    	if(file_exists($file2))
+    	system_call("cp -f $file2 $extrapath");
+    }
+	
     // If its mavericks then copy the files from ml folder for now
     if($os == "mav" && !is_dir("$workpath/model-data/$modelName/$os")) {
     $edp->writeToLog("$workpath/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder..<br>");
     $file = "$workpath/model-data/$modelName/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-    $file = "$workpath/model-data/$modelName/ml/smbios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    $file = "$workpath/model-data/$modelName/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     $file = "$workpath/model-data/$modelName/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     }						
 
@@ -555,11 +565,28 @@ function copyEssentials() {
     	// set DropSSDT to Yes from org.chameleon.Boot.plist
 		system("sudo /usr/libexec/PlistBuddy -c \"set DropSSDT Yes\" $extrapath/org.chameleon.Boot.plist"); 
     }
-    $file = "$workpath/model-data/$modelName/common/SSDT-1.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-2.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-3.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; if (file_exists($file)) { system_call("cp -f $file $extrapath"); }			
+
+    
+    $file = "$workpath/model-data/$modelName/common/SSDT-1.aml"; if (file_exists($file)) { 
+    if (file_exists("$extrapath/SSDT-1.aml")) { system_call("rm $extrapath/SSDT-1.aml"); }
+    system_call("cp -f $file $extrapath"); 
+    }
+    $file = "$workpath/model-data/$modelName/common/SSDT-2.aml"; if (file_exists($file)) { 
+    if (file_exists("$extrapath/SSDT-2.aml")) { system_call("rm $extrapath/SSDT-2.aml"); }
+    system_call("cp -f $file $extrapath"); 
+    }
+    $file = "$workpath/model-data/$modelName/common/SSDT-3.aml"; if (file_exists($file)) { 
+    if (file_exists("$extrapath/SSDT-3.aml")) { system_call("rm $extrapath/SSDT-3.aml"); }
+    system_call("cp -f $file $extrapath"); 
+    }
+    $file = "$workpath/model-data/$modelName/common/SSDT-4.aml"; if (file_exists($file)) {
+    if (file_exists("$extrapath/SSDT-4.aml")) { system_call("rm $extrapath/SSDT-4.aml"); } 
+    system_call("cp -f $file $extrapath"); 
+    }
+    $file = "$workpath/model-data/$modelName/common/SSDT-5.aml"; if (file_exists($file)) {
+    if (file_exists("$extrapath/SSDT-5.aml")) { system_call("rm $extrapath/SSDT-5.aml"); } 
+    system_call("cp -f $file $extrapath"); 
+    }			
 
 
     //Copy essentials from /Extra/include if user has
