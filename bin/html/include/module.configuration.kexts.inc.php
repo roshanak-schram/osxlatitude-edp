@@ -37,13 +37,10 @@
 				//echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] ($row[arch]) - $row[notes]</option>\n";
 				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] - $row[notes]</option>\n";
 			}			
-			// If AppleHDA folder found then set the value to builtin
-			if (is_dir("/Extra/EDP/model-data/$mdrow[name]/common/applehda") || is_dir("/Extra/EDP/model-data/$mdrow[name]/$os/applehda")) { 
-				echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA</option>\n";
-			} else {
 				//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
-				if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio: Not selected</option>"; }
-			}
+				if ("$mdrow[bundledAudio]" == "" || "$mdrow[bundledAudio]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio: Not selected</option>"; }
+				else { echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA</option>\n"; }
+
 			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";			
 			echo "</select><span class='arrow'></span> </li>\n";
 
