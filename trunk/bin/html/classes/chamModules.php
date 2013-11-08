@@ -2,12 +2,15 @@
 
 class chamModules {
 
-	//-----> Copies modules from storage/modules to /Extra/modules by removing old onces first - it will only copy whatever is defined in $chamModConfig
+	//-----> Copies modules from EDP/modules to /Extra/modules by removing old onces first - it will only copy whatever is defined in $chamModConfig
 	public function copyChamModules($chamModConfig) {
 		global $workpath;
-		$modpathFROM 	= "$workpath/storage/modules";
-		$modpathTO 		= "$workpath/modules/";
+		$modpathFROM 	= "$workpath/modules";
+		$modpathTO 		= "/Extra/modules/";
 	
+		if(!is_dir("/Extra/modules"));
+    			system_call("mkdir /Extra/modules");
+    			
 		//Cleaning existing modules folder
 		system_call("rm -Rf /Extra/modules/*");
 	

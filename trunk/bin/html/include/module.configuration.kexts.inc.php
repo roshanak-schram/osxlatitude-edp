@@ -14,13 +14,13 @@
 
 				
 		//Show dropdown for PS2 kexts
-			$result = $edp_db->query("SELECT * FROM ps2");
+			$result = $edp_db->query("SELECT * FROM ps2New");
 			echo "<li class='select'><select name='ps2pack'>";
 			if ("$mdrow[ps2pack]" == "" || "$mdrow[ps2pack]" == "no") { echo "<option value='no' SELECTED>&nbsp; PS2 kext: None selected</option>\n"; }
 			else { echo "<option value='no'>&nbsp; PS2 kext: None selected</option>\n"; }
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[ps2pack]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; PS2 kext: $row[name] ($row[notes])</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; PS2 kext: $row[name] - $row[notes]</option>\n";
 		    }
 			echo "</select><span class='arrow'></span> </li>";
 			
@@ -30,18 +30,21 @@
 			global $os;
 			$result = $edp_db->query("SELECT * FROM audio");
 			echo "<li class='select'>";
-			//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
 			echo "<select name='audiopack'>\n";	
-			if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio kext: Not selected, may be using AppleHDA</option>"; }
-			else { echo "<option value='no'>&nbsp; Audio kext: Don't load</option>\n"; }		
+
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[audiopack]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] ($row[arch]) - $row[notes]</option>\n";
+				//echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] ($row[arch]) - $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] - $row[notes]</option>\n";
 			}			
-			/*if (is_dir("/Extra/EDP/model-data/$mdrow[name]/common/applehda") || is_dir("/Extra/EDP/model-data/$mdrow[name]/$os/applehda")) { 
-				echo "<option value='buildin' SELECTED>&nbsp; Audio: AppleHDA.</option>\n";
+			// If AppleHDA folder found then set the value to builtin
+			if (is_dir("/Extra/EDP/model-data/$mdrow[name]/common/applehda") || is_dir("/Extra/EDP/model-data/$mdrow[name]/$os/applehda")) { 
+				echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA</option>\n";
+			} else {
+				//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
+				if ("$mdrow[audiopack]" == "" || "$mdrow[audiopack]" == "no") { echo "<option value='no' SELECTED>&nbsp; Audio: Not selected</option>"; }
 			}
-			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";*/			
+			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";			
 			echo "</select><span class='arrow'></span> </li>\n";
 
 
@@ -53,7 +56,7 @@
 			else { echo "<option value='no'>&nbsp; Ethernet kext: Don't load</option>\n"; }
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[ethernet]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Ethernet kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Ethernet kext: $row[name] - $row[notes]</option>\n";
 		    }			
 			echo "</select><span class='arrow'></span> </li>\n";
 			
@@ -66,7 +69,7 @@
 			else { echo "<option value='no'>&nbsp; Wifi kext: Don't load</option>\n"; }
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[wifikext]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Wifi kext: $row[name] ($row[arch]) - $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Wifi kext: $row[name] - $row[notes]</option>\n";
 		    }
 			echo "</select><span class='arrow'></span> </li>\n";
 			
@@ -79,7 +82,7 @@
 			else { echo "<option value='no'>&nbsp; Battery kext: Don't load</option>\n"; }	
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[batteryKext]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Battery kext: $row[name] ($row[arch])</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Battery kext: $row[name] </option>\n";
 		    }			
 			echo "</select><span class='arrow'></span> </li>\n";
 			

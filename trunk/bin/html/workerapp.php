@@ -66,9 +66,10 @@ if ($action == "showCredits") {
 	echo "<p><b>Type:</b> $row[type]</p>\n";	
 	echo "<p><b>Creator:</b> $row[owner]</p>\n";
 	echo "<p><b>E-mail:</b> $row[contactemail]</p><br>\n";
-	echo "<p><b>Website:</b> <a href=\"$row[inforurl]\">$row[inforurl]</a></p>\n";
+	echo "<p><b>Website:</b><a href=\"$row[inforurl]\"> Click here to Visit</a></p>\n";
 	$url = $row[donationurl];
-	echo "<p><b>Donate to support:</b> <input type='button' value='Donate' onclick='edp.openlink(\"$url\");'> ($url)</p>\n";			
+	//echo "<p><b>Donate to support:</b> <input type='button' value='Donate' onclick='edp.openlink(\"$url\");'> ($url)</p>\n";
+	echo "<p><b>Donate to support:</b><a href=\"$row[donationurl]\"> Click here to Donate</a></p>\n";			
 	echo "</li>\n";
 	echo "</ul>\n";
 	echo "<br>";	

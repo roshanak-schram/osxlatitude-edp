@@ -13,7 +13,16 @@ class builder {
 		}		
 	}
 	
-
+//Returns Category name from ID, table must have "category"
+	public function getCategoryNameFromID($table, $id) {
+		if ($table != "" && $id != "") {
+			global $edp_db; global $workpath; global $ee;
+			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
+			$stmt->execute();
+			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
+			return $row[category];
+		}		
+	}
 	
 
 
