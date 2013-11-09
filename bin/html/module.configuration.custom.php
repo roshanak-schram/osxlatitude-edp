@@ -20,9 +20,20 @@
 
 function doCustomBuild() {
 	global $useIncExtentions; global $useIncDSDT; global $useIncSSDT; global $useIncSMBIOS; global $useIncCHAM; global $workpath; global $edp;
+	global $workpath, $slepath;
 	$incpath = "/Extra/include"; global $ee;
 
-
+	
+    // check if myhack.kext exists in ale, and if it dosent then copy it there...
+	if (!is_dir("$slepath/myHack.kext")) {
+        $myhackkext = "$workpath/myHack.kext";
+        system_call("rm -Rf `find -f path \"$myhackkext\" -type d -name .svn`");
+        system_call("cp -R \"$workpath/myHack.kext\" $slepath");
+    }
+    if (!is_file("/usr/sbin/")) {
+        system_call("cp \"$workpath/bin/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
+    }
+    
 	//Start by defining our log file and cleaning it..
 	$log = "$workpath/build.log";
 	if (is_file("$log")) { 
