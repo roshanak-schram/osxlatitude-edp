@@ -328,23 +328,22 @@ function patchWiFiBTBCM4352() {
    
     echo "  Applying BCM20702A1 Bluetooth Fix for BCM94352HMB card\n";
     
-    //$patchedInfoFile = "$slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/KextPatched.plist";
-	//if (!file_exists($patchedInfoFile)) {
+    $patchedInfoFile = "$slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/KextPatched.plist";
+	if (!file_exists($patchedInfoFile)) {
     $file = "$slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist";   if (file_exists($file)) {
-	// Copy the kext from sle to ee for patching
-    system_call("cp -R $slepath/IOBluetoothFamily.kext $ee/");
     // Patch kext
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404 dict\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport\"\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOClass string \"BroadcomBluetoothHostControllerUSBTransport\"\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOProviderClass string \"IOUSBDevice\"\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:LMPLoggingEnabled bool \"NO\"\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idProduct integer \"13316\"\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idVendor integer \"5075\"\" $ee/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
-    //system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/KextPatched.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404 dict\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:CFBundleIdentifier string \"com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOClass string \"BroadcomBluetoothHostControllerUSBTransport\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:IOProviderClass string \"IOUSBDevice\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:LMPLoggingEnabled bool \"NO\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idProduct integer \"13316\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom2046FamilyUSBBluetoothHCIController_3404:idVendor integer \"5075\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/Info.plist");
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"EMlyDinEsH\ And\ Mario\(OSXLatitude\)\"\" $slepath/IOBluetoothFamily.kext/Contents/PlugIns/BroadcomBluetoothHostControllerUSBTransport.kext/Contents/KextPatched.plist");
+    system_call("sudo touch /System/Library/Extensions/");
     }
     else { echo "  BroadcomBluetoothHostControllerUSBTransport.kext not found for patching in System/Library/Extensions/IOBluetoothFamily.kext/Contents/PlugIns/\n"; }
-  //}
+  }
     
 }
 
@@ -506,7 +505,7 @@ function kernelcachefix() {
     }
 }
 function copyEssentials() {
-    global $workpath, $modeldb, $modelID, $os; global $edp;
+    global $workpath, $incpath, $modeldb, $modelID, $os; global $edp;
 
     $modelName = $modeldb[$modelID]["name"];
 
