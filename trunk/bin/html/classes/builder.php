@@ -2,40 +2,9 @@
 
 class builder {
 
-	//Returns foldername from ID, table must have "foldername"
-	public function getKextpackNameFromID($table, $id) {
-		if ($table != "" && $id != "") {
-			global $edp_db; global $workpath; global $ee;
-			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
-			$stmt->execute();
-			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-			return $row[foldername];
-		}		
-	}
-	
-//Returns Category name from ID, table must have "category"
-	public function getCategoryNameFromID($table, $id) {
-		if ($table != "" && $id != "") {
-			global $edp_db; global $workpath; global $ee;
-			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
-			$stmt->execute();
-			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-			return $row[category];
-		}		
-	}
-	
-
-
-	public function lastMinFixes() {
-		global $workpath; global $edp; global $nvram;
-		$stat = $nvram->clear();
-		$edp->writeToLog("$workpath/build.log", "Clearing boot-args in NVRAM...$stat<br>");
-	}
-
-
 	//Handles the pre-defined build process step by step, should only be called when we are sure that the global var $modelID is fully populated with needed vars...
 	public function EDPdoBuild() {
-		global $modeldb; global $modelID; global $workpath; global $rootpath; global $chamModules; global $edp;
+		global $modeldb, $modeldbID; global $modelID; global $workpath; global $rootpath; global $chamModules; global $edp;
 
 		//Start by defining our log file and cleaning it..
 		$log = "$workpath/build.log";
@@ -55,9 +24,23 @@ class builder {
 			
 		
 		//Step 1
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update local model data... </b><br>");
-		$modelName = $modeldb[$modelID]["name"];
-		svnModeldata("$modelName");
+		global $modelNamePath;
+		$modelName = $modeldb[$modeldbID]["name"];
+		$ven = builderGetVendorValuebyID($modelID);
+		$ser = builderGetSeriesValuebyID($modelID);
+		$modelNamePath = "$ven/$ser/$modelName";
+		if(!is_dir("$workpath/model-data/$ven"))
+			system("mkdir $workpath/model-data/$ven");
+		if(!is_dir("$workpath/model-data/$ven/$ser"))
+			system("mkdir $workpath/model-data/$ven/$ser");
+			
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update $modelName  model data... </b><br>");
+		// We will use old way also until we move all the models data into their respective category
+		//New way
+		loadModeldata();
+		//use old way if there is no files in new folder structure 
+		if(!file_exists("$workpath/model-data/$modelNamePath/common/dsdt.aml"))
+			svnModeldata("$modelName");
 			
 		//Step 2
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files to $workpath </b><br>");
@@ -65,16 +48,16 @@ class builder {
 
 		//Step 3
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Preparing kexts for myHack.kext </b><br>");
-				copyKexts();
+		copyKexts();
 			
 		//Step 4
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 4) Applying Chameleon settings.. </b><br>");
 		updateCham();
 		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
-		$chamModules->copyChamModules($modeldb[$modelID]);
+		$chamModules->copyChamModules($modeldb[$modeldbID]);
 			
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 5) Applying last minut fixes...</b><br>");
-		$this->lastMinFixes();
+		lastMinFixes();
 					
 		//Step 5
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 6) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
