@@ -77,10 +77,13 @@ if ($action == 'dobuild') {
 
 	//($ChamModuleACPICodec == "on" ? "yes" : "no")
 
-	global $modelID; $modelID = "0";
+	global $modelID;
 	global $modelName;
+	//id of modeldb array which is '0' for a model
+	global $modeldbID;
+	$modeldbID = "0";
 
-	$modelName = $modeldb[$modelID]["name"];
+	$modelName = $modeldb[$modeldbID]["name"];
 
 	$builder->EDPdoBuild();	
 }
