@@ -39,8 +39,10 @@ class builder {
 		//New way
 		loadModeldata();
 		//use old way if there is no files in new folder structure 
-		if(!file_exists("$workpath/model-data/$modelNamePath/common/dsdt.aml"))
+		if(!file_exists("$workpath/model-data/$modelNamePath/common/dsdt.aml")) {
 			svnModeldata("$modelName");
+			$modelNamePath = "$modelName";
+		}
 			
 		//Step 2
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files to $workpath </b><br>");
