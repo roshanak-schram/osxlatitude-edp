@@ -6,9 +6,7 @@
   include_once "html/classes/edp.php";
   include_once "html/classes/nvram.php";
   include_once "html/classes/kexts.php";  
-  
-  $modelNamePath = "S";
-  
+    
 //------------------> EDPweb functions -----------------------------------------------------------------------------------------------
 
 function checkbox($title, $formname, $status) {
@@ -44,49 +42,56 @@ function getValueFromSmbios($key, $default = null) {
     return $default;
 }
 //---
-//Returns foldername from ID, table must have "foldername"
-	function getKextpackNameFromID($table, $id) {
-		if ($table != "" && $id != "") {
+//Returns model data from id
+	function getModelDataFromID($id) {
+		if ($id != "") {
 			global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
-			$stmt->execute();
-			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-			return $row[foldername];
-		}		
-	}
-	
-//Returns Category name from ID, table must have "category"
-	function getCategoryNameFromID($table, $id) {
-		if ($table != "" && $id != "") {
-			global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
-			$stmt->execute();
-			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-			return $row[category];
+			$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$id'");
+			$stmt->execute(); $result = $stmt->fetchAll(); 
+			$mdata = $result[0]; //get first row
+			return $mdata;
 		}		
 	}
 
-//--- Get EDP builder Model / Vendor / Serie values for the user to select from
+//Returns Kextpack data from id
+	function getKextpackDataFromID($table, $id) {
+		if ($table != "" && $id != "") {
+			global $edp_db;
+			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
+			$stmt->execute(); $result = $stmt->fetchAll(); $kprow = $result[0];
+			return $kprow;
+		}		
+	}
+
+//--- Get EDP builder Model / Vendor / series values for the user to select from
 function builderGetVendorValuebyID($modelid) {
     global $edp_db;
 
-	$stmt = $edp_db->query("SELECT vendor FROM models where id = '$modelid'");
+	$stmt = $edp_db->query("SELECT vendor FROM modelsdata where id = '$modelid'");
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
     return $mdrow[vendor];
 }
+function builderGetGenValuebyID($modelid) {
+    global $edp_db;
+
+	$stmt = $edp_db->query("SELECT generation FROM modelsdata where id = '$modelid'");
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[generation];
+}
 function builderGetSeriesValuebyID($modelid) {
     global $edp_db;
 
-	$stmt = $edp_db->query("SELECT serie FROM models where id = '$modelid'");
+	$stmt = $edp_db->query("SELECT series FROM modelsdata where id = '$modelid'");
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[serie];
+    return $mdrow[series];
 }
 function builderGetVendorValues() {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT DISTINCT vendor FROM models ORDER BY vendor');
+    $result = $edp_db->query('SELECT DISTINCT vendor FROM modelsdata ORDER BY vendor');
     $return = '';
 
     foreach($result as $row) {
@@ -98,19 +103,19 @@ function builderGetVendorValues() {
 function builderGetSerieValues($vendor) {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT DISTINCT serie, vendor FROM models WHERE vendor = "' . $vendor . '" ORDER BY serie');
+    $result = $edp_db->query('SELECT DISTINCT series, vendor, generation FROM modelsdata WHERE vendor = "' . $vendor . '" ORDER BY series');
     $return = '';
 
     foreach($result as $row) {
-        $return .= '<option value="' . $row['serie'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['serie'] . '</option>';
+        $return .= '<option value="' . $row['series'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['series'] . ' ('. $row['generation'] . ')</option>';
     }
 
-    return '<option value="" >&nbsp;&nbsp;Select serie...</option>' . $return;
+    return '<option value="" >&nbsp;&nbsp;Select series...</option>' . $return;
 }
-function builderGetModelValues($vendor, $serie) {
+function builderGetModelValues($vendor, $series) {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT * FROM models WHERE vendor = "' . $vendor . '" AND serie = "' . $serie . '" ORDER BY type');
+    $result = $edp_db->query('SELECT * FROM modelsdata WHERE vendor = "' . $vendor . '" AND series = "' . $series . '" ORDER BY type');
     $return = '';
 
     foreach($result as $row) {
@@ -120,14 +125,6 @@ function builderGetModelValues($vendor, $serie) {
     return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
 }
 //---
-
-			
-function updateCham() {
-    // Note: Overtime we will add a function to make sure that the user have the latest version 
-    // of cham distrobuted with EDP - until then, we will force the update on each build    
-    echo "  Updating Chameleon to latest versions from EDP \n";
-     system_call("cp -f $workpath/boot /");
-}
 
 function checkSVNrevs() {
     global $localrev, $workpath;
@@ -642,6 +639,7 @@ function copyEssentials() {
 function copyKexts() {
     //Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modeldbID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
+    global $cpufixdb;
     
     //Get our class(s)
     global $builder;
@@ -708,8 +706,8 @@ function copyKexts() {
 	
 
     //copying Wifi/BT kexts from kextpacks/ patch Wifi/BT Kexts
-    if ($modeldb[$modeldbID]['wifikext'] != "" && $modeldb[$modeldbID]['wifikext'] != "no") {
-        $wifid = $modeldb[$modeldbID]['wifikext'];
+    if ($modeldb[$modeldbID]['wifipack'] != "" && $modeldb[$modeldbID]['wifipack'] != "no") {
+        $wifid = $modeldb[$modeldbID]['wifipack'];
         $name = $wifidb[$wifid]['kextname'];
         if ($name != "") {
         	
@@ -834,8 +832,8 @@ function copyKexts() {
 	}
 
 	//copying battery kexts from kextpacks
-    if ($modeldb[$modeldbID]['batteryKext'] != "" && $modeldb[$modeldbID]['batteryKext'] != "no") {
-        $battid = $modeldb[$modeldbID]['batteryKext'];
+    if ($modeldb[$modeldbID]['batterypack'] != "" && $modeldb[$modeldbID]['batterypack'] != "no") {
+        $battid = $modeldb[$modeldbID]['batterypack'];
         $name = $batterydb[$battid]['foldername'];
         if ($name != "") {
     		//Syncing kextpack to local storage
@@ -854,23 +852,16 @@ function copyKexts() {
 	$name = ""; 
 	
 	
-	 //Copy optional kexts
+	//Copy optional kexts
     $data = $modeldb[$modeldbID]['optionalpacks'];
     $array 	= explode(',', $data);
     
     foreach($array as $id) {
-	    //Getting foldername from ID
-	    //$categ = $builder->getCategoryNameFromID("optionalpacks", "$id");
-        //$name = $builder->getKextpackNameFromID("optionalpacks", "$id");
-        $categ = getCategoryNameFromID("optionalpacks", "$id");
-        $name = getKextpackNameFromID("optionalpacks", "$id");
+    	$opdata = getKextpackDataFromID("optionalpacks", $id);
+        $categ = $opdata[category];
+        $fname = $opdata[foldername];
         
-        if($id == "2") {
-        $edp->writeToLog("$workpath/build.log", "  Patching AppleIntelSNBGraphicsFB.kext for VGA and HDMI in Intel HD3000<br>");
-        patchAppleIntelSNBGraphicsFB();
-        }
-        
-        else if ($name != "") { 
+         if ($fname != "") { 
     		//Syncing kextpack to local storage
     		if(!is_dir("$kpsvn/$categ"));
     			system_call("mkdir $kpsvn/$categ");
@@ -881,140 +872,118 @@ function copyKexts() {
     			kextpackLoader("$categ/GenericXHCIUSB3_New");
     		//chooose old version
     		else if(getMacOSXVersion() < "10.8.5")
-    			kextpackLoader("$categ/$name");
+    			kextpackLoader("$categ/$fname");
     		}
     		else	
-    		kextpackLoader("$categ/$name");
+    		kextpackLoader("$categ/$fname");
 
     		//Copying the kextpack to /Extra/Extentions
-    		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $kpsvn/$categ/$name to $ee<br>");
-    		system_call("cp -R $kpsvn/$categ/$name/. $ee");
+    		$edp->writeToLog("$workpath/build.log", "  Copying optional kextpack: $kpsvn/$categ/$fname to $ee<br>");
+    		system_call("cp -R $kpsvn/$categ/$fname/. $ee");
     	}
 	}
-
+	//Resetting $name
+	$fname = ""; 
 
  /*********************** End Kexts related to Hardware *****************************/
  
 /*********************** Begin Fixes and Patches *****************************/
      $edp->writeToLog("$workpath/build.log", "  Applying fixes and patches... <br>");
-
-	//Checking if we need to patch AppleIntelCPUPowerManagement.kext
-    $pathCPU = $modeldb[$modeldbID]["patchCPU"];
-    if ($pathCPU == "yes") {
+	
+	//Apply CPU and power management related fixes 
+    $mdata = getModelDataFromID($modelID);
+    $array 	= explode(',', $mdata['cpufixes']);
+    
+    $i=0; // iterating through all the id's
+	while ($cpufixdb[$i] != "") {
+	    //Getting kextname from ID
+        $cpufixdata = getKextpackDataFromID("cpufixesdata", "$i");
+        $kxtname = $cpufixdata[kextname];
+        
+        //Checking if we need to patch AppleIntelCPUPowerManagement.kext
+        if(($modeldb[$modeldbID]['applecpupwr'] == "on") && $i == "1") {
+        $edp->writeToLog("$workpath/build.log", "  Patching AppleIntelCPUPowerManagement.kext<br>");
         patchAppleIntelCPUPowerManagement();
-    }
-    
-    //Checking if we need nullcpu
-    if ($modeldb[$modeldbID]['nullcpu'] == "yes" || $modeldb[$modeldbID]['nullcpu'] == "y") {
-    	//Syncing kextpack to local storage
-    	if(!is_dir("$kpsvn/PowerMgmt"));
-    			system_call("mkdir $kpsvn/PowerMgmt");
-    			
-    		kextpackLoader("PowerMgmt/NullCPUPowerManagement.kext"); 
-    		
-        $edp->writeToLog("$workpath/build.log", "  Copying NullCPUPowerManagement.kext for disabling Apples native power management.. <br>");
-        system_call("cp -R $workpath/kpsvn/PowerMgmt/NullCPUPowerManagement.kext $ee");
-    }
-
-    //Checking if we need to patch AHCI
-    if ($modeldb[$modeldbID]['patchAHCIml'] == "yes" || $modeldb[$modeldbID]['patchAHCIml'] == "y") {
-        $edp->writeToLog("$workpath/build.log", "  Patching IOAHCIFamily.kext for OS: $os... <br>");
-        if ($os == "ml") {
-            patchAHCI();
         }
-    } 
-    
-
-    //Checking if we need Sleepenabler
-    if ($modeldb[$modeldbID]['sleepEnabler'] == "yes" || $modeldb[$modeldbID]['sleepEnabler'] == "y") {
-    	//Syncing kextpack to local storage
-    	if(!is_dir("$kpsvn/PowerMgmt"));
+        else if(($modeldb[$modeldbID]['emupstates'] == "on") && $i == "3") {
+        	
+        	kextpackLoader("PowerMgmt/VoodooPState"); 
+    		
+        	$edp->writeToLog("$workpath/build.log", "  Copying $kxtname for emulated speedsteps <br>");
+        	system_call("cp -R $workpath/kpsvn/PowerMgmt/VoodooPState/VoodooPState.kext $ee");
+        	system_call("cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents");
+        }
+        else if ($kxtname != "" && $modeldb[$modeldbID][$cpufixdata[edpid]] == "on") { 
+    		//Syncing kextpack to local storage
+    		if(!is_dir("$kpsvn/PowerMgmt"));
     			system_call("mkdir $kpsvn/PowerMgmt");
-    			
-    		kextpackLoader("PowerMgmt/SleepEnabler.kext"); 
     		
-        $edp->writeToLog("$workpath/build.log", "  Copying SleepEnabler.kext for enabling sleep...<br>");
-        system_call("cp -R $workpath/kpsvn/PowerMgmt/SleepEnabler.kext $ee");
-    }
+    		kextpackLoader("PowerMgmt/$kxtname");
 
-    if ($modeldb[$modeldbID]['loadIOATAFamily'] == "yes") {
-    	//Syncing kextpack to local storage
-    	if(!is_dir("$kpsvn/Others"));
-    			system_call("mkdir $kpsvn/Others");
-    			
-    		kextpackLoader("Others/IOATAFamily.kext"); 
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying $kxtname to $ee<br>");
+    		system_call("cp -R $kpsvn/PowerMgmt/$kxtname $ee");
     		
-        $edp->writeToLog("$workpath/build.log", "  Copying IOATAFamily.kext to $ee.. <br>");
-        system_call("cp -R $workpath/kpsvn/Others/IOATAFamily.kext $ee");
-    }
-
-    if ($modeldb[$modeldbID]['loadNatit'] == "yes") {
-    	//Syncing kextpack to local storage
-    	if(!is_dir("$kpsvn/Others"));
-    			system_call("mkdir $kpsvn/Others");
-    			
-    		kextpackLoader("Others/Natit.kext"); 
-    		
-        $edp->writeToLog("$workpath/build.log", "  Copying Natit.kext to $ee.. <br>");
-        system_call("cp -R $workpath/kpsvn/Others/Natit.kext $ee");
-    }
-
-    if ($modeldb[$modeldbID]['tscsync'] == "yes" || $modeldb[$modeldbID]['tscsync'] == "y") {
-    	//Syncing kextpack to local storage
-    	if(!is_dir("$kpsvn/PowerMgmt"));
-    			system_call("mkdir $kpsvn/PowerMgmt");
-    			
-    		kextpackLoader("PowerMgmt/VoodooTSCSync.kext"); 
-    		
-        $edp->writeToLog("$workpath/build.log", "  Check if we need VoodooTSCSync.kext for syncing CPU cores...<br>");
-        system_call("cp -R $workpath/kpsvn/PowerMgmt/VoodooTSCSync.kext $ee");
-    }
-
-    if ($modeldb[$modeldbID]['emulatedST'] == "yes" || $modeldb[$modeldbID]['emulatedST'] == "y") {
-    	//Syncing kextpack to local storage
-    	if(!is_dir("$kpsvn/PowerMgmt"));
-    			system_call("mkdir $kpsvn/PowerMgmt");
-    			
-    		kextpackLoader("PowerMgmt/VoodooPState"); 
-    		
-        $edp->writeToLog("$workpath/build.log", "  Check if we are using emulated speedstep via voodoopstate and voodoopstatemenu <br>");
-        system_call("cp -R $workpath/kpsvn/PowerMgmt/VoodooPState/VoodooPState.kext $ee");
-        system_call("cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents");
-    } else {
-        if(file_exists("/Library/LaunchAgents/PStateMenu.plist")) { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
-    }
+    		 //remove PStateMenu if installed before
+    		 if(file_exists("/Library/LaunchAgents/PStateMenu.plist")) { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
+    	}
+    	$i++;
+	}
 
 	
+ 	//Apply fixes
+    $data = $modeldb[$modeldbID]['fixes'];
+    $array 	= explode(',', $data);
+    
+    foreach($array as $id) {
+	    //Getting names from ID
+	    $fixdata = getKextpackDataFromID("fixesdata", "$id");
+        $categ = $fixdata[category];
+        $fname = $fixdata[foldername];
+        
+       if($id == "2") {
+       $edp->writeToLog("$workpath/build.log", "  Patching AHCI.kext to waiting for root device problem in ML<br>");
+       	patchAHCI();
+       }
+       else if($id == "8") {
+        $edp->writeToLog("$workpath/build.log", "  Patching AppleIntelSNBGraphicsFB.kext for VGA and HDMI in Intel HD3000<br>");
+        patchAppleIntelSNBGraphicsFB();
+        }
+       else if ($fname != "") { 
+    		//Syncing kextpack to local storage
+    		if(!is_dir("$kpsvn/$categ"));
+    			system_call("mkdir $kpsvn/$categ");
+    		
+    		
+    		kextpackLoader("$categ/$fname");
+
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying $fname to $ee<br>");
+    		if($id == "5") 
+    			system_call("cp -R $kpsvn/$categ/$fname $ee");
+    		else 
+    			system_call("cp -R $kpsvn/$categ/$fname/. $ee"); 
+    	}
+	}
+    	
+     //Resetting $name
+	$fname = "";
+	
     //Check if we need a custom version of chameleon
-    if ($modeldb[$modeldbID]['customCham'] == "yes" || $modeldb[$modeldbID]['customCham'] == "y") {
+    if ($modeldb[$modeldbID]['customCham'] == "on") {
         $edp->writeToLog("$workpath/build.log", "  Copying custom chameleon to $rootpath.. <br>");
         system_call("rm -f $rootpath/boot");
+        system_call("cp $workpath/model-data/$modelNamePath/common/boot $rootpath");
         system_call("cp $workpath/model-data/$modelNamePath/$os/boot $rootpath");
     }
 
     //Check if we need a custom made kernel
-    if ($modeldb[$modeldbID]['customKernel'] == "yes" || $modeldb[$modeldbID]['customKernel'] == "y") {
+    if(file_exists("$workpath/model-data/$modelNamePath/$os/custom_kernel")) {
         $edp->writeToLog("$workpath/build.log", "  Copying custom made kernel to $rootpath.. <br>");
         system_call("rm -f $rootpath/custom_kernel");
         system_call("cp $workpath/model-data/$modelNamePath/$os/custom_kernel $rootpath");
     }
     
-    //Check for ACPIPlatfrmxxx and Brightness Fix of GMA950
-    AppleACPIfixCheck();
-    
-    //GMA950 brightness fix
-    $needfix = $modeldb[$modeldbID]["useGMA950brightfix"];
-    
-    if ($needfix == "yes") {
-    $edp->writeToLog("$workpath/build.log", "  Applying GMA950 Brightness fix  <br>");
-        //Syncing kextpack to local storage
-    		if(!is_dir("$workpath/kpsvn/Display"));
-    			system_call("mkdir $workpath/kpsvn/Display");
-    			
-    		kextpackLoader("Display/gma950-brightness-fix");
-    		
-        system_call("cp -R $workpath/kpsvn/Display/gma950-brightness-fix/AppleIntelIntegratedFramebuffer.kext $ee");
-    }
     
     /*********************** End Fixes and Patches *****************************/
 
@@ -1055,6 +1024,15 @@ function copyKexts() {
     $edp->writeToLog("$workpath/build.log", "  Copying custom kexts and Themes from $incpath to /Extra<br>");
     //Copying kexts
     system_call("cp -R $incpath/Extensions/* $ee");
+    //If AppleHDA is found in Extra/include then remove VoodooHDA from ee
+    if(file_exists("$incpath/Extensions/AppleHDA.kext")) {
+    			if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
+        	 	if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
+        	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
+    			system_call("rm -rf $ee/VoodooHDA.kext");
+    			system_call("rm -rf $ee/AppleHDADisabler.kext");
+    			$edp->writeToLog("$workpath/build.log", "  found AppleHDA from $incpath, VoodooHDA removed<br>");
+    }
     
     // Copy Custom Themes folder from $incpatch to /Extra
     if (is_dir("$incpath/Themes")) {

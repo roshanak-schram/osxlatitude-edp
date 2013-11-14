@@ -27,12 +27,12 @@ class builder {
 		global $modelNamePath;
 		$modelName = $modeldb[$modeldbID]["name"];
 		$ven = builderGetVendorValuebyID($modelID);
-		$ser = builderGetSeriesValuebyID($modelID);
-		$modelNamePath = "$ven/$ser/$modelName";
+		$gen = builderGetGenValuebyID($modelID);
+		$modelNamePath = "$ven/$gen/$modelName";
 		if(!is_dir("$workpath/model-data/$ven"))
 			system("mkdir $workpath/model-data/$ven");
-		if(!is_dir("$workpath/model-data/$ven/$ser"))
-			system("mkdir $workpath/model-data/$ven/$ser");
+		if(!is_dir("$workpath/model-data/$ven/$gen"))
+			system("mkdir $workpath/model-data/$ven/$gen");
 			
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update $modelName  model data... </b><br>");
 		// We will use old way also until we move all the models data into their respective category
@@ -52,9 +52,13 @@ class builder {
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Preparing kexts for myHack.kext </b><br>");
 		copyKexts();
 			
-		//Step 4
+		//Step 4		
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 4) Applying Chameleon settings.. </b><br>");
-		updateCham();
+		if($modeldb[$modeldbID]["updateCham"] == "on") {
+			$edp->writeToLog("$workpath/build.log", "Updating bootloader...<br>");
+			system_call("cp -f $workpath/boot /");
+		}
+			
 		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
 		$chamModules->copyChamModules($modeldb[$modeldbID]);
 			

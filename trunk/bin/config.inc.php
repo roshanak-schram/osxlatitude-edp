@@ -9,7 +9,7 @@ $workpath = "/Extra";
 }
 
 
-// SQLite stuff :)
+// SQLite stuff :) which is accessed globally by every php file
 $edp_db = new PDO("sqlite:/$workpath/bin/edp.sqlite3");
 $edp_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -21,7 +21,6 @@ $rootpath   = getConfig('rootpath');
 $slepath    = getConfig('slepath');	
 $cachepath  = getConfig('cachepath');
 $incpath    = getConfig('incpath');
-
 
 
 
@@ -50,7 +49,19 @@ $stmt->execute(); $ps2db = $stmt->fetchAll();
 $stmt = $edp_db->query("SELECT * FROM fakesmc order by id");
 $stmt->execute(); $fakesmcdb = $stmt->fetchAll();
 
-//Populate Optional array
+//Populate cpufixes array
+$stmt = $edp_db->query("SELECT * FROM cpufixesdata order by id");
+$stmt->execute(); $cpufixdb = $stmt->fetchAll();
+
+//Populate fixes array
+$stmt = $edp_db->query("SELECT * FROM fixesdata order by id");
+$stmt->execute(); $fixesdb = $stmt->fetchAll();
+
+//Populate Chameleon mods array
+$stmt = $edp_db->query("SELECT * FROM chammods order by id");
+$stmt->execute(); $chamdb = $stmt->fetchAll();
+
+//Populate Optional packs array
 $stmt = $edp_db->query("SELECT * FROM optionalpacks order by id");
 $stmt->execute(); $optdb = $stmt->fetchAll();
 
@@ -79,15 +90,15 @@ if ($os == "") { echo "Unable to detect operating system, edptool has exited"; e
 $donateurl = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mail%40r2x2%2ecom&lc=US&item_name=OSXlatitude%20Donation&item_number=OSXLatitude%20Donation&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest";
 
 
-//Configuration functions
+//funtion that reads path details from config table
 function getConfig($name) {
     global $edp_db;
     
     $stmt = $edp_db->query("SELECT * FROM config where name = '$name'");
     $stmt->execute();
-    $bigrow = $stmt->fetchAll();
+    $cfgrow = $stmt->fetchAll();
 
-    return $bigrow[0]['value'];
+    return $cfgrow[0]['value'];
 }
 
 
