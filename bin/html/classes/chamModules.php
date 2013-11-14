@@ -31,7 +31,7 @@ class chamModules {
 	//----> Get current configuration from /Extra/modules folder by checking wich files is there
 	public function chamModGetConfig() {
 		global $workpath;
-		$modpath = "$workpath/modules";
+		$modpath = "/Extra/modules";
 
 		$array = array(
 			"ACPICodec" => (is_file("$modpath/ACPICodec.dylib") === TRUE ? "yes" : "no"),
