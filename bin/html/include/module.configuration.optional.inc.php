@@ -17,7 +17,7 @@
 				//If the status is "yes" we will set $c as checked
 				if ($status == "yes") { $c = "checked"; }
 				
-				echo "<li class='checkbox'><span class='name'>$notes ($arch)</span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
+				echo "<li class='checkbox'><span class='name'>$notes </span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
 				$i++;
 			}	
 			
@@ -29,7 +29,7 @@
 		
 		function isOPTinUse($id) {
 			global $modelID; global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
+			$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
 			$stmt->execute();
 			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 
@@ -52,17 +52,20 @@
 updateOPT();
 
 function updateOPT() {
-	var optionalcheck = document.forms[0];
+	var optionalcheck = document.forms["optionalcheck"];
 	
-	var total = '';
+	var opList = '';
 	for (i = 0; i < optionalcheck.optionalbox.length; i++) {
 		if (optionalcheck.optionalbox[i].checked) {
+			//add seperator ','
+			if(opList != "")
+				opList = opList +',';
 			var v = optionalcheck.optionalbox[i].value;
-			total = total+','+v;
+			opList = opList+v;
 		}
 		
 	}
-	document.getElementById("optionalpacks").value = total;
+	document.getElementById("optionalpacks").value = opList;
 	
 }	
 

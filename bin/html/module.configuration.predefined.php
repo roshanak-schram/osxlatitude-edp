@@ -16,27 +16,9 @@ $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; 
 if ($action == 'dobuild') {
 	
 	echo "<span class='console'>";
-	//header("Content-Type: text/event-stream\n\n");
-	//while (ob_get_level()) ob_end_clean();
-
 
 	if ($modelID == "") { echo "modelID is empty"; exit; }
 
-	//Filter the data from the confirmation page 
-	$sleepEnabler 		= $_POST['sleepEnabler']; 		if ($sleepEnabler == "on") 		{ $sleepEnabler = "yes"; } 			else { $sleepEnabler = "no"; }
-	$nullcpu 			= $_POST['nullcpu']; 			if ($nullcpu == "on") 			{ $nullcpu = "yes"; } 				else { $nullcpu = "no"; } 
-	$emulatedST 		= $_POST['emulatedST']; 		if ($emulatedST == "on") 		{ $emulatedST = "yes"; } 			else { $emulatedST = "no"; }
-	$tscsync 			= $_POST['tscsync']; 			if ($tscsync == "on") 			{ $tscsync = "yes"; } 				else { $tscsync = "no"; }
-	$loadIOATAFamily	= $_POST['loadIOATAFamily']; 	if ($loadIOATAFamily == "on") 	{ $loadIOATAFamily = "yes"; } 		else { $loadIOATAFamily = "no"; }
-	$loadNatit			= $_POST['loadNatit']; 			if ($loadNatit == "on") 		{ $loadNatit = "yes"; } 			else { $loadNatit = "no"; }
-	$useACPIfix			= $_POST['useACPIfix']; 		if ($useACPIfix == "on") 		{ $useACPIfix = "yes"; } 			else { $useACPIfix = "no"; }
-	$patchCPU			= $_POST['patchCPU']; 			if ($patchCPU == "on") 			{ $patchCPU = "yes"; } 				else { $patchCPU = "no"; }
-	$useGMA950brightfix	= $_POST['useGMA950brightfix']; if ($useGMA950brightfix == "on"){ $useGMA950brightfix = "yes"; } 	else { $useGMA950brightfix = "no"; }
-	$customCham			= $_POST['customCham']; 		if ($customCham == "on")		{ $customCham = "yes"; } 			else { $customCham= "no"; }
-	$customKernel		= $_POST['customKernel']; 		if ($customKernel == "on")		{ $customKernel = "yes"; } 			else { $customKernel = "no"; }
-	$patchAHCIml		= $_POST['patchAHCIml']; 		if ($patchAHCIml == "on")		{ $patchAHCIml = "yes"; } 			else { $patchAHCIml = "no"; }
-
-	
 	//Generate a multi dim. array used during the build process
 	global $modeldb;
 
@@ -44,25 +26,19 @@ if ($action == 'dobuild') {
 		//This one have to be empty, its used for when we do custom builds...
 		array( 	
 			'name' 			     => $_POST['name'], 
-			'desc' 			     => $_POST['desc'],
-			'nullcpu' 		     => $nullcpu,
-			'sleepEnabler' 	     => $sleepEnabler,                      		
+			'desc' 			     => $_POST['desc'],           		
 			'ps2pack' 		     => $_POST['ps2pack'],
-			'emulatedST' 		 => $emulatedST,                      		
-			'tscsync' 		     => $tscsync,                      		
-			'batteryKext'		 => $_POST['batteryKext'],
-			'loadIOATAFamily'	 => $loadIOATAFamily,
-			'loadNatit'		     => $loadNatit,
-			'useACPIfix'		 => $useACPIfix,
-			'patchCPU'		     => $patchCPU,
-			'patchAHCIml'		 => $patchAHCIml,
-			'useGMA950brightfix' => $useGMA950brightfix,
+			'batterypack'		 => $_POST['batterypack'],
 			'ethernet'		     => $_POST['ethernet'],
-			'wifikext'		     => $_POST['wifikext'],
+			'wifipack'		     => $_POST['wifipack'],
 			'audiopack'		     => $_POST['audiopack'],                    		                      		                      		
-			'customCham' 		 => $customCham,                    		
-			'customKernel' 	     => $customKernel,
 			'fakesmc'			 => $_POST['fakesmc'],
+			'nullcpupwr'			 => $_POST['nullcpupwr'],
+			'applecpupwr'			 => $_POST['applecpupwr'],
+			'sleepenabler'			 => $_POST['sleepenabler'],
+			'emupstates'			 => $_POST['emupstates'],
+			'voodootsc'			 => $_POST['voodootsc'],
+			'noturbo'			 => $_POST['noturbo'],
 			'ACPICodec' 		 => $_POST['ChamModuleACPICodec'],
 			'FileNVRAM' 		 => $_POST['ChamModuleFileNVRAM'],
 			'KernelPatcher' 	 => $_POST['ChamModuleKernelPatcher'],
@@ -71,11 +47,13 @@ if ($action == 'dobuild') {
 			'Resolution'         => $_POST['ChamModuleResolution'],
 			'Sata' 			     => $_POST['ChamModuleSata'],
 			'uClibcxx' 		     => $_POST['ChamModuleuClibcxx'],
+			'HDAEnabler' 		 => $_POST['ChamHDAEnabler'],
+			'customCham' 		 => $_POST['customCham'],
+			'updateCham' 		 => $_POST['updateCham'],
+			'fixes' 		     => $_POST['fixes'],
 			'optionalpacks'	     => $_POST['optionalpacks']                    		 
 		),
 	);
-
-	//($ChamModuleACPICodec == "on" ? "yes" : "no")
 
 	global $modelID;
 	global $modelName;
@@ -92,6 +70,11 @@ if ($action == 'dobuild') {
 
 if ($action == "") {
 
+	//Fetch standard model info needed for the configuration of the choosen model to build
+		$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
+		$stmt->execute();
+		$result = $stmt->fetchAll(); $mdrow = $result[0];
+		
 	//Write out the top menu
 	echoPageItemTOP("icons/big/config.png", "Select a model your wish to configure for:");
 
@@ -105,19 +88,15 @@ if ($action == "") {
 	
 	if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
 
-	echo builderGetVendorValues();
+	echo builderGetVendorValues(); // For series and model we are using jquery
 
 	echo "</select><span class='arrow'></span> </li>";
 
 	echo "<li id='serie-container' class='select hidden'><td><select id='serie' name='serie'>";
 
-	//echo builderGetSerieValues($vendor, $serie);
-
 	echo "</select><span class='arrow'></span> </li>";					
 
 	echo "<li id='model-container' class='select hidden'><td><select id='model' name='model'>";
-
-	//echo builderGetModelValues($vendor, $serie);
 
 	echo "</select><span class='arrow'></span> </li></ul>";
 
@@ -192,8 +171,8 @@ if ($action == "") {
 //Check if $action was set via GET or POST - if it is set, we asume that we are going to confirm the build
 	if ($action == "confirm") {
 		
-		//Fetch standard model info
-		$stmt = $edp_db->query("SELECT * FROM models where id = '$modelID'");
+		//Fetch standard model info needed for the configuration of the choosen model to build
+		$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
 		$stmt->execute();
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
 
