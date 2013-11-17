@@ -254,7 +254,8 @@ function doCustomBuild() {
 	echoPageItemTOP("icons/big/config.png", "Custom build configuration");
 
 	echo "<div class='pageitem_bottom'>\n";
-	echo "EDP is a great tool while doing active development of a new package - not only does it contain a large amount of usefull drivers (kexts) but it also contains a bunch of usefull tools to make your job easier. <br><br> Custom configuration allows you to do a build using your existing configuration in /Extra, further more you can choose weather to include other sources - such as your include folder in /Extra<br>";
+	echo "Custom configuration allows you to use existing configuration in /Extra, further more you can choose your custom files in /Extra/include<br><br>";
+	echo "Copy your files like DSDT, SSDT, plists and boot(chameleon bootloader) to /Extra/include and <br>Kexts to /Extra/include/Extensions, which all can be managed very effectively with our EDP<br>";
 	echo "</div>";
 	//echo "</form>";
 		//Load the tabs
