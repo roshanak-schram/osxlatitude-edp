@@ -712,6 +712,7 @@ function copyKexts() {
     if ($modeldb[$modeldbID]['wifipack'] != "" && $modeldb[$modeldbID]['wifipack'] != "no") {
         $wifid = $modeldb[$modeldbID]['wifipack'];
         $name = $wifidb[$wifid]['kextname'];
+        $fname = $wifidb[$wifid]['foldername'];
         if ($name != "") {
         	
     		$edp->writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
@@ -728,6 +729,16 @@ function copyKexts() {
     			patchWiFiBCM43224();
     		else if($wifid == "6")
     			patchWiFiBCM4331();
+    		else if($wifid == "7")
+    			{
+    				if(!is_dir("$kpsvn/Wireless"))
+    					system_call("mkdir $kpsvn/Wireless");
+    					
+    				kextpackLoader("Wireless/$fname"); 
+    				//Copying the kextpack to /Extra/Extentions
+    				$edp->writeToLog("$workpath/build.log", "  Copying the Wifi kext ($workpath/kpsvn/Wireless/$fname/$name) to $ee<br>");
+    				system_call("cp -R $workpath/kpsvn/Wireless/$fname/. $ee");
+    			}
     		
     		//Syncing kextpack to local storage
     		if($wifid < 3)

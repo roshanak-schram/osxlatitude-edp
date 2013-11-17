@@ -6,22 +6,23 @@ echo "<ul class='pageitem'>";
 		$clinfo = shell_exec("ls -m /Extra/include/Extensions/");
     	$ckarray = explode(',', $clinfo);
 
-		$cuid = 0;	
+		$cuid = 100;
 		foreach($ckarray as $ckfname) {
-			
-			if ($ckfname != "") {
-			$ckname = explode('.', $ckfname);
-			//checkbox("$ckfname", $cuid, "yes", onchange=\"getElementById('delbtn').style.display = 'none'\");
-			// add if it has kext extension
-			// ckname[0] has kext name and ckname[1] has extension
-			$ckname = str_replace(" ","",$ckname); //remove white spaces
-						
-			if($ckname[1] == "kext\n" || $ckname[1] == "kext")		
-				echo "<li class='checkbox'><span class='name'>$ckfname </span><input name='$ckname[0]' id='$cuid' value='$cuid' type='checkbox' checked   > </li>\n";
 				
-			$cuid++;
+				if ($ckfname != "") {
+					$ckname = explode('.', $ckfname);
+					
+					// add if it has kext extension
+					// ckname[0] has kext name and ckname[1] has extension
+					$ckname = str_replace(" ","",$ckname); //remove white spaces
+						
+					if($ckname[1] == "kext\n" || $ckname[1] == "kext")
+						checkbox("$ckfname", $cuid, "yes");
+						
+					$cuid++;	
+				}
 			}
-		}
+			
 echo "</ul>";
 echo "<span class='graytitle'>Files Found in /Extra/include</span>";
 echo "<ul class='pageitem'>";
