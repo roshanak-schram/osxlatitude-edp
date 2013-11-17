@@ -185,7 +185,7 @@ function doCustomBuild() {
 					}
 					else {
 						if(is_dir("/Extra/Extensions/$ccfkname")) {
-							system("rm -rf /Extra/Extensions/$ccfkname $ee");
+							system("rm -rf /Extra/Extensions/$ccfkname");
 					  		$edp->writeToLog("$workpath/build.log", "Removing $ccfkname from $ee<br>");
 					  	}
 					}
