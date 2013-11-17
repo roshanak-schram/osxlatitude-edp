@@ -181,10 +181,11 @@ function doCustomBuild() {
 					
 				$cdfkname = str_replace(" ","",$cdfkname); //remove white spaces
 				$cdkname = explode('.', $cdfkname);// seperate name and extension in array
+				$cdkname = str_replace(" ","",$cdkname); //remove white spaces
 					
 				if($_POST[$pckid] == "on") {
-					  system("cp -R /Extra/include/Extensions/$cdfkname $ee");
-						$edp->writeToLog("$workpath/build.log", "Copying $cdkname[0].kext to $ee<br>");
+					  system("cp -R /Extra/include/Extensions/$cdkname[0].kext $ee");
+					  $edp->writeToLog("$workpath/build.log", "Copying $cdkname[0].kext to $ee<br>");
 					}
 			 	}
 			 	$pckid++;
