@@ -17,7 +17,7 @@
 								
 				if ($edfkname != "") {
 					
-				$edfkname = str_replace(" ","",$edfkname); //remove white spaces
+				$edfkname = preg_replace('/\s+/', '',$edfkname); //remove white spaces
 				
 				if($_POST[$peuid] == "on")
 					; //ignore
@@ -67,13 +67,12 @@
 								
 				if ($cdfkname != "") {
 					
-				$cdfkname = str_replace(" ","",$cdfkname); //remove white spaces
-				$cdkname = explode('.', $cdfkname);// seperate name and extension in array
-									
+				$cdfkname = preg_replace('/\s+/', '',$cdfkname); //remove white spaces
+						
 				if($_POST[$pckid] == "on")
 					;//ignore
 				else {
-					  system("rm -rf /Extra/Extensions/$cdfkname");
+					  system("rm -rf /Extra/include/Extensions/$cdfkname");
 					 //echo "DEL:$cdfkname";
 					}
 			 	}
@@ -169,26 +168,22 @@ function doCustomBuild() {
 		$edp->writeToLog("$workpath/build.log", "Copying $incpath/Extensions to $ee <br>");
 			
 			//Get all the kexts name in comma seperated way
-			$cdlinfo = shell_exec("ls -m /Extra/include/Extensions/");
-    		$cdkarray = explode(',', $cdlinfo);
-				 		
+			$cclinfo = shell_exec("ls -m /Extra/include/Extensions/");
+    		$cckarray = explode(',', $cclinfo);
+				
 			$pckid = 100;
 			
-			foreach($cdkarray as $cdfkname) {
+			foreach($cckarray as $ccfkname) {
 								
-				if ($cdfkname != "") {
+				if ($ccfkname != "") {
 					
-				$cdfkname = str_replace(" ","",$cdfkname); //remove white spaces
-				$cdkname = explode('.', $cdfkname);// seperate name and extension in array
+				$ccfkname = preg_replace('/\s+/', '',$ccfkname); //remove white spaces
 					
-				if($_POST[$pckid] == "on")
-					;//ignore
-				else {
-					system_call("cp -R /Extra/include/Extensions/$cdfkname $ee");
-					$edp->writeToLog("$workpath/build.log", "Copying $cdfkname to $ee<br>");
+				if($_POST[$pckid] == "on") {
+					  system("cp -R /Extra/include/Extensions/$ccfkname $ee");
+					  $edp->writeToLog("$workpath/build.log", "Copying $ccfkname to $ee<br>");
 					}
-
-				}
+			 	}
 			 	$pckid++;
 			 }
 	
@@ -250,10 +245,10 @@ function doCustomBuild() {
 	echoPageItemTOP("icons/big/config.png", "Custom build configuration");
 
 	echo "<div class='pageitem_bottom'>\n";
-	echo "Custom configuration allows you to use existing configuration in /Extra, further more you can choose your custom files in /Extra/include<br>";
+	echo "Custom configuration allows you to use existing configuration in /Extra, further more you can choose your custom files in /Extra/include<br><br>";
 	echo "Copy your files like DSDT, SSDT, plists and boot(chameleon bootloader) to /Extra/include and <br>Kexts to /Extra/include/Extensions, which all can be managed very effectively with our EDP<br>";
 	echo "</div>";
-
+	//echo "</form>";
 		//Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
@@ -280,7 +275,7 @@ function doCustomBuild() {
 			
 			
 			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
-			echo "</form>";		
+					
 
 
 			exit;
