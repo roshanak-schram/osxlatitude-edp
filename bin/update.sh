@@ -1,7 +1,7 @@
 echo "Cleaning up /Extra/EDP using SVN \n"
 svn cleanup /Extra/EDP
 echo "Downloading latest sources from EDP's svn server \n"
-svn --non-interactive --username edp --password edp --force update /Extra
+svn --non-interactive --username edp --password edp --force update /Extra/EDP
 
 cd /Extra/EDP/bin
 
