@@ -321,12 +321,13 @@ function patchAppleIntelSNBGraphicsFB() {
 function patchAppleIntelCPUPowerManagement() {
     global $ee, $slepath;
     
-    $patchedInfoFile = "$slepath/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist";
-    if (!file_exists($patchedInfoFile)) {
-    //system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
-    system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' $slepath/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"Leon\ and\ EMlyDinEsH\(OSXLatitude\)\"\" $slepath/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist");  
-    }
+    //$patchedInfoFile = "$slepath/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist";
+    //if (!file_exists($patchedInfoFile)) {
+    if(is_dir("$slepath/AppleIntelCPUPowerManagement.kext")) {
+    	system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $ee/");
+    	system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' $ee/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+    //system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"Leon\ and\ EMlyDinEsH\(OSXLatitude\)\"\" $slepath/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist");  
+  }
 }
 /**
  * Patch WiFI and Bluetooth Kexts
