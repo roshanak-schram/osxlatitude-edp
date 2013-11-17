@@ -69,8 +69,7 @@
 					
 				$cdfkname = str_replace(" ","",$cdfkname); //remove white spaces
 				$cdkname = explode('.', $cdfkname);// seperate name and extension in array
-					
-				
+									
 				if($_POST[$pckid] == "on")
 					;//ignore
 				else {
@@ -172,7 +171,7 @@ function doCustomBuild() {
 			//Get all the kexts name in comma seperated way
 			$cdlinfo = shell_exec("ls -m /Extra/include/Extensions/");
     		$cdkarray = explode(',', $cdlinfo);
-				
+				 		
 			$pckid = 100;
 			
 			foreach($cdkarray as $cdfkname) {
@@ -181,13 +180,15 @@ function doCustomBuild() {
 					
 				$cdfkname = str_replace(" ","",$cdfkname); //remove white spaces
 				$cdkname = explode('.', $cdfkname);// seperate name and extension in array
-				$cdkname = str_replace(" ","",$cdkname); //remove white spaces
 					
-				if($_POST[$pckid] == "on") {
-					  system("cp -R /Extra/include/Extensions/$cdkname[0].kext $ee");
-					  $edp->writeToLog("$workpath/build.log", "Copying $cdkname[0].kext to $ee<br>");
+				if($_POST[$pckid] == "on")
+					;//ignore
+				else {
+					system_call("cp -R /Extra/include/Extensions/$cdfkname $ee");
+					$edp->writeToLog("$workpath/build.log", "Copying $cdfkname to $ee<br>");
 					}
-			 	}
+
+				}
 			 	$pckid++;
 			 }
 	
@@ -249,10 +250,10 @@ function doCustomBuild() {
 	echoPageItemTOP("icons/big/config.png", "Custom build configuration");
 
 	echo "<div class='pageitem_bottom'>\n";
-	echo "Custom configuration allows you to use existing configuration in /Extra, further more you can choose your custom files in /Extra/include<br><br>";
+	echo "Custom configuration allows you to use existing configuration in /Extra, further more you can choose your custom files in /Extra/include<br>";
 	echo "Copy your files like DSDT, SSDT, plists and boot(chameleon bootloader) to /Extra/include and <br>Kexts to /Extra/include/Extensions, which all can be managed very effectively with our EDP<br>";
 	echo "</div>";
-	//echo "</form>";
+
 		//Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
@@ -279,7 +280,7 @@ function doCustomBuild() {
 			
 			
 			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
-					
+			echo "</form>";		
 
 
 			exit;
