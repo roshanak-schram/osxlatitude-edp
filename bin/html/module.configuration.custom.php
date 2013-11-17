@@ -183,6 +183,12 @@ function doCustomBuild() {
 					  system("cp -R /Extra/include/Extensions/$ccfkname $ee");
 					  $edp->writeToLog("$workpath/build.log", "Copying $ccfkname to $ee<br>");
 					}
+					else {
+						if(is_dir("/Extra/Extensions/$ccfkname")) {
+							system("rm -rf /Extra/include/Extensions/$ccfkname $ee");
+					  		$edp->writeToLog("$workpath/build.log", "Removing $ccfkname from $ee<br>");
+					  	}
+					}
 			 	}
 			 	$pckid++;
 			 }
