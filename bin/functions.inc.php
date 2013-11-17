@@ -103,23 +103,26 @@ function builderGetVendorValues() {
 function builderGetSerieValues($vendor) {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT DISTINCT series, vendor, generation FROM modelsdata WHERE vendor = "' . $vendor . '" ORDER BY series');
+    $result = $edp_db->query('SELECT DISTINCT series, vendor FROM modelsdata WHERE vendor = "' . $vendor . '" ORDER BY series');
     $return = '';
 
     foreach($result as $row) {
-        $return .= '<option value="' . $row['series'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['series'] . ' ('. $row['generation'] . ')</option>';
+        $return .= '<option value="' . $row['series'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['series'] . ' </option>';
     }
 
     return '<option value="" >&nbsp;&nbsp;Select series...</option>' . $return;
 }
-function builderGetModelValues($vendor, $series) {
+function builderGetModelValues($vendor, $series, $generation) {
     global $edp_db;
 
     $result = $edp_db->query('SELECT * FROM modelsdata WHERE vendor = "' . $vendor . '" AND series = "' . $series . '" ORDER BY type');
     $return = '';
 
     foreach($result as $row) {
-        $return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['type'] . ')</option>';
+    if($row['generation'] != "")
+        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['type'] .')  ' . $row['generation'] .' </option>';
+        else
+        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['type']  .') </option>';
     }
 
     return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
