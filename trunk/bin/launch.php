@@ -5,6 +5,13 @@ $workpath = "/Extra/EDP";
 }
 else { $workpath = "/Extra"; };
 
+// check for Extra/include folders
+if(!is_dir("/Extra/include"))
+   system("mkdir /Extra/include");
+   
+if(!is_dir("/Extra/include/Extensions"))
+   system("mkdir /Extra/include/Extensions");
+   
 
 //Check if db exists, and if not.. download it...
 if (!file_exists("$workpath/bin/edp.sqlite3")) {

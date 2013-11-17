@@ -17,7 +17,7 @@ echo "<ul class='pageitem'>";
 					
 					// add if it has kext extension
 					// ekname[0] has kext name and ekname[1] has extension
-					$ekname = str_replace(" ","",$ekname); //remove white spaces
+					$ekname = preg_replace('/\s+/', '',$ekname); //remove white spaces
 						
 					if($ekname[1] == "kext\n" || $ekname[1] == "kext")
 						checkbox("$ekfname", $euid, "yes");
