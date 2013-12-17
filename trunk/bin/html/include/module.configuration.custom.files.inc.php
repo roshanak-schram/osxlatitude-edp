@@ -67,11 +67,11 @@ echo "</ul>";
 	echo "<ul class='pageitem'><li class='select'>";
 	echo "<select id=\"copchoice\" name=\"copchoice\">";
 	echo "<option value=\"cnone\">&nbsp;&nbsp;None</option>";
- 	echo "<option value=\"cbuild\">&nbsp;&nbsp;Install \"ON\" files into System and do not remove \"OFF\" files from /Extra/include</option>";
- 	echo "<option value=\"cdelbuild\">&nbsp;&nbsp;Install \"ON\" files into System and remove \"OFF\" files from /Extra/include</option>";
- 	echo "<option value=\"cdelonly\">&nbsp;&nbsp;Remove \"OFF\" files from /Extra/include</option>";
- 	echo "<option value=\"cfixcache\">&nbsp;&nbsp;Quick fix for fixing permssions and generate cache </option>";
- 	echo "<option value=\"cfullfix\">&nbsp;&nbsp;Full fix for fixing permisions and generate cache (takes more time)</option>";
+ 	echo "<option value=\"cbuild\">&nbsp;&nbsp;Install selected files into System</option>";
+ 	echo "<option value=\"cdelbuild\">&nbsp;&nbsp;Install selected files into System and remove unselected files from /Extra/include</option>";
+ 	echo "<option value=\"cdelonly\">&nbsp;&nbsp;Remove unselected files from /Extra/include</option>";
+ 	echo "<option value=\"cfixcache\">&nbsp;&nbsp;Quick fix to fix permssions and generate cache </option>";
+ 	echo "<option value=\"cfullfix\">&nbsp;&nbsp;Full fix to fix permisions and generate cache (takes more time)</option>";
 
 	echo "</select></li></ul>";
  
