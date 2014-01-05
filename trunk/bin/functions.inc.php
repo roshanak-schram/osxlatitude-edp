@@ -513,19 +513,21 @@ function getMacOSXVersion() {
  */
 function copyEssentials() {
     global $workpath, $incpath, $os; global $edp;
-
+	global $modeldb, $modeldbID;
      global $modelNamePath;
 	
     $edp->writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
     edpCleaner();
 
 	$extrapath = "/Extra";
-	
     $edp->writeToLog("$workpath/build.log", " Checking System plists, SSDT and DSDT files from $workpath/model-data/$modelNamePath....<br>");
     
-    $file1 = "$workpath/model-data/$modelNamePath/common/SMBios.plist"; $file2 = "$workpath/model-data/$modelNamePath/$os/SMBios.plist"; 
-    if((file_exists($file1)) || (file_exists($file2))) {
-    $edp->writeToLog("$workpath/build.log", " SMBios.plist found, Copying to $extrapath<br>");
+    if($modeldb[$modeldbID]["useEDPSMBIOS"] == "on")
+    {
+    	$file1 = "$workpath/model-data/$modelNamePath/common/SMBios.plist"; 
+    	$file2 = "$workpath/model-data/$modelNamePath/$os/SMBios.plist"; 
+    	if((file_exists($file1)) || (file_exists($file2))) {
+   		 $edp->writeToLog("$workpath/build.log", " SMBios.plist found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
     	if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
     	//Copy file from common folder if exists
@@ -534,11 +536,17 @@ function copyEssentials() {
     	//Copy file from os folder if exists
     	if(file_exists($file2))
     	system_call("cp -f $file2 $extrapath");
+    	}
+    } else {
+    	$edp->writeToLog("$workpath/build.log", " Skipping SMBios.plist file from EDP on user request<br>");
     }
     
-    $file1 = "$workpath/model-data/$modelNamePath/common/org.chameleon.Boot.plist"; $file2 = "$workpath/model-data/$modelNamePath/$os/org.chameleon.Boot.plist"; 
-    if((file_exists($file1)) || (file_exists($file2))) {
-    $edp->writeToLog("$workpath/build.log", " org.chameleon.Boot.plist found, Copying to $extrapath<br>");
+    if($modeldb[$modeldbID]["useEDPCHAM"] == "on")
+    {
+    	$file1 = "$workpath/model-data/$modelNamePath/common/org.chameleon.Boot.plist"; 
+    	$file2 = "$workpath/model-data/$modelNamePath/$os/org.chameleon.Boot.plist"; 
+    	if((file_exists($file1)) || (file_exists($file2))) {
+   	    $edp->writeToLog("$workpath/build.log", " org.chameleon.Boot.plist found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
     	if (file_exists("$extrapath/org.chameleon.Boot.plist")) { system_call("rm $extrapath/org.chameleon.Boot.plist"); }
     	//Copy file from common folder if exists
@@ -547,11 +555,18 @@ function copyEssentials() {
     	//Copy file from os folder if exists
     	if(file_exists($file2))
     	system_call("cp -f $file2 $extrapath");
+   	 	}
+    } else {
+    	$edp->writeToLog("$workpath/build.log", " Skipping org.chameleon.Boot.plist file from EDP on user request<br>");
     }
     
-    $file1 = "$workpath/model-data/$modelNamePath/common/dsdt.aml"; $file2 = "$workpath/model-data/$modelNamePath/$os/dsdt.aml"; 
-    if((file_exists($file1)) || (file_exists($file2))) {
-    $edp->writeToLog("$workpath/build.log", " dsdt found, Copying to $extrapath<br>");
+    
+    if($modeldb[$modeldbID]["useEDPDSDT"] == "on")
+    {
+    	$file1 = "$workpath/model-data/$modelNamePath/common/dsdt.aml"; 
+    	$file2 = "$workpath/model-data/$modelNamePath/$os/dsdt.aml"; 
+    	if((file_exists($file1)) || (file_exists($file2))) {
+    	$edp->writeToLog("$workpath/build.log", " dsdt found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
     	if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
     	//Copy file from common folder if exists
@@ -560,80 +575,100 @@ function copyEssentials() {
     	//Copy file from os folder if exists
     	if(file_exists($file2))
     	system_call("cp -f $file2 $extrapath");
+    	}
+    } else {
+    	$edp->writeToLog("$workpath/build.log", " Skipping DSDT file from EDP on user request<br>");
     }
+    
 	
     // If its mavericks then copy the files from ml folder for now
     if($os == "mav" && !is_dir("$workpath/model-data/$modelNamePath/$os") && is_dir("$workpath/model-data/$modelNamePath/ml")) {
     $edp->writeToLog("$workpath/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
-    $file = "$workpath/model-data/$modelNamePath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-    $file = "$workpath/model-data/$modelNamePath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    $file = "$workpath/model-data/$modelNamePath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    if($modeldb[$modeldbID]["useEDPDSDT"] == "on") {
+    	$file = "$workpath/model-data/$modelNamePath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    	}
+    if($modeldb[$modeldbID]["useEDPSMBIOS"] == "on") {
+    	$file = "$workpath/model-data/$modelNamePath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    	}
+    if($modeldb[$modeldbID]["useEDPCHAM"] == "on") {
+    	$file = "$workpath/model-data/$modelNamePath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    	}
     }						
 
-	// set UseKernelCache to Yes from org.chameleon.Boot.plist
-	system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
+	if($modeldb[$modeldbID]["useEDPCHAM"] == "on") {
+		// set UseKernelCache to Yes from org.chameleon.Boot.plist
+		system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
+	}
 	
-    $file = "$workpath/model-data/$modelNamePath/common/SSDT.aml";   if (file_exists($file)) 
-    { 
+    if($modeldb[$modeldbID]["useEDPSSDT"] == "on")
+    {
+      $file = "$workpath/model-data/$modelNamePath/common/SSDT.aml";   if (file_exists($file)) 
+       { 
     	$edp->writeToLog("$workpath/build.log", " SSDT files found, Copying to $extrapath<br>");
     	system_call("cp -f $file $extrapath");
     	// set DropSSDT to Yes from org.chameleon.Boot.plist
 		system("sudo /usr/libexec/PlistBuddy -c \"set DropSSDT Yes\" $extrapath/org.chameleon.Boot.plist"); 
+   		}
+   		$file = "$workpath/model-data/$modelNamePath/common/SSDT-1.aml"; if (file_exists($file)) { 
+    	if (file_exists("$extrapath/SSDT-1.aml")) { system_call("rm $extrapath/SSDT-1.aml"); }
+   		system_call("cp -f $file $extrapath"); 
+    	}
+    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-2.aml"; if (file_exists($file)) { 
+    	if (file_exists("$extrapath/SSDT-2.aml")) { system_call("rm $extrapath/SSDT-2.aml"); }
+    	system_call("cp -f $file $extrapath"); 
+    	}
+    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-3.aml"; if (file_exists($file)) { 
+    	if (file_exists("$extrapath/SSDT-3.aml")) { system_call("rm $extrapath/SSDT-3.aml"); }
+    	system_call("cp -f $file $extrapath"); 
+    	}
+    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-4.aml"; if (file_exists($file)) {
+    	if (file_exists("$extrapath/SSDT-4.aml")) { system_call("rm $extrapath/SSDT-4.aml"); } 
+    	system_call("cp -f $file $extrapath"); 
+    	}
+    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-5.aml"; if (file_exists($file)) {
+    	if (file_exists("$extrapath/SSDT-5.aml")) { system_call("rm $extrapath/SSDT-5.aml"); } 
+    	system_call("cp -f $file $extrapath"); 
+    	}	
+    }  else {
+    	$edp->writeToLog("$workpath/build.log", " Skipping SSDT files from EDP on user request<br>");
     }
-
-    
-    $file = "$workpath/model-data/$modelNamePath/common/SSDT-1.aml"; if (file_exists($file)) { 
-    if (file_exists("$extrapath/SSDT-1.aml")) { system_call("rm $extrapath/SSDT-1.aml"); }
-    system_call("cp -f $file $extrapath"); 
-    }
-    $file = "$workpath/model-data/$modelNamePath/common/SSDT-2.aml"; if (file_exists($file)) { 
-    if (file_exists("$extrapath/SSDT-2.aml")) { system_call("rm $extrapath/SSDT-2.aml"); }
-    system_call("cp -f $file $extrapath"); 
-    }
-    $file = "$workpath/model-data/$modelNamePath/common/SSDT-3.aml"; if (file_exists($file)) { 
-    if (file_exists("$extrapath/SSDT-3.aml")) { system_call("rm $extrapath/SSDT-3.aml"); }
-    system_call("cp -f $file $extrapath"); 
-    }
-    $file = "$workpath/model-data/$modelNamePath/common/SSDT-4.aml"; if (file_exists($file)) {
-    if (file_exists("$extrapath/SSDT-4.aml")) { system_call("rm $extrapath/SSDT-4.aml"); } 
-    system_call("cp -f $file $extrapath"); 
-    }
-    $file = "$workpath/model-data/$modelNamePath/common/SSDT-5.aml"; if (file_exists($file)) {
-    if (file_exists("$extrapath/SSDT-5.aml")) { system_call("rm $extrapath/SSDT-5.aml"); } 
-    system_call("cp -f $file $extrapath"); 
-    }			
+    		
 
 
     //Copy essentials from /Extra/include if user has
     $edp->writeToLog("$workpath/build.log", "  Checking if we have any essential files in $incpath to use...<br>");
-    if (is_file("$incpath/smbios.plist")) 				{ 
+    if (is_file("$incpath/smbios.plist") && $modeldb[$modeldbID]["useIncSMBIOS"] == "on") 				{ 
     $edp->writeToLog("$workpath/build.log", " Custom smbios.plist found, Copying from $incpath to $extrapath<br>");
     system_call("cp -f $incpath/smbios.plist /Extra"); 
     }
-    if (is_file("$incpath/org.chameleon.Boot.plist")) 	{ 
+    if (is_file("$incpath/org.chameleon.Boot.plist") && $modeldb[$modeldbID]["useIncCHAM"] == "on") 	{ 
     $edp->writeToLog("$workpath/build.log", " Custom org.chameleon.Boot.plist found, Copying from $incpath to $extrapath<br>");
     system_call("cp -f $incpath/org.chameleon.Boot.plist /Extra"); 
     }
-    if (is_file("$incpath/dsdt.aml")) 					{ 
+    if (is_file("$incpath/dsdt.aml") && $modeldb[$modeldbID]["useIncDSDT"] == "on") 					{ 
     $edp->writeToLog("$workpath/build.log", " Custom dsdt file found, Copying from $incpath to $extrapath<br>");
     system_call("cp -f $incpath/dsdt.aml /Extra"); 
     }
-    if (is_file("$incpath/SSDT.aml")) 					{ 
-    $edp->writeToLog("$workpath/build.log", " Custom SSDT files found, Copying from $incpath to $extrapath<br>");
-    system_call("cp -f $incpath/SSDT.aml /Extra"); 
+    if($modeldb[$modeldbID]["useIncSSDT"] == "on")
+    {
+    	if (is_file("$incpath/SSDT.aml")) 					{ 
+    	$edp->writeToLog("$workpath/build.log", " Custom SSDT files found, Copying from $incpath to $extrapath<br>");
+    	system_call("cp -f $incpath/SSDT.aml /Extra"); 
+    	}
+    	if (is_file("$incpath/SSDT-1.aml")) 				{ system_call("cp -f $incpath/SSDT-1.aml /Extra"); }
+    	if (is_file("$incpath/SSDT-2.aml")) 				{ system_call("cp -f $incpath/SSDT-2.aml /Extra"); }
+    	if (is_file("$incpath/SSDT-3.aml")) 				{ system_call("cp -f $incpath/SSDT-3.aml /Extra"); }    
+    	if (is_file("$incpath/SSDT-4.aml")) 				{ system_call("cp -f $incpath/SSDT-4.aml /Extra"); }
+    	if (is_file("$incpath/SSDT-5.aml")) 				{ system_call("cp -f $incpath/SSDT-5.aml /Extra"); }  
     }
-    if (is_file("$incpath/SSDT-1.aml")) 				{ system_call("cp -f $incpath/SSDT-1.aml /Extra"); }
-    if (is_file("$incpath/SSDT-2.aml")) 				{ system_call("cp -f $incpath/SSDT-2.aml /Extra"); }
-    if (is_file("$incpath/SSDT-3.aml")) 				{ system_call("cp -f $incpath/SSDT-3.aml /Extra"); }    
-    if (is_file("$incpath/SSDT-4.aml")) 				{ system_call("cp -f $incpath/SSDT-4.aml /Extra"); }
-    if (is_file("$incpath/SSDT-5.aml")) 				{ system_call("cp -f $incpath/SSDT-5.aml /Extra"); }   
+     
     
     // Copy Themes folder from EDP workpath to Extra
     if (!is_dir("/Extra/Themes")) {
         $edp->writeToLog("$workpath/build.log", "  Copying Standard themes folder to /Extra<br>");
     	system_call("mkdir /Extra/Themes");
 		system_call("cp -R $workpath/Themes/. /Extra/Themes");
-     } 
+     }
 }
 
 
@@ -661,19 +696,21 @@ function copyKexts() {
 
     /*********************** Begin Kexts related to Hardware *****************************/
     
-    //copying PS2 kexts from kextpacks
-    $ps2id = $modeldb[$modeldbID]['ps2pack'];
-    
-    // remove voodooPS2 related files if installed before
-    if($ps2id != "2" && $ps2id != "5" && $ps2id != "6")
+    if($modeldb[$modeldbID]['useEDPExtentions'] == "on")
     {
+    	//copying PS2 kexts from kextpacks
+    	$ps2id = $modeldb[$modeldbID]['ps2pack'];
+    
+    	// remove voodooPS2 related files if installed before
+    	if($ps2id != "2" && $ps2id != "5" && $ps2id != "6")
+    	{
         	if(is_dir("/Library/PreferencePanes/VoodooPS2.prefpane")) {system_call("rm -rf /Library/PreferencePanes/VoodooPS2.prefpane");}
         	if(file_exists("/usr/bin/VoodooPS2Daemon")) {system_call("rm -rf /usr/bin/VoodooPS2Daemon");}
         	if(file_exists("/Library/LaunchDaemons/org.rehabman.voodoo.driver.Daemon.plist")) {system_call("rm -rf /Library/LaunchDaemons/org.rehabman.voodoo.driver.Daemon.plist");}
         	if(is_dir("/Library/PreferencePanes/VoodooPS2synapticsPane.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooPS2synapticsPane.prefPane");}
-    }
+    	}
     
-    if ($ps2id != "" && $ps2id != "no") {
+    	if ($ps2id != "" && $ps2id != "no") {
     	$name = $ps2db[$ps2id]["foldername"];
         if ($name != "") {  
         	 
@@ -704,14 +741,14 @@ function copyKexts() {
     		}
     		else
     			system_call("cp -R $kpsvn/$name/. $ee");
-    	}
-	} 
-	//Resetting $name
-	$name = "";
+    		}
+		} 
+		//Resetting $name
+		$name = "";
 	
 
-    //copying Wifi/BT kexts from kextpacks/ patch Wifi/BT Kexts
-    if ($modeldb[$modeldbID]['wifipack'] != "" && $modeldb[$modeldbID]['wifipack'] != "no") {
+    	//copying Wifi/BT kexts from kextpacks/ patch Wifi/BT Kexts
+    	if ($modeldb[$modeldbID]['wifipack'] != "" && $modeldb[$modeldbID]['wifipack'] != "no") {
         $wifid = $modeldb[$modeldbID]['wifipack'];
         $name = $wifidb[$wifid]['kextname'];
         $fname = $wifidb[$wifid]['foldername'];
@@ -750,52 +787,53 @@ function copyKexts() {
     			//Copying the kextpack to /Extra/Extentions
     			$edp->writeToLog("$workpath/build.log", "  Copying the Bluetooth kext ($workpath/kpsvn/Wireless/BluetoothFWUploader) to $ee<br>");
     			system_call("cp -R $workpath/kpsvn/Wireless/BluetoothFWUploader/. $ee");
+    			}
     		}
-    	}
-	}
-	//Resetting $name
-	$name = "";    
+		}
+		//Resetting $name
+		$name = "";    
     
 
-    //copying fakesmc kexts from kextpacks
-    $fakesmcid = $modeldb[$modeldbID]['fakesmc'];
-    $name = $fakesmcdb[$fakesmcid]["foldername"]; 
-    if ($modeldb[$modeldbID]['fakesmc'] != "" && $modeldb[$modeldbID]['fakesmc'] != "no" && $name != "") {   
+   		 //copying fakesmc kexts from kextpacks
+    	$fakesmcid = $modeldb[$modeldbID]['fakesmc'];
+    	$name = $fakesmcdb[$fakesmcid]["foldername"]; 
+    	if ($modeldb[$modeldbID]['fakesmc'] != "" && $modeldb[$modeldbID]['fakesmc'] != "no" && $name != "") {   
     	
     	//Syncing kextpack to local storage
     	if(!is_dir("$kpsvn/FakeSMC"));
     		system_call("mkdir $kpsvn/FakeSMC");
     		
-    	kextpackLoader("$name");   
+    		kextpackLoader("$name");   
     		
-    	//Copying the kextpack to /Extra/Extentions
-    	$edp->writeToLog("$workpath/build.log", "  Copying the fakesmc kext ($kpsvn/$name) to $ee<br>");
-    	system_call("cp -R $kpsvn/$name/. $ee");
-    }
-	//Resetting $name
-	$name = ""; 
+    		//Copying the kextpack to /Extra/Extentions
+    		$edp->writeToLog("$workpath/build.log", "  Copying the fakesmc kext ($kpsvn/$name) to $ee<br>");
+    		system_call("cp -R $kpsvn/$name/. $ee");
+     	}
+		//Resetting $name
+		$name = ""; 
 	
     	
-    //copying audio kexts
-    $audioid = $modeldb[$modeldbID]['audiopack'];
-    $audiodir = $audiodb[$audioid]["foldername"]; $name = $audiodir;
+    	//copying audio kexts
+    	$audioid = $modeldb[$modeldbID]['audiopack'];
+    	$audiodir = $audiodb[$audioid]["foldername"]; $name = $audiodir;
     
-    // remove voodooHDA related files if installed before
-    if($audioid == "no" || $audioid == "builtin") {
+    	// remove voodooHDA related files if installed before
+    	if($audioid == "no" || $audioid == "builtin") {
         	 	if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
         	 	if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
         	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
-    }
+   		 }
     
-    if ($modeldb[$modeldbID]['audiopack'] != "" && $modeldb[$modeldbID]['audiopack'] != "no") {
+    	if ($modeldb[$modeldbID]['audiopack'] != "" && $modeldb[$modeldbID]['audiopack'] != "no") {
         $edp->writeToLog("$workpath/build.log", "  Copying the Audio kexts to $ee<br>");
         
         //Clean up
         if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
         
         if ($audioid == "builtin") {
-        	if (is_dir("$workpath/model-data/$modelNamePath/$os/applehda")) { system_call("cp -R $workpath/model-data/$modelNamePath/$os/applehda/. $ee/"); }
-        	else { 
+        	if(is_dir("$workpath/model-data/$modelNamePath/applehda/$os")) { system_call("cp -R $workpath/model-data/$modelNamePath/applehda/$os/. $ee/"); }
+        	else if(is_dir("$workpath/model-data/$modelNamePath/$os/applehda")) { system_call("cp -R $workpath/model-data/$modelNamePath/$os/applehda/. $ee/"); }
+        	else {  
         		if (is_dir("$workpath/model-data/$modelNamePath/common/applehda")) { system_call("cp -R $workpath/model-data/$modelNamePath/common/applehda/. $ee/"); }
         	}
         	 	
@@ -815,13 +853,13 @@ function copyKexts() {
         	$edp->writeToLog("$workpath/build.log", "  Copying the $name kextpack ($kpsvn/$name) to $ee<br>");
         	system_call("cp -R $kpsvn/$name/. $ee");
         }   
-    }
-    //Resetting $name
-	$name = ""; 
+   	 }
+   	 //Resetting $name
+		$name = ""; 
 	
 
-	//copying ethernet kexts from kextpacks
-    if ($modeldb[$modeldbID]['ethernet'] != "" && $modeldb[$modeldbID]['ethernet'] != "no") {
+		//copying ethernet kexts from kextpacks
+    	if ($modeldb[$modeldbID]['ethernet'] != "" && $modeldb[$modeldbID]['ethernet'] != "no") {
         $lanid = $modeldb[$modeldbID]['ethernet'];
         $lankext = $landb[$lanid]['name'];
         $name = $landb[$lanid]['foldername'];
@@ -843,12 +881,12 @@ function copyKexts() {
     		//Copying the kextpack to /Extra/Extentions
     		$edp->writeToLog("$workpath/build.log", "  Copying the Ethernet kext ($kpsvn/Ethernet/$name/$lankext) to $ee<br>");
             system_call("cp -R $kpsvn/Ethernet/$name/$lankext $ee/");
-       	 }	
-       }
-	}
+       		 }	
+     	  }
+		}
 
-	//copying battery kexts from kextpacks
-    if ($modeldb[$modeldbID]['batterypack'] != "" && $modeldb[$modeldbID]['batterypack'] != "no") {
+		//copying battery kexts from kextpacks
+   	 if ($modeldb[$modeldbID]['batterypack'] != "" && $modeldb[$modeldbID]['batterypack'] != "no") {
         $battid = $modeldb[$modeldbID]['batterypack'];
         $name = $batterydb[$battid]['foldername'];
         if ($name != "") {
@@ -861,12 +899,15 @@ function copyKexts() {
     		//Copying the kextpack to /Extra/Extentions
     		$edp->writeToLog("$workpath/build.log", "  Copying the Battery kext ($kpsvn/Battery/$name) to $ee<br>");
     		system_call("cp -R $kpsvn/$name/. $ee");
-    	}
-	}
+    		}
+		}
 	
-	//Resetting $name
-	$name = ""; 
-	
+		//Resetting $name
+		$name = ""; 
+    } else {
+    	$edp->writeToLog("$workpath/build.log", " Skipping Standard Kexts from EDP on user request<br>");
+    }
+    
 	
 	//Copy optional kexts
     $data = $modeldb[$modeldbID]['optionalpacks'];
@@ -1032,23 +1073,22 @@ function copyKexts() {
     system_call("cp -Rf $tf/* $ee");
 
 
-    //Copying custom kexts from include folder
-   /* $edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $workpath/include/Extensions to $ee/<br>");
-    system_call("cp -R $workpath/include/Extensions/* $ee");*/
-    
-
-    $edp->writeToLog("$workpath/build.log", "  Copying custom kexts and Themes from $incpath to /Extra<br>");
-    //Copying kexts
-    system_call("cp -R $incpath/Extensions/* $ee");
-    //If AppleHDA is found in Extra/include then remove VoodooHDA from ee
-    if(file_exists("$incpath/Extensions/AppleHDA.kext")) {
+    //Copying Custom kexts
+    if($modeldb[$modeldbID]["useIncExtentions"] == "on")
+    {
+    	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra<br>");
+    	system_call("cp -R $incpath/Extensions/* $ee");
+    	//If AppleHDA is found in Extra/include then remove VoodooHDA from ee
+    	if(file_exists("$incpath/Extensions/AppleHDA.kext")) {
     			if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
         	 	if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
         	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
     			system_call("rm -rf $ee/VoodooHDA.kext");
     			system_call("rm -rf $ee/AppleHDADisabler.kext");
     			$edp->writeToLog("$workpath/build.log", "  found AppleHDA from $incpath, VoodooHDA removed<br>");
-    }
+   		 }
+    } 
+    
     
     // Copy Custom Themes folder from $incpatch to /Extra
     if (is_dir("$incpath/Themes")) {

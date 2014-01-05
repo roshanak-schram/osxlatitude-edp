@@ -79,6 +79,24 @@ echo "	<span class='graytitle'>Compatibility</span>\n";
                 
 
 
-		echo "</ul><br>";
-		echo "</div>";	
+	echo "</ul><br>";
+		
+	echo "<span class='graytitle'>Include EDP Files</span>";
+	echo "<ul class='pageitem'>";
+	checkbox("Use kexts from EDP ?", "useEDPExtentions", "yes");
+	checkbox("Use DSDT.aml from EDP ?", "useEDPDSDT", "yes");
+	checkbox("Use SSDT files from EDP ?", "useEDPSSDT", "yes");
+	checkbox("Use smbios.plist from EDP ?", "useEDPSMBIOS", "yes");
+	checkbox("Use org.chameleon.boot.plust from EDP ?", "useEDPCHAM", "yes");		
+	echo "</ul>";
+	
+	echo "<span class='graytitle'>Include Custom Files</span>";
+	echo "<ul class='pageitem'>";
+	checkbox("Include kexts from /Extra/include/Extensions ?", "useIncExtentions", "yes");
+	checkbox("Include DSDT.aml from /Extra/include ?", "useIncDSDT", "yes");
+	checkbox("Include SSDT files from /Extra/include ?", "useIncSSDT", "yes");
+	checkbox("Include smbios.plist from /Extra/include ?", "useIncSMBIOS", "yes");
+	checkbox("Include org.chameleon.boot.plust from /Extra/include ?", "useIncCHAM", "yes");		
+	echo "</ul>";
+	echo "</div>";	
 ?> 

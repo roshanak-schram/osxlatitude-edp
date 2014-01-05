@@ -26,7 +26,17 @@ if ($action == 'dobuild') {
 		//This one have to be empty, its used for when we do custom builds...
 		array( 	
 			'name' 			     => $_POST['name'], 
-			'desc' 			     => $_POST['desc'],           		
+			'desc' 			     => $_POST['desc'],
+			'useEDPExtentions' 	=> $_POST['useEDPExtentions'], 		
+			'useEDPDSDT' 		=> $_POST['useEDPcDSDT'],			
+			'useEDPSSDT' 		=> $_POST['useEDPSSDT'],			
+			'useEDPSMBIOS' 		=> $_POST['useEDPSMBIOS'], 			
+			'useEDPCHAM' 		=> $_POST['useEDPCHAM'], 
+			'useIncExtentions' 	=> $_POST['useIncExtentions'], 		
+			'useIncDSDT' 		=> $_POST['useIncDSDT'],			
+			'useIncSSDT' 		=> $_POST['useIncSSDT'],			
+			'useIncSMBIOS' 		=> $_POST['useIncSMBIOS'], 			
+			'useIncCHAM' 		=> $_POST['useIncCHAM'],            		
 			'ps2pack' 		     => $_POST['ps2pack'],
 			'batterypack'		 => $_POST['batterypack'],
 			'ethernet'		     => $_POST['ethernet'],
