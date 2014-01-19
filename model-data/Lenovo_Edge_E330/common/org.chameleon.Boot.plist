@@ -5,19 +5,13 @@
 	<key>DSDT</key>
 	<string>/Extra/DSDT.aml</string>
 	<key>DropSSDT</key>
-	<string>Yes</string>
+	<string>No</string>
 	<key>EthernetBuiltIn</key>
 	<string>Yes</string>
-	<key>GeneratePStates</key>
+	<key>Instant Menu</key>
 	<string>Yes</string>
-	<key>GraphicsEnabler</key>
-	<string>No</string>
-	<key>Kernel Flags</key>
-	<string>-v</string>
-	<key>SystemType</key>
-	<string>2</string>
-	<key>Timeout</key>
-	<string>3</string>
+	<key>PciRoot</key>
+	<string>1</string>
 	<key>UseKernelCache</key>
 	<string>No</string>
 </dict>
