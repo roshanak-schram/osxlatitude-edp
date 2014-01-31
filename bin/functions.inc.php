@@ -489,8 +489,11 @@ function copyEssentials() {
     $edp->writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
     edpCleaner();
 
+	$edp->writeToLog("$workpath/build.log", " Model EDP Path: $workpath/model-data/$modelNamePath<br>");
+	$edp->writeToLog("$workpath/build.log", "  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br>");
+
 	$extrapath = "/Extra";
-    $edp->writeToLog("$workpath/build.log", " Checking System plists, SSDT and DSDT files from $workpath/model-data/$modelNamePath....<br>");
+    $edp->writeToLog("$workpath/build.log", " Checking for DSDT, SSDT and System Plist files from EAPD......<br>");
     
     // use EDP SMBIos?
     if($modeldb[$modeldbID]["useEDPSMBIOS"] == "on")
@@ -608,9 +611,9 @@ function copyEssentials() {
     }
     		
 
-
+	$edp->writeToLog("$workpath/build.log", "  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br>");
     //Copy essentials from /Extra/include if user has
-    $edp->writeToLog("$workpath/build.log", "  Checking if we have any essential files in $incpath to use...<br>");
+    $edp->writeToLog("$workpath/build.log", "  Checking if we have any essential files in $incpath to use......<br>");
     if (is_file("$incpath/smbios.plist") && $modeldb[$modeldbID]["useIncSMBIOS"] == "on") 				{ 
     $edp->writeToLog("$workpath/build.log", " Custom smbios.plist found, Copying from $incpath to $extrapath<br>");
     system_call("cp -f $incpath/smbios.plist /Extra"); 
@@ -665,7 +668,7 @@ function copyKexts() {
 	if(!is_dir("$workpath/kpsvn"));
     			system_call("mkdir $workpath/kpsvn");
 
-    $edp->writeToLog("$workpath/build.log", "  Start by cleaning up in $ee..<br>");
+    $edp->writeToLog("$workpath/build.log", "  Cleaning up kexts in $ee..<br>");
     system_call("rm -Rf $ee/*.kext");
 
     /*********************** Begin Kexts related to Hardware *****************************/
@@ -695,7 +698,7 @@ function copyKexts() {
     			
     		kextpackLoader("$name");
     		
-    		$edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kext prefpanes<br>");
+    		$edp->writeToLog("$workpath/build.log", "  Copying the PS2 controller kext prefpanes if exists...<br>");
     		// Copy VodooPS2dameon and preference files
         	if($ps2id == "5")//VoodoPS2 Standard
         	 	system_call("cp -R $kpsvn/$name/VoodooPS2.prefpane /Library/PreferencePanes");
@@ -811,8 +814,16 @@ function copyKexts() {
         if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
         
         if ($audioid == "builtin") {
-        	if(is_dir("$workpath/model-data/$modelNamePath/applehda/$os")) { system_call("cp -R $workpath/model-data/$modelNamePath/applehda/$os/. $ee/"); }
-        	else if(is_dir("$workpath/model-data/$modelNamePath/applehda/common")) { system_call("cp -R $workpath/model-data/$modelNamePath/applehda/common/. $ee/"); }
+        	
+        	if(is_dir("$workpath/model-data/$modelNamePath/applehda/$os")) { 
+        		$edp->writeToLog("$workpath/build.log", "  Copying $os AppleHDA kext to $ee<br>");
+        		system_call("cp -R $workpath/model-data/$modelNamePath/applehda/$os/. $ee/"); 
+        	}
+        	else if(is_dir("$workpath/model-data/$modelNamePath/applehda/common")) { 
+        		$edp->writeToLog("$workpath/build.log", "  Copying common AppleHDA kext to $ee<br>");
+        		system_call("cp -R $workpath/model-data/$modelNamePath/applehda/common/. $ee/");
+        	}
+        		 
         	else if(is_dir("$workpath/model-data/$modelNamePath/$os/applehda")) { system_call("cp -R $workpath/model-data/$modelNamePath/$os/applehda/. $ee/"); }
         	else {  
         		if (is_dir("$workpath/model-data/$modelNamePath/common/applehda")) { system_call("cp -R $workpath/model-data/$modelNamePath/common/applehda/. $ee/"); }
@@ -926,7 +937,9 @@ function copyKexts() {
  /*********************** End Kexts related to Hardware *****************************/
  
 /*********************** Begin Fixes and Patches *****************************/
-     $edp->writeToLog("$workpath/build.log", "  Applying fixes and patches... <br>");
+	$edp->writeToLog("$workpath/build.log", "  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br>");
+
+    $edp->writeToLog("$workpath/build.log", "  Applying fixes and patches...... <br>");
 	
 	//Apply CPU and power management related fixes 
     $mdata = getModelDataFromID($modelID);
@@ -1027,8 +1040,10 @@ function copyKexts() {
 
 
 	/*********************** Begin Common and Custom kexts *****************************/
-	$edp->writeToLog("$workpath/build.log", "  Checking Common and Custom kexts, will be used if exists.. <br>");
-    $edp->writeToLog("$workpath/build.log", "  Copying common files to $ee.. <br>");
+	$edp->writeToLog("$workpath/build.log", "  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br>");
+
+	$edp->writeToLog("$workpath/build.log", "  Checking Common and Custom kexts, will be used if exists...... <br>");
+    $edp->writeToLog("$workpath/build.log", "  Copying common files to $ee... <br>");
     //Syncing kextpack to local storage
     if(!is_dir("$kpsvn/Standard"));
     			system_call("mkdir $kpsvn/Standard");
@@ -1057,7 +1072,7 @@ function copyKexts() {
     //Copying Custom kexts
     if($modeldb[$modeldbID]["useIncExtentions"] == "on")
     {
-    	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra<br>");
+    	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra...<br>");
     	system_call("cp -R $incpath/Extensions/* $ee");
     	//If AppleHDA is found in Extra/include then remove VoodooHDA from ee
     	if(file_exists("$incpath/Extensions/AppleHDA.kext")) {
@@ -1073,7 +1088,7 @@ function copyKexts() {
     
     // Copy Custom Themes folder from $incpatch to /Extra
     if (is_dir("$incpath/Themes")) {
-        $edp->writeToLog("$workpath/build.log", "  Copying Custom themes folder to /Extra<br>");
+        $edp->writeToLog("$workpath/build.log", "  Copying Custom themes folder to /Extra...<br>");
         system_call("rm -rf /Extra/Themes");
         system_call("mkdir /Extra/Themes");
 		system_call("cp -R $incpath/Themes/. /Extra/Themes");
