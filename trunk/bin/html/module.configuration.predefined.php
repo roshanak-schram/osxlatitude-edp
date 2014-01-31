@@ -28,7 +28,7 @@ if ($action == 'dobuild') {
 			'name' 			     => $_POST['name'], 
 			'desc' 			     => $_POST['desc'],
 			'useEDPExtentions' 	=> $_POST['useEDPExtentions'], 		
-			'useEDPDSDT' 		=> $_POST['useEDPcDSDT'],			
+			'useEDPDSDT' 		=> $_POST['useEDPDSDT'],			
 			'useEDPSSDT' 		=> $_POST['useEDPSSDT'],			
 			'useEDPSMBIOS' 		=> $_POST['useEDPSMBIOS'], 			
 			'useEDPCHAM' 		=> $_POST['useEDPCHAM'], 
