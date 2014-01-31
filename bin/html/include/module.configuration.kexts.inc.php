@@ -37,7 +37,7 @@
 				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] - $row[notes]</option>\n";
 			}			
 				//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
-				if ("$mdrow[audio]" == "builtin" || "$mdrow[audio]" == "builtin") { echo "<option value='yes' SELECTED>&nbsp; Audio: Patched AppleHDA</option>"; }
+				if ("$mdrow[audio]" == "builtin" || "$mdrow[audio]" == "builtin") { echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA</option>"; }
 
 			echo "<option value='no'>&nbsp; Audio: Don't load</option>\n";			
 			echo "</select><span class='arrow'></span> </li>\n";
