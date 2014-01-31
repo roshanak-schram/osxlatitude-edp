@@ -29,6 +29,10 @@ class builder {
 		$ven = builderGetVendorValuebyID($modelID);
 		$gen = builderGetGenValuebyID($modelID);
 		$modelNamePath = "$ven/$gen/$modelName";
+		
+		if (!is_dir("$workpath/model-data"))
+			system_call("mkdir $workpath/model-data");
+		
 		if(!is_dir("$workpath/model-data/$ven"))
 			system("mkdir $workpath/model-data/$ven");
 		if(!is_dir("$workpath/model-data/$ven/$gen"))
