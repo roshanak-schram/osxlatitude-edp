@@ -2,21 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Copyright</key>
+	<key>Credits</key>
 	<string>SMBios by OSXLatitude</string>
 	<key>SMbiosvendor</key>
 	<string>Apple Inc.</string>
 	<key>SMbiosversion</key>
-	<string>MBP81.88Z.0047.B27.1201241646</string>
+	<string>MBA51.88Z.00EF.B00.1205221442</string>
 	<key>SMboardproduct</key>
-	<string>Mac-94245A3940C91C80</string>
+	<string>Mac-66F35F19FE2A0D05</string>
 	<key>SMfamily</key>
-	<string>MacBook Pro</string>
+	<string>MacBook Air</string>
 	<key>SMproductname</key>
-	<string>MacBookPro8,2</string>
+	<string>MacBookAir5,1</string>
 	<key>SMserial</key>
-	<string>QT2FR8KGDMGG</string>
-	<key>EDPmodel</key>
-	<string>Asus_K46CB_i5_3317U_HD4000</string>
+	<string>G82H7A96F57J</string>
 </dict>
 </plist>
