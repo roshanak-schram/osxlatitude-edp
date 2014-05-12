@@ -229,22 +229,24 @@ if ($action == "") {
 			echo "<input type='hidden' name='model' value='$modelID'>";
 
 			echo "</div><br>";
-			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
+			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' onclick='clearLoadingScreen();' /></li></ul><br><br>\n";
 			echo "</form>";		
 
-
-			exit;
 		}
 	//<------------------------------ Here ends the model confirmation page
 		?>
 
 		<script>
+		function clearLoadingScreen() {
+			top.document.getElementById('edpmenu').src ='menu.inc.php?i=Configuration';
+		}
 		function doConfirm() {
 			var vendor = '<?php echo "$vendor";?>';
 			var a = document.getElementById("model");
 			var model = a.options[a.selectedIndex].value;
 			if (model == "") { alert('Please select a model before continuing..'); return; }
 			document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&model='+model+'&action=confirm';		
+			top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog#myfix';
 		}
 		function showType() {
 			var a = document.getElementById("vendor");

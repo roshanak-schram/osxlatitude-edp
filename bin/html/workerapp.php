@@ -206,6 +206,7 @@ if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web";
 if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "changelog") 	{ showChangelog(); exit; }
 if ($action == "showBuildLog")	{ showBuildLog(); exit ; }
+if ($action == "showLoadingLog")	{ showLoadingLog(); exit ; }
 
 
 //Functions called by this script
@@ -281,11 +282,28 @@ function fixes_reset_display() {
 
 function showBuildLog() {
 	global $workpath;
-	echo "<body onload=\"JavaScript:timedRefresh(10000);\">";	
-	echoPageItemTOP("icons/big/logs.png", "Building configuration...");
-	echo "<div class='pageitem_bottom'>\n";	
-	include "$workpath/build.log";			
-	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { setTimeout(\"location.reload(true);\",timeoutPeriod); } </script>\n";
+	echoPageItemTOP("icons/big/logs.png", "Build configuration log");
+	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
+
+	echo "<div class='pageitem_bottom'\">";	
+	/*echo "<img src=\"icons/big/loading.gif\" style=\"width:300px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -135px;\">";
+	//echo "<table width=\"100%\" border=\"0\" height=\"100%\" align=\"CENTER\"></table>\n";
+	//echo "<tr><td align=\"CENTER\"><td>Files are being downloaded... Please wait......</td><img src=\"icons/big/loading.gif\" ></td></tr></table>\n";
+	echo "<b><center>Please wait for few minutes while we download the files needed for your model (will take approx 5 - 15 minutes depending on your internet speed) and it will start building after the download................</center></b><br>";*/
+	
+	echo "<b>Build process:</b><br>";
+	include "$workpath/build.log";
+
+	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+	echo "</div>";
+}
+
+function showLoadingLog() {
+	global $workpath;
+	echo "<div class='pageitem_bottom'\">";
+	echo "<b><center>After starting the build process, please wait for few minutes while we download the files needed for your model (will take approx 5 - 15 minutes depending on your internet speed). You will be redirected to the build process log at the end of the build.</center></b>";
+	echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+	echo "</div>";
 }
 
 ?>

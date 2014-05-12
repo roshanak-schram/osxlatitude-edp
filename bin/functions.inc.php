@@ -150,10 +150,10 @@ function kextpackLoader($name) {
 	if ($name != "") {
 		$workfolder = "$workpath/kpsvn/$name";
 		if (is_dir("$workfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force update $workfolder");
+			system_call("svn --non-interactive --username edp --password edp --force update $workfolder >> $workpath/kpload.log 2>&1 &");
 		}
 		else {
-			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >>$workpath/kpload.log");
+			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >> $workpath/kpload.log 2>&1 &");
 		}
 	}
 } 
@@ -165,23 +165,23 @@ function kextpackLoader($name) {
  */
 function loadModeldata() {
     global $workpath, $modelNamePath;
-		
+	
     $modelfolder = "$workpath/model-data/$modelNamePath";
     if (is_dir("$modelfolder")) {
-        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder");
+        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder >> $workpath/checkout.log 2>&1 &");
     } else {
-        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath .");
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath . >> $workpath/checkout.log 2>&1 &");
     }
 }
 	
 function svnModeldata($model) {
     global $workpath;
-    
+		
     $modelfolder = "$workpath/model-data/$model";
     if (is_dir("$modelfolder")) {
-        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder");
+        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder >> $workpath/checkout.log 2>&1 &");
     } else {
-        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$model .");
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$model . >> $workpath/checkout.log 2>&1 &");
     }
 }
 
@@ -361,7 +361,11 @@ function patchWiFiBTBCM4352() {
 	system_call("cp -R $slepath/IO80211Family.kext $ee/");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");
     system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/KextPatched.plist");
-    system_call("sudo perl -pi -e 's|\x01\x58\x54|\x01\x58\x58|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360");
+   
+    // Binary patches
+    system_call("sudo perl -pi -e 's|\x01\x58\x54|\x01\x55\x53|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360"); // region code change to US
+    system_call("sudo perl -pi -e 's|\x6B\x10\x00\x00\x75|\x6B\x10\x00\x00\x74|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360"); // skipping binary checks of apple device id to work Appple card
+    system_call("sudo perl -pi -e 's|\x6B\x10\x00\x00\x0F\x85|\x6B\x10\x00\x00\x0F\x84|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360"); // skipping binary checks of apple device id to work Appple card
     }
     else { echo "  AirPortBrcm4360.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }    
 }
@@ -1040,40 +1044,52 @@ function copyKexts() {
     /*********************** End Fixes and Patches *****************************/
 
 
-	/*********************** Begin Common and Custom kexts *****************************/
+	/*********************** Begin Standard and Custom kexts copy *****************************/
 	$edp->writeToLog("$workpath/build.log", "  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br>");
 
-	$edp->writeToLog("$workpath/build.log", "  Checking Common and Custom kexts, will be used if exists...... <br>");
-    $edp->writeToLog("$workpath/build.log", "  Copying common files to $ee... <br>");
+	$edp->writeToLog("$workpath/build.log", "  Checking for Standard and Custom kexts, will be used if exists...... <br>");
+    $edp->writeToLog("$workpath/build.log", "  Copying Standard common files to $ee <br>");
     //Syncing kextpack to local storage
-    if(!is_dir("$kpsvn/Standard"));
-    			system_call("mkdir $kpsvn/Standard");
+    if(!is_dir("$kpsvn/Standard"))
+    		system_call("mkdir $kpsvn/Standard");
     
     kextpackLoader("Standard/common");
     
-    if ($os != "sl")//skip on Snow leopard for now as we don't have any kexts needed for tha
+    if ($os != "sl")// skip on Snow leopard as we don't have any common kexts needed in EDP
     	system_call("cp -R $workpath/kpsvn/Standard/common/* $ee");
 
-    $edp->writeToLog("$workpath/build.log", "  Copying $os files to $ee.. <br>");
+    $edp->writeToLog("$workpath/build.log", "  Copying Standard $os files to $ee <br>");
     //Syncing kextpack to local storage
     kextpackLoader("Standard/$os");
     
     system_call("cp -R $workpath/kpsvn/Standard/$os/* $ee");
     
-	// From Model data
-    $edp->writeToLog("$workpath/build.log", "  Copying common kexts to $ee..<br>");
-    $tf = "$workpath/model-data/$modelNamePath/common/Extensions";
-    system_call("cp -Rf $tf/* $ee");
-	// From Model data
-    $edp->writeToLog("$workpath/build.log", "  Copying $os kexts to $ee.. <br>");
-    $tf = "$workpath/model-data/$modelNamePath/$os/Extensions";
-    system_call("cp -Rf $tf/* $ee");
+	// From Model data (Extensions folder)
+    if(is_dir("$workpath/model-data/$modelNamePath/Extensions"))
+    {
+    	$edp->writeToLog("$workpath/build.log", "  Copying common kexts from Extensions folder to $ee<br>");
+    	$tf = "$workpath/model-data/$modelNamePath/Extensions/common";
+    	system_call("cp -Rf $tf/* $ee");
+    	$edp->writeToLog("$workpath/build.log", "  Copying $os kexts from Extensions folder to $ee <br>");
+    	$tf = "$workpath/model-data/$modelNamePath/Extensions/$os";
+    	system_call("cp -Rf $tf/* $ee");
+    }
+	
+    // From Model data (Common folder used before, have to remove this when all the models updated to new Extensions folder)
+    if(is_dir("$workpath/model-data/$modelNamePath/common/Extensions"))
+    {
+    	$edp->writeToLog("$workpath/build.log", "  Copying common kexts from common folder to $ee<br>");
+    	$tf = "$workpath/model-data/$modelNamePath/common/Extensions";
+    	system_call("cp -Rf $tf/* $ee");
+    	$edp->writeToLog("$workpath/build.log", "  Copying $os kexts from common folder to $ee<br>");
+    	$tf = "$workpath/model-data/$modelNamePath/$os/Extensions";
+    	system_call("cp -Rf $tf/* $ee");
+    }
 
-
-    //Copying Custom kexts
+    // Copying Custom kexts
     if($modeldb[$modeldbID]["useIncExtentions"] == "on")
     {
-    	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra...<br>");
+    	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra<br>");
     	system_call("cp -R $incpath/Extensions/* $ee");
     	//If AppleHDA is found in Extra/include then remove VoodooHDA from ee
     	if(file_exists("$incpath/Extensions/AppleHDA.kext")) {
@@ -1085,7 +1101,6 @@ function copyKexts() {
     			$edp->writeToLog("$workpath/build.log", "  found AppleHDA from $incpath, VoodooHDA removed<br>");
    		 }
     } 
-    
     
     // Copy Custom Themes folder from $incpatch to /Extra
     if (is_dir("$incpath/Themes")) {
