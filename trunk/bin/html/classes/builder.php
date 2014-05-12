@@ -2,28 +2,36 @@
 
 class builder {
 
-	//Handles the pre-defined build process step by step, should only be called when we are sure that the global var $modelID is fully populated with needed vars...
+	//
+	// Handles the pre-defined build process step by step
+	//
 	public function EDPdoBuild() {
-		global $modeldb, $modeldbID; global $modelID; global $workpath; global $rootpath; global $chamModules; global $edp;
+		global $modeldb, $modeldbID, $modelID; global $workpath; global $rootpath; global $chamModules; global $edp;
 
-		//Start by defining our log file and cleaning it..
+		//
+		// Start by defining our log file and cleaning it
+		//
 		$log = "$workpath/build.log";
 		if (is_file("$log")) { 
 			system_call("rm -Rf $log"); 
 			system_call("<br>echo Building....<br><br> >$log");
 		}
+	
+		$log = "$workpath/checkout.log";
+		if (is_file("$log")) { 
+			system_call("rm -Rf $log"); 
+			system_call("<br>echo Building....<br><br> >$log");
+		}
 		
-		
-		echo "<div id='model_download'>";
-		echo "<p><B><center>Please wait for few minutes(will take approx 2-15 mnts which depends on your speed), while we download the files of your model................</center></p><br>";
-		echo "<p><B><center>When the download is finished then you will automatically redirected to build process and its Log</center></p><br>";
-		echo "</div>";
-		
-		//Check if myhack is up2date and ready for combat
+		//
+		// Check if myhack is up2date and ready for build
+		//
 		myHackCheck();
 			
+		//
+		// Step 1 : Create the folder path and download the model data 
+		//
 		
-		//Step 1
 		global $modelNamePath;
 		$modelName = $modeldb[$modeldbID]["name"];
 		$ven = builderGetVendorValuebyID($modelID);
@@ -38,25 +46,42 @@ class builder {
 		if(!is_dir("$workpath/model-data/$ven/$gen"))
 			system("mkdir $workpath/model-data/$ven/$gen");
 			
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update $modelName  model data... </b><br>");
-		// We will use old way also until we move all the models data into their respective category
-		//New way
+		// Launch the script which provides the summary of the build process 
+		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
+
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/Update of essential files and custom kexts for the $modelName </b><br>");
+		
+		system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath >> $workpath/build.log 2>&1");
+
+		//
+		// We use the new method "loadModeldata" for the new modelswill and 
+		// old method "svnModeldata" for the old models which is not updated for the new DB to fetch files
+		//
+		
+		// Try new method
 		loadModeldata();
-		//use old way if there is no files in new folder structure 
+		
+		//use old method if there are no files in new folder structure 
 		if(!file_exists("$workpath/model-data/$modelNamePath/common/dsdt.aml")) {
 			svnModeldata("$modelName");
 			$modelNamePath = "$modelName";
 		}
 			
-		//Step 2
+		//
+		// Step 2 : Copy essentials like dsdt, ssdt and plists 
+		//
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files to $workpath </b><br>");
 		copyEssentials();
 
-		//Step 3
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Preparing kexts for myHack.kext </b><br>");
+		//
+		// Step 3 : Copying kexts
+		//
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Downlading and Preparing kexts for myHack.kext </b><br>");
 		copyKexts();
 			
-		//Step 4		
+		//
+		// Step 4 : Applying bootloader config
+		//	
 		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 4) Applying Chameleon settings.. </b><br>");
 		if($modeldb[$modeldbID]["updateCham"] == "on") {
 			$edp->writeToLog("$workpath/build.log", "Updating bootloader...<br>");
@@ -66,33 +91,19 @@ class builder {
 		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
 		$chamModules->copyChamModules($modeldb[$modeldbID]);
 			
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 5) Applying last minut fixes...</b><br>");
+		//
+		// Step 5 : Applying last minute fixes and generating caches
+		//
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 5) Applying last minute fixes and Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
 		lastMinFixes();
-					
-		//Step 5
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 6) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
 		system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
 		$edp->writeToLog("$workpath/build.log", "<a name='myfix'></a>");
 				
-		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
-
 		exit;
         		
-	}
-
-
-
-
-
-
-
-
-
-		
+	}	
 }
 
-
 $builder = new builder();
-
 
 ?> 
