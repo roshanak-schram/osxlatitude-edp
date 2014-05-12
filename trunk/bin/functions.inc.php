@@ -146,14 +146,14 @@ function checkSVNrevs() {
  * This function will download a kextpack from SVN if requested (or update it if allready exists) 
  */
 function kextpackLoader($name) {
-	global $edp_db, $workpath, $edp;
+	global $workpath;
 	if ($name != "") {
 		$workfolder = "$workpath/kpsvn/$name";
 		if (is_dir("$workfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force update $workfolder >> $workpath/kpload.log 2>&1");
+			system_call("svn --non-interactive --username edp --password edp --force --quiet update $workfolder");
 		}
 		else {
-			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name . >> $workpath/kpload.log 2>&1");
+			system_call("mkdir $workfolder; cd $workfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$name .");
 		}
 	}
 } 
@@ -168,9 +168,9 @@ function loadModeldata() {
 	
     $modelfolder = "$workpath/model-data/$modelNamePath";
     if (is_dir("$modelfolder")) {
-        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder >> $workpath/checkout.log 2>&1");
+        system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
     } else {
-        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath . >> $workpath/checkout.log 2>&1");
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath .");
     }
 }
 	
@@ -179,9 +179,9 @@ function svnModeldata($model) {
 		
     $modelfolder = "$workpath/model-data/$model";
     if (is_dir("$modelfolder")) {
-        system_call("svn --non-interactive --username edp --password edp --force update $modelfolder >> $workpath/checkout.log 2>&1");
+        system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
     } else {
-        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force co http://osxlatitude-edp.googlecode.com/svn/model-data/$model . >> $workpath/checkout.log 2>&1");
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model .");
     }
 }
 
