@@ -6,12 +6,14 @@ include "header.inc.php";
 
 //Get server vars
 global $modelID;
+global $runFix;
 
 $vendor 	= $_GET['vendor'];	if ($vendor == "") 	{ $vendor 	= $_POST['vendor']; }
 $serie 		= $_GET['serie'];	if ($serie == "") 	{ $serie 	= $_POST['serie']; }
 $modelID 	= $_GET['model'];	if ($modelID == "") { $modelID 	= $_POST['model']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 
+		
 //-------------------------> Do build page starts here
 if ($action == 'dobuild') {
 	
@@ -19,7 +21,7 @@ if ($action == 'dobuild') {
 
 	if ($modelID == "") { echo "modelID is empty"; exit; }
 
-	//Generate a multi dim. array used during the build process
+	// Generate a multi dim. array used during the build process
 	global $modeldb;
 
 	$modeldb = array(
@@ -65,27 +67,148 @@ if ($action == 'dobuild') {
 		),
 	);
 
-	global $modelID;
-	global $modelName;
-	//id of modeldb array which is '0' for a model
-	global $modeldbID;
-	$modeldbID = "0";
+		global $workpath, $rootpath, $ee, $os; 
+		global $chamModules; global $edp;
+		global $modelID, $modelName;
+	
+		//id of modeldb array which is '0' for a model
+		global $modeldbID;
+		$modeldbID = "0";
+		global $runFix;
+		$runFix = "Yes";
+		
+		//
+		// Start by defining our log file and cleaning it
+		//
+		$log = "$workpath/build.log";
+		if (is_file("$log")) { 
+			system_call("rm -Rf $log"); 
+		}
+	
+		$log = "$workpath/checkout.log";
+		if (is_file("$log")) { 
+			system_call("rm -Rf $log"); 
+		}
+		
+		$myFixlog = "$workpath/myFix.log";
+		if (is_file("$myFixlog")) { 
+			system_call("rm -Rf $myFixlog"); 
+		}
+		
+		if(!is_dir("$workpath/kpsvn")) {
+    		system_call("mkdir $workpath/kpsvn");
+    	 }
+	
+		// Launch the script which provides the summary of the build process 
+		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
+		
+   		$edp->writeToLog("$workpath/build.log", "  Cleaning up kexts in /Extra/Extensions and download status files in EDP...<br>");
+    	system_call("rm -Rf /Extra/Extensions/*");
+    
+    	$edp->writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
+  		edpCleaner();
+    
+   	 	if(!is_dir("$workpath/kpsvn/dload/"))
+    		system_call("mkdir $workpath/kpsvn/dload");
+    	else
+    		system_call("rm -Rf $workpath/kpsvn/dload/*");
+    
+		//
+		// Check if myhack is up2date and ready for build
+		//
+		myHackCheck();
+			
+		//
+		// Step 1 : Create the folder path and download the model data 
+		//
+		
+		global $modelNamePath;
+		$modelName = $modeldb[$modeldbID]["name"];
+		$ven = builderGetVendorValuebyID($modelID);
+		$gen = builderGetGenValuebyID($modelID);
+		$modelNamePath = "$ven/$gen/$modelName";
+		
+		if (!is_dir("$workpath/model-data"))
+			system_call("mkdir $workpath/model-data");
+		
+		if(!is_dir("$workpath/model-data/$ven"))
+			system("mkdir $workpath/model-data/$ven");
+			
+		if(!is_dir("$workpath/model-data/$ven/$gen"))
+			system("mkdir $workpath/model-data/$ven/$gen");
+			
+		if(!is_dir("$workpath/model-data/$modelNamePath/"))
+			system("mkdir $workpath/model-data/$modelNamePath");
+			
+		if(!is_dir("$workpath/model-data/$modelNamePath/Extensions"))
+			system("mkdir $workpath/model-data/$modelNamePath/Extensions");
+			
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
+		
+		system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $workpath/build.log 2>&1");
 
-	$modelName = $modeldb[$modeldbID]["name"];
-
-	$builder->EDPdoBuild();	
+		//
+		// We use the new method "loadModeldata" for the new modelswill and 
+		// old method "svnModeldata" for the old models which is not updated for the new DB to fetch files
+		//
+		
+		// Try new method
+		loadModelEssentialFiles();
+		
+		//use old method if there are no files in new folder structure 
+		if(!file_exists("$workpath/model-data/$modelNamePath/common/dsdt.aml")) {
+			svnModeldata("$modelName");
+			$modelNamePath = "$modelName";
+		}
+			
+		//
+		// Step 2 : Copy essentials like dsdt, ssdt and plists 
+		//
+		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files downloaded and from /Extra/include:</b><br>");
+		copyEssentials();
+			
+		//
+		// Step 3 : Applying Fixes and bootloader config
+		//	
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Applying fixes and Chameleon settings:</b><br>");
+		applyFixes();
+		
+		if($modeldb[$modeldbID]["updateCham"] == "on") {
+			$edp->writeToLog("$workpath/build.log", "Updating bootloader...<br>");
+			system_call("cp -f $workpath/boot /");
+		}
+			
+		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
+		$chamModules->copyChamModules($modeldb[$modeldbID]);
+		
+		//
+		// Step 4 : Copying kexts
+		//
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 4) Downlading and preparing kexts:</b><br>");
+		copyEDPKexts();		
 }
 
 //-------------------------> Here starts the Vendor and model selector - but only if $action is empty
 
 if ($action == "") {
 
-	//Fetch standard model info needed for the configuration of the choosen model to build
+		//
+		// Clear build Status files
+		//
+		$myFixlog = "$workpath/myFix2.log";
+		if (is_file("$myFixlog")) { 
+			system_call("rm -Rf $myFixlog"); 
+		}
+		$statFiles = "$workpath/kpsvn/dload";
+		if(is_dir("$statFiles"))
+			system_call("rm -rf $workpath/kpsvn/dload/*");
+				
+		// Fetch standard model info needed for the configuration of the choosen model to build
 		$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
 		$stmt->execute();
 		$result = $stmt->fetchAll(); $mdrow = $result[0];
 		
-	//Write out the top menu
+	// Write out the top menu
 	echoPageItemTOP("icons/big/config.png", "Select a model your wish to configure for:");
 
 	echo "<div class='pageitem_bottom'>\n";
@@ -111,7 +234,7 @@ if ($action == "") {
 	echo "</select><span class='arrow'></span> </li></ul>";
 
 	echo '<div id="continue-container" class="hidden">';
-	echo "<p><B><center>After clicking 'Continue' EDP will download the latest model data for your machine.<br>- This may take a few minuts -	</center></p><br>";
+	echo "<p><B><center>After clicking 'Continue' EDP will let you to config your machine.<br></p><br>";
 	echo "<ul class='pageitem'><li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul></p>";
 	echo '</div>';
 
@@ -238,7 +361,8 @@ if ($action == "") {
 
 		<script>
 		function clearLoadingScreen() {
-			top.document.getElementById('edpmenu').src ='menu.inc.php?i=Configuration';
+			// top.document.getElementById('edpmenu').src ='menu.inc.php?i=Configuration';
+			// top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog#myfix';
 		}
 		function doConfirm() {
 			var vendor = '<?php echo "$vendor";?>';
