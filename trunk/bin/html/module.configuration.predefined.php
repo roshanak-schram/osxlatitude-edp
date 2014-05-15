@@ -6,7 +6,6 @@ include "header.inc.php";
 
 //Get server vars
 global $modelID;
-global $runFix;
 
 $vendor 	= $_GET['vendor'];	if ($vendor == "") 	{ $vendor 	= $_POST['vendor']; }
 $serie 		= $_GET['serie'];	if ($serie == "") 	{ $serie 	= $_POST['serie']; }
@@ -74,8 +73,6 @@ if ($action == 'dobuild') {
 		//id of modeldb array which is '0' for a model
 		global $modeldbID;
 		$modeldbID = "0";
-		global $runFix;
-		$runFix = "Yes";
 		
 		//
 		// Start by defining our log file and cleaning it
@@ -309,12 +306,6 @@ if ($action == "") {
 		$stmt->execute();
 		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
 
-		//Download model data
-		/*$modelName = $mdrow[name];
-		echo "<div id='model_download' style='display: none'>";
-		svnModeldata("$modelName");
-		echo "</div>";*/
-		
 		//Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		

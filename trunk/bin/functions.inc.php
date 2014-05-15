@@ -167,18 +167,32 @@ function kextpackLoader($categ, $fname, $name) {
 			$kpath = "kextpacks/$categ/$fname";
 			$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
 
-		if ($categ == "Ethernet")
+			// Copy VoodooHDA prefpanes
+			if ($name == "AudioSettings")
+			{
+        		$copyKextCmd = "cp -R $workpath/kpsvn/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kpsvn/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA config files installed<br>\" >> $workpath/build.log";
+			}
+			// Copy VoodooPState launch agent plist
+			else if ($fname == "VoodooPState")
+			{
+				$kextdir = "$workpath/kpsvn/$categ/$fname/";
+				$kpath = "kextpacks/$categ/$fname";
+				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
+			}
+			// Copy VoodooPS2 prefpanes
+			else if ($fname == "StandardVooDooPS2")
+			{
+				$copyKextCmd = "cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname prefpane installed to /Library/PreferencePanes<br>\" >> $workpath/build.log";
+			}
+			else if ($fname == "LatestVoodooPS2" || $fname == "VoooDooALPS2")
+			{
+				$copyKextCmd = "cp $workpath/kpsvn/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kpsvn/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname prefpane and dameon installed<br>\" >> $workpath/build.log";
+			}
+			// change to correct ethernet and power mgmt kexts folder path
+		    else if ($categ == "Ethernet")
 			{
 				$kextdir = "$workpath/kpsvn/$categ/$fname/$name";
 				$kpath = "kextpacks/$categ/$fname/$name";
-			}
-			else if ($categ == "AudioSettings")
-			{
-        		$copyKextCmd = "cp -R $kpsvn/Audio/Settings/VoodooHdaSettingsLoader.app /Applications/; cp $kpsvn/Audio/Settings/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $kpsvn/Audio/Settings/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : Audio settings files installed<br>\" >> $workpath/build.log";
-			}
-			else if ($categ == "PS2Touchpad")
-			{
-				
 			}
 			else if ($categ == "PowerMgmt" || $categ == "Others")
 			{
@@ -189,14 +203,6 @@ function kextpackLoader($categ, $fname, $name) {
 			else if ($categ == "Others")
 			{
 				
-			}
-			
-			// Copy VoodooPState launch agent plist
-			if ($fname == "VoodooPState")
-			{
-				$kextdir = "$workpath/kpsvn/$categ/$fname/";
-				$kpath = "kextpacks/$categ/$fname";
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
 			}
 		}	
 			
@@ -419,14 +425,15 @@ function patchWiFiBTBCM4352() {
 	
 	$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist";   if (file_exists($file)) {
 	system_call("cp -R $slepath/IO80211Family.kext $ee/");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");
-    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/KextPatched.plist");
-   
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
     // Binary patches
-    system_call("sudo perl -pi -e 's|\x01\x58\x54|\x01\x55\x53|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360"); // region code change to US
-    system_call("sudo perl -pi -e 's|\x6B\x10\x00\x00\x75|\x6B\x10\x00\x00\x74|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360"); // skipping binary checks of apple device id to work Appple card
-    system_call("sudo perl -pi -e 's|\x6B\x10\x00\x00\x0F\x85|\x6B\x10\x00\x00\x0F\x84|g' $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360"); // skipping binary checks of apple device id to work Appple card
-    }
+    system_call('sudo perl -pi -e \'s|\x01\x58\x54|\x01\x55\x53|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // region code change to US
+    system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x75|\x6B\x10\x00\x00\x74|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
+    system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x0F\x85|\x6B\x10\x00\x00\x0F\x84|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
+    
+    system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/KextPatched.plist");
+
+  }
     else { echo "  AirPortBrcm4360.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }    
 }
 
@@ -738,7 +745,7 @@ function copyEssentials() {
     		$name = $ps2db[$ps2id]['kextname'];
     		
     		// remove voodooPS2 files if its installed before
-    		if($ps2id != "2" && $ps2id != "5" && $ps2id != "6")
+    		if($ps2id != "2" && $ps2id != "6")
     		{
         		if(is_dir("/Library/PreferencePanes/VoodooPS2.prefpane")) {system_call("rm -rf /Library/PreferencePanes/VoodooPS2.prefpane");}
         		if(file_exists("/usr/bin/VoodooPS2Daemon")) {system_call("rm -rf /usr/bin/VoodooPS2Daemon");}
@@ -880,7 +887,7 @@ function copyEssentials() {
         		kextpackLoader("Audio", "$fname", "$name");
         		
         		// Copy Prefpane and Settings loader
-        		kextpackLoader("AudioSettings", "Audio", "Settings");
+        		kextpackLoader("Audio", "Settings", "AudioSettings");
         	} 
    	 	}
    	 	// Reset vars
