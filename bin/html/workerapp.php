@@ -282,7 +282,7 @@ function fixes_reset_display() {
 
 function showBuildLog() {
 	global $workpath, $edp, $ee;
-	echoPageItemTOP("icons/big/logs.png", "Build configuration log");
+	echoPageItemTOP("icons/big/logs.png", "System configuration build log");
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
