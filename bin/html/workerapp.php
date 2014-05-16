@@ -207,6 +207,7 @@ if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "changelog") 	{ showChangelog(); exit; }
 if ($action == "showBuildLog")	{ showBuildLog(); exit ; }
 if ($action == "showLoadingLog")	{ showLoadingLog(); exit ; }
+if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
 
 
 //Functions called by this script
@@ -308,7 +309,7 @@ function showBuildLog() {
 	if ($fcount > 0)
 		echo "<b>Files left to download/update : $fcount</b><br>";
 		
-	if ($fcount == 0 && !is_file("$workpath/myFix.log"))
+	if ($fcount == 0 && is_dir("$workpath/kpsvn/dload/statFiles") && !is_file("$workpath/myFix.log"))
 	{
 		
 		$edp->writeToLog("$workpath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
@@ -372,6 +373,13 @@ function showLoadingLog() {
 		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 		echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
 	}	
+	echo "</div>";
+}
+
+function showCustomBuildInfo() {
+	echo "<div class='pageitem_bottom'\">";	
+	echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+	echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
 	echo "</div>";
 }
 
