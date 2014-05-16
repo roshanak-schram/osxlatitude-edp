@@ -33,10 +33,9 @@ if (file_exists("$workpath/bin/edp.sqlite3")) {
 // download db
 system("curl -o $workpath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
 
-echo "Failed to update EDP database, using database from backup...\n";
-
 // could not download then use backup!
 if (!file_exists("$workpath/bin/edp.sqlite3")) {
+	echo "Failed to update EDP database, using database from backup...\n";
     system("cp $workpath/bin/backup/edp.sqlite3 $workpath/bin/edp.sqlite3");
 }
 
