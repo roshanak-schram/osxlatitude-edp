@@ -1,5 +1,10 @@
 <?php
 
+//
+// create must directories
+//
+
+// check for EDP folder
 if(is_dir("/Extra/EDP")) {
 $workpath = "/Extra/EDP";
 }
@@ -12,15 +17,27 @@ if(!is_dir("/Extra/include"))
 if(!is_dir("/Extra/include/Extensions"))
    system("mkdir /Extra/include/Extensions");
    
+//
+// Updating database on app start
+//
 
-//Check if db exists, and if not.. download it...
+echo "Updating EDP database, please wait...\n";
+
+// backup and remove db if exists to update
+if (file_exists("$workpath/bin/edp.sqlite3")) {
+	system("rm -Rf $workpath/bin/backup/edp.sqlite3");
+	system("cp $workpath/bin/edp.sqlite3 $workpath/bin/backup/edp.sqlite3");
+	system("rm -Rf $workpath/bin/edp.sqlite3");
+  }
+    	
+// download db
+system("curl -o $workpath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
+
+echo "Failed to update EDP database, using database from backup...\n";
+
+// could not download then use backup!
 if (!file_exists("$workpath/bin/edp.sqlite3")) {
-    system("curl -o $workpath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
-
-    if (!file_exists("$workpath/bin/edp.sqlite3")) {
-        // Nope still no good use backup!
-        system("cp $workpath/bin/edp.sqlite3 $workpath/bin/backup/edp.sqlite3");
-    }
+    system("cp $workpath/bin/backup/edp.sqlite3 $workpath/bin/edp.sqlite3");
 }
 
 include_once "config.inc.php";
@@ -30,10 +47,12 @@ $os_string = "";
 $os = getVersion();
 
 if ($os == "lion" || $os == "ml" || $os == "mav") {
-	//EDP app is not being closed automatically after we click close, so we manually close this and open again when we launch it
+	// EDP app is not being closed automatically after we click close
+	// so we manually close this and open again when we launch it
 	system("sudo killall EDP"); 
     system("open $workpath/apps/EDPweb.app");
 } else {
+	// start EDP
     system("open http://127.0.0.1:11250/");
 }
 ?>
