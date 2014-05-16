@@ -1,8 +1,3 @@
-<script>
-		function showBuildInfo() {
-			top.document.getElementById('edpmenu').src ='workerapp.php?action=showCustomBuildInfo#myfix';
-		}
-</script>
 
 <?php
 	include_once "../functions.inc.php";
@@ -118,8 +113,11 @@
 				deleteUsrIncludeFiles();
 				
 			if($cusoper == "cbuild" || $edpoper == "ebuild" || $cusoper == "cdelbuild" ||
-			   $cusoper == "cfixcache" || $cusoper == "cfullfix")	
+			   $cusoper == "cfixcache" || $cusoper == "cfullfix")	 {
 				doCustomBuild();
+				echo "<body onload=\"JavaScript:showStatus();\">";
+				echo "<script type=\"text/JavaScript\"> function showStatus() { top.document.getElementById('edpmenu').src ='workerapp.php?action=showCustomBuildInfo#myfix'; } </script>\n";
+			}
 		}
 
 
@@ -293,7 +291,7 @@ function doCustomBuild() {
 			echo "<input type='hidden' name='action' value='dobuild'>";
 			echo "</div><br>";
 			
-	echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' onclick='showBuildInfo();' /></li></ul><br><br>\n";
+	echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
 	
 	exit;
 		
