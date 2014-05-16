@@ -123,39 +123,49 @@ if ($action == 'dobuild') {
 		$modelName = $modeldb[$modeldbID]["name"];
 		$ven = builderGetVendorValuebyID($modelID);
 		$gen = builderGetGenValuebyID($modelID);
-		$modelNamePath = "$ven/$gen/$modelName";
+		
 		
 		if (!is_dir("$workpath/model-data"))
 			system_call("mkdir $workpath/model-data");
-		
-		if(!is_dir("$workpath/model-data/$ven"))
-			system("mkdir $workpath/model-data/$ven");
-			
-		if(!is_dir("$workpath/model-data/$ven/$gen"))
-			system("mkdir $workpath/model-data/$ven/$gen");
-			
-		if(!is_dir("$workpath/model-data/$modelNamePath/"))
-			system("mkdir $workpath/model-data/$modelNamePath");
-			
-		if(!is_dir("$workpath/model-data/$modelNamePath/Extensions"))
-			system("mkdir $workpath/model-data/$modelNamePath/Extensions");
 			
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
 		
-		system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $workpath/build.log 2>&1");
-
-		//
-		// We use the new method "loadModeldata" for the new modelswill and 
-		// old method "svnModeldata" for the old models which is not updated for the new DB to fetch files
-		//
+		//use old method if there are is $gen type in db 
+		if($gen == "") {
 		
-		// Try new method
-		loadModelEssentialFiles();
-		
-		//use old method if there are no files in new folder structure 
-		if(!file_exists("$workpath/model-data/$modelNamePath/common/dsdt.aml")) {
-			svnModeldata("$modelName");
 			$modelNamePath = "$modelName";
+
+			if(!is_dir("$workpath/model-data/$modelName/"))
+				system("mkdir $workpath/model-data/$modelName");
+				
+			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $workpath/build.log 2>&1");
+			
+			svnModeldata("$modelName");
+		}
+		else {
+		
+			$modelNamePath = "$ven/$gen/$modelName";
+			
+			if(!is_dir("$workpath/model-data/$ven"))
+				system("mkdir $workpath/model-data/$ven");
+			
+			if(!is_dir("$workpath/model-data/$ven/$gen"))
+				system("mkdir $workpath/model-data/$ven/$gen");
+			
+			if(!is_dir("$workpath/model-data/$modelNamePath/"))
+				system("mkdir $workpath/model-data/$modelNamePath");
+			
+			if(!is_dir("$workpath/model-data/$modelNamePath/Extensions"))
+				system("mkdir $workpath/model-data/$modelNamePath/Extensions");
+			
+			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $workpath/build.log 2>&1");
+			
+			//
+			// We use the new method "loadModelEssentialFiles" for the models and 
+			// old method "svnModeldata" for the old models which is not updated for the new DB to fetch files
+			//
+		
+			loadModelEssentialFiles();
 		}
 			
 		//

@@ -1,3 +1,9 @@
+<script>
+		function showBuildInfo() {
+			top.document.getElementById('edpmenu').src ='workerapp.php?action=showCustomBuildInfo#myfix';
+		}
+</script>
+
 <?php
 	include_once "../functions.inc.php";
 	include_once "../config.inc.php";
@@ -141,13 +147,24 @@ function doCustomBuild() {
         system_call("cp \"$workpath/bin/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
     }
     
-	//Start by defining our log file and cleaning it..
+    //
+	// Start by defining our log file and cleaning it..
+	//
 	$log = "$workpath/build.log";
 	if (is_file("$log")) { 
 		system_call("rm -Rf $log"); 
-		system_call("<br>echo Building....<br><br> >$log");
 	}
 	
+	$myFixlog = "$workpath/myFix.log";
+		if (is_file("$myFixlog")) { 
+			system_call("rm -Rf $myFixlog"); 
+		}
+		
+	if(!is_dir("$workpath/kpsvn/dload/"))
+    		system_call("mkdir $workpath/kpsvn/dload");
+    	else
+    		system_call("rm -Rf $workpath/kpsvn/dload/*");
+    		
 	//$edp->writeToLog("$workpath/build.log", "Choice: $cusoper, $edpoper<br>");
 
 	
@@ -193,12 +210,10 @@ function doCustomBuild() {
 			 	$pckid++;
 			 }
 	
-	if ($dsdt == "on") {
-		$edp->writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to /Extra<br>");
-		system_call("cp -f /Extra/include/dsdt.aml /Extra");
-	} 	
-	
-	
+		if ($dsdt == "on") {
+			$edp->writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to /Extra<br>");
+			system_call("cp -f /Extra/include/dsdt.aml /Extra");
+		} 	
 	
     	if (is_file("/Extra/include/SSDT.aml") && $ssdt == "on") 					{ 
     		$edp->writeToLog("$workpath/build.log", "Copying SSDT file to /Extra<br>");
@@ -221,15 +236,15 @@ function doCustomBuild() {
     		system_call("cp -f /Extra/include/SSDT-4.aml /Extra"); 
     	}
 
-	if ($smbios == "on")	{
-		$edp->writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to /Extra<br>"); 
-		system_call("cp -f /Extra/include/smbios.plist /Extra");
-		}
+		if ($smbios == "on")	{
+			$edp->writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to /Extra<br>"); 
+			system_call("cp -f /Extra/include/smbios.plist /Extra");
+			}
 	
-	if ($boot == "on") { 
-		$edp->writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to /Extra<br>");
-		system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra");
-		}		
+		if ($boot == "on") { 
+			$edp->writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to /Extra<br>");
+			system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra");
+			}		
 		
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 2) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
 		system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
@@ -243,7 +258,6 @@ function doCustomBuild() {
 	exit;
 }		
 
-		
 
 	//Custom configration page
 	echo "<form action='module.configuration.custom.php' method='post'>";
@@ -255,9 +269,9 @@ function doCustomBuild() {
 	echo "Copy your files like DSDT, SSDT, plists and boot(chameleon bootloader) to /Extra/include and <br>Kexts to /Extra/include/Extensions, which all can be managed very effectively with our EDP<br>";
 	echo "</div>";
 	//echo "</form>";
-		//Load the tabs
-		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
+	//Load the tabs
+	echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
 		//Show the tabs bar ?>
 		<div id="tabs">
@@ -279,13 +293,8 @@ function doCustomBuild() {
 			echo "<input type='hidden' name='action' value='dobuild'>";
 			echo "</div><br>";
 			
-			
-			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
-					
-
-
-			exit;
+	echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' onclick='showBuildInfo();' /></li></ul><br><br>\n";
+	
+	exit;
 		
 ?>
-
- 
