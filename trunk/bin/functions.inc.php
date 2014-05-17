@@ -194,15 +194,11 @@ function kextpackLoader($categ, $fname, $name) {
 				$kextdir = "$workpath/kpsvn/$categ/$fname/$name";
 				$kpath = "kextpacks/$categ/$fname/$name";
 			}
-			else if ($categ == "PowerMgmt" || $categ == "Others")
+			else if ($categ == "PowerMgmt")
 			{
 				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/*.kext $ee/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
 				$kextdir = "$workpath/kpsvn/$categ/$name";
 				$kpath = "kextpacks/$categ/$name";
-			}
-			else if ($categ == "Others")
-			{
-				
 			}
 		}	
 			
@@ -307,34 +303,6 @@ function downloadAndRun($url, $filetype, $filename, $execpath) {
     system_call("open $execpath");
 }	
 	
-/**
- * AppleACPIPlatformxxx kext fix for Battery and Coolbook
- */
-function AppleACPIfixCheck() {
-    global $ee, $workpath, $slepath, $modeldb, $modeldbID;
-
-    //Check if ACPIfix is selected
-    if ($modeldb[$modeldbID]["useACPIfix"] == "yes") {
-        echo "  Applying ACPI fix (Coolbook fix)\n";
-        
-        if(!is_dir("$workpath/kpsvn/ACPI"));
-    			system_call("mkdir $workpath/kpsvn/ACPI");
-    			
-    		kextpackLoader("ACPI/coolbook-fix");
-    		
-        system_call("cp -R $workpath/kpsvn/ACPI/coolbook-fix/AppleACPIPlatform.kext $ee");
-
-        if (is_dir("$slepath/AppleACPIPlatform.kext")) {
-            //Create backup folder
-            date_default_timezone_set('UTC');
-            $date = date("d-m-Y");
-            $backupfolder = "/backup/$date-AppleACPIPlatform.kext-$kver2";
-            system_call("mkdir /backup");
-            system_call("mkdir $backupfolder");
-            system_call("mv $slepath/AppleACPIPlatform.kext $backupfolder");
-        }
-    }
-}
 
 function kernelcachefix() {
     global $workpath, $rootpath;
@@ -366,8 +334,7 @@ function lastMinFixes() {
 function patchAHCI() {
 	global $workpath,$slepath, $ee;
     system_call("cp -R $slepath/IOAHCIFamily.kext $ee");
-    //system_call("perl /Extra/EDP/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
-    system_call("perl $workpath/bin/fixes/patch-ahci-mlion.pl >>$workpath/build.log");
+    system_call("perl $workpath/bin/fixes/patch-ahci-mlion.pl >> $workpath/build.log");
 }
 
 /**
@@ -1094,6 +1061,13 @@ function applyFixes() {
         }
        else if ($fname != "") { 
 
+			if($id == "1") {
+       			$edp->writeToLog("$workpath/build.log", "  Applying ACPI fix for Battery read and Coolbook...<br>");
+       		}
+       		else if($id == "5") {
+       			$edp->writeToLog("$workpath/build.log", "  Downloading patched IOATAFamily fix for IDE disks...<br>");
+       		}
+       		
     		if(!is_dir("$kpsvn/$categ"))
     			system_call("mkdir $kpsvn/$categ");
     		
