@@ -226,9 +226,22 @@ function kextpackLoader($categ, $fname, $name) {
  * if the model is not checked out it will check it out
  */
 function loadModelEssentialFiles() {
-    global $workpath, $modelNamePath;
+    global $workpath, $modelNamePath, $os;
 	
+	//
+	// download essential files from common folder
+	//
     $modelfolder = "$workpath/model-data/$modelNamePath/common";
+    if (is_dir("$modelfolder")) {
+        system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+    } else {
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common .");
+    }
+    
+    //
+	// download essential files from $os folder
+	//
+    $modelfolder = "$workpath/model-data/$modelNamePath/$os";
     if (is_dir("$modelfolder")) {
         system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
     } else {
@@ -237,9 +250,22 @@ function loadModelEssentialFiles() {
 }
 	
 function svnModeldata($model) {
-    global $workpath;
+    global $workpath, $os;
 		
+	//
+	// download essential files from common folder
+	//
     $modelfolder = "$workpath/model-data/$model/common";
+    if (is_dir("$modelfolder")) {
+        system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+    } else {
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/common .");
+    }
+    
+    //
+	// download essential files from common $os
+	//
+    $modelfolder = "$workpath/model-data/$model/$os";
     if (is_dir("$modelfolder")) {
         system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
     } else {
@@ -843,6 +869,23 @@ function copyEssentials() {
     				
         		kextpackLoader("Extensions", "audiocommon", "$modelNamePath/applehda");
 				kextpackLoader("Extensions", "audio$os", "$modelNamePath/applehda");
+				
+				//
+				// Copy AppleHDA kexts from common and $os folders (used in old db structure, have to remove this when model moved to new db)
+				//
+				if(is_dir("$workpath/model-data/$modelNamePath/common/applehda"))
+    				{
+    				$edp->writeToLog("$workpath/build.log", "  Copying AppleHDA kexts from model common folder to $ee<br>");
+    				$tf = "$workpath/model-data/$modelNamePath/common/applehda";
+    				system_call("cp -a $tf/. $ee/");
+   				 }
+   				 
+				if(is_dir("$workpath/model-data/$modelNamePath/$os/applehda"))
+    				{
+    				$edp->writeToLog("$workpath/build.log", "  Copying AppleHDA kexts from model $os folder to $ee<br>");
+    				$tf = "$workpath/model-data/$modelNamePath/$os/applehda";
+    				system_call("cp -a $tf/. $ee/");
+   				 }
         	}
         	else if ($fname != "") {
     			        
@@ -966,21 +1009,17 @@ function copyEssentials() {
 	kextpackLoader("Extensions", "modelcommon", "$modelNamePath/Extensions");
 	kextpackLoader("Extensions", "model$os", "$modelNamePath/Extensions");
 	
-   /* if(is_dir("$workpath/model-data/$modelNamePath/Extensions"))
-    {
-    	$edp->writeToLog("$workpath/build.log", "  Copying common kexts from Extensions folder to $ee<br>");
-    	$tf = "$workpath/model-data/$modelNamePath/Extensions/common";
-    	system_call("cp -a $tf/. $ee/");
-    	$edp->writeToLog("$workpath/build.log", "  Copying $os kexts from Extensions folder to $ee <br>");
-    	$tf = "$workpath/model-data/$modelNamePath/Extensions/$os";
-    	system_call("cp -a $tf/. $ee/");
-    }*/
-	
-    // From Model data (Common folder used before, have to remove this when all the models updated to new Extensions folder)
+    // From Model data (Common and $os folder used before, have to remove this when all the models updated to new Extensions folder)
     if(is_dir("$workpath/model-data/$modelNamePath/common/Extensions"))
     {
     	$edp->writeToLog("$workpath/build.log", "  Copying kexts from model common folder to $ee<br>");
     	$tf = "$workpath/model-data/$modelNamePath/common/Extensions";
+    	system_call("cp -a $tf/. $ee/");
+    }
+    if(is_dir("$workpath/model-data/$modelNamePath/$os/Extensions"))
+    {
+    	$edp->writeToLog("$workpath/build.log", "  Copying kexts from model $os folder to $ee<br>");
+    	$tf = "$workpath/model-data/$modelNamePath/$os/Extensions";
     	system_call("cp -a $tf/. $ee/");
     }
  }
