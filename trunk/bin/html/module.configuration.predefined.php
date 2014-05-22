@@ -28,12 +28,12 @@ if ($action == 'dobuild') {
 		array( 	
 			'name' 			     => $_POST['name'], 
 			'desc' 			     => $_POST['desc'],
-			'useEDPExtentions' 	=> $_POST['useEDPExtentions'], 		
+			'useEDPExtensions' 	=> $_POST['useEDPExtensions'], 		
 			'useEDPDSDT' 		=> $_POST['useEDPDSDT'],			
 			'useEDPSSDT' 		=> $_POST['useEDPSSDT'],			
 			'useEDPSMBIOS' 		=> $_POST['useEDPSMBIOS'], 			
 			'useEDPCHAM' 		=> $_POST['useEDPCHAM'], 
-			'useIncExtentions' 	=> $_POST['useIncExtentions'], 		
+			'useIncExtensions' 	=> $_POST['useIncExtensions'], 		
 			'useIncDSDT' 		=> $_POST['useIncDSDT'],			
 			'useIncSSDT' 		=> $_POST['useIncSSDT'],			
 			'useIncSMBIOS' 		=> $_POST['useIncSMBIOS'], 			
@@ -154,9 +154,6 @@ if ($action == 'dobuild') {
 			
 			if(!is_dir("$workpath/model-data/$modelNamePath/"))
 				system("mkdir $workpath/model-data/$modelNamePath");
-			
-			if(!is_dir("$workpath/model-data/$modelNamePath/Extensions"))
-				system("mkdir $workpath/model-data/$modelNamePath/Extensions");
 			
 			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $workpath/build.log 2>&1");
 			

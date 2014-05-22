@@ -83,7 +83,7 @@ echo "	<span class='graytitle'>Compatibility</span>\n";
 		
 	echo "<span class='graytitle'>Include EDP Files</span>";
 	echo "<ul class='pageitem'>";
-	checkbox("Use kexts from EDP ?", "useEDPExtentions", "yes");
+	checkbox("Use kexts from EDP ?", "useEDPExtensions", "yes");
 	checkbox("Use DSDT.aml from EDP ?", "useEDPDSDT", "yes");
 	checkbox("Use SSDT files from EDP ?", "useEDPSSDT", "yes");
 	checkbox("Use smbios.plist from EDP ?", "useEDPSMBIOS", "yes");
@@ -92,7 +92,7 @@ echo "	<span class='graytitle'>Compatibility</span>\n";
 	
 	echo "<span class='graytitle'>Include Custom Files</span>";
 	echo "<ul class='pageitem'>";
-	checkbox("Include kexts from /Extra/include/Extensions ?", "useIncExtentions", "yes");
+	checkbox("Include kexts from /Extra/include/Extensions ?", "useIncExtensions", "yes");
 	checkbox("Include DSDT.aml from /Extra/include ?", "useIncDSDT", "yes");
 	checkbox("Include SSDT files from /Extra/include ?", "useIncSSDT", "yes");
 	checkbox("Include smbios.plist from /Extra/include ?", "useIncSMBIOS", "yes");
