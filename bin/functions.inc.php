@@ -1,5 +1,5 @@
 <?php
-
+  
   //Include builder class
   include_once "html/classes/builder.php";
   include_once "html/classes/chamModules.php";
@@ -155,15 +155,17 @@ function kextpackLoader($categ, $fname, $name) {
 		
 		$endStatFile = "cd $workpath/kpsvn/dload/statFiles; rm -rf $fname.txt";
 		
-    	if ($categ == "Extensions")
+    	if ($categ == "Extensions"  || $categ == "Kernel")
 		{
-			$kextdir = "$workpath/model-data/$name/$fname";
+			$categdir = "$workpath/model-data/$name";
+			$kextdir = "$categdir/$fname";
 			$kpath = "model-data/$name/$fname";
 			$copyKextCmd = "cp -a $workpath/model-data/$name/$fname/*.kext $ee/; echo \"Copy : $fname kext copied to $ee<br>\" >> $workpath/build.log";
 			$name = $fname;
 		}
 		else {
-			$kextdir = "$workpath/kpsvn/$categ/$fname/";
+			$categdir = "$workpath/kpsvn/$categ";
+			$kextdir = "$categdir/$fname";
 			$kpath = "kextpacks/$categ/$fname";
 			$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
 
@@ -175,8 +177,6 @@ function kextpackLoader($categ, $fname, $name) {
 			// Copy VoodooPState launch agent plist
 			else if ($fname == "VoodooPState")
 			{
-				$kextdir = "$workpath/kpsvn/$categ/$fname/";
-				$kpath = "kextpacks/$categ/$fname";
 				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
 			}
 			// Copy VoodooPS2 prefpanes
@@ -191,13 +191,15 @@ function kextpackLoader($categ, $fname, $name) {
 			// change to correct ethernet and power mgmt kexts folder path
 		    else if ($categ == "Ethernet")
 			{
-				$kextdir = "$workpath/kpsvn/$categ/$fname/$name";
+				$categdir = "$workpath/kpsvn/$categ/$fname"; // Ethernet/RealTek/kextname.kext
+				$kextdir = "$categdir/$name";
 				$kpath = "kextpacks/$categ/$fname/$name";
 			}
 			else if ($categ == "PowerMgmt")
 			{
 				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/*.kext $ee/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
-				$kextdir = "$workpath/kpsvn/$categ/$name";
+				$categdir = "$workpath/kpsvn/$categ"; // PowerMgmt/kextname.kext
+				$kextdir = "$categdir/$name";
 				$kpath = "kextpacks/$categ/$name";
 			}
 		}	
@@ -211,7 +213,7 @@ function kextpackLoader($categ, $fname, $name) {
 			// system_call("svn --non-interactive --username edp --password edp --quiet --force update $kextdir");
 		}
 		else {
-			$checkoutCmd = "mkdir $kextdir; cd $kextdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$kpath/ .; echo \"Download : $name kext download finished<br>\" >> $workpath/build.log";
+			$checkoutCmd = "mkdir $categdir; cd $categdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$kpath; echo \"Download : $name kext download finished<br>\" >> $workpath/build.log";
 
 			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $copyKextCmd; $endStatFile; ");
 			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
@@ -245,7 +247,7 @@ function loadModelEssentialFiles() {
     if (is_dir("$modelfolder")) {
         system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
     } else {
-        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common .");
+        system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/$os .");
     }
 }
 	
@@ -706,12 +708,37 @@ function copyEssentials() {
     	if (is_file("$incpath/SSDT-5.aml")) 				{ system_call("cp -f $incpath/SSDT-5.aml /Extra"); }  
     }
     
-    // Copy Themes folder from EDP workpath to Extra
+     //
+    // Check if we need a custom version of chameleon from essential common and $os folders
+    //
+    if ($modeldb[$modeldbID]['customCham'] == "on") {
+        $edp->writeToLog("$workpath/build.log", "  Copying custom chameleon to $rootpath if exists... <br>");
+        
+        $cboot = "$workpath/model-data/$modelNamePath/common/boot";
+        $osboot = "$workpath/model-data/$modelNamePath/$os/boot";
+        
+        if(is_file("$cboot") || is_file("$osboot"))
+        {
+        	system_call("rm -f $rootpath/boot");
+        	system_call("cp $workpath/model-data/$modelNamePath/common/boot $rootpath");
+        	system_call("cp $workpath/model-data/$modelNamePath/$os/boot $rootpath");
+        }
+    }
+    
+    //
+    // Copy Custom Themes folder to Extra
+    //
+    $edp->writeToLog("$workpath/build.log", "  Copying Themes folder to /Extra...<br>");
     if (!is_dir("/Extra/Themes")) {
-        $edp->writeToLog("$workpath/build.log", "  Copying Standard themes folder to /Extra<br>");
-    	system_call("mkdir /Extra/Themes");
-		system_call("cp -R $workpath/Themes/. /Extra/Themes");
+        system_call("mkdir /Extra/Themes");
      }
+     
+    if(is_dir("$workpath/model-data/$modelNamePath/common/Themes")) {
+		system_call("cp -a $workpath/model-data/$modelNamePath/common/Themes/. /Extra/Themes");
+    }
+    else {
+    	system_call("cp -a $workpath/Themes/. /Extra/Themes");
+    }
 }
 
 
@@ -732,7 +759,7 @@ function copyEssentials() {
 	$kpsvn = "$workpath/kpsvn";    
     
     // Use EDP Kexts?
-    if($modeldb[$modeldbID]['useEDPExtentions'] == "on")
+    if($modeldb[$modeldbID]['useEDPExtensions'] == "on")
     {
     	//
     	// copying PS2 kexts from kextpacks
@@ -766,9 +793,6 @@ function copyEssentials() {
 		$name = "";
 		$fname = "";
 		
-		//system_call("ls");
-		/*$fcount = shell_exec("ls | wc -l");
-		echo "File counts $fcount<br>";*/
 		
 		//
     	// copying Wifi/BT kexts from kextpacks / patch WiFi/BT Kexts
@@ -1029,6 +1053,20 @@ function copyEssentials() {
     	$tf = "$workpath/model-data/$modelNamePath/$os/Extensions";
     	system_call("cp -a $tf/. $ee/");
     }
+    
+    //
+    // Download custom kernel from EDP
+    //
+    	  	
+    kextpackLoader("Kernel", "kernel$os", "$modelNamePath/Kernel");
+    
+    //
+    // Create a script file if we need to copy kexts from include
+    //
+    if($modeldb[$modeldbID]["useIncExtensions"] == "on")
+    {
+    	$edp->writeToLog("$workpath/kpsvn/dload/CopyCustomKexts.sh", "");
+    } 
  }
  
  /*
@@ -1131,28 +1169,32 @@ function applyFixes() {
  */
 function copyCustomFiles() {
     //Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $incpath, $modeldb, $modeldbID, $os, $ee, $edp;
+    global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $edp;
     global $modelNamePath;
 	
-	$edp->writeToLog("$workpath/build.log", "  Checking for Custom files from $incpath, will be used if exists...... <br>");
-
-    //
-    // Check if we need a custom version of chameleon
-    //
-    if ($modeldb[$modeldbID]['customCham'] == "on") {
-        $edp->writeToLog("$workpath/build.log", "  Copying custom chameleon to $rootpath.. <br>");
-        system_call("rm -f $rootpath/boot");
-        system_call("cp $workpath/model-data/$modelNamePath/common/boot $rootpath");
-        system_call("cp $workpath/model-data/$modelNamePath/$os/boot $rootpath");
-    }
+	$edp->writeToLog("$workpath/build.log", "  Checking for Custom files from EDP model path and $incpath, will be used if exists...... <br>");
 
 	//
-    // Check if we need a custom made kernel
+    // Check if we need a custom made kernel from EDP model kernel folder
     //
-    if(file_exists("$workpath/model-data/$modelNamePath/$os/custom_kernel")) {
-        $edp->writeToLog("$workpath/build.log", "  Copying custom made kernel to $rootpath.. <br>");
-        system_call("rm -f $rootpath/custom_kernel");
-        system_call("cp $workpath/model-data/$modelNamePath/$os/custom_kernel $rootpath");
+    
+    if(is_dir("$workpath/model-data/$modelNamePath/kernel/kernel$os")) {
+        $edp->writeToLog("$workpath/build.log", "  Copying custom kernel to $rootpath if exists... <br>");
+        	
+        $ckernel = "$workpath/model-data/$modelNamePath/kernel/kernel$os/custom_kernel";
+        if(is_file("$ckernel"))
+        {
+        	$edp->writeToLog("$workpath/build.log", "  custom_kernel found, copied to $rootpath <br>");
+        	system_call("rm -f $rootpath/custom_kernel");
+       		system_call("cp $workpath/model-data/$modelNamePath/kernel/kernel$os//custom_kernel $rootpath");
+        }
+        $kernelos = "$workpath/model-data/$modelNamePath/kernel/kernel$os/mach_kernel";
+        if(is_file("$kernelos"))
+        {
+        	$edp->writeToLog("$workpath/build.log", "  mach_kernel found, copied to $rootpath <br>");
+        	system_call("rm -f $rootpath/mach_kernel");
+       		system_call("cp $workpath/model-data/$modelNamePath/kernel/kernel$os/mach_kernel $rootpath");
+        }
     }
 
 
@@ -1167,9 +1209,9 @@ function copyCustomFiles() {
      }	
      
 	//
-    // Copying Custom kexts from include
+    // Copying Custom kexts from include if CopyCustomKexts file exists
     //
-    if($modeldb[$modeldbID]["useIncExtentions"] == "on")
+    if(is_file("$workpath/kpsvn/dload/CopyCustomKexts.sh"))
     {
     	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra<br>");
     	system_call("cp -a $incpath/Extensions/. $ee/");
