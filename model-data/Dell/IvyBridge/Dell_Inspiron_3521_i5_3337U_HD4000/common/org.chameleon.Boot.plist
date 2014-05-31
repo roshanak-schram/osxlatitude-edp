@@ -12,6 +12,8 @@
 	<string>Yes</string>
 	<key>PciRoot</key>
 	<string>1</string>
+	<key>Kernel Flags</key>
+	<string>-f</string>
 	<key>UseKernelCache</key>
 	<string>No</string>
 </dict>
