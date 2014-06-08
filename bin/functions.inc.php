@@ -1044,8 +1044,8 @@ function copyEssentials() {
     //
 	// From Model data (Extensions folder)
 	//
-	kextpackLoader("Extensions", "modelcommon", "$modelNamePath/Extensions");
-	kextpackLoader("Extensions", "model$os", "$modelNamePath/Extensions");
+	kextpackLoader("Extensions", "kextscommon", "$modelNamePath/Extensions");
+	kextpackLoader("Extensions", "kexts$os", "$modelNamePath/Extensions");
 	
     // From Model data (Common and $os folder used before, have to remove this when all the models updated to new Extensions folder)
     if(is_dir("$workpath/model-data/$modelNamePath/common/Extensions"))
