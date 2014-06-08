@@ -172,7 +172,7 @@ function kextpackLoader($categ, $fname, $name) {
 			// Copy VoodooHDA prefpanes
 			if ($name == "AudioSettings")
 			{
-        		$copyKextCmd = "cp -R $workpath/kpsvn/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kpsvn/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA config files installed<br>\" >> $workpath/build.log";
+        		$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kpsvn/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA files installed<br>\" >> $workpath/build.log";
 			}
 			// Copy VoodooPState launch agent plist
 			else if ($fname == "VoodooPState")
@@ -182,11 +182,11 @@ function kextpackLoader($categ, $fname, $name) {
 			// Copy VoodooPS2 prefpanes
 			else if ($fname == "StandardVooDooPS2")
 			{
-				$copyKextCmd = "cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname prefpane installed to /Library/PreferencePanes<br>\" >> $workpath/build.log";
+				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname installed to /Library/PreferencePanes<br>\" >> $workpath/build.log";
 			}
 			else if ($fname == "LatestVoodooPS2" || $fname == "VoooDooALPS2")
 			{
-				$copyKextCmd = "cp $workpath/kpsvn/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kpsvn/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname prefpane and dameon installed<br>\" >> $workpath/build.log";
+				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kpsvn/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname files installed<br>\" >> $workpath/build.log";
 			}
 			// change to correct ethernet and power mgmt kexts folder path
 		    else if ($categ == "Ethernet")
@@ -538,11 +538,11 @@ function getVersion() {
     if ($v == "10.9.3") { $r="mav"; $os_string = "OSX Maverick $v"; }	
     if ($v == "10.9.4") { $r="mav"; $os_string = "OSX Maverick $v"; }
     if ($v == "10.9.5") { $r="mav"; $os_string = "OSX Maverick $v"; }
-    if ($v == "10.10") { $r="y"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.0") { $r="y"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.1") { $r="y"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.2") { $r="y"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.3") { $r="y"; $os_string = "OSX Yosemite $v"; }                            			
+    if ($v == "10.10") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.0") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.1") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.2") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.3") { $r="yos"; $os_string = "OSX Yosemite $v"; }                            			
     return $r;
 }
 	
