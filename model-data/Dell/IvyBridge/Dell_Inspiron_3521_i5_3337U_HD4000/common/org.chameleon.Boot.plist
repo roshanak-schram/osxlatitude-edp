@@ -13,7 +13,7 @@
 	<key>PciRoot</key>
 	<string>1</string>
 	<key>Kernel Flags</key>
-	<string>-f</string>
+	<string>dart=0</string>
 	<key>UseKernelCache</key>
 	<string>No</string>
 </dict>
