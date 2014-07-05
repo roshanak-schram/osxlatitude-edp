@@ -38,6 +38,9 @@ if (!file_exists("$workpath/bin/edp.sqlite3")) {
 	echo "Failed to update EDP database, using database from backup...\n";
     system("cp $workpath/bin/backup/edp.sqlite3 $workpath/bin/edp.sqlite3");
 }
+else {
+	echo "Update success.\n";
+}
 
 include_once "config.inc.php";
 include_once "functions.inc.php";
@@ -45,7 +48,7 @@ include_once "functions.inc.php";
 $os_string = "";
 $os = getVersion();
 
-if ($os == "lion" || $os == "ml" || $os == "mav") {
+if(getMacOSXVersion() >= "10.7") {
 	// EDP app is not being closed automatically after we click close
 	// so we manually close this and open again when we launch it
 	system("sudo killall EDP"); 

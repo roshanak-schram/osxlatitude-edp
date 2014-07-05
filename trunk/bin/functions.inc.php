@@ -538,11 +538,15 @@ function getVersion() {
     if ($v == "10.9.3") { $r="mav"; $os_string = "OSX Maverick $v"; }	
     if ($v == "10.9.4") { $r="mav"; $os_string = "OSX Maverick $v"; }
     if ($v == "10.9.5") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.6") { $r="mav"; $os_string = "OSX Maverick $v"; }
     if ($v == "10.10") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
     if ($v == "10.10.0") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
     if ($v == "10.10.1") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
     if ($v == "10.10.2") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.3") { $r="yos"; $os_string = "OSX Yosemite $v"; }                            			
+    if ($v == "10.10.3") { $r="yos"; $os_string = "OSX Yosemite $v"; }
+    if ($v == "10.10.4") { $r="yos"; $os_string = "OSX Yosemite $v"; }
+    if ($v == "10.10.5") { $r="yos"; $os_string = "OSX Yosemite $v"; } 
+    if ($v == "10.10.6") { $r="yos"; $os_string = "OSX Yosemite $v"; }                            			
     return $r;
 }
 	
