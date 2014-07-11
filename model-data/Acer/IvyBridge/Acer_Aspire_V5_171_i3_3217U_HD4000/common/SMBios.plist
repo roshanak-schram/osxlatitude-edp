@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Credits</key>
-	<string>Created with Champlist</string>
+	<string>SMBios by OSXLatitude</string>
 	<key>SMbiosvendor</key>
 	<string>Apple Inc.</string>
 	<key>SMbiosversion</key>
@@ -16,7 +16,5 @@
 	<string>MacBookAir5,1</string>
 	<key>SMserial</key>
 	<string>G82H7A96F57J</string>
-	<key>EDPmodel</key>
-	<string>Acer_Aspire_v5_171_i3_3217U_HD4000</string>
 </dict>
 </plist>
