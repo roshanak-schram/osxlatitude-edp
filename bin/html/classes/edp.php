@@ -5,7 +5,7 @@ class edp {
 	//-----> Updates EDP from SVN and downloads a new database
 	public function update() {
 		global $workpath;
-    	include_once "$workpath/bin/config.inc.php";
+    	include_once "$workpath/bin/edpconfig.inc.php";
     
     	//echo "<pre>";
     	echo "Cleaning up $workpath using SVN <br>\n";
@@ -28,9 +28,6 @@ class edp {
     public function writeToLog($logfile, $data) {
     	file_put_contents($logfile, $data, FILE_APPEND | LOCK_EX);
     }
-
-	
-		
 }
 
 
