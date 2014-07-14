@@ -1,17 +1,14 @@
 <?php
 include_once "../functions.inc.php";
-include_once "../config.inc.php";
+include_once "../edpconfig.inc.php";
 
 include "header.inc.php";
 
-//Get server vars
-global $modelID;
-
-$vendor 	= $_GET['vendor'];	if ($vendor == "") 	{ $vendor 	= $_POST['vendor']; }
-$serie 		= $_GET['serie'];	if ($serie == "") 	{ $serie 	= $_POST['serie']; }
-$modelID 	= $_GET['model'];	if ($modelID == "") { $modelID 	= $_POST['model']; }
+// Get the values from the javascript link 
+$type	 	= $_GET['type'];	if ($type == "") 	{ $type 	= $_POST['type']; }
+$modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
-
+		
 		
 //-------------------------> Do build page starts here
 if ($action == 'dobuild') {
@@ -68,12 +65,8 @@ if ($action == 'dobuild') {
 
 		global $workpath, $rootpath, $ee, $os; 
 		global $chamModules; global $edp;
-		global $modelID, $modelName;
+		global $modelName;
 	
-		//id of modeldb array which is '0' for a model
-		global $modeldbID;
-		$modeldbID = "0";
-		
 		//
 		// Start by defining our log file and cleaning it
 		//
@@ -120,7 +113,7 @@ if ($action == 'dobuild') {
 		//
 		
 		global $modelNamePath;
-		$modelName = $modeldb[$modeldbID]["name"];
+		$modelName = $modeldb[0]["name"];
 		$ven = builderGetVendorValuebyID($modelID);
 		$gen = builderGetGenValuebyID($modelID);
 		
@@ -130,7 +123,7 @@ if ($action == 'dobuild') {
 			
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
 		
-		//use old method if there are is $gen type in db 
+		// use old method if there are is no generation column in db 
 		if($gen == "") {
 		
 			$modelNamePath = "$modelName";
@@ -177,13 +170,13 @@ if ($action == 'dobuild') {
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Applying fixes and Chameleon settings:</b><br>");
 		applyFixes();
 		
-		if($modeldb[$modeldbID]["updateCham"] == "on") {
+		if($modeldb[0]["updateCham"] == "on") {
 			$edp->writeToLog("$workpath/build.log", "Updating bootloader...<br>");
 			system_call("cp -f $workpath/boot /");
 		}
 			
 		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
-		$chamModules->copyChamModules($modeldb[$modeldbID]);
+		$chamModules->copyChamModules($modeldb[0]);
 		
 		//
 		// Step 4 : Copying kexts
@@ -196,22 +189,18 @@ if ($action == 'dobuild') {
 
 if ($action == "") {
 
-		//
-		// Clear build Status files
-		//
-		$myFixlog = "$workpath/myFix2.log";
-		if (is_file("$myFixlog")) { 
-			system_call("rm -Rf $myFixlog"); 
-		}
-		$statFiles = "$workpath/kpsvn/dload";
-		if(is_dir("$statFiles"))
-			system_call("rm -rf $workpath/kpsvn/dload/*");
+	//
+	// Clear build Status files
+	//
+	$myFixlog = "$workpath/myFix2.log";
+	if (is_file("$myFixlog")) { 
+		system_call("rm -Rf $myFixlog"); 
+	}
+	$statFiles = "$workpath/kpsvn/dload";
+	if(is_dir("$statFiles"))
+		system_call("rm -rf $workpath/kpsvn/dload/*");
+	
 				
-		// Fetch standard model info needed for the configuration of the choosen model to build
-		$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
-		$stmt->execute();
-		$result = $stmt->fetchAll(); $mdrow = $result[0];
-		
 	// Write out the top menu
 	echoPageItemTOP("icons/big/config.png", "Select a model your wish to configure for:");
 
@@ -219,15 +208,20 @@ if ($action == "") {
 	echo "EDP's internal database contains 'best practice' schematics for 80+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. <br><br>Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.";
 
 	include "header.inc.php";
+	
 	echo "<p><span class='graytitle'></span><ul class='pageitem'><li class='select'>";
 
-	echo "<select name='vendor' id='vendor'>";
+	echo "<select name='type' id='type'>";
 	
-	if ($vendor == "") { echo "<option value='' selected>&nbsp;&nbsp;Select vendor...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select vendor and type...</option>\n"; }
+	if ($type == "") { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; }
 
-	echo builderGetVendorValues(); // For series and model we are using jquery
-
+	echo getSystemTypeValue();
+	
 	echo "</select><span class='arrow'></span> </li>";
+
+	echo "<li id='vendor-container' class='select hidden'><td><select id='vendor' name='vendor'>";
+
+	echo "</select><span class='arrow'></span> </li>";	
 
 	echo "<li id='serie-container' class='select hidden'><td><select id='serie' name='serie'>";
 
@@ -238,6 +232,7 @@ if ($action == "") {
 	echo "</select><span class='arrow'></span> </li></ul>";
 
 	echo '<div id="continue-container" class="hidden">';
+	
 	echo "<p><B><center>After clicking 'Continue' EDP will let you to config your machine.<br></p><br>";
 	echo "<ul class='pageitem'><li class='button'><input name='OK' type='button' value='Continue...' onclick='doConfirm();' /></li></ul></p>";
 	echo '</div>';
@@ -250,7 +245,25 @@ if ($action == "") {
 		}
 	</style>
 	<script>
+		jQuery('#type').change(function() {
+			var type = jQuery('#type option:selected').val();
+
+			console.log('Selected type: ' + type);
+
+			if (type == '') {
+				jQuery('#vendor-container, #serie-container, #model-container, #continue-container').addClass('hidden');
+				return;
+			}
+
+			jQuery.get('workerapp.php', { action: 'builderVendorValues', type: type }, function(data) {
+				jQuery('#vendor').empty().append(data).val('');
+				jQuery('#vendor-container').removeClass('hidden');
+				jQuery('#serie-container, #model-container, #continue-container').addClass('hidden');
+			});
+		});
+		
 		jQuery('#vendor').change(function() {
+			var type = jQuery('#type option:selected').val();
 			var vendor = jQuery('#vendor option:selected').val();
 
 			console.log('Selected vendor: ' + vendor);
@@ -260,7 +273,7 @@ if ($action == "") {
 				return;
 			}
 
-			jQuery.get('workerapp.php', { action: 'builderSerieValues', vendor: vendor }, function(data) {
+			jQuery.get('workerapp.php', { action: 'builderSerieValues', type: type, vendor: vendor }, function(data) {
 				jQuery('#serie').empty().append(data).val('');
 				jQuery('#serie-container').removeClass('hidden');
 				jQuery('#model-container, #continue-container').addClass('hidden');
@@ -268,6 +281,7 @@ if ($action == "") {
 		});
 
 		jQuery('#serie').change(function() {
+			var type = jQuery('#type option:selected').val();
 			var vendor = jQuery('#vendor option:selected').val();
 			var serie  = jQuery('#serie option:selected').val();
 
@@ -278,7 +292,7 @@ if ($action == "") {
 				return;
 			}
 
-			jQuery.get('workerapp.php', { action: 'builderModelValues', vendor: vendor, serie: serie }, function(data) {
+			jQuery.get('workerapp.php', { action: 'builderModelValues', type: type, vendor: vendor, serie: serie }, function(data) {
 				jQuery('#model').empty().append(data);
 				jQuery('#model-container').removeClass('hidden');
 			});
@@ -308,12 +322,24 @@ if ($action == "") {
 //Check if $action was set via GET or POST - if it is set, we asume that we are going to confirm the build
 	if ($action == "confirm") {
 		
-		//Fetch standard model info needed for the configuration of the choosen model to build
-		$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
-		$stmt->execute();
-		$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+		// Fetch standard model info needed for the configuration of the choosen model to build
+		switch ($type) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT * FROM modelsPortable where id = '$modelID'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT * FROM modelsDesk where id = '$modelID'";
+ 			  break;
+ 		}
+		$stmt = $edp_db->query($query);
+		$stmt->execute(); $bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
 
-		//Load the tabs
+		// Load the tabs
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
 		echo "<form action='module.configuration.predefined.php' method='post'>";
@@ -335,7 +361,7 @@ if ($action == "") {
 
 			echo "<div class='pageitem_bottom'><br>\n";
 
-			//Include tabs
+			// Include tabs
 			include "include/module.configuration.overview.inc.php";
 			include "include/module.configuration.kexts.inc.php";
 			include "include/module.configuration.cpu.inc.php";
@@ -343,7 +369,7 @@ if ($action == "") {
 			include "include/module.configuration.fixes.inc.php";
 			include "include/module.configuration.optional.inc.php";		
 
-			//Send standard vars
+			// Send standard vars
 			echo "<input type='hidden' name='action' value='dobuild'>";
 			echo "<input type='hidden' name='name' value='$mdrow[name]'>";
 			echo "<input type='hidden' name='desc' value='$mdrow[desc]'>";
@@ -363,11 +389,14 @@ if ($action == "") {
 			// top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog#myfix';
 		}
 		function doConfirm() {
-			var vendor = '<?php echo "$vendor";?>';
-			var a = document.getElementById("model");
-			var model = a.options[a.selectedIndex].value;
+			var t = document.getElementById("type");
+			var type = t.options[t.selectedIndex].value;
+
+			var m = document.getElementById("model");
+			var id = m.options[m.selectedIndex].value;
+			
 			if (model == "") { alert('Please select a model before continuing..'); return; }
-			document.location.href = 'module.configuration.predefined.php?vendor='+vendor+'&model='+model+'&action=confirm';		
+			document.location.href = 'module.configuration.predefined.php?type='+type+'&modelID='+id+'&action=confirm';		
 			top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog#myfix';
 		}
 		function showType() {

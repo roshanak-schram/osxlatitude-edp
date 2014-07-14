@@ -3,7 +3,7 @@
 		echo "<span class='graytitle'>Kernel Extentions (kexts / drivers)</span>\n";
 		echo "<ul class='pageitem'>";
 
-		//Show dropdown for FakeSMC kexts
+		// Show dropdown for FakeSMC kexts
 			$result = $edp_db->query("SELECT * FROM fakesmc");
 			echo "<li class='select'><select name='fakesmc'>";
 			foreach($result as $row) {
@@ -13,8 +13,8 @@
 			echo "</select><span class='arrow'></span> </li>";
 
 				
-		//Show dropdown for PS2 kexts
-			$result = $edp_db->query("SELECT * FROM ps2New");
+		// Show dropdown for PS2 kexts
+			$result = $edp_db->query("SELECT * FROM ps2");
 			echo "<li class='select'><select name='ps2pack'>";
 			if ("$mdrow[ps2]" == "" || "$mdrow[ps2]" == "no") { echo "<option value='no' SELECTED>&nbsp; PS2 kext: None selected</option>\n"; }
 			else { echo "<option value='no'>&nbsp; PS2 kext: None selected</option>\n"; }
@@ -26,7 +26,7 @@
 			
 			
 			
-		//Show dropdown for Audio kexts
+		// Show dropdown for Audio kexts
 			global $os;
 			$result = $edp_db->query("SELECT * FROM audio");
 			echo "<li class='select'>";
@@ -44,7 +44,7 @@
 
 
 
-		//Show dropdown for Ethernet (lan) Kexts
+		// Show dropdown for Ethernet (lan) Kexts
 			$result = $edp_db->query("SELECT * FROM ethernet");
 			echo "<li class='select'><select name='ethernet'>\n";
 			if ("$mdrow[ethernet]" == "" || "$mdrow[ethernet]" == "no") { echo "<option value='no' SELECTED>&nbsp; Ethernet kext: Not selected</option>"; }
@@ -57,7 +57,7 @@
 			
 
 			
-		//Show dropdown for Wifi Kexts
+		// Show dropdown for Wifi Kexts
 			$result = $edp_db->query("SELECT * FROM wifi");
 			echo "<li class='select'><select name='wifipack'>\n";
 			if ("$mdrow[wifi]" == "" || "$mdrow[wifi]" == "no") { echo "<option value='no' SELECTED>&nbsp; Wifi kext: Not selected</option>\n"; }			
@@ -70,7 +70,7 @@
 			
 
 									
-		//Show dropdown for Battery kexts
+		// Show dropdown for Battery kexts
 			$result = $edp_db->query("SELECT * FROM battery");
 			echo "<li class='select'><select name='batterypack'>\n";
 			if ("$mdrow[battery]" == "" || "$mdrow[battery]" == "no") { echo "<option value='no' SELECTED>&nbsp; Battery kext: Not selected</option>\n"; }

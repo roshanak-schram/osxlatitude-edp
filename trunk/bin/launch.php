@@ -42,7 +42,7 @@ else {
 	echo "Update success.\n";
 }
 
-include_once "config.inc.php";
+include_once "edpconfig.inc.php";
 include_once "functions.inc.php";
 
 $os_string = "";

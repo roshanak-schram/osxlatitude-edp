@@ -29,7 +29,8 @@
 		
 		function isChamModsInUse($id) {
 			global $modelID; global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
+			global $query;
+			$stmt = $edp_db->query($query);
 			$stmt->execute();
 			$result = $stmt->fetchAll();
 

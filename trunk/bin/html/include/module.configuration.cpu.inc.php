@@ -19,14 +19,13 @@
 			
 		echo "</ul><br></div>";
 		
-		
 		function isCPUFixInUse($id) {
-			global $modelID; global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
+			global $modelID; global $edp_db; global $query;
+			$stmt = $edp_db->query($query);
 			$stmt->execute();
 			$result = $stmt->fetchAll();
 
-			$data = $result[0]['cpufixes'];
+			$data = $result[0]['pmfixes'];
 			//If nothing is defined in the models db just return blank
 			if ($data == "") { return "no"; }
 			
