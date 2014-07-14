@@ -1,12 +1,12 @@
 <?php
 include_once "../functions.inc.php";
-include_once "../config.inc.php";
+include_once "../edpconfig.inc.php";
 
-//Fetch the show type
+// Fetch the show type
 $showtype 	= $_GET['showtype']; if (!$showtype) { $showtype = $_POST['showtype']; }
 $action 	= $_POST['action'];
 
-//Check if Action is set to "yes" (aka copy modules)
+// Check if Action is set to "yes" (aka copy modules)
 if ($action == "update") {
 	$chamModConfig = array(
     	"ACPICodec" => $_POST['ChamModuleACPICodec'],
@@ -25,12 +25,7 @@ if ($action == "update") {
     $chamModConfig = "";
 }
 
-
-
-
-//-------------------------------------------------------------------------------------------------> Code for showing info -----------------------------------------
-
-//If the showtype is set to standalone we asume that its being called from the sidebar menu under configuration
+// If the showtype is set to standalone we asume that its being called from the sidebar menu under configuration
 if ($showtype == "standalone") {
 
 	//Get the current config
@@ -48,8 +43,7 @@ if ($showtype == "standalone") {
 	echo "<form action='module.configuration.chameleonmods.php' method='post'>\n";
 }
 
-
-//Write out the config - we will use the current config based on the - this HTML is common for all show types
+// Write out the config - we will use the current config based on the - this HTML is common for all show types
 echo "<ul class='pageitem'>";
 $result = $edp_db->query("SELECT * FROM chammods order by name");
 foreach($result as $row) {
@@ -57,11 +51,8 @@ foreach($result as $row) {
 	checkbox("$name: $row[description]", "$row[edpname]", $chamModConfig[$name]);
 }
 echo "</ul><br>";
-
-
-
 					
-//Finish html for standalone mode
+// Finish html for standalone mode
 if ($showtype == "standalone") {
 	echo "</div>";
 	echo "<input type='hidden' name='action' value='update'>";
@@ -69,16 +60,7 @@ if ($showtype == "standalone") {
 	echo "<ul class='pageitem'>\n";
 	echo "	<li class='button'><input name='Submit input' type='submit' value='Save changes' /></li>\n";
 	echo "</ul></form>\n";
-	
 }
 
-
-//-------------------------------------------------------------------------------------------------> Code for showing info -----------------------------------------
-
-
-
-
-	
-	
 ?>
 

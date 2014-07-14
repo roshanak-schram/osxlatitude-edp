@@ -1,9 +1,10 @@
 <?php
 	$i = $_GET['i'];
-	include_once "../config.inc.php";
+	include_once "../edpconfig.inc.php";
 	if (!$i) { $i = "EDP"; }
 
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -22,8 +23,6 @@
 </script>
 	
 
-
-
 <script>
     function loadURL(page) {
 	    top.document.getElementById('console_iframe').src = page;
@@ -31,10 +30,9 @@
 </script>
 
 
-
 <?php
 
-	//Credits menu hack
+	// Credits menu
 	if ($i == "Credits") {
 		$result1 = $edp_db->query("SELECT * FROM credits order by category");
 		foreach($result1 as $row1) {
@@ -52,48 +50,61 @@
 		exit;	
 	}
 
-
-
-
-
- //-------------------------> Normal menus....
+ //-------------------------> side menus
  
- //Write out header
- echo "<div id='title' class='edpmenu_title_text' style='margin-top: 10px;'>&nbsp;&nbsp;$i</div>\n";
+switch ($i) {
+	case "Applications":
+		$query = "SELECT * FROM appsdata";
+	break;
+	
+	case "EDP":
+	case "Configuration":
+		$query = "SELECT * FROM edpdata";
+	break;
+	
+	case "Fixes":
+		$query = "SELECT * FROM fixesdata";
+	break;
+	
+	case "Tools":
+		$query = "SELECT * FROM toolsdata";
+	break;
+	
+}
 
- ////Write out the standard menu - un-categorized items
- generateMenu("$i", "");
+//echo "$i<br>";
+//echo "$query<br>";
 
-
-//Fetch menu items that have a category defined 
-$result1 = $edp_db->query("SELECT * FROM resources where menu = '$i' order by category");
-foreach($result1 as $row1) {
-	if ($row1[category] != $last) { 
-		//$result2 = $edp_db->query("SELECT * FROM resources where menu = '$i' AND category = '$row1[category]' order by name");
-		echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row1[category]</div>";
-		generateMenu("$i", "$row1[category]");
+// Fetch menu items that have a category defined 
+$categData = $edp_db->query("$query order by category");
+foreach($categData as $row) {
+	if ($row[menu] != $last && $i == $row[category]) { 
+		echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";
+		generateMenu("$query", "$row[menu]", "$row[category]");
 	}
-	$last = $row1[category];
+	$last = $row[menu];
 }	
 
-
-
-function generateMenu($menu, $category) {
+function generateMenu($query, $menu, $category) {
 	global $edp_db;
 	echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
 	
-	$result = $edp_db->query("SELECT * FROM resources where menu = '$menu' order by name");
-	foreach($result as $row) {
-		if ($row[category] == "$category" && $row[status] == "active") {
-			//Check if the type is redirect (meaning it will go thru showresource for direct where it will use ACTION from db instead
-			if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "icons/sidebar/$row[icon]", "$row[name]"); }
-			else { addMenuItem("loadURL('showresource.php?id=$row[id]');", "icons/sidebar/$row[icon]", "$row[name]"); }
+	$menuData = $edp_db->query("$query where menu = '$menu' order by submenu");
+	foreach($menuData as $row) {
+		if ($row[status] == "active") {
+			//
+			// Check if the type is redirect (meaning it will go thru showresource php) or direct instead
+			//
+			if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
+			
+			// redirecting the resource with category and id info in the link
+			else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
 		}
 	}
 	echo "</table>";
 }	
 
-//Function for writeing out menu items
+// Function for writeing out menu items
 function addMenuItem($action, $icon, $title) {
 	echo "<tr onclick=\"$action\" style='cursor: hand'>";
 	echo "	<td width='20' height='28'></td>\n";
@@ -102,9 +113,6 @@ function addMenuItem($action, $icon, $title) {
 	echo "</tr>\n";
 }
 
-
 ?>
 		
-		
-
 </body>

@@ -25,8 +25,8 @@
 		
 		
 		function isFixesInUse($id) {
-			global $modelID; global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$modelID'");
+			global $modelID; global $edp_db; global $query;
+			$stmt = $edp_db->query($query);			
 			$stmt->execute();
 			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 

@@ -63,6 +63,26 @@ function getValueFromSmbios($key, $default = null) {
 		}		
 	}
 
+function getSystemTypeValue() {
+    global $edp_db;
+
+    $return = '';
+
+	$result = $edp_db->query("SELECT DISTINCT type FROM modelsPortable ORDER BY type");
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['type'] . '">&nbsp;&nbsp;' . $row['type'] . '</option>';
+    }
+    
+	$result = $edp_db->query("SELECT DISTINCT type FROM modelsDesk ORDER BY type");
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['type'] . '">&nbsp;&nbsp;' . $row['type'] . '</option>';
+    }
+
+    return $return;
+}
+
 //--- Get EDP builder Model / Vendor / series values for the user to select from
 function builderGetVendorValuebyID($modelid) {
     global $edp_db;
@@ -88,22 +108,52 @@ function builderGetSeriesValuebyID($modelid) {
 	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
     return $mdrow[series];
 }
-function builderGetVendorValues() {
+
+
+function builderGetVendorValues($type) {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT DISTINCT vendor FROM modelsdata ORDER BY vendor');
+ 	switch ($type) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$type'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$type'";
+ 			  break;
+ 	}
+  	
+    $result = $edp_db->query($query);
     $return = '';
 
     foreach($result as $row) {
-        $return .= '<option value="' . $row['vendor'] . '">&nbsp;&nbsp;' . $row['vendor'] . '</option>';
+       $return .= '<option value="' . $row['vendor'] . '">&nbsp;&nbsp;' . $row['vendor'] . '</option>';
     }
 
-    return $return;
+    return '<option value="" >&nbsp;&nbsp;Select vendor...</option>' . $return;
 }
-function builderGetSerieValues($vendor) {
+function builderGetSerieValues($type, $vendor) {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT DISTINCT series, vendor FROM modelsdata WHERE vendor = "' . $vendor . '" ORDER BY series');
+	switch ($type) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT vendor, series FROM modelsPortable WHERE type = '$type' AND vendor = '$vendor' ORDER BY series";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT vendor, series FROM  modelsDesk WHERE type = '$type' AND vendor = '$vendor' ORDER BY series";
+ 			  break;
+ 	}
+ 	
+    $result = $edp_db->query($query);
     $return = '';
 
     foreach($result as $row) {
@@ -112,17 +162,31 @@ function builderGetSerieValues($vendor) {
 
     return '<option value="" >&nbsp;&nbsp;Select series...</option>' . $return;
 }
-function builderGetModelValues($vendor, $series, $generation) {
+function builderGetModelValues($type, $vendor, $series, $generation) {
     global $edp_db;
 
-    $result = $edp_db->query('SELECT * FROM modelsdata WHERE vendor = "' . $vendor . '" AND series = "' . $series . '" ORDER BY type');
+	switch ($type) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$type' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$type' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
+ 			  break;
+ 	}
+ 	
+    $result = $edp_db->query($query);
     $return = '';
 
     foreach($result as $row) {
     if($row['generation'] != "")
-        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['type'] .')  ' . $row['generation'] .' </option>';
+        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['generation'] .')  </option>';
         else
-        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['type']  .') </option>';
+        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . '  </option>';
     }
 
     return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;

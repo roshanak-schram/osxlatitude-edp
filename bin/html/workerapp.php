@@ -12,16 +12,22 @@ if ($action == "goto_hell") {
 }
 
 include_once "../functions.inc.php";
-include_once "../config.inc.php";
+include_once "../edpconfig.inc.php";
 
 // Ajax Methods
 //--- Builder page ajax actions
-if ($action == "builderSerieValues") {
-    echo builderGetSerieValues($_GET['vendor']);
+if ($action == "builderVendorValues") {
+    echo builderGetVendorValues($_GET['type']);
     exit;
 }
+
+if ($action == "builderSerieValues") {
+    echo builderGetSerieValues($_GET['type'], $_GET['vendor']);
+    exit;
+}
+
 if ($action == "builderModelValues") {
-    echo builderGetModelValues($_GET['vendor'], $_GET['serie']);
+    echo builderGetModelValues($_GET['type'], $_GET['vendor'], $_GET['serie']);
     exit;
 }
 //---
@@ -39,7 +45,6 @@ if ($action == "") {
     echo "No action defined..";
     exit;
 }
-
 
 if ($action == "browseURL") {
 	echoPageItemTOP("icons/big/globe.png", "Browsing remote url...");
@@ -83,10 +88,6 @@ if ($action == "showCredits") {
 	
 	exit;	
 }
-
-
-
-
 
 
 if ($action == "dellBiosCrack") {

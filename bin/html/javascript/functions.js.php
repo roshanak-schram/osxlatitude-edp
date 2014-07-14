@@ -1,5 +1,5 @@
 <?php
-	include_once "../../config.inc.php";
+	include_once "../../edpconfig.inc.php";
 ?>
 
 function bootloader() {
