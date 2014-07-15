@@ -10,6 +10,7 @@ svn --non-interactive --username edp --password edp --force update /Extra/EDP/mo
 svn --non-interactive --username edp --password edp --force update /Extra/EDP/Themes
 svn --non-interactive --username edp --password edp --force update /Extra/EDP/phpWebServer
 
+echo “Updating php binary from EDP's svn server \n"
 cd /Extra/EDP/phpWebServer
 rm -rf /Extra/EDP/php
 unzip php.zip -d /Extra/EDP
