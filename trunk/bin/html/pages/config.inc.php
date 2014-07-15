@@ -6,7 +6,5 @@ echo "<div class='pageitem_bottom'>\n";
 
 ?>
 
-<span class='graytitle'>Build from model database</span>
-<p>EDP's internal database contains 'best practice' schematics for 80+ systems - this makes it easy for to to choose the right configuration - however - you allways have the option to ajust the schematics before doing a build. 
-
-Doing a build means that EDP will copy a combination of kexts, dsdt, plists needed to boot your system.</p>
+<span class='graytitle'>Build model using EDP</span>
+<p>Build your model using EDP which provides combination of kexts, dsdt, plists needed to boot your system and allows you to configure.</p>
