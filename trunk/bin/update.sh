@@ -1,7 +1,18 @@
 echo "Cleaning up /Extra/EDP using SVN \n"
-svn cleanup /Extra/EDP
+svn cleanup /Extra/EDP/bin
+svn cleanup /Extra/EDP/modules
+svn cleanup /Extra/EDP/Themes
+svn cleanup /Extra/EDP/phpWebServer
+
 echo "Downloading latest sources from EDP's svn server \n"
-svn --non-interactive --username edp --password edp --force update /Extra/EDP
+svn --non-interactive --username edp --password edp --force update /Extra/EDP/bin
+svn --non-interactive --username edp --password edp --force update /Extra/EDP/modules
+svn --non-interactive --username edp --password edp --force update /Extra/EDP/Themes
+svn --non-interactive --username edp --password edp --force update /Extra/EDP/phpWebServer
+
+cd /Extra/EDP/phpWebServer
+rm -rf /Extra/EDP/php
+unzip php.zip -d /Extra/EDP
 
 cd /Extra/EDP/bin
 
