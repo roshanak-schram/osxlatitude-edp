@@ -1,1 +1,0 @@
-default page for changelog
