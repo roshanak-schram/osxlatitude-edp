@@ -18,7 +18,7 @@
 								
 				if ($edfkname != "") {
 					
-				$edfkname = preg_replace('/\s+/', '',$edfkname); //remove white spaces
+				$edfkname = preg_replace('/\s+/', '',$edfkname); // remove white spaces
 				
 				if($_POST[$peuid] == "on")
 					; //ignore
@@ -97,9 +97,8 @@
 			if(file_exists("/Extra/include/SSDT-4.aml") && $ssdt4 != "on") { system("rm -f /Extra/include/SSDT-4.aml");} 
 			
 		}
-		
 
-	//Fetch vars if any was posted and if action is set to "dobuild" then fetch the rest of the vars and run doCustomBuild :)
+		// Fetch vars if any was posted and if action is set to "dobuild" then fetch the rest of the vars and run doCustomBuild :)
 		$action		= $_POST['action'];
 		if ($action == "dobuild") {	
 		
@@ -121,7 +120,7 @@
 		}
 
 
-//Build Process		
+// Build Process		
 function doCustomBuild() {
 
 	global $workpath; global $edp;
@@ -250,28 +249,29 @@ function doCustomBuild() {
   
     }
     
-	$edp->writeToLog("$workpath/build.log", "<a name='myfix'></a>");			
-	echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
+		$edp->writeToLog("$workpath/build.log", "<a name='myfix'></a>");			
+		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 	
-	exit;
-}		
+		exit;
+	}		
 
-
-	//Custom configration page
+	//
+	// Custom configuration page
+	//
 	echo "<form action='module.configuration.custom.php' method='post'>";
-	//Write out the top menu
+	
+	// Write out the top menu
 	echoPageItemTOP("icons/big/config.png", "Custom build configuration");
 
 	echo "<div class='pageitem_bottom'>\n";
-	echo "Custom configuration allows you to use existing configuration in /Extra, further more you can choose your custom files in /Extra/include<br><br>";
-	echo "Copy your files like DSDT, SSDT, plists and boot(chameleon bootloader) to /Extra/include and <br>Kexts to /Extra/include/Extensions, which all can be managed very effectively with our EDP<br>";
+	echo "EDP custom configuration allows you to use your existing configuration in /Extra and allows you to choose your custom files included from /Extra/include.<br><br>";
+	echo "Copy your custom files like DSDT, SSDT, plists and boot(chameleon bootloader) to /Extra/include and <br> custom Kexts to /Extra/include/Extensions, which can be managed very effectively and easily using our EDP.<br>";
 	echo "</div>";
-	//echo "</form>";
-		
+			
 	//Load the tabs
 	echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
-		//Show the tabs bar ?>
+		// Show the tabs bar ?>
 		<div id="tabs">
 			<div id="menutabs">
 				<ul>

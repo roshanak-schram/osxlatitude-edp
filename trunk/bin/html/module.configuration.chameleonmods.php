@@ -28,18 +28,18 @@ if ($action == "update") {
 // If the showtype is set to standalone we asume that its being called from the sidebar menu under configuration
 if ($showtype == "standalone") {
 
-	//Get the current config
+	// Get the current config
 	$chamModConfig = $chamModules->chamModGetConfig();
 	
-	//Write out the header
+	// Write out the header
 	include "header.inc.php";
 	
-	//Write out the top menu
+	// Write out the top menu
 	echoPageItemTOP("icons/big/tools.png", "Chameleon modules");
 	echo "<div class='pageitem_bottom'>\n";
-	echo "<br>Use this to configure wich modules you want to be used by chameleon - these settings might be overwritten when you do a new build...<br><br>";
+	echo "<br>Use this to configure the modules you want to be used by chameleon.<br><br>";
 	
-	//Write out the form header
+	// Write out the form header
 	echo "<form action='module.configuration.chameleonmods.php' method='post'>\n";
 }
 
