@@ -54,7 +54,7 @@ echo "<ul class='pageitem'>";
 	echo "<select id=\"eopchoice\" name=\"eopchoice\">";
 	echo "<option value=\"enone\">&nbsp;&nbsp;None</option>";
  	echo "<option value=\"ebuild\">&nbsp;&nbsp;Uninstall selected files from system</option>";
- 	echo "<option value=\"edelonly\">&nbsp;&nbsp;Remove unselected files /Extra/Extensions</option>";
+ 	echo "<option value=\"edelonly\">&nbsp;&nbsp;Remove unselected files from /Extra/Extensions</option>";
 
 	echo "</select></li></ul>";
 	echo "<br></div>";
