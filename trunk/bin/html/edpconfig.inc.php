@@ -61,7 +61,7 @@ $stmt = $edp_db->query("SELECT * FROM optionalpacks order by id");
 $stmt->execute(); $optdb = $stmt->fetchAll();
 
 
-$localrev 	= exec("cd $workpath; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
+$localrev 	= exec("cd $workpath/bin; svn info --username osxlatitude-edp-read-only --non-interactive | grep -i \"Last Changed Rev\"");
 $localrev 	= str_replace("Last Changed Rev: ", "", $localrev);
 
 
