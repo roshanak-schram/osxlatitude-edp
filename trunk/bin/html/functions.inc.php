@@ -891,8 +891,9 @@ function copyEssentials() {
     if(is_dir("$workpath/model-data/$modelNamePath/common/Themes")) {
 		system_call("cp -a $workpath/model-data/$modelNamePath/common/Themes/. /Extra/Themes");
     }
+    // Standard theme folder
     else {
-    	system_call("cp -a $workpath/Themes/. /Extra/Themes");
+    	system_call("cp -a $workpath/bin/Themes/. /Extra/Themes");
     }
 }
 

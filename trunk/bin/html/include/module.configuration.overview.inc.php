@@ -46,9 +46,9 @@ echo "<ul class='pageitem'>";
 </thead>
 
 <?
-		global $type;
+		global $sysType;
 		
-		switch ($type) {
+		switch ($sysType) {
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":

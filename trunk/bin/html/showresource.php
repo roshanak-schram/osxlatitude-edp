@@ -22,6 +22,8 @@ switch ($categ) {
 	break;
 	
 	case "EDP":
+	if (file_exists("$workpath/update.log")) 
+			system_call("rm -rf $workpath/update.log");
 	case "Configuration":
 		$query = "SELECT * FROM edpdata";
 	break;
