@@ -31,7 +31,8 @@ else
     cp backup/edp.sqlite3 ./edp.sqlite3
 fi
 
-chmod -R 755 /Extra/EDP
+chmod -R 755 /Extra/EDP/bin
+chmod -R 755 /Extra/EDP/phpWebServer
 
 echo "Update finished."
 
