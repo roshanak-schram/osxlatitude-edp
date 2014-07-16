@@ -37,8 +37,8 @@ else {
 	echo "Update success.\n";
 }
 
-include_once "./html/edpconfig.inc.php";
-include_once "./html/functions.inc.php";
+include_once "html/edpconfig.inc.php";
+include_once "html/functions.inc.php";
 
 $os_string = "";
 $os = getVersion();
@@ -52,4 +52,5 @@ if(getMacOSXVersion() >= "10.7") {
 	// start EDP
     system("open http://127.0.0.1:11250/");
 }
+
 ?>
