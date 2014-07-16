@@ -9,8 +9,8 @@ global $edpmode;
 $edpmode = "web";
             
 ?>
-	<script src="/edp.core.js.php" type="text/javascript"></script>
-    <body onload="edp.bootloader();" onresize="aligndesign();" background="images/console_bg.png">
+	<script type="text/javascript"></script>
+    <body onload="bootloader();" onresize="aligndesign();" background="images/console_bg.png">
     	
 
 	<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
@@ -43,7 +43,7 @@ $edpmode = "web";
 
 		<iframe id="edpmenu" 		name="edpmenu" 			class="edpmenu" 	   marginwidth="0" marginheight="0" border="0" frameborder="0" height="80%" src="menu.inc.php?i=<?= "$i"; ?>"></iframe>
 
-        <iframe id="console_iframe" name="console_iframe" 	class="console_iframe" marginwidth="0" marginheight="0" border="0" frameborder="0" src="show.php?i=pages/edp.inc.php"></iframe>
+        <iframe id="console_iframe" name="console_iframe" 	class="console_iframe" marginwidth="0" marginheight="0" border="0" frameborder="0" src="showPage.php?i=EDP"></iframe>
 
     </body>
 </html>

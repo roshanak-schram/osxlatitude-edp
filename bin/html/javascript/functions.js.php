@@ -72,12 +72,12 @@ function waitToggle() {
 function loader(action) {
 	var sidebar = top.document.getElementById('edpmenu');
 	var console = top.document.getElementById('console_iframe');
-	if (action == "EDP") 	{ sidebar.src = 'menu.inc.php?i=EDP'; console.src = 'show.php?i=pages/edp.inc.php'; }	
-	if (action == "Configuration") 	{ sidebar.src = 'menu.inc.php?i=Configuration'; console.src = 'show.php?i=pages/config.inc.php'; }
-	if (action == "Fixes") 			{ sidebar.src = 'menu.inc.php?i=Fixes'; 		console.src = 'show.php?i=pages/fixes.inc.php'; }
-	if (action == "Tools") 			{ sidebar.src = 'menu.inc.php?i=Tools'; 		console.src = 'show.php?i=pages/tools.inc.php'; }
-	if (action == "Applications") 	{ sidebar.src = 'menu.inc.php?i=Applications'; 	console.src = 'show.php?i=pages/apps.inc.php'; }
-	if (action == "Credits") 		{ sidebar.src = 'menu.inc.php?i=Credits'; 		console.src = 'show.php?i=pages/credits.inc.php'; }
+	if (action == "EDP") 			{ sidebar.src = 'menu.inc.php?i=EDP'; 			console.src = 'showPage.php?i=EDP'; }	
+	if (action == "Configuration") 	{ sidebar.src = 'menu.inc.php?i=Configuration'; console.src = 'showPage.php?i=Configuration'; }
+	if (action == "Fixes") 			{ sidebar.src = 'menu.inc.php?i=Fixes'; 		console.src = 'showPage.php?i=Fixes'; }
+	if (action == "Tools") 			{ sidebar.src = 'menu.inc.php?i=Tools'; 		console.src = 'showPage.php?i=Tools'; }
+	if (action == "Applications") 	{ sidebar.src = 'menu.inc.php?i=Applications'; 	console.src = 'showPage.php?i=Applications'; }
+	if (action == "Credits") 		{ sidebar.src = 'menu.inc.php?i=Credits'; 		console.src = 'showPage.php?i=Credits'; }
 }
 
 

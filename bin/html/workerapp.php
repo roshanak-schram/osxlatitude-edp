@@ -89,35 +89,14 @@ if ($action == "showCredits") {
 	exit;	
 }
 
-
-
 //
 // Functions called by this script
 //
 
-if ($action == "update-edp") 	{ echo "<pre>"; global $edpmode; $edpmode = "web"; $edp->update(); echo "<script> window.fluid.dockBadge = ''; </script> \n"; exit; }
-if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
-if ($action == "changelog") 	{ showChangelog(); exit; }
-if ($action == "showBuildLog")	{ showBuildLog(); exit ; }
-if ($action == "showLoadingLog")	{ showLoadingLog(); exit ; }
+if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
+if ($action == "showBuildLog")			{ showBuildLog(); exit ; }
+if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
-
-function showChangelog() {
-	echoPageItemTOP("icons/big/xcode.png", "Changelog for EDP...");
-    echo "<div class='pageitem_bottom'>\n";
-    
-    $url = "http://pipes.yahoo.com/pipes/pipe.run?_id=fcf8f5975800dd5f04a86cdcdcef7c4d&_render=rss";
-    $xml = new SimpleXmlElement(file_get_contents($url));
-
-    foreach ($xml->channel->item as $item) {
-        echo '<ul class="pageitem"><li class="textbox">';
-        echo '<span class="header">' . $item->title . '</span>';
-        echo '<p>' . trim($item->description) . '</p><br/>';
-        echo '<p>Commited on: ' . date('l jS \of F Y h:i:s A', strtotime($item->pubDate)) . '</p></li></ul>';
-    }
-    
-    echo "</div>\n";
-}
 
 function showBuildLog() {
 	global $workpath, $edp, $ee;
