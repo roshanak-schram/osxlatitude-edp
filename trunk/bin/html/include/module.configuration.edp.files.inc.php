@@ -53,8 +53,8 @@ echo "<ul class='pageitem'>";
 	echo "<ul class='pageitem'><li class='select'>";
 	echo "<select id=\"eopchoice\" name=\"eopchoice\">";
 	echo "<option value=\"enone\">&nbsp;&nbsp;None</option>";
- 	echo "<option value=\"ebuild\">&nbsp;&nbsp;Uninstall selected EDP installed files from system</option>";
- 	echo "<option value=\"edelonly\">&nbsp;&nbsp;Remove unselected files from folder /Extra(uinstall) and /Extra/Extensions(remove only)</option>";
+ 	echo "<option value=\"ebuild\">&nbsp;&nbsp;Uninstall selected files from system</option>";
+ 	echo "<option value=\"edelonly\">&nbsp;&nbsp;Remove unselected files /Extra/Extensions</option>";
 
 	echo "</select></li></ul>";
 	echo "<br></div>";
