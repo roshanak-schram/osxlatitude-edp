@@ -221,13 +221,14 @@
 			if ($fcount == 0 && is_file("$workpath/update.log"))
 				{
 					system_call("mv $workpath/update.log $workpath/lastupdate.log ");
+			
+					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
+					
 					echo "<pre>";
 					if(is_file("$workpath/lastupdate.log"))
 						include "$workpath/lastupdate.log";
 					echo "</pre>";
-					
-					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
 					
 				}
 			else 
