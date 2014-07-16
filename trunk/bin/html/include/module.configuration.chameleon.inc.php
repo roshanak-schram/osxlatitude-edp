@@ -2,9 +2,9 @@
 
 		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon bootloader configuration</span>";
 		echo "<ul class='pageitem'>";				
-			checkbox("Update Chameleon to latest version 2.2 r2391", "updateCham", "no");
-			checkbox("Use Enoch Chameleon version 2.2 r2390?", "useEnochCham", "no");
-			checkbox("Use custom chameleon (copy boot file to 'Extra/include' if you have)", "customCham", "no");	
+			checkbox("Update Chameleon to latest version (v2.2 r2391)?", "updateCham", "no");
+			checkbox("Use Enoch version of Chameleon(v2.2 r2390)?", "useEnochCham", "no");
+			checkbox("Use custom chameleon (if you have, copy boot file to '/Extra/include')?", "customCham", "no");	
 		echo "</ul><br>";
 		
 		echo "<span class='graytitle'>Modules</span>";
