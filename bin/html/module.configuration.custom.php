@@ -278,7 +278,7 @@ function doCustomBuild() {
 			<div id="menutabs">
 				<ul>
 					<li><a href="#tabs-0">Custom Files</a></li>
-					<li><a href="#tabs-1">EDP Kexts</a></li>
+					<li><a href="#tabs-1">EDP Files</a></li>
 
 				</ul>
 			</div>
