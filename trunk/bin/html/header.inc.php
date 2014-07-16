@@ -10,7 +10,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <script src="javascript/functions.js.php" type="text/javascript"></script>
         <script src="javascript/jquery-1.9.1.js"></script>
-				<script src="javascript/jquery-ui.js"></script>
+		<script src="javascript/jquery-ui.js"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-38629435-1']);
