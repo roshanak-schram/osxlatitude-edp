@@ -3,14 +3,14 @@
 echo "<div id=\"tabs-0\">\n";
 
 echo "<span class='graytitle'>Software</span><br>\n";
-echo "<div><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operating system:</b></b> $os_string</div>";
-echo "<br><br>";  
+echo "<div><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operating system:</b> $os_string</div>";
+echo "<div><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDP </b>v$edpversion - Rev: $localrev</div>";
+echo "<br>";  
 
 echo "<span class='graytitle'>Compatibility</span>\n";
-echo "<ul class='pageitem'>";
 		
 ?>
-<br>
+
 <table class='compatibility_table' border="1" width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse" bordercolor="#F4F4F4">
 <thead>
         <tr bgcolor="#FFFFFF">
@@ -84,7 +84,7 @@ echo "<ul class='pageitem'>";
 
         echo "</tr></table> \n";
 
-	echo "</ul><br>";
+	echo "</ul>";
 		
 	echo "<span class='graytitle'>Include EDP Files</span>";
 	echo "<ul class='pageitem'>";
