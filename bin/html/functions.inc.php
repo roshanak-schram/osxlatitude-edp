@@ -41,18 +41,8 @@ function getValueFromSmbios($key, $default = null) {
     return $default;
 }
 //---
-//Returns model data from id
-	function getModelDataFromID($id) {
-		if ($id != "") {
-			global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM modelsdata where id = '$id'");
-			$stmt->execute(); $result = $stmt->fetchAll(); 
-			$mdata = $result[0]; //get first row
-			return $mdata;
-		}		
-	}
 
-//Returns Kextpack data from id
+// Returns Kextpack data from id
 	function getKextpackDataFromID($table, $id) {
 		if ($table != "" && $id != "") {
 			global $edp_db;
@@ -62,6 +52,31 @@ function getValueFromSmbios($key, $default = null) {
 		}		
 	}
 
+// Returns model data from id
+	function getModelDataFromID($sysType, $modelid) {
+		
+			global $edp_db;
+			
+			switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT * FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT * FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			}
+ 	
+			$stmt = $edp_db->query($query);
+			$stmt->execute(); $result = $stmt->fetchAll(); 
+			$mdata = $result[0]; //get first row
+			return $mdata;
+   }
+	
 function getSystemTypeValue() {
     global $edp_db;
 
@@ -83,46 +98,89 @@ function getSystemTypeValue() {
 }
 
 //--- Get EDP builder Model / Vendor / series values for the user to select from
-function builderGetVendorValuebyID($modelid) {
+function builderGetVendorValuebyID($sysType, $modelid) {
     global $edp_db;
 
-	$stmt = $edp_db->query("SELECT vendor FROM modelsdata where id = '$modelid'");
-	$stmt->execute();
-	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[vendor];
-}
-function builderGetGenValuebyID($modelid) {
-    global $edp_db;
-
-	$stmt = $edp_db->query("SELECT generation FROM modelsdata where id = '$modelid'");
-	$stmt->execute();
-	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[generation];
-}
-function builderGetSeriesValuebyID($modelid) {
-    global $edp_db;
-
-	$stmt = $edp_db->query("SELECT series FROM modelsdata where id = '$modelid'");
-	$stmt->execute();
-	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[series];
-}
-
-
-function builderGetVendorValues($type) {
-    global $edp_db;
-
- 	switch ($type) {
+	switch ($sysType) {
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":
- 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$type'";
+ 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
  			  break;
  			  
  			  case "Desktop":
  			  case "Workstation":
  			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$type'";
+ 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 	}
+ 	
+	$stmt = $edp_db->query($query);
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[vendor];
+}
+
+function builderGetSeriesValuebyID($sysType, $modelid) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT series FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT series FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 	}
+ 	
+	$stmt = $edp_db->query($query);
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[series];
+}
+
+function builderGetGenValuebyID($sysType, $modelid) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT generation FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT generation FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 	}
+ 	
+	$stmt = $edp_db->query($query);
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[generation];
+}
+
+function builderGetVendorValues($sysType) {
+    global $edp_db;
+
+ 	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$sysType'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$sysType'";
  			  break;
  	}
   	
@@ -135,20 +193,20 @@ function builderGetVendorValues($type) {
 
     return '<option value="" >&nbsp;&nbsp;Select vendor...</option>' . $return;
 }
-function builderGetSerieValues($type, $vendor) {
+function builderGetSerieValues($sysType, $vendor) {
     global $edp_db;
 
-	switch ($type) {
+	switch ($sysType) {
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":
- 			  	$query = "SELECT DISTINCT vendor, series FROM modelsPortable WHERE type = '$type' AND vendor = '$vendor' ORDER BY series";
+ 			  	$query = "SELECT DISTINCT vendor, series FROM modelsPortable WHERE type = '$sysType' AND vendor = '$vendor' ORDER BY series";
  			  break;
  			  
  			  case "Desktop":
  			  case "Workstation":
  			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT vendor, series FROM  modelsDesk WHERE type = '$type' AND vendor = '$vendor' ORDER BY series";
+ 			  	$query = "SELECT DISTINCT vendor, series FROM  modelsDesk WHERE type = '$sysType' AND vendor = '$vendor' ORDER BY series";
  			  break;
  	}
  	
@@ -161,20 +219,20 @@ function builderGetSerieValues($type, $vendor) {
 
     return '<option value="" >&nbsp;&nbsp;Select series...</option>' . $return;
 }
-function builderGetModelValues($type, $vendor, $series, $generation) {
+function builderGetModelValues($sysType, $vendor, $series, $generation) {
     global $edp_db;
 
-	switch ($type) {
+	switch ($sysType) {
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":
- 			  	$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$type' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
+ 			  	$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$sysType' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
  			  break;
  			  
  			  case "Desktop":
  			  case "Workstation":
  			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$type' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
+ 			  	$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$sysType' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
  			  break;
  	}
  	
@@ -210,7 +268,7 @@ function checkSVNrevs() {
  */
 function kextpackLoader($categ, $fname, $name) {
 		global $workpath, $edp, $ee;
-    	
+    	    	
     	if(!is_dir("$workpath/kpsvn/dload/statFiles"))
 			$createStatFile = "mkdir $workpath/kpsvn/dload/statFiles; cd $workpath/kpsvn/dload/statFiles; touch $fname.txt";
     	else		
@@ -218,31 +276,37 @@ function kextpackLoader($categ, $fname, $name) {
 		
 		$endStatFile = "cd $workpath/kpsvn/dload/statFiles; rm -rf $fname.txt";
 		
+		//
+		// Download custom Kexts, kernel and AppleHDA from model data
+		//
     	if ($categ == "Extensions"  || $categ == "Kernel")
 		{
 			$categdir = "$workpath/model-data/$name";
 			$packdir = "$categdir/$fname";
 			$svnpath = "model-data/$name/$fname";
-			$copyKextCmd = "cp -a $workpath/model-data/$name/$fname/*.kext $ee/; echo \"Copy : $fname kext copied to $ee<br>\" >> $workpath/build.log";
+			$copyKextCmd = "cp -a $workpath/model-data/$name/$fname/*.kext $ee/; echo \"Copy : $fname file(s) installed<br>\" >> $workpath/build.log";
 			$name = $fname;
 		}
+		//
+		// Download kexts and booloader from kextpacks
+		//
 		else {
 			$categdir = "$workpath/kpsvn/$categ";
 			$packdir = "$categdir/$fname";
 			$svnpath = "kextpacks/$categ/$fname";
-			$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
+			$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
 
 
 			// Copy VoodooHDA prefpanes
 			if ($name == "AudioSettings")
 			{
-        		$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kpsvn/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA files installed<br>\" >> $workpath/build.log";
+        		$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kpsvn/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA file(s) installed<br>\" >> $workpath/build.log";
 			}
 			
 			switch ($fname) {
 				// Copy VoodooPState launch agent plist
 				case "VoodooPState":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
+				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
 				break;
 				
 				// Copy VoodooPS2 prefpanes
@@ -252,7 +316,7 @@ function kextpackLoader($categ, $fname, $name) {
 				
 				case "LatestVoodooPS2":				
 				case "VoooDooALPS2":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kpsvn/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname files installed<br>\" >> $workpath/build.log";
+				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kpsvn/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname file(s) installed<br>\" >> $workpath/build.log";
 				break;
 				
 				default:
@@ -269,7 +333,7 @@ function kextpackLoader($categ, $fname, $name) {
 				break;
 				
 				case "PowerMgmt":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/*.kext $ee/; echo \"Copy : $name kext copied to $ee<br>\" >> $workpath/build.log";
+				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
 				$categdir = "$workpath/kpsvn/$categ"; // PowerMgmt/kextname.kext
 				$packdir = "$categdir/$name";
 				$svnpath = "kextpacks/$categ/$name";
@@ -285,17 +349,17 @@ function kextpackLoader($categ, $fname, $name) {
 		}	
 			
 		if (is_dir("$packdir")) {
-			$checkoutCmd = "svn --non-interactive --username edp --password edp --quiet --force update $packdir; echo \"Update : $name kext update finished<br>\" >> $workpath/build.log";
+			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir; then echo \"Update : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
 
-			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $copyKextCmd; $endStatFile;");
+			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
 			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
 			
 			// system_call("svn --non-interactive --username edp --password edp --quiet --force update $packdir");
 		}
 		else {
-			$checkoutCmd = "mkdir $categdir; cd $categdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; echo \"Download : $name kext download finished<br>\" >> $workpath/build.log";
+			$checkoutCmd = "mkdir $categdir; cd $categdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
 
-			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $copyKextCmd; $endStatFile; ");
+			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
 			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
 			
 			// system_call("mkdir $packdir; cd $packdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$pname/ .");
@@ -641,14 +705,14 @@ function getMacOSXVersion() {
  */
 function copyEssentials() {
     global $workpath, $incpath, $os; global $edp;
-	global $modeldb, $modeldbID;
+	global $modeldb, $modelRowID;
     global $modelNamePath;
 
 	$extrapath = "/Extra";
     $edp->writeToLog("$workpath/build.log", " Checking for DSDT, SSDT and System Plist files...<br>");
     
     // use EDP SMBIos?
-    if($modeldb[$modeldbID]["useEDPSMBIOS"] == "on")
+    if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on")
     {
     	$file1 = "$workpath/model-data/$modelNamePath/common/SMBios.plist"; 
     	$file2 = "$workpath/model-data/$modelNamePath/$os/SMBios.plist"; 
@@ -668,7 +732,7 @@ function copyEssentials() {
     }
     
     // use EDP org.chameleon.Boot.plist?
-    if($modeldb[$modeldbID]["useEDPCHAM"] == "on")
+    if($modeldb[$modelRowID]["useEDPCHAM"] == "on")
     {
     	$file1 = "$workpath/model-data/$modelNamePath/common/org.chameleon.Boot.plist"; 
     	$file2 = "$workpath/model-data/$modelNamePath/$os/org.chameleon.Boot.plist"; 
@@ -688,7 +752,7 @@ function copyEssentials() {
     }
     
     // use EDP DSDT?
-    if($modeldb[$modeldbID]["useEDPDSDT"] == "on")
+    if($modeldb[$modelRowID]["useEDPDSDT"] == "on")
     {
     	$file1 = "$workpath/model-data/$modelNamePath/common/dsdt.aml"; 
     	$file2 = "$workpath/model-data/$modelNamePath/$os/dsdt.aml"; 
@@ -710,25 +774,25 @@ function copyEssentials() {
     // If its mavericks then copy the files from ml folder temporarilyfor now
     if($os == "mav" && !is_dir("$workpath/model-data/$modelNamePath/$os") && is_dir("$workpath/model-data/$modelNamePath/ml")) {
     $edp->writeToLog("$workpath/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
-    if($modeldb[$modeldbID]["useEDPDSDT"] == "on") {
+    if($modeldb[$modelRowID]["useEDPDSDT"] == "on") {
     	$file = "$workpath/model-data/$modelNamePath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     	}
-    if($modeldb[$modeldbID]["useEDPSMBIOS"] == "on") {
+    if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on") {
     	$file = "$workpath/model-data/$modelNamePath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     	}
-    if($modeldb[$modeldbID]["useEDPCHAM"] == "on") {
+    if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
     	$file = "$workpath/model-data/$modelNamePath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     	}
     }						
 
 	// use EDP org.chameleon.Boot.plist?
-	if($modeldb[$modeldbID]["useEDPCHAM"] == "on") {
+	if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
 		// set UseKernelCache to Yes from org.chameleon.Boot.plist
 		system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
 	}
 	
 	// use EDP SSDT?
-    if($modeldb[$modeldbID]["useEDPSSDT"] == "on")
+    if($modeldb[$modelRowID]["useEDPSSDT"] == "on")
     {
     
       if (file_exists("$extrapath/SSDT.aml")) { system_call("rm $extrapath/SSDT.aml"); }
@@ -774,19 +838,19 @@ function copyEssentials() {
     // Copy essentials from /Extra/include if user has
     //
 
-    if (is_file("$incpath/smbios.plist") && $modeldb[$modeldbID]["useIncSMBIOS"] == "on") 				{ 
+    if (is_file("$incpath/smbios.plist") && $modeldb[$modelRowID]["useIncSMBIOS"] == "on") 				{ 
     	$edp->writeToLog("$workpath/build.log", " Custom smbios.plist found, Copying from $incpath to $extrapath<br>");
     	system_call("cp -f $incpath/smbios.plist /Extra"); 
     }
-    if (is_file("$incpath/org.chameleon.Boot.plist") && $modeldb[$modeldbID]["useIncCHAM"] == "on") 	{ 
+    if (is_file("$incpath/org.chameleon.Boot.plist") && $modeldb[$modelRowID]["useIncCHAM"] == "on") 	{ 
     	$edp->writeToLog("$workpath/build.log", " Custom org.chameleon.Boot.plist found, Copying from $incpath to $extrapath<br>");
     	system_call("cp -f $incpath/org.chameleon.Boot.plist /Extra"); 
     }
-    if (is_file("$incpath/dsdt.aml") && $modeldb[$modeldbID]["useIncDSDT"] == "on") 					{ 
+    if (is_file("$incpath/dsdt.aml") && $modeldb[$modelRowID]["useIncDSDT"] == "on") 					{ 
     	$edp->writeToLog("$workpath/build.log", " Custom dsdt file found, Copying from $incpath to $extrapath<br>");
     	system_call("cp -f $incpath/dsdt.aml /Extra"); 
     }
-    if($modeldb[$modeldbID]["useIncSSDT"] == "on")
+    if($modeldb[$modelRowID]["useIncSSDT"] == "on")
     {
     	if (is_file("$incpath/SSDT.aml")) 					{ 
     		$edp->writeToLog("$workpath/build.log", " Custom SSDT files found, Copying from $incpath to $extrapath<br>");
@@ -802,7 +866,7 @@ function copyEssentials() {
      //
     // Check if we need a custom version of chameleon from essential common and $os folders
     //
-    if ($modeldb[$modeldbID]['customCham'] == "on") {
+    if ($modeldb[$modelRowID]['customCham'] == "on") {
         $edp->writeToLog("$workpath/build.log", "  Copying custom chameleon to $rootpath if exists... <br>");
         
         $cboot = "$workpath/model-data/$modelNamePath/common/boot";
@@ -839,7 +903,7 @@ function copyEssentials() {
  function copyEDPKexts()
  {
  	//Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modeldbID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
+    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelRowID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
     global $cpufixdb;
     
     //Get our class(s)
@@ -850,12 +914,12 @@ function copyEssentials() {
 	$kpsvn = "$workpath/kpsvn";    
     
     // Use EDP Kexts?
-    if($modeldb[$modeldbID]['useEDPExtensions'] == "on")
+    if($modeldb[$modelRowID]['useEDPExtensions'] == "on")
     {
     	//
     	// copying PS2 kexts from kextpacks
     	//
-    	$ps2id = $modeldb[$modeldbID]['ps2pack'];
+    	$ps2id = $modeldb[$modelRowID]['ps2pack'];
     
     	if ($ps2id != "" && $ps2id != "no")
         {
@@ -888,9 +952,9 @@ function copyEssentials() {
 		//
     	// copying Wifi/BT kexts from kextpacks / patch WiFi/BT Kexts
     	//
-    	if ($modeldb[$modeldbID]['wifipack'] != "" && $modeldb[$modeldbID]['wifipack'] != "no") 
+    	if ($modeldb[$modelRowID]['wifipack'] != "" && $modeldb[$modelRowID]['wifipack'] != "no") 
     	{
-        	$wifid = $modeldb[$modeldbID]['wifipack'];
+        	$wifid = $modeldb[$modelRowID]['wifipack'];
         	$name = $wifidb[$wifid]['kextname'];
         	$fname = $wifidb[$wifid]['foldername'];
         	
@@ -945,9 +1009,9 @@ function copyEssentials() {
    		 // copying fakesmc kexts from kextpacks
    		 //
     	
-    	if ($modeldb[$modeldbID]['fakesmc'] != "" && $modeldb[$modeldbID]['fakesmc'] != "no")
+    	if ($modeldb[$modelRowID]['fakesmc'] != "" && $modeldb[$modelRowID]['fakesmc'] != "no")
     	 {   
-    		$fakesmcid = $modeldb[$modeldbID]['fakesmc'];
+    		$fakesmcid = $modeldb[$modelRowID]['fakesmc'];
     		$fname = $fakesmcdb[$fakesmcid]['foldername'];
     		$name = $fakesmcdb[$fakesmcid]['name']; 
     		
@@ -967,10 +1031,10 @@ function copyEssentials() {
     	//
     	// copying audio kexts
     	//
-    	if ($modeldb[$modeldbID]['audiopack'] != "" && $modeldb[$modeldbID]['audiopack'] != "no")
+    	if ($modeldb[$modelRowID]['audiopack'] != "" && $modeldb[$modelRowID]['audiopack'] != "no")
         {
         
-        	$audioid = $modeldb[$modeldbID]['audiopack'];
+        	$audioid = $modeldb[$modelRowID]['audiopack'];
     		$fname = $audiodb[$audioid]['foldername']; 
     		$name = $audiodb[$audioid]['name']; 
     
@@ -1029,9 +1093,9 @@ function copyEssentials() {
 		//
 		// copying ethernet kexts from kextpacks
 		//
-    	if ($modeldb[$modeldbID]['ethernet'] != "" && $modeldb[$modeldbID]['ethernet'] != "no")
+    	if ($modeldb[$modelRowID]['ethernet'] != "" && $modeldb[$modelRowID]['ethernet'] != "no")
     	 {
-        	$lanid = $modeldb[$modeldbID]['ethernet'];
+        	$lanid = $modeldb[$modelRowID]['ethernet'];
         	$name = $landb[$lanid]['name'];
         	$fname = $landb[$lanid]['foldername'];
         	
@@ -1056,9 +1120,9 @@ function copyEssentials() {
 	 //	
 	 // copying battery kexts from kextpacks
 	 //
-   	 if ($modeldb[$modeldbID]['batterypack'] != "" && $modeldb[$modeldbID]['batterypack'] != "no") 
+   	 if ($modeldb[$modelRowID]['batterypack'] != "" && $modeldb[$modelRowID]['batterypack'] != "no") 
    	 {
-        $battid = $modeldb[$modeldbID]['batterypack'];
+        $battid = $modeldb[$modelRowID]['batterypack'];
         $fname = $batterydb[$battid]['foldername'];
         $name = $batterydb[$battid]['name'];
         
@@ -1082,7 +1146,7 @@ function copyEssentials() {
     //
     // Copy selected optional kexts
     //
-    $data = $modeldb[$modeldbID]['optionalpacks'];
+    $data = $modeldb[$modelRowID]['optionalpacks'];
     $array 	= explode(',', $data);
     
     foreach($array as $id) {
@@ -1152,9 +1216,9 @@ function copyEssentials() {
     kextpackLoader("Kernel", "kernel$os", "$modelNamePath/Kernel");
     
     //
-    // Create a script file if we need to copy kexts from include
+    // Create a script file if we need to copy kexts from Extra/include/Extensions
     //
-    if($modeldb[$modeldbID]["useIncExtensions"] == "on")
+    if($modeldb[$modelRowID]["useIncExtensions"] == "on")
     {
     	$edp->writeToLog("$workpath/kpsvn/dload/CopyCustomKexts.sh", "");
     } 
@@ -1165,9 +1229,9 @@ function copyEssentials() {
   */
 function applyFixes() {
 	//Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $modeldb, $modeldbID, $os, $ee, $edp;
+    global $workpath, $rootpath, $slepath, $os, $ee, $edp;
     global $cpufixdb;
-    global $modelNamePath;
+    global $modelNamePath, $sysType, $modeldb, $modelRowID, $modelID;
 	
 	//kextpack svn path
 	$kpsvn = "$workpath/kpsvn";
@@ -1175,28 +1239,28 @@ function applyFixes() {
     $edp->writeToLog("$workpath/build.log", "  Applying fixes and patches...... <br>");
 	
 	//
-	// Apply CPU and power management related fixes 
+	// Apply power management related fixes 
 	//
-    $mdata = getModelDataFromID($modelID);
-    $array 	= explode(',', $mdata['cpufixes']);
+    $mdata = getModelDataFromID($sysType, $modelID);
+    $array 	= explode(',', $mdata['pmfixes']);
     
     $i = 0; // iterating through all the id's
 	while ($cpufixdb[$i] != "") {
 	    // Getting kextname from ID
-        $cpufixdata = getKextpackDataFromID("cpufixesdata", "$i");
+        $cpufixdata = getKextpackDataFromID("pmfixes", "$i");
         $kxtname = $cpufixdata[kextname];
         $name = $cpufixdata[edpid];
         
         // Checking if we need to patch AppleIntelCPUPowerManagement.kext
-        if(($modeldb[$modeldbID]['applecpupwr'] == "on") && $i == "1") {
+        if(($modeldb[$modelRowID]['applecpupwr'] == "on") && $i == "1") {
         	$edp->writeToLog("$workpath/build.log", "  Patching AppleIntelCPUPowerManagement.kext<br>");
         	patchAppleIntelCPUPowerManagement();
         }
-        else if(($modeldb[$modeldbID]['emupstates'] == "on") && $i == "3") {
+        else if(($modeldb[$modelRowID]['emupstates'] == "on") && $i == "3") {
         	
         	kextpackLoader("PowerMgmt", "VoodooPState", "$kxtname"); 
         }
-        else if ($kxtname != "" && $modeldb[$modeldbID][$cpufixdata[edpid]] == "on") { 
+        else if ($kxtname != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
 
     		if(!is_dir("$kpsvn/PowerMgmt"))
     			system_call("mkdir $kpsvn/PowerMgmt");
@@ -1214,14 +1278,14 @@ function applyFixes() {
 	$fname = "";
 		
 	//
- 	// Apply fixes
+ 	// Apply Generic xes
  	//
-    $data = $modeldb[$modeldbID]['fixes'];
+    $data = $modeldb[$modelRowID]['fixes'];
     $array 	= explode(',', $data);
     
     foreach($array as $id) {
 	    //Getting names from ID
-	    $fixdata = getKextpackDataFromID("fixesdata", "$id");
+	    $fixdata = getKextpackDataFromID("genfixes", "$id");
         $categ = $fixdata[category];
         $fname = $fixdata[foldername];
         $name = $fixdata[name];
@@ -1263,7 +1327,7 @@ function copyCustomFiles() {
     global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $edp;
     global $modelNamePath;
 	
-	$edp->writeToLog("$workpath/build.log", "  Checking for Custom files from EDP model path and $incpath, will be used if exists...... <br>");
+	$edp->writeToLog("$workpath/build.log", "  Checking for Custom files from EDP model path and $incpath... <br>");
 
 	//
     // Check if we need a custom made kernel from EDP model kernel folder
@@ -1302,7 +1366,7 @@ function copyCustomFiles() {
 	//
     // Copying Custom kexts from include if CopyCustomKexts file exists
     //
-    if(is_file("$workpath/kpsvn/dload/CopyCustomKexts.sh"))
+    if(is_file("$workpath/kpsvn/dload/CopyCustomKexts.sh") && shell_exec("cd $incpath/Extensions; ls | wc -l") > 0)
     {
     	$edp->writeToLog("$workpath/build.log", "  Copying custom kexts from $incpath to /Extra<br>");
     	system_call("cp -a $incpath/Extensions/. $ee/");

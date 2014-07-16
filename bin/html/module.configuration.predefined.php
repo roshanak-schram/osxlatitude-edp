@@ -5,14 +5,13 @@ include_once "edpconfig.inc.php";
 include "header.inc.php";
 
 // Get the values from the javascript link 
-$type	 	= $_GET['type'];	if ($type == "") 	{ $type 	= $_POST['type']; }
+$sysType	 	= $_GET['type'];	if ($sysType == "") 	{ $sysType 	= $_POST['type']; }
 $modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 		
-		
+
 //-------------------------> Do build page starts here
-if ($action == 'dobuild') {
-	
+if ($action == 'dobuild') {	
 	echo "<span class='console'>";
 
 	if ($modelID == "") { echo "modelID is empty"; exit; }
@@ -114,9 +113,10 @@ if ($action == 'dobuild') {
 		//
 		
 		global $modelNamePath;
-		$modelName = $modeldb[0]["name"];
-		$ven = builderGetVendorValuebyID($modelID);
-		$gen = builderGetGenValuebyID($modelID);
+		$modelRowID = 0;
+		$modelName = $modeldb[$modelRowID]["name"];
+		$ven = builderGetVendorValuebyID($sysType, $modelID);
+		$gen = builderGetGenValuebyID($sysType, $modelID);
 		
 		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
 		
@@ -164,22 +164,23 @@ if ($action == 'dobuild') {
 		//
 		// Step 3 : Applying Fixes and bootloader config
 		//	
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Applying fixes and Chameleon settings:</b><br>");
+		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
 		applyFixes();
 		
-		if($modeldb[0]["updateCham"] == "on") {
-			$edp->writeToLog("$workpath/build.log", "Updating bootloader...<br>");
+		if($modeldb[$modelRowID]["updateCham"] == "on") {
 			
-			if($modeldb[0]["useEnochCham"] == "on") {
+			if($modeldb[$modelRowID]["useEnochCham"] == "on") {
+				$edp->writeToLog("$workpath/build.log", "Updating enoch bootloader...<br>");
 				kextpackLoader("Bootloader", "EnochBoot", "boot");
 			} 
 			else {
+				$edp->writeToLog("$workpath/build.log", "Updating standard bootloader...<br>");
 				kextpackLoader("Bootloader", "StandardBoot", "boot");
 			}			
 		}
 			
 		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
-		$chamModules->copyChamModules($modeldb[0]);
+		$chamModules->copyChamModules($modeldb[$modelRowID]);
 		
 		//
 		// Step 4 : Copying kexts
@@ -216,7 +217,7 @@ if ($action == "") {
 
 	echo "<select name='type' id='type'>";
 	
-	if ($type == "") { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; }
+	if ($sysType == "") { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; }
 
 	echo getSystemTypeValue();
 	
@@ -326,7 +327,7 @@ if ($action == "") {
 	if ($action == "confirm") {
 		
 		// Fetch standard model info needed for the configuration of the choosen model to build
-		switch ($type) {
+		switch ($sysType) {
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":
@@ -372,11 +373,12 @@ if ($action == "") {
 			include "include/module.configuration.fixes.inc.php";
 			include "include/module.configuration.optional.inc.php";		
 
-			// Send standard vars
+			// set model vars in hidden input to read back during build
 			echo "<input type='hidden' name='action' value='dobuild'>";
+			echo "<input type='hidden' name='modelID' value='$modelID'>";
+			echo "<input type='hidden' name='type' value='$mdrow[type]'>";
 			echo "<input type='hidden' name='name' value='$mdrow[name]'>";
 			echo "<input type='hidden' name='desc' value='$mdrow[desc]'>";
-			echo "<input type='hidden' name='model' value='$modelID'>";
 
 			echo "</div><br>";
 			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' onclick='clearLoadingScreen();' /></li></ul><br><br>\n";

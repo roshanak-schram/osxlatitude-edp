@@ -31,6 +31,7 @@
 				
 			}
 		
+		/*
 		$edsdt = $_POST['edsdt']; $eboot = $_POST['eboot']; $esmbios = $_POST['esmbios'];
 		$essdt = $_POST['essdt']; $essdt1 = $_POST['essdt1']; $essdt2 = $_POST['essdt2']; $essdt3 = $_POST['essdt3']; $essdt4 = $_POST['essdt4'];
 			
@@ -49,6 +50,7 @@
 		if(file_exists("/Extra/SSDT-3.aml") && $essdt3 != "on") {  system("rm -f /Extra/SSDT-3.aml");} 
 
 		if(file_exists("/Extra/SSDT-4.aml") && $essdt4 != "on") { system("rm -f /Extra/SSDT-4.aml");} 
+		*/
 	}
 	
 	function deleteUsrIncludeFiles()
@@ -108,10 +110,10 @@
 			if($edpoper === "edelonly" || $edpoper == "ebuild")
 				deleteEDPFiles();
 				
-			if($cusoper == "cdelbuild" || $cusoper == "cdelonly")
+			if($cusoper == "cdelonly")
 				deleteUsrIncludeFiles();
 				
-			if($cusoper == "cbuild" || $edpoper == "ebuild" || $cusoper == "cdelbuild" ||
+			if($cusoper == "cbuild" || $edpoper == "ebuild" ||
 			   $cusoper == "cfixcache" || $cusoper == "cfullfix")	 {
 				doCustomBuild();
 				echo "<body onload=\"JavaScript:showStatus();\">";

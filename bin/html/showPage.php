@@ -147,6 +147,7 @@
 			echoPageItemTOP("icons/big/sysprefs.png", "Configuration");
 			echo "<div class='pageitem_bottom'>\n";
 			echo "Build your model using EDP which provides combination of kexts, dsdt, plists needed to boot your system and allows you to configure.";
+			exit;
 		break;
 		
 		case "Applications":
@@ -219,7 +220,7 @@
 		
 			if ($fcount > 0 || ($fcount == 0 && !is_file("$workpath/update.log"))) {
 				echo "<body onload=\"JavaScript:timedRefresh(3000);\">";
-				echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 5 minutes depending on your internet speed</b><br><br><b>Shortly you will be redirected to log which will show the status of the update.</center></b>";
+				echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center><br>";
 				echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 
@@ -235,7 +236,7 @@
 				{
 					system_call("mv $workpath/update.log $workpath/lastupdate.log ");
 					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-					echo "<b><center> Update Finished.</b><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
+					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
 				}
 			}
 			echo "</div>";
