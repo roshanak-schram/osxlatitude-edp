@@ -9,14 +9,10 @@ class edp {
     
     	echo "Cleaning up $workpath using SVN <br>\n";
     	system_call("svn cleanup $workpath/bin");
-    	system_call("svn cleanup $workpath/modules");
-    	system_call("svn cleanup $workpath/Themes");
     	system_call("svn cleanup $workpath/phpWebServer");
     
     	echo "\n<br>Downloading latest sources from EDP's svn server<br>\n\n";
     	system_call("svn --non-interactive --username edp --password edp --force update $workpath/bin");
-    	system_call("svn --non-interactive --username edp --password edp --force update $workpath/modules");
-    	system_call("svn --non-interactive --username edp --password edp --force update $workpath/Themes");
     	system_call("svn --non-interactive --username edp --password edp --force update $workpath/phpWebServer");
 
 		// Copy the updated php binary

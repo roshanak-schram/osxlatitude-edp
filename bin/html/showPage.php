@@ -218,11 +218,24 @@
 				$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
 			}
 		
-			if ($fcount > 0 || ($fcount == 0 && !is_file("$workpath/update.log"))) {
+			if ($fcount == 0 && is_file("$workpath/update.log"))
+				{
+					system_call("mv $workpath/update.log $workpath/lastupdate.log ");
+					echo "<pre>";
+					if(is_file("$workpath/lastupdate.log"))
+						include "$workpath/lastupdate.log";
+					echo "</pre>";
+					
+					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
+					
+				}
+			else 
+			{
+				if ($fcount > 0 || ($fcount == 0 && !is_file("$workpath/update.log"))) {
 				echo "<body onload=\"JavaScript:timedRefresh(3000);\">";
 				echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center><br>";
 				echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
-				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 
 				if ($fcount == 0) {
 					if (file_exists("$workpath/lastupdate.log")) 
@@ -230,14 +243,8 @@
 					
 					system_call("sudo sh $workpath/bin/update.sh >> $workpath/update.log &");
 				}
-			}
-			else {
-				if ($fcount == 0 && is_file("$workpath/update.log"))
-				{
-					system_call("mv $workpath/update.log $workpath/lastupdate.log ");
-					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
-				}
+			  }
+			  echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 			}
 			echo "</div>";
 			exit;
