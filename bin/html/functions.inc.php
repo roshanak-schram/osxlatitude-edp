@@ -426,9 +426,12 @@ function myHackCheck() {
     global $workpath, $slepath;
 
     if (!is_dir("$slepath/myHack.kext")) {
-        $myhackkext = "$workpath/bin/myHack/myHack.kext";
-        system_call("rm -Rf `find -f path \"$myhackkext\" -type d -name .svn`");
-        system_call("cp -R \"$myhackkext\" $slepath");
+    	// copy kext to workpath
+        system_call("cp -R \"$workpath/bin/myHack/myHack.kext\" $workpath");
+        // Remove svn versioning
+        system_call("rm -Rf `find -f path \"$workpath/myHack.kext\" -type d -name .svn`");
+        // copy kext to sle
+        system_call("cp -R \"$workpath/myHack.kext\" $slepath");
     }
     if (!is_file("/usr/sbin/")) {
         system_call("cp \"$workpath/bin/myHack/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
