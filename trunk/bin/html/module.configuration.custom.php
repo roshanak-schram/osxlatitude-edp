@@ -136,15 +136,10 @@ function doCustomBuild() {
 			$ssdt = $_POST['ssdt']; $ssdt1 = $_POST['ssdt1']; $ssdt2 = $_POST['ssdt2']; $ssdt3 = $_POST['ssdt3']; $ssdt4 = $_POST['ssdt4'];
 
 	
-    // check if myhack.kext exists in ale, and if it dosent then copy it there...
-	if (!is_dir("$slepath/myHack.kext")) {
-        $myhackkext = "$workpath/bin/myHack/myHack.kext";
-        system_call("rm -Rf `find -f path \"$myhackkext\" -type d -name .svn`");
-        system_call("cp -R \"$myhackkext\" $slepath");
-    }
-    if (!is_file("/usr/sbin/")) {
-        system_call("cp \"$workpath/bin/myHack/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
-    }
+	//
+    // check if myhack.kext exists in sle, if it dosent then copy it there...
+    //
+	myHackCheck();
     
     //
 	// Start by defining our log file and cleaning it..
