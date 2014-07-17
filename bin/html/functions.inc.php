@@ -1111,7 +1111,16 @@ function copyEssentials() {
     			if(!is_dir("$kpsvn/Ethernet/$fname"))
     				system_call("mkdir $kpsvn/Ethernet/$fname");
     		
-    			kextpackLoader("Ethernet", "$fname", "$name");   
+    			if($lanid == "11") {
+				//Choose 10.8+ version 
+    			if(getMacOSXVersion() >= "10.8")
+    				kextpackLoader("Ethernet", "$fname", "NewRTL81xx");
+    			//chooose Lion version
+    			else if(getMacOSXVersion() == "10.7")
+    				kextpackLoader("Ethernet", "$fname", "NewRTL81xx_Lion");
+    			}
+    			else
+    				kextpackLoader("Ethernet", "$fname", "$name");   
      	  	}	
 		}
 		// Reset vars
@@ -1163,7 +1172,7 @@ function copyEssentials() {
     		if($id == "5") {
 			//Choose new version 
     		if(getMacOSXVersion() >= "10.8.5")
-    			kextpackLoader("$categ/GenericXHCIUSB3_New");
+    			kextpackLoader("$categ", "GenericXHCIUSB3_New", "$name");
     		//chooose old version
     		else if(getMacOSXVersion() < "10.8.5")
     			kextpackLoader("$categ", "$fname", "$name");
