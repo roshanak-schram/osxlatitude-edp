@@ -8,7 +8,7 @@
 			echo "<li class='select'><select name='fakesmc'>";
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[fakesmc]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp;FakeSMC: $row[name] $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp;FakeSMC: v$row[version] - $row[notes]</option>\n";
 		    }
 			echo "</select><span class='arrow'></span> </li>";
 
@@ -20,7 +20,7 @@
 			else { echo "<option value='no'>&nbsp; PS2 kext: None selected</option>\n"; }
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[ps2]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; PS2 kext: $row[name] - $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; PS2 kext: $row[name] v$row[version] - $row[notes]</option>\n";
 		    }
 			echo "</select><span class='arrow'></span> </li>";
 			
@@ -34,7 +34,7 @@
 
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[audio]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] - $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Audio: $row[name] v$row[version] - $row[notes]</option>\n";
 			}			
 				//Check if the field bundledAudio is set to yes, if so we will disable the dropdown field
 				if ("$mdrow[audio]" == "builtin" || "$mdrow[audio]" == "builtin") { echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA</option>"; }
@@ -51,7 +51,7 @@
 			else { echo "<option value='no'>&nbsp; Ethernet kext: Don't load</option>\n"; }
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[ethernet]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Ethernet kext: $row[name] - $row[notes]</option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Ethernet kext: $row[name] v$row[version] - $row[notes]</option>\n";
 		    }			
 			echo "</select><span class='arrow'></span> </li>\n";
 			
@@ -77,7 +77,7 @@
 			else { echo "<option value='no'>&nbsp; Battery kext: Don't load</option>\n"; }	
 			foreach($result as $row) {
 				$s=""; if ("$mdrow[battery]" == "$row[id]") { $s = "SELECTED"; }
-				echo "<option value='$row[id]' $s>&nbsp; Battery kext: $row[name] </option>\n";
+				echo "<option value='$row[id]' $s>&nbsp; Battery kext: $row[name] v$row[version] </option>\n";
 		    }			
 			echo "</select><span class='arrow'></span> </li>\n";
 			
