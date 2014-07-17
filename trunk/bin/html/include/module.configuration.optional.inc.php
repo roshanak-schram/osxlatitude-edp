@@ -9,7 +9,7 @@
 				$id = ""; $name = ""; $arch = ""; $notes = ""; $status = ""; $c = "";
 				
 				//Getting vars from the optional multidim. array
-				$id = $optdb[$i]['id']; $name = $optdb[$i]['name']; $arch = $optdb[$i]['arch']; $notes = $optdb[$i]['notes'];
+				$id = $optdb[$i]['id']; $name = $optdb[$i]['name']; $arch = $optdb[$i]['arch']; $notes = $optdb[$i]['notes']; $ver = $optdb[$i]['version'];
 				
 				//Checking wether we are using the optional pack in our model
 				$status = isOPTinUse("$id");
@@ -17,7 +17,7 @@
 				//If the status is "yes" we will set $c as checked
 				if ($status == "yes") { $c = "checked"; }
 				
-				echo "<li class='checkbox'><span class='name'>$notes </span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
+				echo "<li class='checkbox'><span class='name'>v$ver - $notes </span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
 				$i++;
 			}	
 			
