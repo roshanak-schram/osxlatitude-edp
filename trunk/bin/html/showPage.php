@@ -222,9 +222,12 @@
 				{
 					system_call("mv $workpath/update.log $workpath/lastupdate.log ");
 			
+					echo "<ul class='pageitem'>";
 					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
+					echo "<br></ul>";
 					
+					echo "<b>Update Log:</b>\n";
 					echo "<pre>";
 					if(is_file("$workpath/lastupdate.log"))
 						include "$workpath/lastupdate.log";
@@ -235,7 +238,7 @@
 			{
 				if ($fcount > 0 || ($fcount == 0 && !is_file("$workpath/update.log"))) {
 				echo "<body onload=\"JavaScript:timedRefresh(3000);\">";
-				echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center><br>";
+				echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
 				echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 
 				if ($fcount == 0) {

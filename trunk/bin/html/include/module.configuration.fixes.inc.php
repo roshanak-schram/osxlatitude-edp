@@ -30,7 +30,7 @@
 			$stmt->execute();
 			$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 
-			$data = $row[Fixes];
+			$data = $row[genfixes];
 			//If nothing is defined in the modelsdb just return blank
 			if ($data == "") { return "no"; }
 			
