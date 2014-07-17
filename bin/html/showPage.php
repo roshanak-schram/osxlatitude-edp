@@ -231,7 +231,7 @@
 			
 						echo "<ul class='pageitem'>";
 						echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-						echo "<b><center> Update Finished.</b><br><br><b> App will reload in 10 sec for the new changes to take effect.</center></b>";
+						echo "<b><center> Update Finished.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
 						echo "<br></ul>";
 					
 						echo "<b>Update Log:</b>\n";
