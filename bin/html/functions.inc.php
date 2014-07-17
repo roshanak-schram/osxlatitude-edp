@@ -329,7 +329,11 @@ function kextpackLoader($categ, $fname, $name) {
 				case "Ethernet":
 				$categdir = "$workpath/kpsvn/$categ/$fname"; // Ethernet/RealTek/kextname.kext
 				$packdir = "$categdir/$name";
-				$svnpath = "kextpacks/$categ/$fname/$name";				
+				$svnpath = "kextpacks/$categ/$fname/$name";	
+				// Copy kext inside the name folder for new RTL kext 
+				if ($name == "NewRTL81xx" || $name == "NewRTL81xx_Lion") {
+					$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
+				}			
 				break;
 				
 				case "PowerMgmt":
