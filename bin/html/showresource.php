@@ -56,7 +56,7 @@ echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
 	<?="$row[description]";?>
 	<br>
 	<p><b>Website:</b></p>
-	<a href='<?="$row[link]";?>'>Project Link for support</a>
+	<a href='<?="$row[link]";?>'>Project/Support Link</a>
 </div>
 <ul class="pageitem">
 	<li class="button"><input name="Submit input" type="submit" onclick="document.location.href='<?="$row[action]";?>'" value="Proceed to Install/Update" /></li>
