@@ -218,21 +218,31 @@
 				$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
 			}
 		
-			if ($fcount == 0 && is_file("$workpath/update.log"))
+			if ($fcount == 0 && (is_file("$workpath/update.log") || is_file("$workpath/updateFinish.log")))
 				{
-					system_call("mv $workpath/update.log $workpath/lastupdate.log ");
+					if(is_file("$workpath/updateFinish.log")) {
+						system_call("mv $workpath/updateFinish.log $workpath/lastupdate.log ");
+						system("sudo killall EDP"); 
+    					system("open $workpath/bin/EDPweb.app");
+					}
+					else {
+					
+						system_call("mv $workpath/update.log $workpath/updateFinish.log ");
 			
-					echo "<ul class='pageitem'>";
-					echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-					echo "<b><center> Update Finished.</b><br><br><b> You can now reload the app for those changes to take effect (or) just close this app.</center></b>";
-					echo "<br></ul>";
+						echo "<ul class='pageitem'>";
+						echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+						echo "<b><center> Update Finished.</b><br><br><b> App will reload in 10 sec for the new changes to take effect.</center></b>";
+						echo "<br></ul>";
 					
-					echo "<b>Update Log:</b>\n";
-					echo "<pre>";
-					if(is_file("$workpath/lastupdate.log"))
-						include "$workpath/lastupdate.log";
-					echo "</pre>";
-					
+						echo "<b>Update Log:</b>\n";
+						echo "<pre>";
+						if(is_file("$workpath/updateFinish.log"))
+							include "$workpath/updateFinish.log";
+						echo "</pre>";
+						echo "<body onload=\"JavaScript:timedRefresh(10000);\">";
+			  			echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
+					}
+
 				}
 			else 
 			{
@@ -248,7 +258,7 @@
 					system_call("sudo sh $workpath/bin/update.sh >> $workpath/update.log &");
 				}
 			  }
-			  echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+			  echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
 			}
 			echo "</div>";
 			exit;
