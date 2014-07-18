@@ -1,11 +1,5 @@
 <?php
-  
-  //Include builder class
-  include_once "classes/chamModules.php";
-  include_once "classes/edp.php";
-  include_once "classes/nvram.php";
-  include_once "classes/kexts.php";  
-    
+     
 //------------------> EDPweb functions -----------------------------------------------------------------------------------------------
 
 function checkbox($title, $formname, $status) {
@@ -18,362 +12,10 @@ function echoPageItemTOP($icon, $text) {
 	echo "<div class='pageitem_top'><img src='$icon'><span><b>$text</span></div></b>\n";
 }
 
+//<------------------> SVN Functions ----------------------------------------------------------------------------------------------------
 
-//<-----------------------------------------------------------------------------------------------------------------------------------
-
-//--- Get Value from Key in SMbios.plist
-include_once __DIR__ . '/vendor/CFPropertyList/CFPropertyList.php';
-
-function getValueFromSmbios($key, $default = null) {
-    global $workpath;
-
-    $file = $workpath . '/smbios.plist';
-
-    if (file_exists($file)) {
-        $plist = new CFPropertyList\CFPropertyList($file, CFPropertyList\CFPropertyList::FORMAT_XML);
-        $dict  = $plist->toArray();
-
-        if (array_key_exists($key, $dict)) {
-            return $dict[$key];
-        }
-    }
-
-    return $default;
-}
-//---
-
-// Returns Kextpack data from id
-	function getKextpackDataFromID($table, $id) {
-		if ($table != "" && $id != "") {
-			global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
-			$stmt->execute(); $result = $stmt->fetchAll(); $kprow = $result[0];
-			return $kprow;
-		}		
-	}
-
-// Returns model data from id
-	function getModelDataFromID($sysType, $modelid) {
-		
-			global $edp_db;
-			
-			switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT * FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT * FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 			}
- 	
-			$stmt = $edp_db->query($query);
-			$stmt->execute(); $result = $stmt->fetchAll(); 
-			$mdata = $result[0]; //get first row
-			return $mdata;
-   }
-	
-function getSystemTypeValue() {
-    global $edp_db;
-
-    $return = '';
-
-	$result = $edp_db->query("SELECT DISTINCT type FROM modelsPortable ORDER BY type");
-
-    foreach($result as $row) {
-        $return .= '<option value="' . $row['type'] . '">&nbsp;&nbsp;' . $row['type'] . '</option>';
-    }
-    
-	$result = $edp_db->query("SELECT DISTINCT type FROM modelsDesk ORDER BY type");
-
-    foreach($result as $row) {
-        $return .= '<option value="' . $row['type'] . '">&nbsp;&nbsp;' . $row['type'] . '</option>';
-    }
-
-    return $return;
-}
-
-//--- Get EDP builder Model / Vendor / series values for the user to select from
-function builderGetVendorValuebyID($sysType, $modelid) {
-    global $edp_db;
-
-	switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 	}
- 	
-	$stmt = $edp_db->query($query);
-	$stmt->execute();
-	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[vendor];
-}
-
-function builderGetSeriesValuebyID($sysType, $modelid) {
-    global $edp_db;
-
-	switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT DISTINCT series FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT series FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 	}
- 	
-	$stmt = $edp_db->query($query);
-	$stmt->execute();
-	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[series];
-}
-
-function builderGetGenValuebyID($sysType, $modelid) {
-    global $edp_db;
-
-	switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT DISTINCT generation FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT generation FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
- 			  break;
- 	}
- 	
-	$stmt = $edp_db->query($query);
-	$stmt->execute();
-	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
-    return $mdrow[generation];
-}
-
-function builderGetVendorValues($sysType) {
-    global $edp_db;
-
- 	switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$sysType'";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$sysType'";
- 			  break;
- 	}
-  	
-    $result = $edp_db->query($query);
-    $return = '';
-
-    foreach($result as $row) {
-       $return .= '<option value="' . $row['vendor'] . '">&nbsp;&nbsp;' . $row['vendor'] . '</option>';
-    }
-
-    return '<option value="" >&nbsp;&nbsp;Select vendor...</option>' . $return;
-}
-function builderGetSerieValues($sysType, $vendor) {
-    global $edp_db;
-
-	switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT DISTINCT vendor, series FROM modelsPortable WHERE type = '$sysType' AND vendor = '$vendor' ORDER BY series";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT vendor, series FROM  modelsDesk WHERE type = '$sysType' AND vendor = '$vendor' ORDER BY series";
- 			  break;
- 	}
- 	
-    $result = $edp_db->query($query);
-    $return = '';
-
-    foreach($result as $row) {
-        $return .= '<option value="' . $row['series'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['series'] . ' </option>';
-    }
-
-    return '<option value="" >&nbsp;&nbsp;Select series...</option>' . $return;
-}
-function builderGetModelValues($sysType, $vendor, $series, $generation) {
-    global $edp_db;
-
-	switch ($sysType) {
- 			  case "Notebook":
- 			  case "Ultrabook":
- 			  case "Tablet":
- 			  	$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$sysType' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
- 			  break;
- 			  
- 			  case "Desktop":
- 			  case "Workstation":
- 			  case "AllinOnePC":
- 			  	$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$sysType' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
- 			  break;
- 	}
- 	
-    $result = $edp_db->query($query);
-    $return = '';
-
-    foreach($result as $row) {
-    if($row['generation'] != "")
-        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['generation'] .')  </option>';
-        else
-        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . '  </option>';
-    }
-
-    return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
-}
-//---
-
-function checkSVNrevs() {
-    global $localrev, $workpath;
-
-    $remoterev = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
-    $remoterev = str_replace("Last Changed Rev: ", "", $remoterev);
-
-    if ($localrev < $remoterev) {
-        echo "\n   ---------------------------------------------------------------------------------------\n";
-        echo "        !!! There is an update of EDP, please run option 2 to download the update !!!\n";
-        echo "   ---------------------------------------------------------------------------------------\n\n";
-    }
-}
-
-/**
- * This function will download a kextpack from SVN if requested (or update it if allready exists) 
- */
-function kextpackLoader($categ, $fname, $name) {
-		global $workpath, $edp, $ee;
-    	    	
-    	if(!is_dir("$workpath/kpsvn/dload/statFiles"))
-			$createStatFile = "mkdir $workpath/kpsvn/dload/statFiles; cd $workpath/kpsvn/dload/statFiles; touch $fname.txt";
-    	else		
-			$createStatFile = "cd $workpath/kpsvn/dload/statFiles; touch $fname.txt";	
-		
-		$endStatFile = "cd $workpath/kpsvn/dload/statFiles; rm -rf $fname.txt";
-		
-		//
-		// Download custom Kexts, kernel and AppleHDA from model data
-		//
-    	if ($categ == "Extensions"  || $categ == "Kernel")
-		{
-			$categdir = "$workpath/model-data/$name";
-			$packdir = "$categdir/$fname";
-			$svnpath = "model-data/$name/$fname";
-			$copyKextCmd = "cp -a $workpath/model-data/$name/$fname/*.kext $ee/; echo \"Copy : $fname file(s) installed<br>\" >> $workpath/build.log";
-			$name = $fname;
-		}
-		//
-		// Download kexts and booloader from kextpacks
-		//
-		else {
-			$categdir = "$workpath/kpsvn/$categ";
-			$packdir = "$categdir/$fname";
-			$svnpath = "kextpacks/$categ/$fname";
-			$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
-
-
-			// Copy VoodooHDA prefpanes
-			if ($name == "AudioSettings")
-			{
-        		$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kpsvn/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kpsvn/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA file(s) installed<br>\" >> $workpath/build.log";
-			}
-			
-			switch ($fname) {
-				// Copy VoodooPState launch agent plist
-				case "VoodooPState":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
-				break;
-				
-				// Copy VoodooPS2 prefpanes
-				case "StandardVooDooPS2":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname installed to /Library/PreferencePanes<br>\" >> $workpath/build.log";
-				break;
-				
-				case "LatestVoodooPS2":				
-				case "VoooDooALPS2":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/*.kext $ee/; cp $workpath/kpsvn/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kpsvn/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kpsvn/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname file(s) installed<br>\" >> $workpath/build.log";
-				break;
-				
-				default:
-				break;
-			}
-			
-			// change to correct bootloader, ethernet and power mgmt kexts folder path
-			switch ($categ) {
-		
-				case "Ethernet":
-				$categdir = "$workpath/kpsvn/$categ/$fname"; // Ethernet/RealTek/kextname.kext
-				$packdir = "$categdir/$name";
-				$svnpath = "kextpacks/$categ/$fname/$name";	
-				// Copy kext inside the name folder for new RTL kext 
-				if ($name == "NewRTL81xx" || $name == "NewRTL81xx_Lion") {
-					$copyKextCmd = "cp -a $workpath/kpsvn/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
-				}			
-				break;
-				
-				case "PowerMgmt":
-				$copyKextCmd = "cp -a $workpath/kpsvn/$categ/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $workpath/build.log";
-				$categdir = "$workpath/kpsvn/$categ"; // PowerMgmt/kextname.kext
-				$packdir = "$categdir/$name";
-				$svnpath = "kextpacks/$categ/$name";
-				break;
-				
-				case "Bootloader":
-				$copyKextCmd = "cp -f $workpath/kpsvn/$categ/$fname/$name /; echo \"Copy : $fname bootloader installed/updated<br>\" >> $workpath/build.log";
-				$categdir = "$workpath/kpsvn/$categ";
-				$packdir = "$categdir/$fname";
-				$svnpath = "kextpacks/$categ/$fname";
-				break;
-			}
-		}	
-			
-		if (is_dir("$packdir")) {
-			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir; then echo \"Update : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
-
-			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
-			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
-			
-			// system_call("svn --non-interactive --username edp --password edp --quiet --force update $packdir");
-		}
-		else {
-			$checkoutCmd = "mkdir $categdir; cd $categdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
-
-			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
-			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
-			
-			// system_call("mkdir $packdir; cd $packdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$pname/ .");
-		}
-} 
-
- 
-/**
- * Function to check if the model is allready checked out
- * if the model is not checked out it will check it out
+/*
+ * Functions to download essential and custom files from model folder
  */
 function loadModelEssentialFiles() {
     global $workpath, $modelNamePath, $os;
@@ -423,36 +65,318 @@ function svnModeldata($model) {
     }
 }
 
-/**
- * Function to check if myhack.kext exists in ale, and if it dosent for some weird reason... copy it there...
- */
-function myHackCheck() {
-    global $workpath, $slepath;
+function checkSVNrevs() {
+    global $localrev, $workpath;
 
-    if (!is_dir("$slepath/myHack.kext")) {
-    	// copy kext to workpath
-        system_call("cp -R \"$workpath/bin/myHack/myHack.kext\" $workpath");
-        // Remove svn versioning
-        system_call("rm -Rf `find -f path \"$workpath/myHack.kext\" -type d -name .svn`");
-        // copy kext to sle
-        system_call("cp -R \"$workpath/myHack.kext\" $slepath");
+    $remoterev = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
+    $remoterev = str_replace("Last Changed Rev: ", "", $remoterev);
+
+    if ($localrev < $remoterev) {
+        echo "\n   ---------------------------------------------------------------------------------------\n";
+        echo "        !!! There is an update of EDP, please run option 2 to download the update !!!\n";
+        echo "   ---------------------------------------------------------------------------------------\n\n";
     }
-    if (!is_file("/usr/sbin/")) {
-        system_call("cp \"$workpath/bin/myHack/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
+}
+
+//<------------------> Database Functions ----------------------------------------------------------------------------------------------------
+
+//
+// Get data from database table using ID
+//
+function getKextpackDataFromID($table, $id) {
+		if ($table != "" && $id != "") {
+			global $edp_db;
+			$stmt = $edp_db->query("SELECT * FROM $table where id = '$id'");
+			$stmt->execute(); $result = $stmt->fetchAll(); $kprow = $result[0];
+			return $kprow;
+		}		
+	}
+
+//
+// Get model data from database using ID
+//
+function getModelDataFromID($sysType, $modelid) {
+		
+			global $edp_db;
+			
+			switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT * FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT * FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			}
+ 	
+			$stmt = $edp_db->query($query);
+			$stmt->execute(); $result = $stmt->fetchAll(); 
+			$mdata = $result[0]; //get first row
+			return $mdata;
+   }
+
+//
+// Get System type values for the models from database
+//	
+function getSystemTypeValue() {
+    global $edp_db;
+
+    $return = '';
+
+	$result = $edp_db->query("SELECT DISTINCT type FROM modelsPortable ORDER BY type");
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['type'] . '">&nbsp;&nbsp;' . $row['type'] . '</option>';
     }
+    
+	$result = $edp_db->query("SELECT DISTINCT type FROM modelsDesk ORDER BY type");
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['type'] . '">&nbsp;&nbsp;' . $row['type'] . '</option>';
+    }
+
+    return $return;
+ }
+
+//
+// Get vendor values from database using ID
+//
+function builderGetVendorValuebyID($sysType, $modelid) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 	}
+ 	
+	$stmt = $edp_db->query($query);
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[vendor];
+ }
+
+//
+// Get series values from database using ID
+//
+function builderGetSeriesValuebyID($sysType, $modelid) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT series FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT series FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 	}
+ 	
+	$stmt = $edp_db->query($query);
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[series];
+ }
+
+//
+// Get generation values from database using ID
+//
+function builderGetGenValuebyID($sysType, $modelid) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT generation FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT generation FROM  modelsDesk WHERE type = '$sysType' AND id = '$modelid'";
+ 			  break;
+ 	}
+ 	
+	$stmt = $edp_db->query($query);
+	$stmt->execute();
+	$bigrow = $stmt->fetchAll(); $mdrow = $bigrow[0];
+    return $mdrow[generation];
+ }
+
+//
+// Get vendor values from database using system type
+//
+function builderGetVendorValues($sysType) {
+    global $edp_db;
+
+ 	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT vendor FROM modelsPortable WHERE type = '$sysType'";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT vendor FROM  modelsDesk WHERE type = '$sysType'";
+ 			  break;
+ 	}
+  	
+    $result = $edp_db->query($query);
+    $return = '';
+
+    foreach($result as $row) {
+       $return .= '<option value="' . $row['vendor'] . '">&nbsp;&nbsp;' . $row['vendor'] . '</option>';
+    }
+
+    return '<option value="" >&nbsp;&nbsp;Select vendor...</option>' . $return;
+}
+
+//
+// Get series values from database using system type
+//
+function builderGetSerieValues($sysType, $vendor) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT vendor, series FROM modelsPortable WHERE type = '$sysType' AND vendor = '$vendor' ORDER BY series";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT vendor, series FROM  modelsDesk WHERE type = '$sysType' AND vendor = '$vendor' ORDER BY series";
+ 			  break;
+ 	}
+ 	
+    $result = $edp_db->query($query);
+    $return = '';
+
+    foreach($result as $row) {
+        $return .= '<option value="' . $row['series'] . '">&nbsp;&nbsp;' . $row['vendor'] . ' ' . $row['series'] . ' </option>';
+    }
+
+    return '<option value="" >&nbsp;&nbsp;Select series...</option>' . $return;
+}
+
+//
+// Get model data from database using system type
+//
+function builderGetModelValues($sysType, $vendor, $series, $generation) {
+    global $edp_db;
+
+	switch ($sysType) {
+ 			  case "Notebook":
+ 			  case "Ultrabook":
+ 			  case "Tablet":
+ 			  	$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$sysType' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
+ 			  break;
+ 			  
+ 			  case "Desktop":
+ 			  case "Workstation":
+ 			  case "AllinOnePC":
+ 			  	$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$sysType' AND vendor = '$vendor' AND series = '$series' ORDER BY type";
+ 			  break;
+ 	}
+ 	
+    $result = $edp_db->query($query);
+    $return = '';
+
+    foreach($result as $row) {
+    if($row['generation'] != "")
+        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['generation'] .')  </option>';
+        else
+        	$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . '  </option>';
+    }
+
+    return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
+}
+
+
+//<------------------> EDP Functions ----------------------------------------------------------------------------------------------------
+	
+function getVersion() {
+    global $rootpath, $os_string;
+
+    $path = "".$rootpath."System/Library/CoreServices/SystemVersion";
+    $v = exec("defaults read $path ProductVersion");
+    $r = '';
+
+    if ($v == "10.6")   { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }		
+    if ($v == "10.6.0") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.1") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.2") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.3") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }						
+    if ($v == "10.6.4") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.5") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.6") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.7") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.8") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.6.9") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
+    if ($v == "10.7")   { $r="lion"; $os_string = "MacOS X Lion $v"; }			
+    if ($v == "10.7.0") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.1") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.2") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.3") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.4") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.5") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.6") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.7.7") { $r="lion"; $os_string = "MacOS X Lion $v"; }
+    if ($v == "10.8")   { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
+    if ($v == "10.8.0") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
+    if ($v == "10.8.1") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
+    if ($v == "10.8.2") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
+    if ($v == "10.8.3") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
+    if ($v == "10.8.4") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
+    if ($v == "10.8.5") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
+    if ($v == "10.8.6") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }    	
+    if ($v == "10.9") 	{ $r="mav"; $os_string = "OSX Maverick $v"; }	
+    if ($v == "10.9.0") { $r="mav"; $os_string = "OSX Maverick $v"; }	
+    if ($v == "10.9.1") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.2") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.3") { $r="mav"; $os_string = "OSX Maverick $v"; }	
+    if ($v == "10.9.4") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.5") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.9.6") { $r="mav"; $os_string = "OSX Maverick $v"; }
+    if ($v == "10.10") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.0") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.1") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.2") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
+    if ($v == "10.10.3") { $r="yos"; $os_string = "OSX Yosemite $v"; }
+    if ($v == "10.10.4") { $r="yos"; $os_string = "OSX Yosemite $v"; }
+    if ($v == "10.10.5") { $r="yos"; $os_string = "OSX Yosemite $v"; } 
+    if ($v == "10.10.6") { $r="yos"; $os_string = "OSX Yosemite $v"; }                            			
+    return $r;
 }
 	
-function edpCleaner() {
-    global $slepath;
-    
-    if ($slepath != "") {
-        if (!is_dir("$slepath/0EDP.kext")) {
-            system_call("rm -Rf $slepath/0EDP.kext");
-        }
-    }
+function getMacOSXVersion() {
+		$path = "/System/Library/CoreServices/SystemVersion";
+    	$ver = exec("defaults read $path ProductVersion");
+    	return $ver;
 }
 
-/**
+/*
  * replace system_call() .. works with LWS also
  */
 function system_call($data) {
@@ -468,20 +392,6 @@ function isEmptyDir($dir) {
         return "no";
     }
 }
-	
-function downloadAndRun($url, $filetype, $filename, $execpath) {
-    echo "Making downloads folder in /Downloads and initiating download of $url\n\n";
-    system_call("mkdir /downloads; cd /downloads; curl -O $url");
-    echo "Mounting $filename... \n\n";
-    
-    if ($filetype == "dmg") {
-        system_call("hdiutil attach /downloads/$filename >/dev/null");
-    }
-    
-    echo "Executing the package installer... \n\n";
-    system_call("open $execpath");
-}	
-	
 
 function kernelcachefix() {
     global $workpath, $rootpath;
@@ -498,15 +408,53 @@ function kernelcachefix() {
     }
 }
 
-function lastMinFixes() {
-		global $workpath; global $edp; global $nvram;
-		// Final Chown to SLE (this is due to some issuses with myFix in Mavericks)
-		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
-		$stat = $nvram->clear();
-		$edp->writeToLog("$workpath/build.log", "Clearing boot-args in NVRAM...$stat<br>");
-	}
-		
-/**
+//
+// Get Value from Key in SMbios.plist
+//
+include_once __DIR__ . '/vendor/CFPropertyList/CFPropertyList.php';
+
+function getValueFromSmbios($key, $default = null) {
+    global $workpath;
+
+    $file = $workpath . '/smbios.plist';
+
+    if (file_exists($file)) {
+        $plist = new CFPropertyList\CFPropertyList($file, CFPropertyList\CFPropertyList::FORMAT_XML);
+        $dict  = $plist->toArray();
+
+        if (array_key_exists($key, $dict)) {
+            return $dict[$key];
+        }
+    }
+
+    return $default;
+}
+
+function edpCleaner() {
+    global $slepath;
+    
+    if ($slepath != "") {
+        if (!is_dir("$slepath/0EDP.kext")) {
+            system_call("rm -Rf $slepath/0EDP.kext");
+        }
+    }
+}
+	
+function downloadAndRun($url, $filetype, $filename, $execpath) {
+    echo "Making downloads folder in /Downloads and initiating download of $url\n\n";
+    system_call("mkdir /downloads; cd /downloads; curl -O $url");
+    echo "Mounting $filename... \n\n";
+    
+    if ($filetype == "dmg") {
+        system_call("hdiutil attach /downloads/$filename >/dev/null");
+    }
+    
+    echo "Executing the package installer... \n\n";
+    system_call("open $execpath");
+}	
+	
+//<------------------> Patches  ----------------------------------------------------------------------------------------------------	
+/*
  * Patch AHCI
  * @see http://www.insanelymac.com/forum/topic/280062-waiting-for-root-device-when-kernel-cache-used-only-with-some-disks-fix/page__st__60#entry1851722
  */
@@ -516,7 +464,7 @@ function patchAHCI() {
     system_call("perl $workpath/bin/fixes/patch-ahci-mlion.pl >> $workpath/build.log");
 }
 
-/**
+/*
  * Patch VGA and HDMI for Intel HD3000 GPU
  */
 function patchAppleIntelSNBGraphicsFB() {
@@ -527,7 +475,8 @@ function patchAppleIntelSNBGraphicsFB() {
     system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
     system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/AppleIntelSNBGraphicsFB.kext/Contents/KextPatched.plist");  
 }
-/**
+
+/*
  * Patch AppleIntelCPUPowerxxx for Native Speedstep and Power managment
  */
 function patchAppleIntelCPUPowerManagement() {
@@ -540,8 +489,10 @@ function patchAppleIntelCPUPowerManagement() {
         system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist");  
   }
 }
-/**
- * Patch WiFI and Bluetooth Kexts
+
+
+/*
+ * WiFI and Bluetooth kext Patches
  */
 //<-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -560,7 +511,6 @@ function patchWiFiAR9285AndAR9287() {
     }
     else { echo "  AirPortAtheros40.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
-
 
 /*
  * Patch AirPortBrcm4360.kext for the card BCM94352HMB from Mountain Lion 10.8.5 onwards
@@ -644,71 +594,10 @@ function patchWiFiBCM4331() {
      else { echo "  AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 }
 
-//<-----------------------------------------------------------------------------------------------------------------------------------
+//<----------------------------> EDP Build functions ---------------------------------------------------------------------------------------------------
 
-	
-function getVersion() {
-    global $rootpath, $os_string;
-
-    $path = "".$rootpath."System/Library/CoreServices/SystemVersion";
-    $v = exec("defaults read $path ProductVersion");
-    $r = '';
-
-    if ($v == "10.6")   { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }		
-    if ($v == "10.6.0") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.1") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.2") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.3") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }						
-    if ($v == "10.6.4") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.5") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.6") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.7") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.8") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.6.9") { $r="sl"; $os_string = "MacOS X Snow Leopard $v"; }
-    if ($v == "10.7")   { $r="lion"; $os_string = "MacOS X Lion $v"; }			
-    if ($v == "10.7.0") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.1") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.2") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.3") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.4") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.5") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.6") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.7.7") { $r="lion"; $os_string = "MacOS X Lion $v"; }
-    if ($v == "10.8")   { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
-    if ($v == "10.8.0") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.1") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.2") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.3") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
-    if ($v == "10.8.4") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }	
-    if ($v == "10.8.5") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }
-    if ($v == "10.8.6") { $r="ml"; $os_string = "OSX Mountain Lion $v"; }    	
-    if ($v == "10.9") 	{ $r="mav"; $os_string = "OSX Maverick $v"; }	
-    if ($v == "10.9.0") { $r="mav"; $os_string = "OSX Maverick $v"; }	
-    if ($v == "10.9.1") { $r="mav"; $os_string = "OSX Maverick $v"; }
-    if ($v == "10.9.2") { $r="mav"; $os_string = "OSX Maverick $v"; }
-    if ($v == "10.9.3") { $r="mav"; $os_string = "OSX Maverick $v"; }	
-    if ($v == "10.9.4") { $r="mav"; $os_string = "OSX Maverick $v"; }
-    if ($v == "10.9.5") { $r="mav"; $os_string = "OSX Maverick $v"; }
-    if ($v == "10.9.6") { $r="mav"; $os_string = "OSX Maverick $v"; }
-    if ($v == "10.10") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.0") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.1") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.2") { $r="yos"; $os_string = "OSX Yosemite $v"; }    
-    if ($v == "10.10.3") { $r="yos"; $os_string = "OSX Yosemite $v"; }
-    if ($v == "10.10.4") { $r="yos"; $os_string = "OSX Yosemite $v"; }
-    if ($v == "10.10.5") { $r="yos"; $os_string = "OSX Yosemite $v"; } 
-    if ($v == "10.10.6") { $r="yos"; $os_string = "OSX Yosemite $v"; }                            			
-    return $r;
-}
-	
-function getMacOSXVersion() {
-		$path = "/System/Library/CoreServices/SystemVersion";
-    	$ver = exec("defaults read $path ProductVersion");
-    	return $ver;
-}
-
-/**
- * Essentials like dsdt, ssdt and plists
+/*
+ * Essential file copy like dsdt, ssdt and plists
  */
 function copyEssentials() {
     global $workpath, $incpath, $os; global $edp;
@@ -904,9 +793,33 @@ function copyEssentials() {
     }
 }
 
+// Include kext class for downloading kext packs using kextpackLoader
+include_once "classes/kexts.php";  
+ 
+ /*
+  * Function to check if myhack.kext exists in ale, 
+  * and if it dosen't for some weird reason... copy it there...
+  */
+ 	function myHackCheck() {
+  	  global $workpath, $slepath;
 
-/**
- * Kexts loading for build
+   	 if (!is_dir("$slepath/myHack.kext")) {
+    	// copy kext to workpath
+        system_call("cp -R \"$workpath/bin/myHack/myHack.kext\" $workpath");
+        // Remove svn versioning
+        system_call("rm -Rf `find -f path \"$workpath/myHack.kext\" -type d -name .svn`");
+        // copy kext to sle
+        system_call("cp -R \"$workpath/myHack.kext\" $slepath");
+      }
+      
+   	 if (!is_file("/usr/sbin/")) {
+        system_call("cp \"$workpath/bin/myHack/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
+   	 }
+   	 
+	}
+	 
+/*
+ * Copy EDP Kexts copy for build
  */
  function copyEDPKexts()
  {
@@ -1241,9 +1154,9 @@ function copyEssentials() {
     } 
  }
  
- /*
-  * Fixes
-  */
+/*
+ * Fixes
+ */
 function applyFixes() {
 	//Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $os, $ee, $edp;
@@ -1399,6 +1312,5 @@ function copyCustomFiles() {
    		 }
     } 
 }
-
 	
 ?>
