@@ -54,7 +54,8 @@
  
 switch ($i) {
 	case "Applications":
-		$query = "SELECT * FROM appsdata";
+	case "Tools":
+		$query = "SELECT * FROM appsdata where category = '$i'";
 	break;
 	
 	case "EDP":
@@ -65,18 +66,13 @@ switch ($i) {
 	case "Fixes":
 		$query = "SELECT * FROM fixesdata";
 	break;
-	
-	case "Tools":
-		$query = "SELECT * FROM toolsdata";
-	break;
-	
 }
 
 //echo "$i<br>";
 //echo "$query<br>";
 
 // Fetch menu items that have a category defined 
-$categData = $edp_db->query("$query order by category");
+$categData = $edp_db->query("$query order by menu");
 foreach($categData as $row) {
 	if ($row[menu] != $last && $i == $row[category]) { 
 		echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";

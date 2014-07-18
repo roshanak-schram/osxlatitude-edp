@@ -104,10 +104,6 @@ function showBuildLog() {
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
-	/*echo "<img src=\"icons/big/loading.gif\" style=\"width:300px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -135px;\">";
-	//echo "<table width=\"100%\" border=\"0\" height=\"100%\" align=\"CENTER\"></table>\n";
-	//echo "<tr><td align=\"CENTER\"><td>Files are being downloaded... Please wait......</td><img src=\"icons/big/loading.gif\" ></td></tr></table>\n";
-	echo "<b><center>Please wait for few minutes while we download the files needed for your model (will take approx 5 - 15 minutes depending on your internet speed) and it will start building after the download................</center></b><br>";*/
 	
 	echo "<b>Build process:</b><br>";
 	
@@ -126,6 +122,9 @@ function showBuildLog() {
 	if ($fcount > 0)
 		echo "<b>Files left to download/update : $fcount</b><br>";
 		
+	//
+	// Run Step 5 and 6 after the kexts are downloaded
+	//
 	if ($fcount == 0 && is_dir("$workpath/kpsvn/dload/statFiles") && !is_file("$workpath/myFix.log"))
 	{
 		
@@ -145,6 +144,8 @@ function showBuildLog() {
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 		system_call("sudo touch /System/Library/Extensions/");
+		
+		// Clear NVRAM
 		$edp->writeToLog("$workpath/myFix.log", "Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
 		$edp->writeToLog("$workpath/myFix.log", "Removing version control of kexts in $ee<br>");
@@ -155,9 +156,8 @@ function showBuildLog() {
 		$edp->writeToLog("$workpath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
 		$edp->writeToLog("$workpath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
 
-		//shell_exec("sudo myfix -q -t / >> $workpath/myFix.log &");
-		/*$edp->writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
-		system_call("sh $workpath/kpsvn/dload/myFix.sh &");*/
+		// $edp->writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
+		// system_call("sh $workpath/kpsvn/dload/myFix.sh &");
 	}
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	echo "</div>";
@@ -171,6 +171,9 @@ function showLoadingLog() {
 		$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
 	}
 	
+	//
+	// build log
+	//
 	if ($fcount == "" || $fcount > 0 || !is_file("$workpath/myFix.log")) {
 		echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
 		echo "<center><b>After starting the build process, please wait for few minutes while we download the files needed for your model.</b> [which will take approx 5 to 15 minutes depending on your internet speed] <br><br><b>Shortly you will be redirected to the build process log which will show the status of the build.</center></b>";
@@ -182,10 +185,14 @@ function showLoadingLog() {
 		echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	}
 	else {
+	
+		//
+		// myFix log
+		//
 		if ($fcount == 0 && is_file("$workpath/myFix.log") && !is_file("$workpath/myFix2.log"))
 		{
+			// Run myFix to generate cahe and fix permissions
 			shell_exec("sudo myfix -q -t / >> $workpath/myFix2.log &");
-			//system_call("sudo myfix -q -t / >> $workpath/myFix.log &");
 		}
 		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 		echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
