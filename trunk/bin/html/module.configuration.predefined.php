@@ -4,8 +4,11 @@ include_once "edpconfig.inc.php";
 
 include "header.inc.php";
 
+// our classes 
+global $edpDBase;
+		
 // Get the values from the javascript link 
-$sysType	 	= $_GET['type'];	if ($sysType == "") 	{ $sysType 	= $_POST['type']; }
+$sysType	 = $_GET['type'];	if ($sysType == "") 	{ $sysType 	= $_POST['type']; }
 $modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 		
@@ -63,8 +66,11 @@ if ($action == 'dobuild') {
 		),
 	);
 
+		// our classes
+		global $chamModules; 
+		global $svnLoad; 
+		
 		global $workpath, $rootpath, $ee, $os; 
-		global $chamModules; global $edp;
 		global $modelName;
 	
 		//
@@ -92,10 +98,10 @@ if ($action == 'dobuild') {
 		// Launch the script which provides the summary of the build process 
 		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 		
-   		$edp->writeToLog("$workpath/build.log", "  Cleaning up kexts in /Extra/Extensions and download status files in EDP...<br>");
+   		writeToLog("$workpath/build.log", "  Cleaning up kexts in /Extra/Extensions and download status files in EDP...<br>");
     	system_call("rm -Rf /Extra/Extensions/*");
     
-    	$edp->writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
+    	writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
   		edpCleaner();
     
    	 	if(!is_dir("$workpath/kpsvn/dload/"))
@@ -115,10 +121,10 @@ if ($action == 'dobuild') {
 		global $modelNamePath;
 		$modelRowID = 0;
 		$modelName = $modeldb[$modelRowID]["name"];
-		$ven = builderGetVendorValuebyID($sysType, $modelID);
-		$gen = builderGetGenValuebyID($sysType, $modelID);
+		$ven = $edpDBase->builderGetVendorValuebyID($sysType, $modelID);
+		$gen = $edpDBase->builderGetGenValuebyID($sysType, $modelID);
 		
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
+		writeToLog("$workpath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
 		
 		// use old method if there are is no generation column in db 
 		if($gen == "") {
@@ -130,7 +136,7 @@ if ($action == 'dobuild') {
 				
 			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $workpath/build.log 2>&1");
 			
-			svnModeldata("$modelName");
+			$svnLoad->svnModeldata("$modelName");
 		}
 		else {
 		
@@ -149,43 +155,43 @@ if ($action == 'dobuild') {
 			
 			//
 			// We use the new method "loadModelEssentialFiles" for the models and 
-			// old method "svnModeldata" for the old models which is not updated for the new DB to fetch files
+			// old method "$svnLoad->svnModeldata" for the old models which is not updated for the new DB to fetch files
 			//
 		
-			loadModelEssentialFiles();
+			$svnLoad->loadModelEssentialFiles();
 		}
 			
 		//
 		// Step 2 : Copy essentials like dsdt, ssdt and plists 
 		//
-		$edp->writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files downloaded and from /Extra/include:</b><br>");
+		writeToLog("$workpath/build.log", "<br><br><b>Step 2) Copying Essential files downloaded and from /Extra/include:</b><br>");
 		copyEssentials();
 			
 		//
 		// Step 3 : Applying Fixes and bootloader config
 		//	
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
+		writeToLog("$workpath/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
 		applyFixes();
 		
 		if($modeldb[$modelRowID]["updateCham"] == "on") {
 			
 			if($modeldb[$modelRowID]["useEnochCham"] == "on") {
-				$edp->writeToLog("$workpath/build.log", "Updating enoch bootloader...<br>");
-				kextpackLoader("Bootloader", "EnochBoot", "boot");
+				writeToLog("$workpath/build.log", "Updating enoch bootloader...<br>");
+				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", "boot");
 			} 
 			else {
-				$edp->writeToLog("$workpath/build.log", "Updating standard bootloader...<br>");
-				kextpackLoader("Bootloader", "StandardBoot", "boot");
+				writeToLog("$workpath/build.log", "Updating standard bootloader...<br>");
+				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", "boot");
 			}			
 		}
 			
-		$edp->writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
+		writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
 		$chamModules->copyChamModules($modeldb[$modelRowID]);
 		
 		//
 		// Step 4 : Copying kexts
 		//
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 4) Downlading and preparing kexts:</b><br>");
+		writeToLog("$workpath/build.log", "<br><b>Step 4) Downlading and preparing kexts:</b><br>");
 		copyEDPKexts();		
 }
 
@@ -219,7 +225,7 @@ if ($action == "") {
 	
 	if ($sysType == "") { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; } else { echo "<option value='' selected>&nbsp;&nbsp;Select system type...</option>\n"; }
 
-	echo getSystemTypeValue();
+	echo $edpDBase->getSystemTypeValue();
 	
 	echo "</select><span class='arrow'></span> </li>";
 

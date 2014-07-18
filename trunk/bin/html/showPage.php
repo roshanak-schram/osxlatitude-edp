@@ -205,6 +205,11 @@
 			echoPageItemTOP("icons/big/update.png", "Update");
 			echo "<div class='pageitem_bottom'\">";	
 		
+			// Clear logs and scripts
+			if(is_dir("$workpath/kpsvn/dload")) {
+				system_call("rm -rf $workpath/apps/dload/*");
+			}
+			
 			if(!is_dir("$workpath/kpsvn")) {
 				system_call("mkdir $workpath/kpsvn");
 			}
@@ -218,48 +223,13 @@
 				$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
 			}
 		
-			if ($fcount == 0 && (is_file("$workpath/update.log") || is_file("$workpath/updateFinish.log")))
-				{
-					if(is_file("$workpath/updateFinish.log")) {
-						system_call("mv $workpath/updateFinish.log $workpath/lastupdate.log ");
-						system("sudo killall EDP"); 
-    					system("open $workpath/bin/EDPweb.app");
-					}
-					else {
-					
-						system_call("mv $workpath/update.log $workpath/updateFinish.log ");
-			
-						echo "<ul class='pageitem'>";
-						echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-						echo "<b><center> Update Finished.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
-						echo "<br></ul>";
-					
-						echo "<b>Update Log:</b>\n";
-						echo "<pre>";
-						if(is_file("$workpath/updateFinish.log"))
-							include "$workpath/updateFinish.log";
-						echo "</pre>";
-						echo "<body onload=\"JavaScript:timedRefresh(10000);\">";
-			  			echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
-					}
+			// Start installation process by Launching the script which provides the summary of the build process 
+			echo "<script> document.location.href = 'workerapp.php?action=showUpdateLog#myfix'; </script>";
+		
+			echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
+			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+			system_call("sudo sh $workpath/bin/update.sh >> $workpath/update.log &");
 
-				}
-			else 
-			{
-				if ($fcount > 0 || ($fcount == 0 && !is_file("$workpath/update.log"))) {
-				echo "<body onload=\"JavaScript:timedRefresh(3000);\">";
-				echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
-				echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
-
-				if ($fcount == 0) {
-					if (file_exists("$workpath/lastupdate.log")) 
-						system_call("rm -rf $workpath/lastupdate.log");
-					
-					system_call("sudo sh $workpath/bin/update.sh >> $workpath/update.log &");
-				}
-			  }
-			  echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
-			}
 			echo "</div>";
 			exit;
 		break;

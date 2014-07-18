@@ -1,8 +1,8 @@
 <?php
 
 $action = $_GET['action'];
-$id 	= $_GET['id'];
 $url 	= $_GET['url'];
+$id 	= $_GET['id'];
 
 if ($action == "goto_hell") {
 	echo "If the window does not close automatically you may close it now";
@@ -16,18 +16,19 @@ include_once "edpconfig.inc.php";
 
 // Ajax Methods to build type, vendor, seris and model values 
 //--- Builder page ajax actions
+global $edpDBase;
 if ($action == "builderVendorValues") {
-    echo builderGetVendorValues($_GET['type']);
+    echo $edpDBase->builderGetVendorValues($_GET['type']);
     exit;
 }
 
 if ($action == "builderSerieValues") {
-    echo builderGetSerieValues($_GET['type'], $_GET['vendor']);
+    echo $edpDBase->builderGetSerieValues($_GET['type'], $_GET['vendor']);
     exit;
 }
 
 if ($action == "builderModelValues") {
-    echo builderGetModelValues($_GET['type'], $_GET['vendor'], $_GET['serie']);
+    echo $edpDBase->builderGetModelValues($_GET['type'], $_GET['vendor'], $_GET['serie']);
     exit;
 }
 //---
@@ -89,14 +90,24 @@ if ($action == "showCredits") {
 	exit;	
 }
 
+if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
+
 //
-// Functions called by this script
+// Log functions
 //
 
-if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "showBuildLog")			{ showBuildLog(); exit ; }
 if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
+if ($action == "showUpdateLog")			{ showUpdateLog(); exit ; }
+
+if ($action == "showInstallLog")		
+{ 
+	$icon 		 = $_GET['icon'];
+	$name		 = $_GET['name'];
+	showInstallLog($id, $name, $icon); 
+	exit ; 
+}
 
 function showBuildLog() {
 	global $workpath, $edp, $ee;
@@ -128,37 +139,38 @@ function showBuildLog() {
 	if ($fcount == 0 && is_dir("$workpath/kpsvn/dload/statFiles") && !is_file("$workpath/myFix.log"))
 	{
 		
-		$edp->writeToLog("$workpath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
+		writeToLog("$workpath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
 		
 		//
 		// Step 5 : Copying custom files from /Extra/include
 		//
-		$edp->writeToLog("$workpath/build.log", "<br><b>Step 5) Copying custom files from /Extra/include:</b><br>");
+		writeToLog("$workpath/build.log", "<br><b>Step 5) Copying custom files from /Extra/include:</b><br>");
 		copyCustomFiles();
 		
 		//
 		// Step 6 : Applying last minute fixes and generating caches
 		//
-		$edp->writeToLog("$workpath/myFix.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
+		writeToLog("$workpath/myFix.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
 		
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 		system_call("sudo touch /System/Library/Extensions/");
 		
 		// Clear NVRAM
-		$edp->writeToLog("$workpath/myFix.log", "Clearing boot-args in NVRAM...<br>");
+		writeToLog("$workpath/myFix.log", "Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
-		$edp->writeToLog("$workpath/myFix.log", "Removing version control of kexts in $ee<br>");
+		writeToLog("$workpath/myFix.log", "Removing version control of kexts in $ee<br>");
    		system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
    		
-   		//$edp->writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
-		$edp->writeToLog("$workpath/myFix.log", "<a name='myfix'></a>");
-		$edp->writeToLog("$workpath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
-		$edp->writeToLog("$workpath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+   		//writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
+		writeToLog("$workpath/myFix.log", "<a name='myfix'></a>");
+		writeToLog("$workpath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
+		writeToLog("$workpath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
 
-		// $edp->writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
+		// writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
 		// system_call("sh $workpath/kpsvn/dload/myFix.sh &");
 	}
+	
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	echo "</div>";
 }
@@ -204,6 +216,132 @@ function showCustomBuildInfo() {
 	echo "<div class='pageitem_bottom'\">";	
 	echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 	echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
+	echo "</div>";
+}
+
+function showUpdateLog($id, $name, $icon) {
+	global $workpath, $ee, $edp_db;
+		
+	if(is_file("$workpath/updateFinish.log")) {
+		system_call("mv $workpath/updateFinish.log $workpath/lastupdate.log ");
+		system("sudo killall EDP"); 
+    	system("open $workpath/bin/EDPweb.app");
+    	exit;
+	}
+				
+	echoPageItemTOP("icons/big/update.png", "EDP Update");
+	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
+
+	echo "<div class='pageitem_bottom'\">";	
+		
+	$UpdlogPath = "$workpath/kpsvn/dload";
+
+	if(is_dir("$UpdlogPath/statFiles")) {
+		$fcount = shell_exec("cd $UpdlogPath/statFiles; ls | wc -l");
+	}
+	
+	if ($fcount == 0 && is_dir("$UpdlogPath/statFiles") && is_file("$UpdlogPath/Updsuccess.txt") || is_file("$UpdlogPath/Updfail.txt"))
+	{
+			// Get info from db
+			$stmt = $edp_db->query("SELECT * FROM appsdata where id = '$id'");
+			$stmt->execute();
+			$rows = $stmt->fetchAll();
+			$row = $rows[0];
+			
+			echo "<ul class='pageitem'>";
+			if (file_exists("$UpdlogPath/Updsuccess.txt")) {
+			
+				system_call("mv $workpath/update.log $workpath/updateFinish.log ");
+				
+				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Update Finished.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Update Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$workpath/update.log"))
+					include "$workpath/update.log";
+				echo "</pre>";
+				echo "<body onload=\"JavaScript:timedRefresh(10000);\">";
+				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
+			}
+			else {
+				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Installation failed.</b><br><br><b> Check the log for the reason.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Update Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$applogPath/update.log"))
+					include "$applogPath/update.log";
+				echo "</pre>";
+			}					
+			echo "</div>";
+	}
+	else 
+	{
+		echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
+		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+		
+		echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+		echo "</div>";
+	}
+
+}
+		
+function showInstallLog($id, $name, $icon) {
+	global $workpath, $ee, $edp_db;
+		
+	echoPageItemTOP("icons/big/$icon", "$name");
+	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
+
+	echo "<div class='pageitem_bottom'\">";	
+		
+	$applogPath = "$workpath/apps/dload";
+
+ 	if(is_dir("$applogPath/statFiles")) {
+		$fcount = shell_exec("cd $applogPath/statFiles; ls | wc -l");
+	}
+	
+	if ($fcount == 0 && is_dir("$applogPath/statFiles") && is_file("$applogPath/success.txt") || is_file("$applogPath/fail.txt"))
+	{
+			// Get info from db
+			$stmt = $edp_db->query("SELECT * FROM appsdata where id = '$id'");
+			$stmt->execute();
+			$rows = $stmt->fetchAll();
+			$row = $rows[0];
+			
+			echo "<ul class='pageitem'>";
+			if (file_exists("$applogPath/success.txt")) {
+			
+				system_call("rm -rf /Applications/$row[submenu].app;");
+				system_call("cd $workpath/apps/$row[menu]/$row[submenu]; unzip -qq $row[submenu].zip -d /Applications");
+				
+				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Installation finished.</b><br><br><b> You can find this from Applications list.</center></b>";
+				echo "<br></ul>";
+			}
+			else {
+				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Installation failed.</b><br><br><b> Check the log for the reason.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$applogPath/appInstall.log"))
+					include "$applogPath/appInstall.log";
+				echo "</pre>";
+			}					
+			echo "</div>";
+			exit;
+	}
+	else 
+	{
+		echo "<center><b>Please wait for few minutes while we download and install the app... which will take approx 1 to 10 minutes depending on your internet speed.</b></center>";
+		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+	}
+	
+	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	echo "</div>";
 }
 
