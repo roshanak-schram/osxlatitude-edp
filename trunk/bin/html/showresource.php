@@ -5,8 +5,6 @@ include_once "functions.inc.php";
 
 include_once "header.inc.php";
 
-// Include edp class for writeToLog method
-include_once "classes/edp.php";  
 
 /*
  * load the page of the selected side menu
