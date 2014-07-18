@@ -5,6 +5,8 @@ include_once "functions.inc.php";
 
 include_once "header.inc.php";
 
+// Include edp class for writeToLog method
+include_once "classes/edp.php";  
 
 /*
  * load the page of the selected side menu
@@ -116,7 +118,7 @@ function appsLoader($categ, $fname) {
 		else {
 			$checkoutCmd = "mkdir $packdir; cd $packdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\" >> $applogPath/appInstall.log; touch $applogPath/success.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\" >> $applogPath/appInstall.log; touch $applogPath/fail.txt; fi";
 
-			$edp->writeToLog("$applogPath/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
+			$edp->writeToLog("$applogPath/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
 			system_call("sh $applogPath/$fname.sh >> $applogPath/appInstall.log &");	
 		}
 } 
