@@ -1,7 +1,6 @@
 
 <?php
 	include_once "functions.inc.php";
-	include_once "edpconfig.inc.php";
 		
 	include "header.inc.php";
 

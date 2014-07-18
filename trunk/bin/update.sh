@@ -2,29 +2,45 @@
 cd /Extra/EDP/kpsvn/dload/statFiles
 touch edpUpdate.txt
 
-echo "Cleaning up EDP using SVN <br>"
+echo "Cleaning up EDP svn... <br>"
 svn cleanup /Extra/EDP/bin
 svn cleanup /Extra/EDP/phpWebServer
 
 echo "Downloading latest sources from EDP's svn server<br>"
 echo "Updating EDP files..."
-svn --non-interactive --username edp --password edp --force update /Extra/EDP/bin
-echo "Updating PHP binary..."
-svn --non-interactive --username edp --password edp --force update /Extra/EDP/phpWebServer
-
-cd /Extra/EDP/phpWebServer
-rm -rf /Extra/EDP/php
-unzip php.zip -d /Extra/EDP
-
+if svn --non-interactive --username edp --password edp --force update /Extra/EDP/bin; then
+	echo "Updating PHP binary..."
+	if svn --non-interactive --username edp --password edp --force update /Extra/EDP/phpWebServer; then
+		cd /Extra/EDP/phpWebServer
+		rm -rf /Extra/EDP/php
+		unzip -qq php.zip -d /Extra/EDP
+		cd /Extra/EDP/kpsvn/dload
+		touch Updsuccess.txt
+		echo "Update success"
+	else
+		cd /Extra/EDP/kpsvn/dload/
+		touch Updfail.txt
+		echo "Update failed (may be no internet or failed to connect to svn)"
+	fi
+else
+	cd /Extra/EDP/kpsvn/dload/
+	touch Updfail.txt
+	echo "Update failed (may be no internet or failed to connect to svn)"
+fi
 
 echo "<br>Updating database..."
 
 cd /Extra/EDP/bin
-
+echo "<br>Making a backup..."
+rm -Rf /Extra/EDP/bin/backup/edp.sqlite3
+cp edp.sqlite3 /Extra/EDP/bin/backup
+echo "Backup finished"
 rm -Rf edp.sqlite3
 
+echo "Downloading new database..."
 if curl -o edp.sqlite3 http://www.osxlatitude.com/dbupdate.php --connect-timeout 10 ; then
     echo "Database successfully downloaded <br>"
+    touch Updsuccess.txt
 else
     echo "Could not update database... using backup <br>"
     cp backup/edp.sqlite3 ./edp.sqlite3
