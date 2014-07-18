@@ -12,26 +12,31 @@ if ($action == "goto_hell") {
 }
 
 include_once "functions.inc.php";
-include_once "edpconfig.inc.php";
+
 
 // Ajax Methods to build type, vendor, seris and model values 
 //--- Builder page ajax actions
-global $edpDBase;
-if ($action == "builderVendorValues") {
-    echo $edpDBase->builderGetVendorValues($_GET['type']);
-    exit;
-}
 
-if ($action == "builderSerieValues") {
-    echo $edpDBase->builderGetSerieValues($_GET['type'], $_GET['vendor']);
-    exit;
-}
+if ($action == "builderVendorValues" || $action == "builderSerieValues" || $action == "builderModelValues") {
 
-if ($action == "builderModelValues") {
-    echo $edpDBase->builderGetModelValues($_GET['type'], $_GET['vendor'], $_GET['serie']);
+	include_once "edpconfig.inc.php";
+	global $edpDBase;
+	
+	switch($action) {
+		case "builderVendorValues":
+		 	echo $edpDBase->builderGetVendorValues($_GET['type']);
+		break;
+		
+		case "builderSerieValues":
+			echo $edpDBase->builderGetSerieValues($_GET['type'], $_GET['vendor']);
+		break;
+		
+		case "builderModelValues":
+			echo $edpDBase->builderGetModelValues($_GET['type'], $_GET['vendor'], $_GET['serie']);
+		break;
+	}
     exit;
 }
-//---
 
 
 // Non Ajax methods below
@@ -47,17 +52,10 @@ if ($action == "") {
     exit;
 }
 
-if ($action == "browseURL") {
-	echoPageItemTOP("icons/big/globe.png", "Browsing remote url...");
-	echo "<div class='pageitem_bottom'>\n";	
-	echo "<ul class='pageitem'>\n";
-	echo "<li class='textbox'>\n";
-	echo "<iframe id=\"browser\" marginwidth=\"0\" marginheight=\"0\" border=\"0\" frameborder=\"0\" height=\"600px\" width=\"100%\" src=\"$url\"></iframe>\n";			
-	echo "</li>\n";
-	echo "</ul>\n";	
-}
-
 if ($action == "showCredits") {
+
+	include_once "edpconfig.inc.php";
+
 	//Fetch data for ID
 	$stmt = $edp_db->query("SELECT * FROM credits where id = '$id'");
 	$stmt->execute();
@@ -96,13 +94,19 @@ if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
 // Log functions
 //
 
-if ($action == "showBuildLog")			{ showBuildLog(); exit ; }
+if ($action == "showBuildLog")			
+ { 
+	include_once "edpconfig.inc.php";
+	showBuildLog(); exit ;
+ }
 if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
 if ($action == "showUpdateLog")			{ showUpdateLog(); exit ; }
 
 if ($action == "showInstallLog")		
 { 
+	include_once "edpconfig.inc.php";
+
 	$icon 		 = $_GET['icon'];
 	$name		 = $_GET['name'];
 	showInstallLog($id, $name, $icon); 
@@ -110,7 +114,7 @@ if ($action == "showInstallLog")
 }
 
 function showBuildLog() {
-	global $workpath, $edp, $ee;
+	$workpath = "/Extra/EDP";
 	echoPageItemTOP("icons/big/logs.png", "System configuration build log");
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
 
@@ -159,8 +163,8 @@ function showBuildLog() {
 		// Clear NVRAM
 		writeToLog("$workpath/myFix.log", "Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
-		writeToLog("$workpath/myFix.log", "Removing version control of kexts in $ee<br>");
-   		system_call("rm -Rf `find -f path \"$ee\" -type d -name .svn`");
+		writeToLog("$workpath/myFix.log", "Removing version control of kexts in /Extra/Extensions<br>");
+   		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
    		
    		//writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
 		writeToLog("$workpath/myFix.log", "<a name='myfix'></a>");
@@ -176,7 +180,7 @@ function showBuildLog() {
 }
 
 function showLoadingLog() {
-	global $workpath, $edp, $ee;	
+	$workpath = "/Extra/EDP";	
 
 	echo "<div class='pageitem_bottom'\">";	
 	if(is_dir("$workpath/kpsvn/dload/statFiles")) {
@@ -219,8 +223,8 @@ function showCustomBuildInfo() {
 	echo "</div>";
 }
 
-function showUpdateLog($id, $name, $icon) {
-	global $workpath, $ee, $edp_db;
+function showUpdateLog() {
+	$workpath = "/Extra/EDP";
 		
 	if(is_file("$workpath/updateFinish.log")) {
 		system_call("mv $workpath/updateFinish.log $workpath/lastupdate.log ");
@@ -240,40 +244,34 @@ function showUpdateLog($id, $name, $icon) {
 		$fcount = shell_exec("cd $UpdlogPath/statFiles; ls | wc -l");
 	}
 	
-	if ($fcount == 0 && is_dir("$UpdlogPath/statFiles") && is_file("$UpdlogPath/Updsuccess.txt") || is_file("$UpdlogPath/Updfail.txt"))
+	if ($fcount == 0 && is_dir("$UpdlogPath/statFiles") && (is_file("$UpdlogPath/Updsuccess.txt") || is_file("$UpdlogPath/Updfail.txt")))
 	{
-			// Get info from db
-			$stmt = $edp_db->query("SELECT * FROM appsdata where id = '$id'");
-			$stmt->execute();
-			$rows = $stmt->fetchAll();
-			$row = $rows[0];
-			
 			echo "<ul class='pageitem'>";
 			if (file_exists("$UpdlogPath/Updsuccess.txt")) {
 			
 				system_call("mv $workpath/update.log $workpath/updateFinish.log ");
 				
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Update Finished.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
+				echo "<b><center> Update success.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Update Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$workpath/updateFinish.log"))
+					include "$workpath/updateFinish.log";
+				echo "</pre>";
+				echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
+				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
+			}
+			else {
+				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Update failed.</b><br><br><b> Check the log for the reason.</center></b>";
 				echo "<br></ul>";
 				
 				echo "<b>Update Log:</b>\n";
 				echo "<pre>";
 				if(is_file("$workpath/update.log"))
 					include "$workpath/update.log";
-				echo "</pre>";
-				echo "<body onload=\"JavaScript:timedRefresh(10000);\">";
-				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
-			}
-			else {
-				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Installation failed.</b><br><br><b> Check the log for the reason.</center></b>";
-				echo "<br></ul>";
-				
-				echo "<b>Update Log:</b>\n";
-				echo "<pre>";
-				if(is_file("$applogPath/update.log"))
-					include "$applogPath/update.log";
 				echo "</pre>";
 			}					
 			echo "</div>";
@@ -290,7 +288,7 @@ function showUpdateLog($id, $name, $icon) {
 }
 		
 function showInstallLog($id, $name, $icon) {
-	global $workpath, $ee, $edp_db;
+	global $workpath, $edp_db;
 		
 	echoPageItemTOP("icons/big/$icon", "$name");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	

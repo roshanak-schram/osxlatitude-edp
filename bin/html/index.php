@@ -2,7 +2,6 @@
 
 $i = (isset($_GET['i'])) ? $_GET['i'] : "";
 
-include_once "edpconfig.inc.php";
 include "header.inc.php";
 
 global $edpmode;

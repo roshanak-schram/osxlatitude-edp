@@ -1,6 +1,7 @@
 
 <?php
 	$i = $_GET['i'];
+	include_once "edpconfig.inc.php";
 	include_once "header.inc.php";
 
 	/*
@@ -202,12 +203,10 @@
 		break;
 		
 		case "Update":
-			echoPageItemTOP("icons/big/update.png", "Update");
-			echo "<div class='pageitem_bottom'\">";	
 		
 			// Clear logs and scripts
 			if(is_dir("$workpath/kpsvn/dload")) {
-				system_call("rm -rf $workpath/apps/dload/*");
+				system_call("rm -rf $workpath/kpsvn/dload/*");
 			}
 			
 			if(!is_dir("$workpath/kpsvn")) {
@@ -226,8 +225,11 @@
 			// Start installation process by Launching the script which provides the summary of the build process 
 			echo "<script> document.location.href = 'workerapp.php?action=showUpdateLog#myfix'; </script>";
 		
+			echoPageItemTOP("icons/big/update.png", "Update");
+			echo "<div class='pageitem_bottom'\">";	
 			echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+			
 			system_call("sudo sh $workpath/bin/update.sh >> $workpath/update.log &");
 
 			echo "</div>";
