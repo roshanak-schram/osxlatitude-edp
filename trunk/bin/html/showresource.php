@@ -18,7 +18,7 @@ include_once "header.inc.php";
 	switch ($categ) {
 		case "Applications":
 		case "Tools":
-			$query = "SELECT * FROM appsdata where category = '$categ'";
+			$query = "SELECT * FROM appsdata";
 		break;
 	
 		case "EDP":

@@ -1,5 +1,4 @@
 
-// create download stat file
 cd /Extra/EDP/kpsvn/dload/statFiles
 touch edpUpdate.txt
 
@@ -36,6 +35,5 @@ chmod -R 755 /Extra/EDP/phpWebServer
 
 echo "Update finished."
 
-// remove download stat file after update
 cd /Extra/EDP/kpsvn/dload/statFiles
 rm -rf edpUpdate.txt
