@@ -1,56 +1,75 @@
- 
 <?php
 
-class kexts {
- 
-    //------> Function to get version from kext
-    public function getKextVersion($kext) {
-    	global $workpath;
-    
-    	if (!is_dir($kext)) { return "0.00"; }		// If $kext dosent exist we will just return 0.00
-    
-    	include_once "$workpath/bin/html/libs/PlistParser.inc";
-    	$parser = new plistParser();
-    	$plist = $parser->parseFile("$kext/Contents/Info.plist");
-    	reset($plist);
-    
-    	while (list($key, $value) = each($plist)) {
-        	if ($key == "CFBundleShortVersionString") {
-            	return "$value";
-            }
-        }
-    }
+class svnDownload {
 
-    //-----> Copys $kext to /System/Library/Extensions/
-    function copyKextToSLE($kext, $frompath) {
-    	global $slepath, $workpath;
+	/*
+	 * public functions to download essential and custom files from model folder
+	 */
+	public function loadModelEssentialFiles() {
+		global $workpath, $modelNamePath, $os;
+	
+		//
+		// download essential files from common folder
+		//
+		$modelfolder = "$workpath/model-data/$modelNamePath/common";
+		if (is_dir("$modelfolder")) {
+			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+		} else {
+			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common .");
+		}
+	
+		//
+		// download essential files from $os folder
+		//
+		$modelfolder = "$workpath/model-data/$modelNamePath/$os";
+		if (is_dir("$modelfolder")) {
+			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+		} else {
+			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/$os .");
+		}
+	}
+	
+	public function svnModeldata($model) {
+		global $workpath, $os;
+		
+		//
+		// download essential files from common folder
+		//
+		$modelfolder = "$workpath/model-data/$model/common";
+		if (is_dir("$modelfolder")) {
+			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+		} else {
+			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/common .");
+		}
+	
+		//
+		// download essential files from common $os
+		//
+		$modelfolder = "$workpath/model-data/$model/$os";
+		if (is_dir("$modelfolder")) {
+			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+		} else {
+			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/common .");
+		}
+	}
 
-    	//Create backup folder
-    	date_default_timezone_set('UTC');
-    	$date = date("d-m-Y");
-    	$backupfolder = "/backup/$date";
-    	system_call("mkdir /backup");
-    	system_call("mkdir $backupfolder");
-    	system_call("rm -Rf $backupfolder/*");
-    
-    	//Do backup
-    	echo "Copying old $slepath/$kext to $backupfolder \n";
-    	system_call("cp -R $slepath/$kext $backupfolder");
+	public function checkSVNrevs() {
+		global $localrev, $workpath;
 
-    	//Remove the present kext
-    	system_call("rm -R $slepath/$kext");
+		$remoterev = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
+		$remoterev = str_replace("Last Changed Rev: ", "", $remoterev);
 
-    	echo "Copying $workpath/$frompath/$kext to $slepath/ \n";
-    	system_call("cp -R $workpath/$frompath/$kext $slepath/");
-
-    	system_call("chown -R root:wheel $slepath/$kext");
-    	system_call("chmod -R 755 \"$slepath/$kext\"");
-    }
+		if ($localrev < $remoterev) {
+			echo "\n   ---------------------------------------------------------------------------------------\n";
+			echo "        !!! There is an update of EDP, please run option 2 to download the update !!!\n";
+			echo "   ---------------------------------------------------------------------------------------\n\n";
+		}
+	}
 	
 	/*
  	 * This function will download a kextpack from SVN if requested (or update it if allready exists) 
  	 */
-	function kextpackLoader($categ, $fname, $name) {
+	public function kextpackLoader($categ, $fname, $name) {
 		global $workpath, $edp, $ee;
     	    	
     	if(!is_dir("$workpath/kpsvn/dload/statFiles"))
@@ -139,7 +158,7 @@ class kexts {
 		if (is_dir("$packdir")) {
 			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir; then echo \"Update : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
 
-			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
+			writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
 			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
 			
 			// system_call("svn --non-interactive --username edp --password edp --quiet --force update $packdir");
@@ -147,14 +166,15 @@ class kexts {
 		else {
 			$checkoutCmd = "mkdir $categdir; cd $categdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
 
-			$edp->writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
+			writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
 			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
 			
 			// system_call("mkdir $packdir; cd $packdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$pname/ .");
 		}
 	} 
+
 }
 
-$kexts = new kexts();
+$svnLoad = new svnDownload();
 
 ?> 
