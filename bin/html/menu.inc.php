@@ -85,7 +85,7 @@ function generateMenu($query, $menu, $category) {
 	global $edp_db;
 	echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
 	
-	$menuData = $edp_db->query("$query where menu = '$menu' order by submenu");
+	$menuData = $edp_db->query("$query AND menu = '$menu' order by submenu");
 	foreach($menuData as $row) {
 		if ($row[status] == "active") {
 			//
