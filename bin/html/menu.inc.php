@@ -55,7 +55,7 @@
 switch ($i) {
 	case "Applications":
 	case "Tools":
-		$query = "SELECT * FROM appsdata where category = '$i'";
+		$query = "SELECT * FROM appsdata";
 	break;
 	
 	case "EDP":
@@ -72,7 +72,7 @@ switch ($i) {
 //echo "$query<br>";
 
 // Fetch menu items that have a category defined 
-$categData = $edp_db->query("$query order by menu");
+$categData = $edp_db->query("$query where category = '$i' order by menu");
 foreach($categData as $row) {
 	if ($row[menu] != $last && $i == $row[category]) { 
 		echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";
@@ -85,7 +85,7 @@ function generateMenu($query, $menu, $category) {
 	global $edp_db;
 	echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
 	
-	$menuData = $edp_db->query("$query AND menu = '$menu' order by submenu");
+	$menuData = $edp_db->query("$query where menu = '$menu' order by submenu");
 	foreach($menuData as $row) {
 		if ($row[status] == "active") {
 			//
