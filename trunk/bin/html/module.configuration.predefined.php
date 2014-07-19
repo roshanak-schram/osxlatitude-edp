@@ -105,7 +105,7 @@ if ($action == 'dobuild') {
   		edpCleaner();
     
   		//Kernel hack for YOS
-  		yosLinkKernel();
+  		if ($v == "yos") { yosLinkKernel(); }
   		
    	 	if(!is_dir("$workpath/kpsvn/dload/"))
     		system_call("mkdir $workpath/kpsvn/dload");
