@@ -163,10 +163,22 @@ function echoPageItemTOP($icon, $text) {
     	system_call("chmod -R 755 \"$slepath/$kext\"");
     }
     
+    //
+    // Function to copy /SL/Kernels/kernel to /mach_kernel during build proess, funcion will check if OS is yos 10.10.x and copy a kernel only if needed
+    // To ensure correct operation, we will create a symbolic link the "real" kernel
+    public function yosLinkKernel() {
+		global $v;
+		if ($v == "yos") {
+			if (file_exists("/System/Library/Kernels/kernel") && (!file_exists("/mach_kernel"))) { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
+		}    
+    }
+    
+    
 	//
 	// Get Value from Key in SMbios.plist
 	//
 	include_once __DIR__ . '/vendor/CFPropertyList/CFPropertyList.php';
+
 
 	function getValueFromSmbios($key, $default = null) {
 		global $workpath;
