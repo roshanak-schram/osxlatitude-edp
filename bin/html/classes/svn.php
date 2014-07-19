@@ -49,7 +49,7 @@ class svnDownload {
 		if (is_dir("$modelfolder")) {
 			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
 		} else {
-			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/common .");
+			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/$os .");
 		}
 	}
 
