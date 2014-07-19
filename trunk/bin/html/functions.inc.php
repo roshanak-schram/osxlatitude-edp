@@ -164,8 +164,8 @@ function echoPageItemTOP($icon, $text) {
     }
     
     //
-    // Function to copy /SL/Kernels/kernel to /mach_kernel during build proess, funcion will check if OS is yos 10.10.x and copy a kernel only if needed
-    // To ensure correct operation, we will create a symbolic link the "real" kernel
+    // Function to create a symblic link between /SL/Kernels/kernel to /mach_kernel during build proess
+    //
     function yosLinkKernel() {
 		system_call("ln -s /System/Library/Kernels/kernel /mach_kernel");   
     }
