@@ -163,12 +163,6 @@ function echoPageItemTOP($icon, $text) {
     	system_call("chmod -R 755 \"$slepath/$kext\"");
     }
     
-    //
-    // Function to create a symblic link between /SL/Kernels/kernel to /mach_kernel during build proess
-    //
-    function yosLinkKernel() {
-		system_call("ln -s /System/Library/Kernels/kernel /mach_kernel");   
-    }
     
     
 	//
