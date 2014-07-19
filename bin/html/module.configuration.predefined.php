@@ -104,8 +104,6 @@ if ($action == 'dobuild') {
     	writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
   		edpCleaner();
     
-  		//Kernel hack for YOS
-  		if ($r == "yos") { yosLinkKernel(); }
   		
    	 	if(!is_dir("$workpath/kpsvn/dload/"))
     		system_call("mkdir $workpath/kpsvn/dload");
@@ -188,6 +186,12 @@ if ($action == 'dobuild') {
 			}			
 		}
 			
+		//Kernel hack for YOS
+		writeToLog("$workpath/build.log", "  Checking if we are running Yosemite and need to link kernel</b><br>");
+		$r = getVersion();
+  		if ($r == "yos") { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
+
+
 		writeToLog("$workpath/build.log", "  Copying selected modules...</b><br>");
 		$chamModules->copyChamModules($modeldb[$modelRowID]);
 		
