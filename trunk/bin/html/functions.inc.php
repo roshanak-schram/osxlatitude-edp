@@ -163,13 +163,10 @@ function echoPageItemTOP($icon, $text) {
     	system_call("chmod -R 755 \"$slepath/$kext\"");
     }
     
-    
-    
 	//
 	// Get Value from Key in SMbios.plist
 	//
 	include_once __DIR__ . '/vendor/CFPropertyList/CFPropertyList.php';
-
 
 	function getValueFromSmbios($key, $default = null) {
 		global $workpath;
@@ -358,9 +355,9 @@ function echoPageItemTOP($icon, $text) {
  * Essential file copy like dsdt, ssdt and plists
  */
 function copyEssentials() {
-    global $workpath, $incpath, $os; global $edp;
+    global $workpath, $incpath, $modelNamePath;
 	global $modeldb, $modelRowID;
-    global $modelNamePath;
+    global $os;
 
 	$extrapath = "/Extra";
     writeToLog("$workpath/build.log", " Checking for DSDT, SSDT and System Plist files...<br>");
@@ -579,11 +576,11 @@ function copyEssentials() {
  function copyEDPKexts()
  {
  	//Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $ps2db, $audiodb, $incpath, $wifidb, $modeldb, $modelRowID, $os, $ee, $batterydb, $landb, $fakesmcdb, $edp;
-    global $cpufixdb;
+    global $workpath, $rootpath, $slepath, $incpath, $modelNamePath, $ee;
+    global $ps2db, $audiodb, $wifidb, $cpufixdb, $batterydb, $landb, $fakesmcdb;
+    global $modeldb, $modelRowID;
+    global $os;
     
-    global $modelNamePath;
-
     //Get our class(s)
     global $builder;
 	global $svnLoad;
@@ -637,36 +634,33 @@ function copyEssentials() {
         	$fname = $wifidb[$wifid]['foldername'];
         	
         	if ($name != "") {
-        	
-    		writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
-    		
-    		if($wifid == "0" || $wifid == "1")
-    			patchWiFiAR9285AndAR9287();
-    		else if($wifid == "2") {
-    			if(getMacOSXVersion() >= "10.8.5")
-    				patchWiFiBTBCM4352();
-    			else
-    				writeToLog("$workpath/build.log", "  OSX version is not supported for WiFi, need OSX 10.8.5 or later<br>");
-    		}
+        	    		
+    		switch($wifid) {
+    			case 0:    			
+    			case 1:
+    				writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
+    				patchWiFiAR9285AndAR9287();
+    			break;
     			
-    		else if($wifid == "3")
-    			patchDW13957WiFiBCM43224();
-    		else if($wifid == "4")
-    			patchDW13957WiFiBCM4311();
-    		else if($wifid == "5")
-    			patchWiFiBCM43224();
-    		else if($wifid == "6")
-    			patchWiFiBCM4331();
-    		else if($wifid == "7")
-    			{
+    			case 2:
+    			    writeToLog("$workpath/build.log", "  Patching WiFi kext $name<br>");
+
+    				if(getMacOSXVersion() >= "10.8.5")
+    					patchWiFiBTBCM4352();
+    				else
+    					writeToLog("$workpath/build.log", "  OSX version is not supported for WiFi, need OSX 10.8.5 or later<br>");
+    			break;
+    			
+    			case 4:
     				writeToLog("$workpath/build.log", "  Downloading WiFi kext $fname<br>");
     					
     				if(!is_dir("$kpsvn/Wireless"))
     					system_call("mkdir $kpsvn/Wireless");
     				
     				$svnLoad->kextpackLoader("Wireless", "$fname", "$name");
-    			}
-    			
+    			break;
+    		}
+    		
     		// Load Bluetooth kext for AR3011 and BCM4352
     		if($wifid < "3")
     			{
@@ -706,6 +700,7 @@ function copyEssentials() {
 		$name = "";
 		$fname = "";	
     	
+    	
     	//
     	// copying audio kexts
     	//
@@ -716,42 +711,59 @@ function copyEssentials() {
     		$fname = $audiodb[$audioid]['foldername']; 
     		$name = $audiodb[$audioid]['name']; 
     
+    
+    		//
     		// remove voodooHDA related files if installed before
+    		//
     		if($audioid == "no" || $audioid == "builtin") {
         	 	if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
         	 	if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
         	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
    			 }
         	if (is_dir("$slepath/HDAEnabler.kext")) { system_call("rm -Rf $slepath/HDAEnabler.kext"); }
-        
-        	if ($audioid == "builtin")
-        	{
-        		writeToLog("$workpath/build.log", " Downloading Audio kext patched AppleHDA<br>");
+        	
+   			
+   			//
+			// Check for AppleHDA		
+			//
+			$usingAppleHDA = "";
+			if ($audioid == "builtin") {
+				global $modelID, $edp_db;
+				global $os;
+				$applehda = $edp_db->query("SELECT * FROM applehda WHERE model_id = '$modelID'");
+				switch ($os) {
+					case "sl":    				
+					case "lion":    				
+					case "ml":    				
+					case "mav":    				
+					case "yos":
+						foreach($applehda as $row) {
+							if ($row[$os] != "no")
+							$aID = explode(',', $row[$os]);
+						
+							if (getVersion() >= $aID[1]) {
+								writeToLog("$workpath/build.log", " Downloading Audio kext patched AppleHDA<br>");
 
-				if(!is_dir("$workpath/model-data/$modelNamePath/applehda"))
-    				system_call("mkdir $workpath/model-data/$modelNamePath/applehda");
-    				
-        		$svnLoad->kextpackLoader("Extensions", "audiocommon", "$modelNamePath/applehda");
-				$svnLoad->kextpackLoader("Extensions", "audio$os", "$modelNamePath/applehda");
-				
-				//
-				// Copy AppleHDA kexts from common and $os folders (used in old db structure, have to remove this when model moved to new db)
-				//
-				if(is_dir("$workpath/model-data/$modelNamePath/common/applehda"))
-    				{
-    				writeToLog("$workpath/build.log", "  Copying AppleHDA kexts from model common folder to $ee<br>");
-    				$tf = "$workpath/model-data/$modelNamePath/common/applehda";
-    				system_call("cp -a $tf/. $ee/");
-   				 }
-   				 
-				if(is_dir("$workpath/model-data/$modelNamePath/$os/applehda"))
-    				{
-    				writeToLog("$workpath/build.log", "  Copying AppleHDA kexts from model $os folder to $ee<br>");
-    				$tf = "$workpath/model-data/$modelNamePath/$os/applehda";
-    				system_call("cp -a $tf/. $ee/");
-   				 }
-        	}
-        	else if ($fname != "") {
+								if(!is_dir("$workpath/model-data/$modelNamePath/applehda"))
+									system_call("mkdir $workpath/model-data/$modelNamePath/applehda");
+					
+								$svnLoad->kextpackLoader("Extensions", "audiocommon", "$modelNamePath/applehda");
+								$svnLoad->kextpackLoader("Extensions", "audio$os", "$modelNamePath/applehda");
+								$usingAppleHDA = "yes";
+							}
+							else 
+							{
+								writeToLog("$workpath/build.log", " Patched AppleHDA is not supported in this OSX version, using latest VoodooHDA instead<br>");
+							}
+						}
+					break;
+				}
+			}
+    		
+    		//
+    		// Check for VoodooHDA
+    		//
+        	if ($fname != "" && $usingAppleHDA = "") {
     			        
     		    writeToLog("$workpath/build.log", "  Downloading Audio kext $fname<br>");
 
@@ -763,6 +775,7 @@ function copyEssentials() {
         		// Copy Prefpane and Settings loader
         		$svnLoad->kextpackLoader("Audio", "Settings", "AudioSettings");
         	} 
+        	
    	 	}
    	 	// Reset vars
 		$name = "";
@@ -788,13 +801,15 @@ function copyEssentials() {
     			if(!is_dir("$kpsvn/Ethernet/$fname"))
     				system_call("mkdir $kpsvn/Ethernet/$fname");
     		
+    			// New Realtek kext
     			if($lanid == "11") {
-				//Choose 10.8+ version 
-    			if(getMacOSXVersion() >= "10.8")
-    				$svnLoad->kextpackLoader("Ethernet", "$fname", "NewRTL81xx");
-    			//chooose Lion version
-    			else if(getMacOSXVersion() == "10.7")
-    				$svnLoad->kextpackLoader("Ethernet", "$fname", "NewRTL81xx_Lion");
+				
+					//Choose 10.8+ version 
+					if(getMacOSXVersion() >= "10.8")
+						$svnLoad->kextpackLoader("Ethernet", "$fname", "NewRTL81xx");
+					//chooose Lion version
+					else if(getMacOSXVersion() == "10.7")
+						$svnLoad->kextpackLoader("Ethernet", "$fname", "NewRTL81xx_Lion");
     			}
     			else
     				$svnLoad->kextpackLoader("Ethernet", "$fname", "$name");   
@@ -847,13 +862,14 @@ function copyEssentials() {
     		if(!is_dir("$kpsvn/$categ"))
     			system_call("mkdir $kpsvn/$categ");
     		
+    		// Generic XHCI USB3.0
     		if($id == "5") {
-			//Choose new version 
-    		if(getMacOSXVersion() >= "10.8.5")
-    			$svnLoad->kextpackLoader("$categ", "GenericXHCIUSB3_New", "$name");
-    		//chooose old version
-    		else if(getMacOSXVersion() < "10.8.5")
-    			$svnLoad->kextpackLoader("$categ", "$fname", "$name");
+				//Choose new version 
+				if(getMacOSXVersion() >= "10.8.5")
+					$svnLoad->kextpackLoader("$categ", "GenericXHCIUSB3_New", "$name");
+				//chooose old version
+				else if(getMacOSXVersion() < "10.8.5")
+					$svnLoad->kextpackLoader("$categ", "$fname", "$name");
     		}
     		else	
     			$svnLoad->kextpackLoader("$categ", "$fname", "$name");
@@ -917,11 +933,11 @@ function copyEssentials() {
  */
 function applyFixes() {
 	//Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $os, $ee, $edp;
-    global $cpufixdb;
-    global $modelNamePath, $sysType, $modeldb, $modelRowID, $modelID;
+    global $workpath, $rootpath, $slepath, $modelNamePath, $os, $ee;
+    global $sysType, $modeldb, $modelRowID, $modelID;
 	global $edpDBase;
-	
+	global $cpufixdb;
+
 	//Get our class(s)
 	global $svnLoad;
 	
@@ -1016,8 +1032,7 @@ function applyFixes() {
  */
 function copyCustomFiles() {
     //Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $edp;
-    global $modelNamePath;
+    global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $modelNamePath;
 	
 	writeToLog("$workpath/build.log", "  Checking for Custom files from EDP model path and $incpath... <br>");
 
