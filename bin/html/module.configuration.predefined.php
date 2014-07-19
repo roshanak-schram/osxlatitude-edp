@@ -104,6 +104,9 @@ if ($action == 'dobuild') {
     	writeToLog("$workpath/build.log", "Cleaning up by System...<br>");
   		edpCleaner();
     
+  		//Kernel hack for YOS
+  		yosLinkKernel();
+  		
    	 	if(!is_dir("$workpath/kpsvn/dload/"))
     		system_call("mkdir $workpath/kpsvn/dload");
     	else
