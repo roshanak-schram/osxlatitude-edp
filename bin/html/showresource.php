@@ -229,7 +229,7 @@ function appsLoader($categ, $fname) {
 			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");
 		}
 		else {
-			$checkoutCmd = "if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
+			$checkoutCmd = "cd apps/$categ; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
 
 			writeToLog("$appsLogPath/$fname.sh", "$checkoutCmd;");
 			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");	
