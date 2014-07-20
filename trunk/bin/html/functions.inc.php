@@ -314,7 +314,7 @@ function echoPageItemTOP($icon, $text) {
 		
 		writeToLog("$log", " Applying AR9285/AR9287 WiFi kext patch for AR5B195/AR5B95 and AR5B197<br>");
 
-		if (!file_exists("$slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist") {
+		if (!file_exists("$slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist")) {
 			writeToLog("$log", " IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext kext not found<br>");
 			system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
 			return;
@@ -359,7 +359,7 @@ function echoPageItemTOP($icon, $text) {
 		
 		writeToLog("$log", " Applying WiFi patches for BCM4352 card<br>");
 
-		if (!file_exists("$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist") {
+		if (!file_exists("$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist")) {
 			writeToLog("$log", " IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext kext not found<br>");
 			system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
 			return;
