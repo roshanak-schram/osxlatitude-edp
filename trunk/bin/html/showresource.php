@@ -40,7 +40,7 @@ include_once "header.inc.php";
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 
 	// Write out the top menu
-	echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
+	echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
 	
 	$href = "$row[action]";
 		

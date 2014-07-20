@@ -290,7 +290,7 @@ function showUpdateLog() {
 function showInstallLog($id, $name, $icon) {
 	global $workpath, $edp_db;
 		
-	echoPageItemTOP("icons/big/$icon", "$name");
+	echoPageItemTOP("icons/sidebar/$icon", "$name");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
@@ -316,9 +316,11 @@ function showInstallLog($id, $name, $icon) {
 					system_call("rm -rf /Library/QuickTime/CamTwist.component");
 					system_call("rm -rf /rm /Applications/$row[submenu]");
 					
-					system_call("cd $workpath/apps/$row[menu]/$row[submenu]; unzip -qq $row[submenu].zip; cd $row[submenu];");
-					system_call("cp -a ./CamTwist.component /Library/QuickTime/");
-					system_call("cp -a ./CamTwist /Applications/");
+					system_call("cd $workpath/apps/$row[menu]/$row[submenu]; unzip -qq $row[submenu].zip;");
+					system_call("cd $workpath/apps/$row[menu]/$row[submenu]/$row[submenu];");
+
+					system_call("cp -R ./CamTwist.component /Library/QuickTime/");
+					system_call("cp -a ./CamTwist/. /Applications/");
 				}
 				else {
 					system_call("rm -rf /Applications/$row[submenu].app;");
