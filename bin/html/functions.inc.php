@@ -224,7 +224,7 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchAppleIntelSNBGraphicsFB($log, $pathToPatch, $genCache) {
 
-		global $ee, $slepath;
+		global $ee, $slepath, $workpath;
 	
 		if(!is_dir("/System/Library/Extensions/AppleIntelSNBGraphicsFB.kext")) {
 				writeToLog("$log", "  AppleIntelSNBGraphicsFB.kext not found for patching<br>");
@@ -236,7 +236,6 @@ function echoPageItemTOP($icon, $text) {
 		{
 			case "SLE":			
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /System/Library/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/AppleIntelSNBGraphicsFB.kext/Contents/KextPatched.plist");  
 			
 			if ($genCache == "yes") {
 				system_call("sudo touch /System/Library/Extensions/ >> $log &");
@@ -246,7 +245,6 @@ function echoPageItemTOP($icon, $text) {
 			case "EE":		
 			system_call("cp -R $slepath/AppleIntelSNBGraphicsFB.kext $ee/");
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/AppleIntelSNBGraphicsFB.kext/Contents/KextPatched.plist");  
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
@@ -310,7 +308,7 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AirPortAtheros40.kext for the card AR5B95/AR5B195 from Lion onwards
 	 */
 	function patchWiFiAR9285AndAR9287($log, $pathToPatch, $genCache) {
-		global $ee, $slepath;
+		global $ee, $slepath, $workpath;
 		
 		writeToLog("$log", " Applying AR9285/AR9287 WiFi kext patch for AR5B195/AR5B95 and AR5B197<br>");
 
@@ -355,7 +353,7 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AirPortBrcm4360.kext for the card BCM94352HMB from Mountain Lion 10.8.5 onwards
 	 */
 	function patchWiFiBTBCM4352($log, $pathToPatch, $genCache) {
-		global $ee, $slepath;
+		global $ee, $slepath, $workpath;
 		
 		writeToLog("$log", " Applying WiFi patches for BCM4352 card<br>");
 
