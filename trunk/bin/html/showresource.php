@@ -38,8 +38,6 @@ include_once "header.inc.php";
 	$stmt = $edp_db->query("$query where id = '$id'");
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-
-	
 	
 	$href = "$row[action]";
 		
@@ -47,9 +45,9 @@ include_once "header.inc.php";
 	{
 		// Write out the top menu
 		if ($categ != "EDP")
-			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
+			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[name]");
 		else
-			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
+			echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
 		
 		?>
 		
@@ -72,7 +70,7 @@ include_once "header.inc.php";
 	elseif ($action == "Install")
 	{
 		// Start installation process by Launching the script which provides the summary of the build process 
-		echo "<script> document.location.href = 'workerapp.php?id=$id&name=$row[submenu]&icon=$row[icon]&action=showInstallLog#myfix'; </script>";
+		echo "<script> document.location.href = 'workerapp.php?id=$id&name=$row[name]&icon=$row[icon]&action=showInstallLog#myfix'; </script>";
 		
 		// Clear logs and scripts
 		if(is_dir("$workpath/apps/dload")) {
