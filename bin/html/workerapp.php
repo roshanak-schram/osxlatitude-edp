@@ -316,7 +316,7 @@ function showInstallLog($id, $name, $submenu, $icon) {
 					system_call("rm -rf /Library/QuickTime/CamTwist.component");
 					system_call("rm -rf /Applications/$row[name]");
 					
-					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -qq $row[name].zip");
+					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -X -qq $row[name].zip");
 						
 					system_call("cp -R $appPath/CamTwist.component /Library/QuickTime/");
 					system_call("cp -a $appPath/CamTwist/. /Applications/CamTwist/");
