@@ -151,7 +151,25 @@
 					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "EE", "yes");
 			break;
 			
-			case "":
+			case "BCM4352WiFiPatches":
+				if ($patchSLE == "on")
+					patchWiFiBTBCM4352("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchWiFiBTBCM4352("$fixLogPath/fix.log", "EE", "yes");
+			break;
+			
+			case "AR9285AR9287WiFiPatch":
+				if ($patchSLE == "on")
+					patchWiFiAR9285AndAR9287("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchWiFiAR9285AndAR9287("$fixLogPath/fix.log", "EE", "yes");
+			break;
+			
+			case "VGA_HDMI_Intel_HD3000_Patch":
+				if ($patchSLE == "on")
+					patchAppleIntelSNBGraphicsFB("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchAppleIntelSNBGraphicsFB("$fixLogPath/fix.log", "EE", "yes");
 			break;
 		}
 		
