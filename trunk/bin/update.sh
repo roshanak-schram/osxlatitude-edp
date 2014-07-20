@@ -27,7 +27,7 @@ if svn --non-interactive --username edp --password edp --force update /Extra/EDP
 	if svn --non-interactive --username edp --password edp --force update /Extra/EDP/phpWebServer; then
 		cd /Extra/EDP/phpWebServer
 		rm -rf /Extra/EDP/php
-		unzip -qq php.zip -d /Extra/EDP
+		unzip -X -qq php.zip -d /Extra/EDP
 		cd /Extra/EDP/logs/update
 		touch Updsuccess.txt
 		echo "Update success"
