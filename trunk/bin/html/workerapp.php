@@ -108,31 +108,34 @@ if ($action == "showInstallLog")
 	include_once "edpconfig.inc.php";
 
 	$icon 		 	 = $_GET['icon'];
+	$name		 	 = $_GET['name'];
 	$submenu		 = $_GET['submenu'];
-	showInstallLog($id, $name, $icon); 
+	showInstallLog($id, $name, $submenu, $icon); 
 	exit ; 
 }
 
 function showBuildLog() {
 	$workpath = "/Extra/EDP";
+	$buildLogPath = "$workpath/logs/build";
+	
 	echoPageItemTOP("icons/big/logs.png", "System configuration build log");
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
-
 	echo "<div class='pageitem_bottom'\">";	
+	
 	
 	echo "<b>Build process:</b><br>";
 	
-	if(is_file("$workpath/build.log"))
-		include "$workpath/build.log";
+	if(is_file("$buildLogPath/build.log"))
+		include "$buildLogPath/build.log";
 		
-	if(is_file("$workpath/myFix.log"))
-		include "$workpath/myFix.log";
+	if(is_file("$buildLogPath/myFix.log"))
+		include "$buildLogPath/myFix.log";
 		
-	if(is_file("$workpath/myFix2.log"))
-		include "$workpath/myFix2.log";
+	if(is_file("$buildLogPath/myFix2.log"))
+		include "$buildLogPath/myFix2.log";
 	
-	if(is_dir("$workpath/kpsvn/dload/statFiles")) {
-		$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
+	if(is_dir("$buildLogPath/dload/statFiles")) {
+		$fcount = shell_exec("cd $buildLogPath/dload/statFiles; ls | wc -l");
 	}
 	if ($fcount > 0)
 		echo "<b>Files left to download/update : $fcount</b><br>";
@@ -140,39 +143,39 @@ function showBuildLog() {
 	//
 	// Run Step 5 and 6 after the kexts are downloaded
 	//
-	if ($fcount == 0 && is_dir("$workpath/kpsvn/dload/statFiles") && !is_file("$workpath/myFix.log"))
+	if ($fcount == 0 && is_dir("$buildLogPath/dload/statFiles") && !is_file("$buildLogPath/myFix.log"))
 	{
 		
-		writeToLog("$workpath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
 		
 		//
 		// Step 5 : Copying custom files from /Extra/include
 		//
-		writeToLog("$workpath/build.log", "<br><b>Step 5) Copying custom files from /Extra/include:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copying custom files from /Extra/include:</b><br>");
 		copyCustomFiles();
 		
 		//
 		// Step 6 : Applying last minute fixes and generating caches
 		//
-		writeToLog("$workpath/myFix.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
+		writeToLog("$buildLogPath/myFix.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
 		
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 		system_call("sudo touch /System/Library/Extensions/");
 		
 		// Clear NVRAM
-		writeToLog("$workpath/myFix.log", "Clearing boot-args in NVRAM...<br>");
+		writeToLog("$buildLogPath/myFix.log", "Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
-		writeToLog("$workpath/myFix.log", "Removing version control of kexts in /Extra/Extensions<br>");
+		writeToLog("$buildLogPath/myFix.log", "Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
    		
-   		//writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
-		writeToLog("$workpath/myFix.log", "<a name='myfix'></a>");
-		writeToLog("$workpath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
-		writeToLog("$workpath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+   		//writeToLog("$buildLogPath/dload/myFix.sh", "sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+		writeToLog("$buildLogPath/myFix.log", "<a name='myfix'></a>");
+		writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
+		writeToLog("$buildLogPath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
 
-		// writeToLog("$workpath/kpsvn/dload/myFix.sh", "sudo myfix -q -t / >> $workpath/myFix.log &");
-		// system_call("sh $workpath/kpsvn/dload/myFix.sh &");
+		// writeToLog("$buildLogPath/dload/myFix.sh", "sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+		// system_call("sh $buildLogPath/dload/myFix.sh &");
 	}
 	
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
@@ -181,16 +184,17 @@ function showBuildLog() {
 
 function showLoadingLog() {
 	$workpath = "/Extra/EDP";	
-
+	$buildLogPath = "$workpath/logs/build";
+	
 	echo "<div class='pageitem_bottom'\">";	
-	if(is_dir("$workpath/kpsvn/dload/statFiles")) {
-		$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
+	if(is_dir("$buildLogPath/dload/statFiles")) {
+		$fcount = shell_exec("cd $buildLogPath/dload/statFiles; ls | wc -l");
 	}
 	
 	//
 	// build log
 	//
-	if ($fcount == "" || $fcount > 0 || !is_file("$workpath/myFix.log")) {
+	if ($fcount == "" || $fcount > 0 || !is_file("$buildLogPath/myFix.log")) {
 		echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
 		echo "<center><b>After starting the build process, please wait for few minutes while we download the files needed for your model.</b> [which will take approx 5 to 15 minutes depending on your internet speed] <br><br><b>Shortly you will be redirected to the build process log which will show the status of the build.</center></b>";
 		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
@@ -205,10 +209,10 @@ function showLoadingLog() {
 		//
 		// myFix log
 		//
-		if ($fcount == 0 && is_file("$workpath/myFix.log") && !is_file("$workpath/myFix2.log"))
+		if ($fcount == 0 && is_file("$buildLogPath/myFix.log") && !is_file("$buildLogPath/myFix2.log"))
 		{
 			// Run myFix to generate cahe and fix permissions
-			shell_exec("sudo myfix -q -t / >> $workpath/myFix2.log &");
+			shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix2.log &");
 		}
 		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 		echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
@@ -225,9 +229,10 @@ function showCustomBuildInfo() {
 
 function showUpdateLog() {
 	$workpath = "/Extra/EDP";
-		
-	if(is_file("$workpath/updateFinish.log")) {
-		system_call("mv $workpath/updateFinish.log $workpath/lastupdate.log ");
+	$updLogPath = "$workpath/logs/update";
+
+	if(is_file("$updLogPath/updateFinish.log")) {
+		system_call("mv $updLogPath/updateFinish.log $updLogPath/lastupdate.log ");
 		system("sudo killall EDP"); 
     	system("open $workpath/bin/EDPweb.app");
     	exit;
@@ -237,19 +242,13 @@ function showUpdateLog() {
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
-		
-	$UpdlogPath = "$workpath/kpsvn/dload";
-
-	if(is_dir("$UpdlogPath/statFiles")) {
-		$fcount = shell_exec("cd $UpdlogPath/statFiles; ls | wc -l");
-	}
-	
-	if ($fcount == 0 && is_dir("$UpdlogPath/statFiles") && (is_file("$UpdlogPath/Updsuccess.txt") || is_file("$UpdlogPath/Updfail.txt")))
+			
+	if (is_dir("$updLogPath") && (is_file("$updLogPath/Updsuccess.txt") || is_file("$updLogPath/Updfail.txt")))
 	{
 			echo "<ul class='pageitem'>";
-			if (file_exists("$UpdlogPath/Updsuccess.txt")) {
+			if (file_exists("$updLogPath/Updsuccess.txt")) {
 			
-				system_call("mv $workpath/update.log $workpath/updateFinish.log ");
+				system_call("mv $updLogPath/update.log $updLogPath/updateFinish.log ");
 				
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Update success.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
@@ -257,8 +256,8 @@ function showUpdateLog() {
 				
 				echo "<b>Update Log:</b>\n";
 				echo "<pre>";
-				if(is_file("$workpath/updateFinish.log"))
-					include "$workpath/updateFinish.log";
+				if(is_file("$updLogPath/updateFinish.log"))
+					include "$updLogPath/updateFinish.log";
 				echo "</pre>";
 				echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
 				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
@@ -270,8 +269,8 @@ function showUpdateLog() {
 				
 				echo "<b>Update Log:</b>\n";
 				echo "<pre>";
-				if(is_file("$workpath/update.log"))
-					include "$workpath/update.log";
+				if(is_file("$updLogPath/update.log"))
+					include "$updLogPath/update.log";
 				echo "</pre>";
 			}					
 			echo "</div>";
@@ -287,7 +286,7 @@ function showUpdateLog() {
 
 }
 		
-function showInstallLog($id, $name, $icon) {
+function showInstallLog($id, $name, $submenu, $icon) {
 	global $workpath, $edp_db;
 		
 	echoPageItemTOP("icons/sidebar/$icon", "$submenu");
@@ -295,13 +294,9 @@ function showInstallLog($id, $name, $icon) {
 
 	echo "<div class='pageitem_bottom'\">";	
 		
-	$applogPath = "$workpath/apps/dload";
-
- 	if(is_dir("$applogPath/statFiles")) {
-		$fcount = shell_exec("cd $applogPath/statFiles; ls | wc -l");
-	}
+	$appsLogPath = "$workpath/logs/apps";
 	
-	if ($fcount == 0 && is_dir("$applogPath/statFiles") && is_file("$applogPath/success.txt") || is_file("$applogPath/fail.txt"))
+	if (is_dir("appsLogPath") && is_file("$appsLogPath/Success_$name.txt") || is_file("$appsLogPath/Fail_$name.txt"))
 	{
 			// Get info from db
 			$stmt = $edp_db->query("SELECT * FROM appsdata where id = '$id'");
@@ -309,8 +304,11 @@ function showInstallLog($id, $name, $icon) {
 			$rows = $stmt->fetchAll();
 			$row = $rows[0];
 			
+			//
+			// Install the downloaded app
+			//
 			echo "<ul class='pageitem'>";
-			if (file_exists("$applogPath/success.txt")) {
+			if (file_exists("$appsLogPath/Success_$name.txt")) {
 			
 				$appPath = "$workpath/apps/$row[menu]/$row[name]";
 				
@@ -339,8 +337,8 @@ function showInstallLog($id, $name, $icon) {
 				
 				echo "<b>Log:</b>\n";
 				echo "<pre>";
-				if(is_file("$applogPath/appInstall.log"))
-					include "$applogPath/appInstall.log";
+				if(is_file("$appsLogPath/appInstall.log"))
+					include "$appsLogPath/appInstall.log";
 				echo "</pre>";
 			}					
 			echo "</div>";

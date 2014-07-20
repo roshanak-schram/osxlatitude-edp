@@ -71,13 +71,15 @@ class svnDownload {
  	 */
 	public function kextpackLoader($categ, $fname, $name) {
 		global $workpath, $edp, $ee;
-    	    	
-    	if(!is_dir("$workpath/kpsvn/dload/statFiles"))
-			$createStatFile = "mkdir $workpath/kpsvn/dload/statFiles; cd $workpath/kpsvn/dload/statFiles; touch $fname.txt";
-    	else		
-			$createStatFile = "cd $workpath/kpsvn/dload/statFiles; touch $fname.txt";	
 		
-		$endStatFile = "cd $workpath/kpsvn/dload/statFiles; rm -rf $fname.txt";
+    	$buildLogPath = "$workpath/logs/build";
+    	
+    	if(!is_dir("$buildLogPath/dload/statFiles"))
+			$createStatFile = "mkdir $buildLogPath/dload/statFiles; cd $buildLogPath/dload/statFiles; touch $fname.txt";
+    	else		
+			$createStatFile = "cd $buildLogPath/dload/statFiles; touch $fname.txt";	
+		
+		$endStatFile = "cd $buildLogPath/dload/statFiles; rm -rf $fname.txt";
 		
 		//
 		// Download custom Kexts, kernel and AppleHDA from model data
@@ -158,16 +160,16 @@ class svnDownload {
 		if (is_dir("$packdir")) {
 			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir; then echo \"Update : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
 
-			writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
-			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
+			writeToLog("$buildLogPath/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
+			system_call("sh $buildLogPath/dload/$fname.sh >> $workpath/build.log &");
 			
 			// system_call("svn --non-interactive --username edp --password edp --quiet --force update $packdir");
 		}
 		else {
 			$checkoutCmd = "mkdir $categdir; cd $categdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $workpath/build.log; $copyKextCmd; fi";
 
-			writeToLog("$workpath/kpsvn/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
-			system_call("sh $workpath/kpsvn/dload/$fname.sh >> $workpath/build.log &");
+			writeToLog("$buildLogPath/dload/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
+			system_call("sh $buildLogPath/dload/$fname.sh >> $workpath/build.log &");
 			
 			// system_call("mkdir $packdir; cd $packdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$pname/ .");
 		}
