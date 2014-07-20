@@ -54,11 +54,12 @@
 			
 	if ($action == "")
 	{
-		echo "<form action='showresource.php' method='post'>";
+		echo "<form action='$row[action]' method='post'>";
 
 		// Write out the top menu
-		if ($categ != "EDP")
+		if ($categ != "EDP") {
 			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
+		}
 		else
 			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
 		
@@ -67,21 +68,23 @@
 			switch ($row[name]) 
 			{
 				case "AppleIntelCPUPowerManagementPatch":
+				case "BCM4352WiFiPatches":
+				case "AR9285AR9287WiFiPatch":
+				case "VGA_HDMI_Intel_HD3000_Patch":
 					echo "<ul class='pageitem'>";				
 					checkbox("Apply patch directly to /System/Library/Extensions instead of myHack kext loading?", "patchSLE", "no");
 					echo "</ul>";
 					$action = "Patch";
 				break;
-			
-				case "":
-				break;
+	
 			}
 			
 		} 
-		else {
+		else if ($categ == "Applications" || $categ == "Tools")
+		{
 			$action = "Install";
 		}
-		
+	
 		?>
 		
 		<div class="pageitem_bottom">
