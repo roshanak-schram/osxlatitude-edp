@@ -5,7 +5,7 @@
 	include "header.inc.php";
 
 	$skippbuild = "";
-		
+	
 	function deleteEDPFiles()
 	{
 			//Get all the kexts name in comma seperated way
@@ -126,13 +126,16 @@ function doCustomBuild() {
 
 	global $workpath;
 	global $slepath;
-	$incpath = "/Extra/include"; global $ee;
+	global $ee;
 	
-			$cusoper = $_POST['copchoice'];
-			$edpoper = $_POST['eopchoice'];
-			
-			$dsdt = $_POST['dsdt']; $boot = $_POST['boot']; $smbios = $_POST['smbios'];
-			$ssdt = $_POST['ssdt']; $ssdt1 = $_POST['ssdt1']; $ssdt2 = $_POST['ssdt2']; $ssdt3 = $_POST['ssdt3']; $ssdt4 = $_POST['ssdt4'];
+	$incpath = "/Extra/include"; 
+	$buildLogPath = "$workpath/logs/build";
+	
+	$cusoper = $_POST['copchoice'];
+	$edpoper = $_POST['eopchoice'];
+	
+	$dsdt = $_POST['dsdt']; $boot = $_POST['boot']; $smbios = $_POST['smbios'];
+	$ssdt = $_POST['ssdt']; $ssdt1 = $_POST['ssdt1']; $ssdt2 = $_POST['ssdt2']; $ssdt3 = $_POST['ssdt3']; $ssdt4 = $_POST['ssdt4'];
 
 	
 	//
@@ -143,39 +146,34 @@ function doCustomBuild() {
     //
 	// Start by defining our log file and cleaning it..
 	//
-	$log = "$workpath/build.log";
+	$log = "$buildLogPath/build.log";
 	if (is_file("$log")) { 
 		system_call("rm -Rf $log"); 
 	}
 	
-	$myFixlog = "$workpath/myFix.log";
-		if (is_file("$myFixlog")) { 
-			system_call("rm -Rf $myFixlog"); 
-		}
-		
-	if(!is_dir("$workpath/kpsvn/dload/"))
-    		system_call("mkdir $workpath/kpsvn/dload");
-    	else
-    		system_call("rm -Rf $workpath/kpsvn/dload/*");
+	$myFixlog = "$buildLogPath/myFix.log";
+	if (is_file("$myFixlog")) { 
+		system_call("rm -Rf $myFixlog"); 
+	}
     		
-	//writeToLog("$workpath/build.log", "Choice: $cusoper, $edpoper<br>");
+	//writeToLog("$buildLogPath/build.log", "Choice: $cusoper, $edpoper<br>");
 
 	
 	if($cusoper == "cfullfix") {
-   		writeToLog("$workpath/build.log", "<br><b>Calling myFix for Full fix to copy kexts and generate kernelcache</b><br><pre>");
-   		system_call("stty -tostop; sudo myfix -t / >>$workpath/build.log 2>&1 &");
+   		writeToLog("$buildLogPath/build.log", "<br><b>Calling myFix for Full fix to copy kexts and generate kernelcache</b><br><pre>");
+   		system_call("stty -tostop; sudo myfix -t / >>$buildLogPath/build.log 2>&1 &");
    	 }
 	else if($cusoper == "cfixcache" || ($edpoper == "ebuild" && $cusoper == "cnone")) {
-   		writeToLog("$workpath/build.log", "<br><b>Calling myFix for Quick fix to copy kexts and generate kernelcache</b><br><pre>");
-   		system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
+   		writeToLog("$buildLogPath/build.log", "<br><b>Calling myFix for Quick fix to copy kexts and generate kernelcache</b><br><pre>");
+   		system_call("stty -tostop; sudo myfix -q -t / >>$buildLogPath/build.log 2>&1 &");
    	 }
    		
 	else if($cusoper != "cnone")
 	{
 		//Step 1
-		writeToLog("$workpath/build.log", "<br><b>Step 1) Checking if you have selected any sources from $incpath </b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Checking if you have selected any sources from $incpath </b><br>");
 
-		writeToLog("$workpath/build.log", "Copying $incpath/Extensions to $ee <br>");
+		writeToLog("$buildLogPath/build.log", "Copying $incpath/Extensions to $ee <br>");
 			
 			//Get all the kexts name in comma seperated way
 			$cclinfo = shell_exec("ls -m /Extra/include/Extensions/");
@@ -191,12 +189,12 @@ function doCustomBuild() {
 					
 				if($_POST[$pckid] == "on") {
 					  system("cp -R /Extra/include/Extensions/$ccfkname $ee");
-					  writeToLog("$workpath/build.log", "Copying $ccfkname to $ee<br>");
+					  writeToLog("$buildLogPath/build.log", "Copying $ccfkname to $ee<br>");
 					}
 					else {
 						if(is_dir("/Extra/Extensions/$ccfkname")) {
 							system("rm -rf /Extra/Extensions/$ccfkname");
-					  		writeToLog("$workpath/build.log", "Removing $ccfkname from $ee<br>");
+					  		writeToLog("$buildLogPath/build.log", "Removing $ccfkname from $ee<br>");
 					  	}
 					}
 			 	}
@@ -204,48 +202,48 @@ function doCustomBuild() {
 			 }
 	
 		if ($dsdt == "on") {
-			writeToLog("$workpath/build.log", "Copying $incpath/dsdt.aml to /Extra<br>");
+			writeToLog("$buildLogPath/build.log", "Copying $incpath/dsdt.aml to /Extra<br>");
 			system_call("cp -f /Extra/include/dsdt.aml /Extra");
 		} 	
 	
     	if (is_file("/Extra/include/SSDT.aml") && $ssdt == "on") 					{ 
-    		writeToLog("$workpath/build.log", "Copying SSDT file to /Extra<br>");
+    		writeToLog("$buildLogPath/build.log", "Copying SSDT file to /Extra<br>");
     		system_call("cp -f /Extra/include/SSDT.aml /Extra"); 
     	}
     	if (is_file("/Extra/include/SSDT-1.aml") && $ssdt1 == "on") 				{ 
-    		writeToLog("$workpath/build.log", "Copying SSDT-1 file to /Extra<br>");
+    		writeToLog("$buildLogPath/build.log", "Copying SSDT-1 file to /Extra<br>");
     		system_call("cp -f /Extra/include/SSDT-1.aml /Extra"); 
     	}
     	if (is_file("/Extra/include/SSDT-2.aml") && $ssdt2 == "on") 				{ 
-    		writeToLog("$workpath/build.log", "Copying SSDT-2 file to /Extra<br>");
+    		writeToLog("$buildLogPath/build.log", "Copying SSDT-2 file to /Extra<br>");
     		system_call("cp -f /Extra/include/SSDT-2.aml /Extra"); 
     	}
     	if (is_file("/Extra/include/SSDT-3.aml") && $ssdt3 == "on") 				{ 
-    		writeToLog("$workpath/build.log", "Copying SSDT-3 file to /Extra<br>");
+    		writeToLog("$buildLogPath/build.log", "Copying SSDT-3 file to /Extra<br>");
 			system_call("cp -f /Extra/include/SSDT-3.aml /Extra"); 
     	}    
     	if (is_file("/Extra/include/SSDT-4.aml") && $ssdt4 == "on") 				{ 
-    		writeToLog("$workpath/build.log", "Copying SSDT-4 file to /Extra<br>");
+    		writeToLog("$buildLogPath/build.log", "Copying SSDT-4 file to /Extra<br>");
     		system_call("cp -f /Extra/include/SSDT-4.aml /Extra"); 
     	}
 
 		if ($smbios == "on")	{
-			writeToLog("$workpath/build.log", "Copying $incpath/smbios.plist to /Extra<br>"); 
+			writeToLog("$buildLogPath/build.log", "Copying $incpath/smbios.plist to /Extra<br>"); 
 			system_call("cp -f /Extra/include/smbios.plist /Extra");
 			}
 	
 		if ($boot == "on") { 
-			writeToLog("$workpath/build.log", "Copying $incpath/org.chameleon.Boot.plist to /Extra<br>");
+			writeToLog("$buildLogPath/build.log", "Copying $incpath/org.chameleon.Boot.plist to /Extra<br>");
 			system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra");
 			}		
 		
-		writeToLog("$workpath/build.log", "<br><b>Step 2) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
-		system_call("stty -tostop; sudo myfix -q -t / >>$workpath/build.log 2>&1 &");
-		writeToLog("$workpath/build.log", "<a name='myfix'></a>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Calling myFix to copy kexts and generate kernelcache</b><br><pre>");
+		system_call("stty -tostop; sudo myfix -q -t / >>$buildLogPath/build.log 2>&1 &");
+		writeToLog("$buildLogPath/build.log", "<a name='myfix'></a>");
   
     }
     
-		writeToLog("$workpath/build.log", "<a name='myfix'></a>");			
+		writeToLog("$buildLogPath/build.log", "<a name='myfix'></a>");			
 		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 	
 		exit;

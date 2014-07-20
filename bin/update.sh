@@ -1,7 +1,4 @@
 
-cd /Extra/EDP/kpsvn/dload/statFiles
-touch edpUpdate.txt
-
 echo "Cleaning up EDP svn... <br>"
 svn cleanup /Extra/EDP/bin
 svn cleanup /Extra/EDP/phpWebServer
@@ -14,16 +11,16 @@ if svn --non-interactive --username edp --password edp --force update /Extra/EDP
 		cd /Extra/EDP/phpWebServer
 		rm -rf /Extra/EDP/php
 		unzip -qq php.zip -d /Extra/EDP
-		cd /Extra/EDP/kpsvn/dload
+		cd /Extra/EDP/logs/update
 		touch Updsuccess.txt
 		echo "Update success"
 	else
-		cd /Extra/EDP/kpsvn/dload/
+		cd /Extra/EDP/logs/update
 		touch Updfail.txt
 		echo "Update failed (may be no internet or failed to connect to svn)"
 	fi
 else
-	cd /Extra/EDP/kpsvn/dload/
+	cd /Extra/EDP/logs/update
 	touch Updfail.txt
 	echo "Update failed (may be no internet or failed to connect to svn)"
 fi
@@ -50,6 +47,3 @@ chmod -R 755 /Extra/EDP/bin
 chmod -R 755 /Extra/EDP/phpWebServer
 
 echo "Update finished."
-
-cd /Extra/EDP/kpsvn/dload/statFiles
-rm -rf edpUpdate.txt

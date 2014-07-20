@@ -204,24 +204,21 @@
 		
 		case "Update":
 		
+			$updLogPath = "$workpath/logs/update";
+
 			// Clear logs and scripts
-			if(is_dir("$workpath/kpsvn/dload")) {
-				system_call("rm -rf $workpath/kpsvn/dload/*");
+			if(is_dir("$updLogPath")) {
+				system_call("rm -rf $updLogPath/*");
 			}
 			
-			if(!is_dir("$workpath/kpsvn")) {
-				system_call("mkdir $workpath/kpsvn");
+			// create log directory if not found
+			if(!is_dir("$workpath/logs")) {
+				system_call("mkdir $workpath/logs");
 			}
-			if(!is_dir("$workpath/kpsvn/dload")) {
-				system_call("mkdir $workpath/kpsvn/dload");
+			if(!is_dir("$updLogPath")) {
+				system_call("mkdir $updLogPath");
 			}
-			if(!is_dir("$workpath/kpsvn/dload/statFiles")) {
-				system_call("mkdir $workpath/kpsvn/dload/statFiles");
-			}
-			if(is_dir("$workpath/kpsvn/dload/statFiles")) {
-				$fcount = shell_exec("cd $workpath/kpsvn/dload/statFiles; ls | wc -l");
-			}
-		
+			
 			// Start installation process by Launching the script which provides the summary of the build process 
 			echo "<script> document.location.href = 'workerapp.php?action=showUpdateLog#myfix'; </script>";
 		
@@ -230,7 +227,7 @@
 			echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 			
-			system_call("sudo sh $workpath/bin/update.sh >> $workpath/update.log &");
+			system_call("sudo sh $workpath/bin/update.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
 			exit;
