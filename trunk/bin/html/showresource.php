@@ -143,7 +143,7 @@
 		echo "<div class='pageitem_bottom'\">";	
 		echo "<ul class='pageitem'>";
 
-		$patchSLE = $_GET['patchSLE'];
+		$patchSLE = $_POST['patchSLE'];
 		
 		switch ($row[name]) {
 		
