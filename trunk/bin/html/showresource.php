@@ -98,7 +98,7 @@
 		<a href='<?="$row[link]";?>'>Project/Support Link</a>
 		</div>
 		<ul class="pageitem">
-			<li class="button"><input name="Submit input" type="submit">'" value="Proceed to Install/Update" /></li>
+			<li class="button"><input name="Submit input" type="submit" value="Proceed to Install/Update" /></li>
 		</ul>
 		
 		<?php
@@ -229,7 +229,7 @@ function appsLoader($categ, $fname) {
 			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");
 		}
 		else {
-			$checkoutCmd = "cd apps/$categ; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
+			$checkoutCmd = "cd $workpath/apps/$categ; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
 
 			writeToLog("$appsLogPath/$fname.sh", "$checkoutCmd;");
 			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");	
