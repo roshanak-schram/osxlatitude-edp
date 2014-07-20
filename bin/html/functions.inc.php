@@ -248,28 +248,21 @@ function echoPageItemTOP($icon, $text) {
 		 */
 		switch ($pathToPatch)
 		{
-			case "SLE":
-			$pathToPatch = "/System/Library/Extensions";
-			
+			case "SLE":			
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-			writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
-			system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
 			break;
 			
-			case "EE":
-			$pathToPatch = "/Extra/Extensions";
-		
-			system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $pathToPatch/");
+			case "EE":		
+			system_call("cp -R /System/Library/Extensions/AppleIntelCPUPowerManagement.kext /Extra/Extensions/");
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-			writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
-			system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
 			break;
 		}
-		// For this pathToPatch variable works
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $pathToPatch/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist"); 
 		
+		writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
+		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+
 		// touch for kernel cache
 		if ($genCache == "yes") {
 			system_call("sudo touch /System/Library/Extensions/");

@@ -1,19 +1,32 @@
 
 <?php
-include_once "edpconfig.inc.php";
-include_once "functions.inc.php";
 
-include_once "header.inc.php";
+	include_once "edpconfig.inc.php";
+	include_once "functions.inc.php";
 
+	include_once "header.inc.php";
 
-/*
- * load the page of the selected side menu
- */
+	/*
+	 * load the page of the selected side menu
+	 */
+ 
+ 	//
+ 	// get category and id from the get and post methods
+ 	//
 	$action = $_GET['action'];
-
-	// get category and id from the link
-	$categ = $_GET['category'];	
-	$id = $_GET['id'];
+	if ($action == "") {
+		$action = $_POST['action'];
+	}
+	
+	$categ	= $_GET['category'];
+	if ($categ == "") {
+		$categ = $_POST['category'];
+	}	
+	
+	$id 	= $_GET['id'];
+	if ($id == "") {
+		$id = $_POST['id'];
+	}
 
 	switch ($categ) {
 		case "Applications":
@@ -38,16 +51,36 @@ include_once "header.inc.php";
 	$stmt = $edp_db->query("$query where id = '$id'");
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
-	
-	$href = "$row[action]";
-		
+			
 	if ($action == "")
 	{
+		echo "<form action='showresource.php' method='post'>";
+
 		// Write out the top menu
 		if ($categ != "EDP")
 			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
 		else
 			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
+		
+		if ($categ == "Fixes") 
+		{
+			switch ($row[name]) 
+			{
+				case "AppleIntelCPUPowerManagementPatch":
+					echo "<ul class='pageitem'>";				
+					checkbox("Apply patch directly to /System/Library/Extensions instead of myHack kext loading?", "patchSLE", "no");
+					echo "</ul>";
+					$action = "Patch";
+				break;
+			
+				case "":
+				break;
+			}
+			
+		} 
+		else {
+			$action = "Install";
+		}
 		
 		?>
 		
@@ -62,9 +95,16 @@ include_once "header.inc.php";
 		<a href='<?="$row[link]";?>'>Project/Support Link</a>
 		</div>
 		<ul class="pageitem">
-			<li class="button"><input name="Submit input" type="submit" onclick="document.location.href='<?=$href?>'" value="Proceed to Install/Update" /></li>
+			<li class="button"><input name="Submit input" type="submit">'" value="Proceed to Install/Update" /></li>
 		</ul>
-	
+		
+		<?php
+			echo "<input type='hidden' name='id' value='$id'>";
+			echo "<input type='hidden' name='action' value='$action'>";
+			echo "<input type='hidden' name='category' value='$categ'>";
+		?>
+
+		</form>
 		<?php
 	}
 	elseif ($action == "Install")
@@ -100,10 +140,15 @@ include_once "header.inc.php";
 		echo "<div class='pageitem_bottom'\">";	
 		echo "<ul class='pageitem'>";
 
+		$patchSLE = $_GET['patchSLE'];
+		
 		switch ($row[name]) {
 		
 			case "AppleIntelCPUPowerManagementPatch":
-				patchAppleIntelCPUPowerManagement("EE", "$fixLogPath/fix.log", "yes");
+				if ($patchSLE == "on")
+					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "EE", "yes");
 			break;
 			
 			case "":
@@ -114,12 +159,6 @@ include_once "header.inc.php";
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 			echo "<b><center> Patch finished.</b><br><br><b> You can now reboot the sysem to see the patch in action.</center></b>";
 			echo "<br></ul>";
-			
-			echo "<b>Log:</b>\n";
-			echo "<pre>";
-			if(is_file("$workpath/logs/build/build.log"))
-				include "$workpath/logs/build/build.log";
-			echo "</pre>";
 		}
 		else {
 			echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
