@@ -243,7 +243,7 @@ function showUpdateLog() {
 
 	echo "<div class='pageitem_bottom'\">";	
 			
-	if (is_dir("$updLogPath") && (is_file("$updLogPath/Updsuccess.txt") || is_file("$updLogPath/Updfail.txt")))
+	if (is_file("$updLogPath/Updsuccess.txt") || is_file("$updLogPath/Updfail.txt"))
 	{
 			echo "<ul class='pageitem'>";
 			if (file_exists("$updLogPath/Updsuccess.txt")) {
@@ -296,7 +296,7 @@ function showInstallLog($id, $name, $submenu, $icon) {
 		
 	$appsLogPath = "$workpath/logs/apps";
 	
-	if (is_dir("appsLogPath") && is_file("$appsLogPath/Success_$name.txt") || is_file("$appsLogPath/Fail_$name.txt"))
+	if (is_file("$appsLogPath/Success_$name.txt") || is_file("$appsLogPath/Fail_$name.txt"))
 	{
 			// Get info from db
 			$stmt = $edp_db->query("SELECT * FROM appsdata where id = '$id'");
