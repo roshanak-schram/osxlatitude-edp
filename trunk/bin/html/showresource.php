@@ -39,13 +39,18 @@ include_once "header.inc.php";
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 
-	// Write out the top menu
-	echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
+	
 	
 	$href = "$row[action]";
 		
 	if ($action == "")
 	{
+		// Write out the top menu
+		if ($categ != "EDP")
+			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
+		else
+			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
+		
 		?>
 		
 		<div class="pageitem_bottom">
@@ -69,10 +74,6 @@ include_once "header.inc.php";
 		// Start installation process by Launching the script which provides the summary of the build process 
 		echo "<script> document.location.href = 'workerapp.php?id=$id&name=$row[submenu]&icon=$row[icon]&action=showInstallLog#myfix'; </script>";
 		
-		echo "<div class='pageitem_bottom'>";
-		echo "<center><b>Please wait for few minutes while we download and install the app... which will take approx 1 to 10 minutes depending on your internet speed.</b></center>";
-		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
-		
 		// Clear logs and scripts
 		if(is_dir("$workpath/apps/dload")) {
 			system_call("rm -rf $workpath/apps/dload/*");
@@ -80,8 +81,6 @@ include_once "header.inc.php";
 		
 		// Download app
 		appsLoader("$row[menu]","$row[submenu]");
-
-		echo "</div>";
 	}
 
 function appsLoader($categ, $fname) {

@@ -312,21 +312,21 @@ function showInstallLog($id, $name, $icon) {
 			echo "<ul class='pageitem'>";
 			if (file_exists("$applogPath/success.txt")) {
 			
+				$appPath = "$workpath/apps/$row[menu]/$row[submenu]";
+				
 				if ($row[submenu] == "CamTwist") {
 					system_call("rm -rf /Library/QuickTime/CamTwist.component");
-					system_call("rm -rf /rm /Applications/$row[submenu]");
+					system_call("rm -rf /Applications/$row[submenu]");
 					
-					system_call("cd $workpath/apps/$row[menu]/$row[submenu]; unzip -qq $row[submenu].zip;");
-					system_call("cd $workpath/apps/$row[menu]/$row[submenu]/$row[submenu];");
-
-					system_call("cp -R ./CamTwist.component /Library/QuickTime/");
-					system_call("cp -a ./CamTwist/. /Applications/");
+					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -qq $row[submenu].zip");
+						
+					system_call("cp -R $appPath/CamTwist.component /Library/QuickTime/");
+					system_call("cp -a $appPath/CamTwist/. /Applications/CamTwist/");
 				}
 				else {
-					system_call("rm -rf /Applications/$row[submenu].app;");
-					system_call("cd $workpath/apps/$row[menu]/$row[submenu]; unzip -qq $row[submenu].zip -d /Applications");
-				}	
-				
+					system_call("rm -rf /Applications/$row[submenu].app");
+					system_call("cd $appPath; unzip -qq $row[submenu].zip -d /Applications");
+				}		
 				
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Installation finished.</b><br><br><b> You can find this from Applications list.</center></b>";
