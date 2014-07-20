@@ -107,8 +107,8 @@ if ($action == "showInstallLog")
 { 
 	include_once "edpconfig.inc.php";
 
-	$icon 		 = $_GET['icon'];
-	$name		 = $_GET['name'];
+	$icon 		 	 = $_GET['icon'];
+	$submenu		 = $_GET['submenu'];
 	showInstallLog($id, $name, $icon); 
 	exit ; 
 }
@@ -290,7 +290,7 @@ function showUpdateLog() {
 function showInstallLog($id, $name, $icon) {
 	global $workpath, $edp_db;
 		
-	echoPageItemTOP("icons/sidebar/$icon", "$name");
+	echoPageItemTOP("icons/sidebar/$icon", "$submenu");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
@@ -312,20 +312,20 @@ function showInstallLog($id, $name, $icon) {
 			echo "<ul class='pageitem'>";
 			if (file_exists("$applogPath/success.txt")) {
 			
-				$appPath = "$workpath/apps/$row[menu]/$row[submenu]";
+				$appPath = "$workpath/apps/$row[menu]/$row[name]";
 				
-				if ($row[submenu] == "CamTwist") {
+				if ($row[name] == "CamTwist") {
 					system_call("rm -rf /Library/QuickTime/CamTwist.component");
-					system_call("rm -rf /Applications/$row[submenu]");
+					system_call("rm -rf /Applications/$row[name]");
 					
-					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -qq $row[submenu].zip");
+					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -qq $row[name].zip");
 						
 					system_call("cp -R $appPath/CamTwist.component /Library/QuickTime/");
 					system_call("cp -a $appPath/CamTwist/. /Applications/CamTwist/");
 				}
 				else {
-					system_call("rm -rf /Applications/$row[submenu].app");
-					system_call("cd $appPath; unzip -qq $row[submenu].zip -d /Applications");
+					system_call("rm -rf /Applications/$row[name].app");
+					system_call("cd $appPath; unzip -qq $row[name].zip -d /Applications");
 				}		
 				
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
