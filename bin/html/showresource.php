@@ -45,9 +45,9 @@ include_once "header.inc.php";
 	{
 		// Write out the top menu
 		if ($categ != "EDP")
-			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[name]");
+			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
 		else
-			echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
+			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
 		
 		?>
 		
@@ -70,7 +70,7 @@ include_once "header.inc.php";
 	elseif ($action == "Install")
 	{
 		// Start installation process by Launching the script which provides the summary of the build process 
-		echo "<script> document.location.href = 'workerapp.php?id=$id&name=$row[name]&icon=$row[icon]&action=showInstallLog#myfix'; </script>";
+		echo "<script> document.location.href = 'workerapp.php?id=$id&submenu=$row[submenu]&icon=$row[icon]&action=showInstallLog#myfix'; </script>";
 		
 		// Clear logs and scripts
 		if(is_dir("$workpath/apps/dload")) {
@@ -79,6 +79,25 @@ include_once "header.inc.php";
 		
 		// Download app
 		appsLoader("$row[menu]","$row[submenu]");
+	}
+	elseif ($action == "Patch")
+	{
+		echo "<div class='pageitem_bottom'\">";	
+		echo "<ul class='pageitem'>";
+
+		switch ($row[name]) {
+		
+			case "AppleIntelCPUPowerManagementPatch":
+				patchAppleIntelCPUPowerManagement();
+			break;
+			
+			case "":
+			break;
+		}
+		
+		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+		echo "<b><center> Patch finished.</b><br><br><b> You can now reboot the sysem to see the patch in action.</center></b>";
+		echo "<br></ul>";
 	}
 
 function appsLoader($categ, $fname) {
