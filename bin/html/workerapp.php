@@ -323,7 +323,7 @@ function showInstallLog($id, $name, $submenu, $icon) {
 				}
 				else {
 					system_call("rm -rf /Applications/$row[name].app");
-					system_call("cd $appPath; unzip -qq $row[name].zip -d /Applications");
+					system_call("cd $appPath; unzip -X -qq $row[name].zip -d /Applications");
 				}		
 				
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
