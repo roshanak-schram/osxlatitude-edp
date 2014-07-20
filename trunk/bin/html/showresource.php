@@ -103,14 +103,14 @@ include_once "header.inc.php";
 		switch ($row[name]) {
 		
 			case "AppleIntelCPUPowerManagementPatch":
-				patchAppleIntelCPUPowerManagement("myHack");
+				patchAppleIntelCPUPowerManagement("EE", "$fixLogPath/fix.log", "yes");
 			break;
 			
 			case "":
 			break;
 		}
 		
-		if (is_file("$fixLogPath/success.txt")) {
+		if (is_file("$fixLogPath/patchSuccess.txt")) {
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 			echo "<b><center> Patch finished.</b><br><br><b> You can now reboot the sysem to see the patch in action.</center></b>";
 			echo "<br></ul>";
@@ -140,8 +140,12 @@ function appsLoader($categ, $fname) {
     	  
     	$appsLogPath = "$workpath/logs/apps";
     	  	
+    	// create app local download directory if not found
     	if(!is_dir("$workpath/apps")) {
 			system_call("mkdir $workpath/apps");
+		}
+		if(!is_dir("$workpath/apps/$categ")) {
+			system_call("mkdir $workpath/apps/$categ");
 		}
 		
 		// create log directory if not found
@@ -155,17 +159,17 @@ function appsLoader($categ, $fname) {
 		//
 		// Download apps from SVN
 		//
-    	$packdir = "$workpath/apps/$categ";
+    	$appdir = "$workpath/apps/$categ/$fname";
 		$svnpath = "apps/$categ/$fname";
 			
-		if (is_dir("$packdir")) {
-			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir/$fname; then echo \"$fname file(s) updated finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) update failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
+		if (is_dir("$appdir")) {
+			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $appdir; then echo \"$fname file(s) updated finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) update failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
 
 			writeToLog("$appsLogPath/$fname.sh", "$checkoutCmd;");
 			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");
 		}
 		else {
-			$checkoutCmd = "mkdir $packdir; cd $packdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
+			$checkoutCmd = "if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
 
 			writeToLog("$appsLogPath/$fname.sh", "$checkoutCmd;");
 			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");	
