@@ -234,36 +234,47 @@ function echoPageItemTOP($icon, $text) {
 	/*
 	 * Patch AppleIntelCPUPowerxxx for Native Speedstep and Power managment
 	 */
-	function patchAppleIntelCPUPowerManagement($patchType) {
-		global $workpath, $slepath, $ee;
-	
-		echo "E/E: $ee, SLE: $slepath";
-		
-		switch ($patchType)
-		{
-			case "Direct":
-			$pathToPatch = "$slepath";
-			$logPath = "$workpath/logs/fixes/fix.log";
-			break;
+	function patchAppleIntelCPUPowerManagement($log, $pathToPatch, $genCache) {
+		global $workpath;
 			
-			case "myHack":
-			$pathToPatch = "/Extra/Extensions";
-			$logPath = "$workpath/logs/build/build.log";
-			break;
-		}
-		
 		if(!is_dir("/System/Library/Extensions/AppleIntelCPUPowerManagement.kext")) {
-			echo "AppleIntelCPUPowerManagement.kext not found<br>";
-			writeToLog("$logPath", "  AppleIntelCPUPowerManagement.kext not found for patching<br>");
-			return;
+				writeToLog("$log", "  AppleIntelCPUPowerManagement.kext not found for patching<br>");
+				system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
+				return;
 	  	}
 	  	
-		if ($pathToPatch == "/Extra/Extensions")
+		/*
+		 * Note: Using the variables for the path in hex patch doesn't work, so we have to provide the full path
+		 */
+		switch ($pathToPatch)
+		{
+			case "SLE":
+			$pathToPatch = "/System/Library/Extensions";
+			
+			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
+			system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+			break;
+			
+			case "EE":
+			$pathToPatch = "/Extra/Extensions";
+		
 			system_call("cp -R $slepath/AppleIntelCPUPowerManagement.kext $pathToPatch/");
-
-		system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' $pathToPatch/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-		system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' $pathToPatch/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
+			system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+			break;
+		}
+		// For this pathToPatch variable works
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $pathToPatch/AppleIntelCPUPowerManagement.kext/Contents/KextPatched.plist"); 
+		
+		// touch for kernel cache
+		if ($genCache == "yes") {
+			system_call("sudo touch /System/Library/Extensions/");
+		}
+			
 	}
 
 
@@ -983,7 +994,7 @@ function applyFixes() {
         // Checking if we need to patch AppleIntelCPUPowerManagement.kext
         if(($modeldb[$modelRowID]['applecpupwr'] == "on") && $i == "1") {
         	writeToLog("$workpath/logs/build/build.log", "  Patching AppleIntelCPUPowerManagement.kext<br>");
-        	patchAppleIntelCPUPowerManagement();
+        	patchAppleIntelCPUPowerManagement("EE", "$workpath/logs/build/build.log", "no");
         }
         else if(($modeldb[$modelRowID]['emupstates'] == "on") && $i == "3") {
         	

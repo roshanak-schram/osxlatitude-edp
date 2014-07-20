@@ -16,7 +16,7 @@ else
     cp backup/edp.sqlite3 ./edp.sqlite3
 fi
 
-echo "Cleaning up EDP svn... <br>"
+echo "Cleaning up EDP svn..."
 svn cleanup /Extra/EDP/bin
 svn cleanup /Extra/EDP/phpWebServer
 
@@ -45,4 +45,4 @@ fi
 chmod -R 755 /Extra/EDP/bin
 chmod -R 755 /Extra/EDP/phpWebServer
 
-echo "Update finished."
+echo "<br>EDP Update finished."
