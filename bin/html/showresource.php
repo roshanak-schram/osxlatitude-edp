@@ -36,7 +36,7 @@
 		break;
 	
 		case "EDP":
-			$buttonValue = "Show";
+			$buttonValue = "Proceed to Install/Update";
 		case "Configuration":
 			$query = "SELECT * FROM edpdata";
 		break;

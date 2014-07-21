@@ -334,27 +334,44 @@
 			echoPageItemTOP("icons/big/logs.png", "Clear Logs");
    			echo "<div class='pageitem_bottom'>\n";
     		
+    		$action = $_POST['action'];
     		if ($action == "") {
     			echo "<form action='showPage.php' method='post'>";
 			
-				echo "<input type='hidden' name='i' value='Clear Logs'>";
+				echo "<input type='hidden' name='i' value='ClearLogs'>";
 				echo "<input type='hidden' name='action' value='removeLogs'>";
 			
-				if (file_exists("$workpath/build.log"))
-					checkbox("Remove Build Log?", "rmBuildLog", "no");
+				echo '<ul class="pageitem">';
+				checkbox("Clear Builds Log?", "rmBuildLog", "no");
+				checkbox("Clear Last Build Log?", "rmLBuildLog", "no");
+				checkbox("Clear Updates Log?", "rmUpdateLog", "no");
+				checkbox("Clear Last Update Log?", "rmLUpdateLog", "no");
+				echo '</ul>';
 				
-				if (file_exists("$workpath/update.log"))
-					checkbox("Remove Update Log?", "rmUpdateLog", "no");
-			
+				echo '<ul class="pageitem">';
 				echo '<li class="button"><input name="Submit input" type="submit" value="Clear" /></li>';
+				echo '</ul>';
 				echo "</form>";
     		}
     		else {
+    			
+    			$rmBuildLog = $_POST['rmBuildLog']; 
+    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/build.log");  system_call("rm -rf $workpath/logs/build/*");}
+    			
+    			$rmLBuildLog = $_POST['rmLBuildLog']; 
+    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/lastbuild.log"); }
+    			
+    			$rmUpdateLog = $_POST['rmUpdateLog']; 
+    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/update.log"); system_call("rm -rf $workpath/logs/update/*"); }
+    			
+    			$rmLUpdateLog = $_POST['rmLUpdateLog']; 
+    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/lastupdate.log"); }
+    			
     			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Log(s) Cleared.</center></b>";
     		}			
    			echo "</div>\n";
-			exit;
+		exit;
 		break;
 	}
 
