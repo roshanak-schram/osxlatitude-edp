@@ -351,20 +351,29 @@
     		}
     		else {
     			
+    			$selectedToClear = "no"; 
+    			
     			$rmBuildLog = $_POST['rmBuildLog']; 
-    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/build.log");  system_call("rm -rf $workpath/logs/build/*");}
+    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/build.log");  system_call("rm -rf $workpath/logs/build/*"); $selectedToClear = "yes"; }
     			
     			$rmLBuildLog = $_POST['rmLBuildLog']; 
-    			if ($rmLBuildLog == "on") { system_call("rm -f $workpath/logs/lastbuild.log"); }
+    			if ($rmLBuildLog == "on") { system_call("rm -f $workpath/logs/lastbuild.log"); $selectedToClear = "yes";  }
     			
     			$rmUpdateLog = $_POST['rmUpdateLog']; 
-    			if ($rmUpdateLog == "on") { system_call("rm -f $workpath/logs/update.log"); system_call("rm -rf $workpath/logs/update/*"); }
+    			if ($rmUpdateLog == "on") { system_call("rm -f $workpath/logs/update.log"); system_call("rm -rf $workpath/logs/update/*"); $selectedToClear = "yes"; }
     			
     			$rmLUpdateLog = $_POST['rmLUpdateLog']; 
-    			if ($rmLUpdateLog == "on") { system_call("rm -f $workpath/logs/lastupdate.log"); }
+    			if ($rmLUpdateLog == "on") { system_call("rm -f $workpath/logs/lastupdate.log"); $selectedToClear = "yes"; }
     			
-    			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Log(s) Cleared.</center></b>";
+    			if ($selectedToClear == "yes") {
+    				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+					echo "<b><center> Log(s) Cleared.</center></b>";
+    			}
+    			else {
+    				echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> Not selected any logs to clear.</center></b>";
+    			}
+    			
     		}			
    			echo "</div>\n";
 		exit;
