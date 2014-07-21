@@ -418,7 +418,12 @@
 						}						
 					}
 				}
-		
+				
+				if ($appID == 0) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> No Application data downloaded by EDP.</center></b>";
+    			}
+    			
 				echo "</ul>";
 				
 				echo '<ul class="pageitem">';
@@ -496,6 +501,11 @@
 					}
 				}
 		
+				if ($kpID == 0) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> No Kext packs data downloaded by EDP.</center></b>";
+    			}
+    			
 				echo "</ul>";
 				
 				echo '<ul class="pageitem">';
