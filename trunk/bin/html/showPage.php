@@ -278,11 +278,18 @@
 			echoPageItemTOP("icons/big/logs.png", "Build Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-			echo "<pre>";
-			if(is_file("$workpath/logs/build.log"))
-				include "$workpath/logs/build.log";
-			echo "</pre>";
-			
+    		if (!file_exists("$workpath/logs/build.log")) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> There is no log available.</center></b>";
+    				echo "</ul>";
+    		} 
+    		else {
+    			echo "<pre>";
+				if(is_file("$workpath/logs/build.log"))
+					include "$workpath/logs/build.log";
+				echo "</pre>";
+    		}
+    					
    			echo "</div>\n";
 			exit;
 		break;
@@ -291,10 +298,17 @@
 			echoPageItemTOP("icons/big/logs.png", "Update Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-			echo "<pre>";
-			if(is_file("$workpath/logs/update.log"))
-				include "$workpath/logs/update.log";
-			echo "</pre>";
+    		if (!file_exists("$workpath/logs/update.log")) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> There is no log available.</center></b>";
+    				echo "</ul>";
+    		} 
+    		else {
+    			echo "<pre>";
+				if(is_file("$workpath/logs/update.log"))
+					include "$workpath/logs/update.log";
+				echo "</pre>";
+    		}
 			
    			echo "</div>\n";
 			exit;
@@ -304,10 +318,17 @@
 			echoPageItemTOP("icons/big/logs.png", "Last Build Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-			echo "<pre>";
-			if(is_file("$workpath/logs/lastbuild.log"))
-				include "$workpath/logs/lastbuild.log";
-			echo "</pre>";
+    		if (!file_exists("$workpath/logs/lastbuild.log")) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> There is no log available.</center></b>";
+    				echo "</ul>";
+    		} 
+    		else {
+    			echo "<pre>";
+				if(is_file("$workpath/logs/lastbuild.log"))
+					include "$workpath/logs/lastbuild.log";
+				echo "</pre>";
+    		}
 			
    			echo "</div>\n";
 			exit;
@@ -317,11 +338,18 @@
 			echoPageItemTOP("icons/big/logs.png", "Last Update Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-			echo "<pre>";
-			if(is_file("$workpath/logs/lastupdate.log"))
-				include "$workpath/logs/lastupdate.log";
-			echo "</pre>";
-			
+    		if (!file_exists("$workpath/logs/lastupdate.log")) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> There is no log available.</center></b>";
+    				echo "</ul>";
+    		} 
+    		else {
+    			echo "<pre>";
+				if(is_file("$workpath/logs/lastupdate.log"))
+					include "$workpath/logs/lastupdate.log";
+				echo "</pre>";
+    		}
+    		
    			echo "</div>\n";
 			exit;
 		break;
