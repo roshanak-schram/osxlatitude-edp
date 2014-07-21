@@ -449,6 +449,7 @@
 					echo "<b><center> Application data deleted.</center></b>";
     			}
     			else {
+    				echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no Application data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
     			}
     		}			
@@ -515,11 +516,9 @@
 					echo "<b><center> Kext pack data deleted.</center></b>";
     			}
     			else {
+    				echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no Kext pack data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
-    			}
-    			
-    			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Kext pack data deleted.</center></b>";
+    			}    			
     		}			
     		echo "</div>\n";
 		exit;
