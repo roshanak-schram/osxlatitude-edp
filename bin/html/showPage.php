@@ -278,7 +278,6 @@
 			echoPageItemTOP("icons/big/logs.png", "Build Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-    		echo "<b>Log:</b>\n";
 			echo "<pre>";
 			if(is_file("$workpath/logs/build.log"))
 				include "$workpath/logs/build.log";
@@ -292,7 +291,6 @@
 			echoPageItemTOP("icons/big/logs.png", "Update Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-    		echo "<b>Log:</b>\n";
 			echo "<pre>";
 			if(is_file("$workpath/logs/update.log"))
 				include "$workpath/logs/update.log";
@@ -306,7 +304,6 @@
 			echoPageItemTOP("icons/big/logs.png", "Last Build Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-    		echo "<b>Log:</b>\n";
 			echo "<pre>";
 			if(is_file("$workpath/logs/lastbuild.log"))
 				include "$workpath/logs/lastbuild.log";
@@ -320,7 +317,6 @@
 			echoPageItemTOP("icons/big/logs.png", "Last Update Log");
    			echo "<div class='pageitem_bottom'>\n";
     		
-    		echo "<b>Log:</b>\n";
 			echo "<pre>";
 			if(is_file("$workpath/logs/lastupdate.log"))
 				include "$workpath/logs/lastupdate.log";

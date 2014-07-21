@@ -184,16 +184,6 @@ function echoPageItemTOP($icon, $text) {
 
 		return $default;
 	}
-
-	function edpCleaner() {
-		global $slepath;
-	
-		if ($slepath != "") {
-			if (!is_dir("$slepath/0EDP.kext")) {
-				system_call("rm -Rf $slepath/0EDP.kext");
-			}
-		}
-	}
 	
 	function downloadAndRun($url, $filetype, $filename, $execpath) {
 		echo "Making downloads folder in /Downloads and initiating download of $url\n\n";
@@ -226,6 +216,8 @@ function echoPageItemTOP($icon, $text) {
 
 		global $ee, $slepath, $workpath;
 	
+		writeToLog("$workpath/logs/build/build.log", " Patching AppleIntelSNBGraphicsFB.kext for VGA and HDMI in Intel HD3000...<br>");
+
 		if(!is_dir("/System/Library/Extensions/AppleIntelSNBGraphicsFB.kext")) {
 				writeToLog("$log", "  AppleIntelSNBGraphicsFB.kext not found for patching<br>");
 				system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
@@ -254,7 +246,7 @@ function echoPageItemTOP($icon, $text) {
 			break;
 		}
 		
-		writeToLog("$log", "<br> AppleIntelSNBGraphicsFB.kext patched successfullly for Intel HD3000 VGA and HDMI <br>");
+		writeToLog("$log", "  AppleIntelSNBGraphicsFB.kext patched successfullly for Intel HD3000 VGA and HDMI<br>");
 		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
 	}
 
@@ -264,6 +256,8 @@ function echoPageItemTOP($icon, $text) {
 	function patchAppleIntelCPUPowerManagement($log, $pathToPatch, $genCache) {
 		global $workpath;
 			
+        writeToLog("$workpath/logs/build/build.log", " Patching AppleIntelCPUPowerManagement.kext...<br>");
+		
 		if(!is_dir("/System/Library/Extensions/AppleIntelCPUPowerManagement.kext")) {
 				writeToLog("$log", "  AppleIntelCPUPowerManagement.kext not found for patching<br>");
 				system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
@@ -296,7 +290,7 @@ function echoPageItemTOP($icon, $text) {
 			break;
 		}
 		
-		writeToLog("$log", "<br> AppleIntelCPUPowerManagement.kext patched successfullly<br>");
+		writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
 		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
 	}
 
@@ -312,10 +306,10 @@ function echoPageItemTOP($icon, $text) {
 	function patchWiFiAR9285AndAR9287($log, $pathToPatch, $genCache) {
 		global $ee, $slepath, $workpath;
 		
-		writeToLog("$log", " Applying AR9285/AR9287 WiFi kext patch for AR5B195/AR5B95 and AR5B197<br>");
+		writeToLog("$log", " Applying AR9285/AR9287 WiFi kext patch for AR5B195/AR5B95 and AR5B197...<br>");
 
 		if (!file_exists("$slepath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist")) {
-			writeToLog("$log", " IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext kext not found<br>");
+			writeToLog("$log", "  IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext kext not found<br>");
 			system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
 			return;
 		}
@@ -348,7 +342,7 @@ function echoPageItemTOP($icon, $text) {
 			break;
 		} 
 		
-		writeToLog("$log", "<br> WiFi kext patched successfullly for AR9285/AR9287 card <br>");
+		writeToLog("$log", "  WiFi kext patched successfullly for AR9285/AR9287 card <br>");
 		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
 	}
 
@@ -358,10 +352,10 @@ function echoPageItemTOP($icon, $text) {
 	function patchWiFiBTBCM4352($log, $pathToPatch, $genCache) {
 		global $ee, $slepath, $workpath;
 		
-		writeToLog("$log", " Applying WiFi patches for BCM4352 card<br>");
+		writeToLog("$log", " Applying WiFi patches for BCM4352 card...<br>");
 
 		if (!file_exists("$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist")) {
-			writeToLog("$log", " IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext kext not found<br>");
+			writeToLog("$log", "  IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext kext not found<br>");
 			system_call("cd $workpath/logs/fixes; touch patchFail.txt;");
 			return;
 		}
@@ -401,7 +395,7 @@ function echoPageItemTOP($icon, $text) {
 			break;
 		} 
 		
-		writeToLog("$log", "<br> WiFi kext/binary patched successfullly for BCM4352 card<br>");
+		writeToLog("$log", "  WiFi kext/binary patched successfullly for BCM4352 card<br>");
 		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
 	}
 
@@ -410,14 +404,14 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchDW13957WiFiBCM43224() {
 		global $ee, $slepath;
-		echo "  Applying BCM43224 WiFi Fix for Dell DW1395, DW1397 \n";
+		echo " Applying BCM43224 WiFi Fix for Dell DW1395, DW1397 \n";
 
 		$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
 		system_call("cp -R $slepath/IO80211Family.kext $ee/");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" $ee/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
 		}
-		 else { echo "  AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+		 else { echo " AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
 
 	/*
@@ -425,14 +419,14 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchDW13957WiFiBCM4311() {
 		global $ee, $slepath;
-		echo "  Applying BCM4311 WiFi Fix for Dell DW1395, DW1397 \n";
+		echo " Applying BCM4311 WiFi Fix for Dell DW1395, DW1397 \n";
 
 		$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist";   if (file_exists($file)) {
 		system_call("cp -R $slepath/IO80211Family.kext $ee/");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" $ee/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/KextPatched.plist");
 		}
-		 else { echo "  AppleAirPortBrcm4311.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+		 else { echo " AppleAirPortBrcm4311.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
 
 	/*
@@ -440,7 +434,7 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchWiFiBCM43224() {
 		global $ee, $slepath;
-		echo "  Applying BCM43224 WiFi Fix for BCM943224 HMS and BCM943225 HMB \n";
+		echo " Applying BCM43224 WiFi Fix for BCM943224 HMS and BCM943225 HMB \n";
 
 		$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
 		system_call("cp -R $slepath/IO80211Family.kext $ee/");
@@ -448,7 +442,7 @@ function echoPageItemTOP($icon, $text) {
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" $ee/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
 		}
-		 else { echo "  AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+		 else { echo " AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
 
 	/*
@@ -456,14 +450,14 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchWiFiBCM4331() {
 		global $ee, $slepath;
-		echo "  Applying BCM4331 WiFi Fix for BCM943225 HMB \n";
+		echo " Applying BCM4331 WiFi Fix for BCM943225 HMB \n";
 
 		$file = "$slepath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist";   if (file_exists($file)) {
 		system_call("cp -R $slepath/IO80211Family.kext $ee/");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
 		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $ee/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/KextPatched.plist");
 		}
-		 else { echo "  AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
+		 else { echo " AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
 
 //<----------------------------> EDP Build functions ---------------------------------------------------------------------------------------------------
@@ -472,11 +466,10 @@ function echoPageItemTOP($icon, $text) {
  * Essential file copy like dsdt, ssdt and plists
  */
 function copyEssentials() {
-    global $workpath, $incpath, $modelNamePath;
+    global $workpath, $modelNamePath;
 	global $modeldb, $modelRowID;
     global $os;
 
-	$extrapath = "/Extra";
     writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files...<br>");
     
     // use EDP SMBIos?
@@ -485,7 +478,7 @@ function copyEssentials() {
     	$file1 = "$workpath/model-data/$modelNamePath/common/SMBios.plist"; 
     	$file2 = "$workpath/model-data/$modelNamePath/$os/SMBios.plist"; 
 
-   		writeToLog("$workpath/logs/build/build.log", " SMBios.plist found, Copying to $extrapath<br>");
+   		writeToLog("$workpath/logs/build/build.log", "  SMBios.plist found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
     	if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
     	//Copy file from common folder if exists
@@ -496,7 +489,7 @@ function copyEssentials() {
     	system_call("cp -f $file2 $extrapath");
     	
     } else {
-    	writeToLog("$workpath/logs/build/build.log", " Skipping SMBios.plist file from EDP on user request<br>");
+    	writeToLog("$workpath/logs/build/build.log", "  Skipping SMBios.plist file from EDP on user request<br>");
     }
     
     // use EDP org.chameleon.Boot.plist?
@@ -505,7 +498,7 @@ function copyEssentials() {
     	$file1 = "$workpath/model-data/$modelNamePath/common/org.chameleon.Boot.plist"; 
     	$file2 = "$workpath/model-data/$modelNamePath/$os/org.chameleon.Boot.plist"; 
 
-   	    writeToLog("$workpath/logs/build/build.log", " org.chameleon.Boot.plist found, Copying to $extrapath<br>");
+   	    writeToLog("$workpath/logs/build/build.log", "  org.chameleon.Boot.plist found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
     	if (file_exists("$extrapath/org.chameleon.Boot.plist")) { system_call("rm $extrapath/org.chameleon.Boot.plist"); }
     	//Copy file from common folder if exists
@@ -516,7 +509,7 @@ function copyEssentials() {
     	system_call("cp -f $file2 $extrapath");
    	 	
     } else {
-    	writeToLog("$workpath/logs/build/build.log", " Skipping org.chameleon.Boot.plist file from EDP on user request<br>");
+    	writeToLog("$workpath/logs/build/build.log", "  Skipping org.chameleon.Boot.plist file from EDP on user request<br>");
     }
     
     // use EDP DSDT?
@@ -525,7 +518,7 @@ function copyEssentials() {
     	$file1 = "$workpath/model-data/$modelNamePath/common/dsdt.aml"; 
     	$file2 = "$workpath/model-data/$modelNamePath/$os/dsdt.aml"; 
 
-    	writeToLog("$workpath/logs/build/build.log", " dsdt found, Copying to $extrapath<br>");
+    	writeToLog("$workpath/logs/build/build.log", "  dsdt found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
     	if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
     	//Copy file from common folder if exists
@@ -536,7 +529,7 @@ function copyEssentials() {
     	system_call("cp -f $file2 $extrapath");
     	
     } else {
-    	writeToLog("$workpath/logs/build/build.log", " Skipping DSDT file from EDP on user request<br>");
+    	writeToLog("$workpath/logs/build/build.log", "  Skipping DSDT file from EDP on user request<br>");
     }
 	
     // If its mavericks then copy the files from ml folder temporarilyfor now
@@ -567,7 +560,7 @@ function copyEssentials() {
       $file = "$workpath/model-data/$modelNamePath/common/SSDT.aml";
   	  if (file_exists($file)) 
        { 
-    		writeToLog("$workpath/logs/build/build.log", " SSDT files found, Copying to $extrapath<br>");
+    		writeToLog("$workpath/logs/build/build.log", "  SSDT files found, Copying to $extrapath<br>");
     		system_call("cp -f $file $extrapath");
     		// set DropSSDT to Yes from org.chameleon.Boot.plist
 			system("sudo /usr/libexec/PlistBuddy -c \"set DropSSDT Yes\" $extrapath/org.chameleon.Boot.plist"); 
@@ -599,53 +592,7 @@ function copyEssentials() {
     	}	
     }  
     else {
-    	writeToLog("$workpath/logs/build/build.log", " Skipping SSDT files from EDP on user request<br>");
-    }
-    
-    //
-    // Copy essentials from /Extra/include if user has
-    //
-
-    if (is_file("$incpath/smbios.plist") && $modeldb[$modelRowID]["useIncSMBIOS"] == "on") 				{ 
-    	writeToLog("$workpath/logs/build/build.log", " Custom smbios.plist found, Copying from $incpath to $extrapath<br>");
-    	system_call("cp -f $incpath/smbios.plist /Extra"); 
-    }
-    if (is_file("$incpath/org.chameleon.Boot.plist") && $modeldb[$modelRowID]["useIncCHAM"] == "on") 	{ 
-    	writeToLog("$workpath/logs/build/build.log", " Custom org.chameleon.Boot.plist found, Copying from $incpath to $extrapath<br>");
-    	system_call("cp -f $incpath/org.chameleon.Boot.plist /Extra"); 
-    }
-    if (is_file("$incpath/dsdt.aml") && $modeldb[$modelRowID]["useIncDSDT"] == "on") 					{ 
-    	writeToLog("$workpath/logs/build/build.log", " Custom dsdt file found, Copying from $incpath to $extrapath<br>");
-    	system_call("cp -f $incpath/dsdt.aml /Extra"); 
-    }
-    if($modeldb[$modelRowID]["useIncSSDT"] == "on")
-    {
-    	if (is_file("$incpath/SSDT.aml")) 					{ 
-    		writeToLog("$workpath/logs/build/build.log", " Custom SSDT files found, Copying from $incpath to $extrapath<br>");
-    		system_call("cp -f $incpath/SSDT.aml /Extra"); 
-    	}
-    	if (is_file("$incpath/SSDT-1.aml")) 				{ system_call("cp -f $incpath/SSDT-1.aml /Extra"); }
-    	if (is_file("$incpath/SSDT-2.aml")) 				{ system_call("cp -f $incpath/SSDT-2.aml /Extra"); }
-    	if (is_file("$incpath/SSDT-3.aml")) 				{ system_call("cp -f $incpath/SSDT-3.aml /Extra"); }    
-    	if (is_file("$incpath/SSDT-4.aml")) 				{ system_call("cp -f $incpath/SSDT-4.aml /Extra"); }
-    	if (is_file("$incpath/SSDT-5.aml")) 				{ system_call("cp -f $incpath/SSDT-5.aml /Extra"); }  
-    }
-    
-     //
-    // Check if we need a custom version of chameleon from essential common and $os folders
-    //
-    if ($modeldb[$modelRowID]['customCham'] == "on") {
-        writeToLog("$workpath/logs/build/build.log", "  Copying custom chameleon to $rootpath if exists... <br>");
-        
-        $cboot = "$workpath/model-data/$modelNamePath/common/boot";
-        $osboot = "$workpath/model-data/$modelNamePath/$os/boot";
-        
-        if(is_file("$cboot") || is_file("$osboot"))
-        {
-        	system_call("rm -f $rootpath/boot");
-        	system_call("cp $workpath/model-data/$modelNamePath/common/boot $rootpath");
-        	system_call("cp $workpath/model-data/$modelNamePath/$os/boot $rootpath");
-        }
+    	writeToLog("$workpath/logs/build/build.log", "  Skipping SSDT files from EDP on user request<br>");
     }
     
     //
@@ -693,7 +640,7 @@ function copyEssentials() {
  function copyEDPKexts()
  {
  	//Get vars from config.inc.php
-    global $workpath, $rootpath, $slepath, $incpath, $modelNamePath, $ee;
+    global $workpath, $rootpath, $slepath, $modelNamePath, $ee;
     global $ps2db, $audiodb, $wifidb, $cpufixdb, $batterydb, $landb, $fakesmcdb;
     global $modeldb, $modelRowID;
     global $os;
@@ -703,7 +650,7 @@ function copyEssentials() {
 	global $svnLoad;
 
 	// kextpack svn path
-	$kpsvn = "$workpath/kpsvn";    
+	$kextPacks = "$workpath/kextPacks";    
     
     // Use EDP Kexts?
     if($modeldb[$modelRowID]['useEDPExtensions'] == "on")
@@ -728,10 +675,10 @@ function copyEssentials() {
     		}
     	
         	if ($fname != "") { 
-        	    writeToLog("$workpath/logs/build/build.log", "  Downloading Touchpad kext $fname<br>");
+        	    writeToLog("$workpath/logs/build/build.log", " Downloading Touchpad kext $fname...<br>");
         	    
-        	    if(!is_dir("$kpsvn/PS2Touchpad"))
-    				system_call("mkdir $kpsvn/PS2Touchpad");
+        	    if(!is_dir("$kextPacks/PS2Touchpad"))
+    				system_call("mkdir $kextPacks/PS2Touchpad");
     				
     			$svnLoad->kextpackLoader("PS2Touchpad", "$fname", "$name");
     		}
@@ -755,12 +702,12 @@ function copyEssentials() {
     		switch($wifid) {
     			case 0:    			
     			case 1:
-    				writeToLog("$workpath/logs/build/build.log", "  Patching WiFi kext $name<br>");
+    				writeToLog("$workpath/logs/build/build.log", " Patching WiFi kext $name...<br>");
     				patchWiFiAR9285AndAR9287("$workpath/logs/build/build.log","EE", "no");
     			break;
     			
     			case 2:
-    			    writeToLog("$workpath/logs/build/build.log", "  Patching WiFi kext $name<br>");
+    			    writeToLog("$workpath/logs/build/build.log", " Patching WiFi kext $name...<br>");
 
     				if(getMacOSXVersion() >= "10.8.5")
     					patchWiFiBTBCM4352("$workpath/logs/build/build.log","EE", "no");
@@ -769,10 +716,10 @@ function copyEssentials() {
     			break;
     			
     			case 4:
-    				writeToLog("$workpath/logs/build/build.log", "  Downloading WiFi kext $fname<br>");
+    				writeToLog("$workpath/logs/build/build.log", " Downloading WiFi kext $fname<br>");
     					
-    				if(!is_dir("$kpsvn/Wireless"))
-    					system_call("mkdir $kpsvn/Wireless");
+    				if(!is_dir("$kextPacks/Wireless"))
+    					system_call("mkdir $kextPacks/Wireless");
     				
     				$svnLoad->kextpackLoader("Wireless", "$fname", "$name");
     			break;
@@ -781,10 +728,10 @@ function copyEssentials() {
     		// Load Bluetooth kext for AR3011 and BCM4352
     		if($wifid < "3")
     			{
-    				writeToLog("$workpath/logs/build/build.log", "  Downloading Bluetooth kext $fname<br>");
+    				writeToLog("$workpath/logs/build/build.log", " Downloading Bluetooth kext $fname<br>");
         	    
-        	    	 if(!is_dir("$kpsvn/Wireless"))
-    					system_call("mkdir $kpsvn/Wireless");
+        	    	 if(!is_dir("$kextPacks/Wireless"))
+    					system_call("mkdir $kextPacks/Wireless");
     					
     				 $svnLoad->kextpackLoader("Wireless", "BluetoothFWUploader", "BluetoothFWUploader.kext");
     			}
@@ -805,10 +752,10 @@ function copyEssentials() {
     		$name = $fakesmcdb[$fakesmcid]['name']; 
     		
     		if ($fname != "") {
-    			writeToLog("$workpath/logs/build/build.log", "  Downloading FakeSMC kext $fname<br>");
+    			writeToLog("$workpath/logs/build/build.log", " Downloading FakeSMC kext $fname<br>");
         	    
-        	    if(!is_dir("$kpsvn/FakeSMC"))
-    				system_call("mkdir $kpsvn/FakeSMC");
+        	    if(!is_dir("$kextPacks/FakeSMC"))
+    				system_call("mkdir $kextPacks/FakeSMC");
     					
     			$svnLoad->kextpackLoader("FakeSMC", "$fname", "$name");
     		}
@@ -870,7 +817,7 @@ function copyEssentials() {
 							}
 							else 
 							{
-								writeToLog("$workpath/logs/build/build.log", " Patched AppleHDA is not supported in this OSX version, using latest VoodooHDA instead<br>");
+								writeToLog("$workpath/logs/build/build.log", " Chosen Patched AppleHDA is not supported in this OSX version, using latest VoodooHDA instead<br>");
 							}
 						}
 					break;
@@ -882,10 +829,10 @@ function copyEssentials() {
     		//
         	if ($fname != "" && $usingAppleHDA = "") {
     			        
-    		    writeToLog("$workpath/logs/build/build.log", "  Downloading Audio kext $fname<br>");
+    		    writeToLog("$workpath/logs/build/build.log", " Downloading Audio kext $fname<br>");
 
-    			if(!is_dir("$kpsvn/Audio"))
-    				system_call("mkdir $kpsvn/Audio");
+    			if(!is_dir("$kextPacks/Audio"))
+    				system_call("mkdir $kextPacks/Audio");
     					    
         		$svnLoad->kextpackLoader("Audio", "$fname", "$name");
         		
@@ -909,14 +856,14 @@ function copyEssentials() {
         	
         	if ($fname != "") {
         		
-        		writeToLog("$workpath/logs/build/build.log", "  Downloading Ethernet kext $name<br>");
+        		writeToLog("$workpath/logs/build/build.log", " Downloading Ethernet kext $name<br>");
         	    
-    			if(!is_dir("$kpsvn/Ethernet"))
-    				system_call("mkdir $kpsvn/Ethernet");
+    			if(!is_dir("$kextPacks/Ethernet"))
+    				system_call("mkdir $kextPacks/Ethernet");
     			
     			// Category folder
-    			if(!is_dir("$kpsvn/Ethernet/$fname"))
-    				system_call("mkdir $kpsvn/Ethernet/$fname");
+    			if(!is_dir("$kextPacks/Ethernet/$fname"))
+    				system_call("mkdir $kextPacks/Ethernet/$fname");
     		
     			// New Realtek kext
     			if($lanid == "11") {
@@ -946,10 +893,10 @@ function copyEssentials() {
         $name = $batterydb[$battid]['name'];
         
         if ($fname != "") {
-        		writeToLog("$workpath/logs/build/build.log", "  Downloading Battery kext $name<br>");
+        		writeToLog("$workpath/logs/build/build.log", " Downloading Battery kext $name<br>");
         	    
-        	    if(!is_dir("$kpsvn/Battery"))
-    				system_call("mkdir $kpsvn/Battery");
+        	    if(!is_dir("$kextPacks/Battery"))
+    				system_call("mkdir $kextPacks/Battery");
     				
     			$svnLoad->kextpackLoader("Battery", "$fname", "$name");  
     		}
@@ -976,8 +923,8 @@ function copyEssentials() {
         $name = $opdata[name];
         
          if ($fname != "") { 
-    		if(!is_dir("$kpsvn/$categ"))
-    			system_call("mkdir $kpsvn/$categ");
+    		if(!is_dir("$kextPacks/$categ"))
+    			system_call("mkdir $kextPacks/$categ");
     		
     		// Generic XHCI USB3.0
     		if($id == "5") {
@@ -996,19 +943,19 @@ function copyEssentials() {
 		$name = "";
 		$fname = "";
 		
-	writeToLog("$workpath/logs/build/build.log", "  Downloading Standard kexts... <br>");
+	writeToLog("$workpath/logs/build/build.log", " Downloading Standard kexts... <br>");
 
 	//
     // Standard kexts
     //
-    if(!is_dir("$workpath/kpsvn/Standard"));
-    	system_call("mkdir $workpath/kpsvn/Standard");
+    if(!is_dir("$workpath/kextPacks/Standard"));
+    	system_call("mkdir $workpath/kextPacks/Standard");
     	
     $svnLoad->kextpackLoader("Standard", "common", "Standard common");
 
     $svnLoad->kextpackLoader("Standard", "$os", "Standard $os");
     
-    writeToLog("$workpath/logs/build/build.log", "  Downloading Model specific kexts... <br>");
+    writeToLog("$workpath/logs/build/build.log", " Downloading Model specific kexts... <br>");
 
     //
 	// From Model data (Extensions folder)
@@ -1041,8 +988,11 @@ function copyEssentials() {
     //
     if($modeldb[$modelRowID]["useIncExtensions"] == "on")
     {
-    	writeToLog("$workpath/kpsvn/dload/CopyCustomKexts.sh", "");
+    	writeToLog("$workpath/logs/build/dLoadScripts/CopyCustomKexts.sh", "");
     } 
+    
+	writeToLog("$workpath/logs/build/build.log", "<br>");
+
  }
  
 /*
@@ -1059,9 +1009,9 @@ function applyFixes() {
 	global $svnLoad;
 	
 	//kextpack svn path
-	$kpsvn = "$workpath/kpsvn";
+	$kextPacks = "$workpath/kextPacks";
 	
-    writeToLog("$workpath/logs/build/build.log", "  Applying fixes and patches...... <br>");
+    writeToLog("$workpath/logs/build/build.log", " Applying fixes and patches...... <br>");
 	
 	//
 	// Apply power management related fixes 
@@ -1078,7 +1028,6 @@ function applyFixes() {
         
         // Checking if we need to patch AppleIntelCPUPowerManagement.kext
         if(($modeldb[$modelRowID]['applecpupwr'] == "on") && $i == "1") {
-        	writeToLog("$workpath/logs/build/build.log", "  Patching AppleIntelCPUPowerManagement.kext<br>");
         	patchAppleIntelCPUPowerManagement("$workpath/logs/build/build.log","EE", "no");
         }
         else if(($modeldb[$modelRowID]['emupstates'] == "on") && $i == "3") {
@@ -1087,8 +1036,8 @@ function applyFixes() {
         }
         else if ($kxtname != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
 
-    		if(!is_dir("$kpsvn/PowerMgmt"))
-    			system_call("mkdir $kpsvn/PowerMgmt");
+    		if(!is_dir("$kextPacks/PowerMgmt"))
+    			system_call("mkdir $kextPacks/PowerMgmt");
     		
     		$svnLoad->kextpackLoader("PowerMgmt", "$name", "$kxtname");
     		
@@ -1116,24 +1065,23 @@ function applyFixes() {
         $name = $fixdata[name];
         
        if($id == "2") {
-       		writeToLog("$workpath/logs/build/build.log", "  Patching AHCI.kext to waiting for root device problem in ML<br>");
+       		writeToLog("$workpath/logs/build/build.log", " Patching AHCI.kext to waiting for root device problem in ML<br>");
        		patchAHCI();
        }
        else if($id == "8") {
-        	writeToLog("$workpath/logs/build/build.log", "  Patching AppleIntelSNBGraphicsFB.kext for VGA and HDMI in Intel HD3000<br>");
         	patchAppleIntelSNBGraphicsFB("$workpath/logs/build/build.log","EE", "no");
         }
        else if ($fname != "") { 
 
 			if($id == "1") {
-       			writeToLog("$workpath/logs/build/build.log", "  Applying ACPI fix for Battery read and Coolbook...<br>");
+       			writeToLog("$workpath/logs/build/build.log", " Applying ACPI fix for Battery read and Coolbook...<br>");
        		}
        		else if($id == "5") {
-       			writeToLog("$workpath/logs/build/build.log", "  Downloading patched IOATAFamily fix for IDE disks...<br>");
+       			writeToLog("$workpath/logs/build/build.log", " Downloading patched IOATAFamily fix for IDE disks...<br>");
        		}
        		
-    		if(!is_dir("$kpsvn/$categ"))
-    			system_call("mkdir $kpsvn/$categ");
+    		if(!is_dir("$kextPacks/$categ"))
+    			system_call("mkdir $kextPacks/$categ");
     		
     		$svnLoad->kextpackLoader("$categ", "$fname", "$name");
     	}
@@ -1151,37 +1099,86 @@ function copyCustomFiles() {
     //Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $modelNamePath;
 	
-	writeToLog("$workpath/logs/build/build.log", "  Checking for Custom files from EDP model path and $incpath... <br>");
+	$extrapath = "/Extra";
 
+	writeToLog("$workpath/logs/build/build.log", " Checking for Custom files from EDP model database... <br>");
+
+	//
+    // Check if we need a custom version of chameleon from essential common and $os folders
+    //
+    if ($modeldb[$modelRowID]['customCham'] == "on") {
+        
+        $cboot = "$workpath/model-data/$modelNamePath/common/boot";
+        $osboot = "$workpath/model-data/$modelNamePath/$os/boot";
+        
+        if(is_file("$cboot") || is_file("$osboot"))
+        {
+        	writeToLog("$workpath/logs/build/build.log", "  Custom chameleon found, copied to $rootpath <br>");
+
+        	system_call("rm -f $rootpath/boot");
+        	system_call("cp $workpath/model-data/$modelNamePath/common/boot $rootpath");
+        	system_call("cp $workpath/model-data/$modelNamePath/$os/boot $rootpath");
+        }
+    }
+    
 	//
     // Check if we need a custom made kernel from EDP model kernel folder
     //
     
     if(is_dir("$workpath/model-data/$modelNamePath/kernel/kernel$os")) {
-        writeToLog("$workpath/logs/build/build.log", "  Copying custom kernel to $rootpath if exists... <br>");
         	
         $ckernel = "$workpath/model-data/$modelNamePath/kernel/kernel$os/custom_kernel";
         if(is_file("$ckernel"))
         {
-        	writeToLog("$workpath/logs/build/build.log", "  custom_kernel found, copied to $rootpath <br>");
+        	writeToLog("$workpath/logs/build/build.log", "  Custom kernel found, copied to $rootpath <br>");
         	system_call("rm -f $rootpath/custom_kernel");
        		system_call("cp $workpath/model-data/$modelNamePath/kernel/kernel$os//custom_kernel $rootpath");
         }
         $kernelos = "$workpath/model-data/$modelNamePath/kernel/kernel$os/mach_kernel";
         if(is_file("$kernelos"))
         {
-        	writeToLog("$workpath/logs/build/build.log", "  mach_kernel found, copied to $rootpath <br>");
+        	writeToLog("$workpath/logs/build/build.log", "  Custom mach_kernel found, copied to $rootpath <br>");
         	system_call("rm -f $rootpath/mach_kernel");
        		system_call("cp $workpath/model-data/$modelNamePath/kernel/kernel$os/mach_kernel $rootpath");
         }
     }
+    
+	writeToLog("$workpath/logs/build/build.log", " Checking for user provided custom files from $incpath... <br>");
 
+	//
+    // Copy essentials from /Extra/include if user has
+    //
 
- 	//
+    if (is_file("$incpath/smbios.plist") && $modeldb[$modelRowID]["useIncSMBIOS"] == "on") 				{ 
+    	writeToLog("$workpath/logs/build/build.log", "  Custom smbios.plist found, Copied from $incpath to $extrapath<br>");
+    	system_call("cp -f $incpath/smbios.plist /Extra"); 
+    }
+    if (is_file("$incpath/org.chameleon.Boot.plist") && $modeldb[$modelRowID]["useIncCHAM"] == "on") 	{ 
+    	writeToLog("$workpath/logs/build/build.log", "  Custom org.chameleon.Boot.plist found, Copied from $incpath to $extrapath<br>");
+    	system_call("cp -f $incpath/org.chameleon.Boot.plist /Extra"); 
+    }
+    if (is_file("$incpath/dsdt.aml") && $modeldb[$modelRowID]["useIncDSDT"] == "on") 					{ 
+    	writeToLog("$workpath/logs/build/build.log", "  Custom dsdt file found, Copied from $incpath to $extrapath<br>");
+    	system_call("cp -f $incpath/dsdt.aml /Extra"); 
+    }
+    if($modeldb[$modelRowID]["useIncSSDT"] == "on")
+    {
+    	if (is_file("$incpath/SSDT.aml")) 					{ 
+    		writeToLog("$workpath/logs/build/build.log", "  Custom SSDT files found, Copied from $incpath to $extrapath<br>");
+    		system_call("cp -f $incpath/SSDT.aml /Extra"); 
+    	}
+    	if (is_file("$incpath/SSDT-1.aml")) 				{ system_call("cp -f $incpath/SSDT-1.aml /Extra"); }
+    	if (is_file("$incpath/SSDT-2.aml")) 				{ system_call("cp -f $incpath/SSDT-2.aml /Extra"); }
+    	if (is_file("$incpath/SSDT-3.aml")) 				{ system_call("cp -f $incpath/SSDT-3.aml /Extra"); }    
+    	if (is_file("$incpath/SSDT-4.aml")) 				{ system_call("cp -f $incpath/SSDT-4.aml /Extra"); }
+    	if (is_file("$incpath/SSDT-5.aml")) 				{ system_call("cp -f $incpath/SSDT-5.aml /Extra"); }  
+    }
+    
+    //
     // Copy Custom Themes folder from $incpatch to /Extra
     //
     if (is_dir("$incpath/Themes")) {
-        writeToLog("$workpath/logs/build/build.log", "  Copying Custom themes folder to /Extra...<br>");
+        writeToLog("$workpath/logs/build/build.log", "  Custom themes folder found, copied to /Extra<br>");
         system_call("rm -rf /Extra/Themes");
         system_call("mkdir /Extra/Themes");
 		system_call("cp -a $incpath/Themes/. /Extra/Themes/");
@@ -1190,9 +1187,9 @@ function copyCustomFiles() {
 	//
     // Copying Custom kexts from include if CopyCustomKexts file exists
     //
-    if(is_file("$workpath/kpsvn/dload/CopyCustomKexts.sh") && shell_exec("cd $incpath/Extensions; ls | wc -l") > 0)
+    if(is_file("$workpath/logs/build/dLoadScripts/CopyCustomKexts.sh") && shell_exec("cd $incpath/Extensions; ls | wc -l") > 0)
     {
-    	writeToLog("$workpath/logs/build/build.log", "  Copying custom kexts from $incpath to /Extra<br>");
+    	writeToLog("$workpath/logs/build/build.log", "  Custom kexts found, copied to /Extra<br>");
     	system_call("cp -a $incpath/Extensions/. $ee/");
     	
     	//If AppleHDA is found in Extra/include then remove VoodooHDA from ee
@@ -1202,9 +1199,10 @@ function copyCustomFiles() {
         	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
     			system_call("rm -rf $ee/VoodooHDA.kext");
     			system_call("rm -rf $ee/AppleHDADisabler.kext");
-    			writeToLog("$workpath/logs/build/build.log", "  found AppleHDA from $incpath, VoodooHDA removed<br>");
+    			writeToLog("$workpath/logs/build/build.log", "  Found AppleHDA from $incpath, VoodooHDA removed<br>");
    		 }
     } 
+
 }	
 	
 ?>
