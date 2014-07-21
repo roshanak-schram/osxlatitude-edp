@@ -127,9 +127,7 @@ function showBuildLog() {
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
 	echo "<div class='pageitem_bottom'\">";	
 	
-	// Show build logs
-	echo "<b>Build process:</b><br>";
-	
+	// Show build logs	
 	if(is_file("$buildLogPath/build.log"))
 		include "$buildLogPath/build.log";
 		
@@ -137,8 +135,8 @@ function showBuildLog() {
 		include "$buildLogPath/myFix.log";
 	
 	// Check the file download status
-	if(is_dir("$buildLogPath/dload/statFiles")) {
-		$fcount = shell_exec("cd $buildLogPath/dload/statFiles; ls | wc -l");
+	if(is_dir("$buildLogPath/dLoadStatus")) {
+		$fcount = shell_exec("cd $buildLogPath/dLoadStatus; ls | wc -l");
 	}
 	if ($fcount > 0)
 		echo "<b>Files left to download/update : $fcount</b><br>";
@@ -146,7 +144,7 @@ function showBuildLog() {
 	//
 	// Run Step 5 and 6 after the kexts are downloaded
 	//
-	if ($fcount == 0 && is_dir("$buildLogPath/dload/statFiles") && !is_file("$buildLogPath/myFix.log"))
+	if ($fcount == 0 && is_dir("$buildLogPath/dLoadStatus") && !is_file("$buildLogPath/Run_myFix.txt"))
 	{
 		
 		writeToLog("$buildLogPath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
@@ -167,15 +165,15 @@ function showBuildLog() {
 		system_call("sudo touch /System/Library/Extensions/");
 		
 		// Clear NVRAM
-		writeToLog("$buildLogPath/build.log", "Clearing boot-args in NVRAM...<br>");
+		writeToLog("$buildLogPath/build.log", " Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
-		writeToLog("$buildLogPath/build.log", "Removing version control of kexts in /Extra/Extensions<br>");
+		writeToLog("$buildLogPath/build.log", " Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
-   		writeToLog("$buildLogPath/build.log", "Calling myFix to fix permissions and genrate cache...<br>");
+   		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and genrate cache...<br>");
 
 		// End build log and create a lastbuild log
 		system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $buildLogPath/build.log");
-		system_call("mv $buildLogPath/build.log $workpath/logs/lastbuild.log ");
+		system_call("cp $buildLogPath/build.log $workpath/logs/lastbuild.log ");
 				
 		// Create run_myFix text file to start myFix process
 		writeToLog("$buildLogPath/Run_myFix.txt", "");
@@ -192,14 +190,14 @@ function showLoadingLog() {
 	echo "<div class='pageitem_bottom'\">";	
 	
 	// Check the file download status
-	if(is_dir("$buildLogPath/dload/statFiles")) {
-		$fcount = shell_exec("cd $buildLogPath/dload/statFiles; ls | wc -l");
+	if(is_dir("$buildLogPath/dLoadStatus")) {
+		$fcount = shell_exec("cd $buildLogPath/dLoadStatus; ls | wc -l");
 	}
 	
 	//
 	// build log
 	//
-	if ($fcount == "" || $fcount > 0 || !is_file("$buildLogPath/myFix.log")) {
+	if ($fcount == "" || $fcount > 0 || !is_file("$buildLogPath/Run_myFix.txt")) {
 		echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
 		echo "<center><b>After starting the build process, please wait for few minutes while we download the files needed for your model.</b> [which will take approx 5 to 15 minutes depending on your internet speed] <br><br><b>Shortly you will be redirected to the build process log which will show the status of the build.</center></b>";
 		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
@@ -216,9 +214,8 @@ function showLoadingLog() {
 		//
 		if ($fcount == 0 && is_file("$buildLogPath/Run_myFix.txt") && !is_file("$buildLogPath/myFix.log"))
 		{
-			writeToLog("$buildLogPath/myFix.log", "<a name='myfix'></a>");
+			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
 			writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
-			writeToLog("$buildLogPath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
 
 			// Run myFix to generate cahe and fix permissions
 			shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");

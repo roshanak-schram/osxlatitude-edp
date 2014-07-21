@@ -12,6 +12,8 @@ $sysType	 = $_GET['type'];	if ($sysType == "") 	{ $sysType 	= $_POST['type']; }
 $modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 		
+$buildLogPath = "$workpath/logs/build";
+
 
 //-------------------------> Do build page starts here
 if ($action == 'dobuild') {	
@@ -73,43 +75,30 @@ if ($action == 'dobuild') {
 		global $workpath, $rootpath, $ee, $os; 
 		global $modelName;
 	
-		//
-		// Clear logs
-		//
-		$log = "$workpath/logs/build/build.log";
-		if (is_file("$log")) { 
-			system_call("rm -Rf $log"); 
-		}
 		
-		$myFixlog = "$workpath/logs/build/myFix.log";
-		if (is_file("$myFixlog")) { 
-			system_call("rm -Rf $myFixlog"); 
-		}
-		
-		if(!is_dir("$workpath/kpsvn")) {
-    		system_call("mkdir $workpath/kpsvn");
-    	 }
+		//
+		// Create directories for build
+		//
+
+		if(!is_dir("$workpath/logs"))
+    		system_call("mkdir $workpath/logs");
+    		
+    	if(!is_dir("$buildLogPath"))
+    		system_call("mkdir $buildLogPath");
+    		
+    	if(!is_dir("$workpath/kextPacks"))
+    		system_call("mkdir $workpath/kextPacks");
+    		
 	
 		// For log time
 		date_default_timezone_set("UTC");
 		$date = date("d-m-y H-i");
 	
-		system_call("echo '<br>*** Logging started on: $date UTC ***' >> $workpath/logs/build/build.log");
+		system_call("echo '<br>*** Logging started on: $date UTC ***' >> $buildLogPath/build.log");
 
 		// Launch the script which provides the summary of the build process 
 		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 		
-   		writeToLog("$workpath/logs/build/build.log", "  Cleaning up kexts in /Extra/Extensions and download status files in EDP...<br>");
-    	system_call("rm -Rf /Extra/Extensions/*");
-    
-    	writeToLog("$workpath/logs/build/build.log", "Cleaning up by System...<br>");
-  		edpCleaner();
-    
-  		
-   	 	if(!is_dir("$workpath/kpsvn/dload/"))
-    		system_call("mkdir $workpath/kpsvn/dload");
-    	else
-    		system_call("rm -Rf $workpath/kpsvn/dload/*");
     
 		//
 		// Check if myhack is up2date and ready for build
@@ -126,7 +115,7 @@ if ($action == 'dobuild') {
 		$ven = $edpDBase->builderGetVendorValuebyID($sysType, $modelID);
 		$gen = $edpDBase->builderGetGenValuebyID($sysType, $modelID);
 		
-		writeToLog("$workpath/logs/build/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
 		
 		// use old method if there are is no generation column in db 
 		if($gen == "") {
@@ -136,7 +125,7 @@ if ($action == 'dobuild') {
 			if(!is_dir("$workpath/model-data/$modelName/"))
 				system("mkdir $workpath/model-data/$modelName");
 				
-			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $workpath/logs/build/build.log 2>&1");
+			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $buildLogPath/build.log 2>&1");
 			
 			$svnLoad->svnModeldata("$modelName");
 		}
@@ -153,7 +142,7 @@ if ($action == 'dobuild') {
 			if(!is_dir("$workpath/model-data/$modelNamePath/"))
 				system("mkdir $workpath/model-data/$modelNamePath");
 			
-			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $workpath/logs/build/build.log 2>&1");
+			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $buildLogPath/build.log 2>&1");
 			
 			//
 			// We use the new method "loadModelEssentialFiles" for the models and 
@@ -166,40 +155,40 @@ if ($action == 'dobuild') {
 		//
 		// Step 2 : Copy essentials like dsdt, ssdt and plists 
 		//
-		writeToLog("$workpath/logs/build/build.log", "<br><br><b>Step 2) Copying Essential files downloaded and from /Extra/include:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Copying Essential files downloaded and from /Extra/include:</b><br>");
 		copyEssentials();
 			
 		//
 		// Step 3 : Applying Fixes and bootloader config
 		//	
-		writeToLog("$workpath/logs/build/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
 		applyFixes();
 		
 		if($modeldb[$modelRowID]["updateCham"] == "on") {
 			
 			if($modeldb[$modelRowID]["useEnochCham"] == "on") {
-				writeToLog("$workpath/logs/build/build.log", "Updating enoch bootloader...<br>");
+				writeToLog("$buildLogPath/build.log", " Updating enoch bootloader...<br>");
 				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", "boot");
 			} 
 			else {
-				writeToLog("$workpath/logs/build/build.log", "Updating standard bootloader...<br>");
+				writeToLog("$buildLogPath/build.log", " Updating standard bootloader...<br>");
 				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", "boot");
 			}			
 		}
 			
 		//Kernel hack for YOS
-		writeToLog("$workpath/logs/build/build.log", "  Checking if we are running Yosemite and need to link kernel</b><br>");
+		writeToLog("$buildLogPath/build.log", " Checking if we are running Yosemite and need to link kernel</b><br>");
 		$r = getVersion();
   		if ($r == "yos") { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
 
 
-		writeToLog("$workpath/logs/build/build.log", "  Copying selected modules...</b><br>");
+		writeToLog("$buildLogPath/build.log", " Copying selected modules...</b><br>");
 		$chamModules->copyChamModules($modeldb[$modelRowID]);
 		
 		//
 		// Step 4 : Copying kexts
 		//
-		writeToLog("$workpath/logs/build/build.log", "<br><b>Step 4) Downlading and preparing kexts:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 4) Downlading and preparing kexts:</b><br>");
 		copyEDPKexts();		
 }
 
@@ -208,15 +197,16 @@ if ($action == 'dobuild') {
 if ($action == "") {
 
 	//
-	// Clear build Status files
+	// Clear build log files
 	//
-	$myFixlog = "$workpath/myFix2.log";
-	if (is_file("$myFixlog")) { 
-		system_call("rm -Rf $myFixlog"); 
-	}
-	$statFiles = "$workpath/kpsvn/dload";
-	if(is_dir("$statFiles"))
-		system_call("rm -rf $workpath/kpsvn/dload/*");
+	writeToLog("$buildLogPath/build.log", "  Cleaning up EDP files of last build...<br>");
+    
+    system_call("rm -Rf /Extra/Extensions/*");
+    	
+	if(!is_dir("$buildLogPath"))
+    	system_call("mkdir $buildLogPath");
+    else
+    	system_call("rm -rf $buildLogPath/*");
 	
 				
 	// Write out the top menu
