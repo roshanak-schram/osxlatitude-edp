@@ -74,7 +74,7 @@ if ($action == 'dobuild') {
 		global $modelName;
 	
 		//
-		// Start by defining our log file and cleaning it
+		// Clear logs
 		//
 		$log = "$workpath/logs/build/build.log";
 		if (is_file("$log")) { 
@@ -90,6 +90,12 @@ if ($action == 'dobuild') {
     		system_call("mkdir $workpath/kpsvn");
     	 }
 	
+		// For log time
+		date_default_timezone_set("UTC");
+		$date = date("d-m-y H-i");
+	
+		system_call("echo '<br>*** Logging started on: $date UTC ***' >> $workpath/logs/build/build.log");
+
 		// Launch the script which provides the summary of the build process 
 		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
 		

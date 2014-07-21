@@ -248,6 +248,7 @@ function echoPageItemTOP($icon, $text) {
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
+				myHackCheck();
 				system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -289,6 +290,7 @@ function echoPageItemTOP($icon, $text) {
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			// touch for kernel cache
 			if ($genCache == "yes") {
+				myHackCheck();
 				system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -340,6 +342,7 @@ function echoPageItemTOP($icon, $text) {
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
+				myHackCheck();
 				system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -392,6 +395,7 @@ function echoPageItemTOP($icon, $text) {
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
+				myHackCheck();
 				system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
