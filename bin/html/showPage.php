@@ -359,13 +359,13 @@
     			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/build.log");  system_call("rm -rf $workpath/logs/build/*");}
     			
     			$rmLBuildLog = $_POST['rmLBuildLog']; 
-    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/lastbuild.log"); }
+    			if ($rmLBuildLog == "on") { system_call("rm -f $workpath/logs/lastbuild.log"); }
     			
     			$rmUpdateLog = $_POST['rmUpdateLog']; 
-    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/update.log"); system_call("rm -rf $workpath/logs/update/*"); }
+    			if ($rmUpdateLog == "on") { system_call("rm -f $workpath/logs/update.log"); system_call("rm -rf $workpath/logs/update/*"); }
     			
     			$rmLUpdateLog = $_POST['rmLUpdateLog']; 
-    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/lastupdate.log"); }
+    			if ($rmLUpdateLog == "on") { system_call("rm -f $workpath/logs/lastupdate.log"); }
     			
     			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Log(s) Cleared.</center></b>";
