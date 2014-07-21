@@ -369,6 +369,162 @@
    			echo "</div>\n";
 		exit;
 		break;
+		
+		case "DownloadedApps":
+			echoPageItemTOP("icons/big/apps.png", "Downloaded application data by EDP");
+   			echo "<div class='pageitem_bottom'>\n";
+   			
+   			// Get all the files/folders anme in comma seperated way
+			$appslinfo = shell_exec("ls -m $workpath/apps/");
+			$appsArray = explode(',', $appslinfo);
+				
+   			$action = $_POST['action'];
+    		if ($action == "") {
+    			echo "<form action='showPage.php' method='post'>";
+			
+				echo "<input type='hidden' name='i' value='DownloadedApps'>";
+				echo "<input type='hidden' name='action' value='removeApps'>";
+			
+				echo "<ul class='pageitem'>";
+				
+				$appID = 0;
+				foreach($appsArray as $appCategName) {
+					
+					$appCategName = preg_replace('/\s+/', '',$appCategName); //remove white spaces
+					
+					if ($appCategName != "" && $appName != ".DS_Store") {
+				
+						$appinfo = shell_exec("ls -m $workpath/apps/$appCategName");
+						$appNameArray = explode(',', $appinfo);
+					
+						foreach($appNameArray as $appName) {
+						
+							$appName = preg_replace('/\s+/', '',$appName); //remove white spaces
+							
+							if ($appName != "" && $appName != ".DS_Store") 
+							{
+								checkbox("$appName", $appID, "yes");
+								$appID++;
+							}
+						}						
+					}
+				}
+		
+				echo "</ul>";
+				
+				echo '<ul class="pageitem">';
+				echo '<li class="button"><input name="Submit input" type="submit" value="Delete selected Apps" /></li>';
+				echo '</ul>';
+				echo "</form>";
+    		}
+    		else {
+    		
+				$appID = 0;
+    			foreach($appsArray as $appCategName) {
+				
+					$appCategName = preg_replace('/\s+/', '',$appCategName); //remove white spaces
+
+					if ($appCategName != "" && $appName != ".DS_Store") {
+				
+						$appinfo = shell_exec("ls -m $workpath/apps/$appCategName");
+						$appNameArray = explode(',', $appinfo);
+					
+						foreach($appNameArray as $appName) {
+							
+							$appName = preg_replace('/\s+/', '',$appName); //remove white spaces
+
+							if ($appName != "" && $appName != ".DS_Store") 
+							{
+								if($_POST[$appID] == "on") {
+									system_call("rm -rf $workpath/apps/$appCategName/$appName");	
+								}
+								$appID++;
+							}							
+						}						
+					}
+				}
+    			
+    			if ($appID > 0) {
+    				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+					echo "<b><center> Application data deleted.</center></b>";
+    			}
+    			else {
+    				echo "<b><center> There is no Application data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
+    			}
+    		}			
+    		echo "</div>\n";
+		exit;
+		break;
+		
+		case "DownloadedKextPacks":
+			echoPageItemTOP("icons/big/apps.png", "Downloaded Kext Packs data by EDP");
+   			echo "<div class='pageitem_bottom'>\n";
+   			
+   			// Get all the files/folders anme in comma seperated way
+			$kplinfo = shell_exec("ls -m $workpath/kextPacks/");
+			$kpArray = explode(',', $kplinfo);
+				
+   			$action = $_POST['action'];
+    		if ($action == "") {
+    			echo "<form action='showPage.php' method='post'>";
+			
+				echo "<input type='hidden' name='i' value='DownloadedKextPacks'>";
+				echo "<input type='hidden' name='action' value='removeKPack'>";
+			
+				echo "<ul class='pageitem'>";
+				
+				$kpID = 0;
+				foreach($kpArray as $kpName) {
+				
+					$kpName = preg_replace('/\s+/', '',$kpName); //remove white spaces
+
+					if ($kpName != "" && $kpName != ".DS_Store") {
+				
+						checkbox("$kpName", $kpID, "yes");
+						
+						$kpID++;				
+					}
+				}
+		
+				echo "</ul>";
+				
+				echo '<ul class="pageitem">';
+				echo '<li class="button"><input name="Submit input" type="submit" value="Delete selected Packs" /></li>';
+				echo '</ul>';
+				echo "</form>";
+    		}
+    		else {
+    		
+    			$kpID = 0;
+				foreach($kpArray as $kpName) {
+				
+					$kpName = preg_replace('/\s+/', '',$kpName); //remove white spaces
+
+					if ($kpName != "" && $kpName != ".DS_Store") {
+				
+						if($_POST[$kpID] == "on") {
+							system_call("rm -rf $workpath/kextPacks/$kpName");	
+						}
+						
+						$kpID++;				
+					}
+				}				
+    			
+    			if ($kpID > 0) {
+    				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+					echo "<b><center> Kext pack data deleted.</center></b>";
+    			}
+    			else {
+    				echo "<b><center> There is no Kext pack data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
+    			}
+    			
+    			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Kext pack data deleted.</center></b>";
+    		}			
+    		echo "</div>\n";
+		exit;
+		break;
+		
 	}
 
 ?>
