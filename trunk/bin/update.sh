@@ -44,4 +44,4 @@ fi
 chmod -R 755 /Extra/EDP/bin
 chmod -R 755 /Extra/EDP/phpWebServer
 
-echo "<br>EDP Update finished."
+echo "<br>EDP Updates finished."

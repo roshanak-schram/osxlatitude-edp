@@ -32,18 +32,18 @@
 		case "Applications":
 		case "Tools":
 			$query = "SELECT * FROM appsdata";
+			$buttonValue = "Proceed to Install/Update";
 		break;
 	
 		case "EDP":
-		if (file_exists("$workpath/update.log")) 
-			system_call("rm -rf $workpath/update.log");
-		
+			$buttonValue = "Show";
 		case "Configuration":
 			$query = "SELECT * FROM edpdata";
 		break;
 	
 		case "Fixes":
 			$query = "SELECT * FROM fixesdata";
+			$buttonValue = "Apply Fix";
 		break;
 	}
 
@@ -98,7 +98,7 @@
 		<a href='<?="$row[link]";?>'>Project/Support Link</a>
 		</div>
 		<ul class="pageitem">
-			<li class="button"><input name="Submit input" type="submit" value="Proceed to Install/Update" /></li>
+			<li class="button"><input name="Submit input" type="submit" value="<?=$buttonValue?>" /></li>
 		</ul>
 		
 		<?php

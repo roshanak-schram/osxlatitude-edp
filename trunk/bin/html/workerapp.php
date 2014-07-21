@@ -1,5 +1,6 @@
 <?php
 
+				
 $action = $_GET['action'];
 $url 	= $_GET['url'];
 $id 	= $_GET['id'];
@@ -118,11 +119,15 @@ function showBuildLog() {
 	$workpath = "/Extra/EDP";
 	$buildLogPath = "$workpath/logs/build";
 	
+	// For log time
+	date_default_timezone_set("UTC");
+	$date = date("d-m-y H-i");
+
 	echoPageItemTOP("icons/big/logs.png", "System configuration build log");
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
 	echo "<div class='pageitem_bottom'\">";	
 	
-	
+	// Show build logs
 	echo "<b>Build process:</b><br>";
 	
 	if(is_file("$buildLogPath/build.log"))
@@ -130,10 +135,8 @@ function showBuildLog() {
 		
 	if(is_file("$buildLogPath/myFix.log"))
 		include "$buildLogPath/myFix.log";
-		
-	if(is_file("$buildLogPath/myFix2.log"))
-		include "$buildLogPath/myFix2.log";
 	
+	// Check the file download status
 	if(is_dir("$buildLogPath/dload/statFiles")) {
 		$fcount = shell_exec("cd $buildLogPath/dload/statFiles; ls | wc -l");
 	}
@@ -157,25 +160,25 @@ function showBuildLog() {
 		//
 		// Step 6 : Applying last minute fixes and generating caches
 		//
-		writeToLog("$buildLogPath/myFix.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
 		
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 		system_call("sudo touch /System/Library/Extensions/");
 		
 		// Clear NVRAM
-		writeToLog("$buildLogPath/myFix.log", "Clearing boot-args in NVRAM...<br>");
+		writeToLog("$buildLogPath/build.log", "Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
-		writeToLog("$buildLogPath/myFix.log", "Removing version control of kexts in /Extra/Extensions<br>");
+		writeToLog("$buildLogPath/build.log", "Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
-   		
-   		//writeToLog("$buildLogPath/dload/myFix.sh", "sudo myfix -q -t / >> $buildLogPath/myFix.log &");
-		writeToLog("$buildLogPath/myFix.log", "<a name='myfix'></a>");
-		writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
-		writeToLog("$buildLogPath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+   		writeToLog("$buildLogPath/build.log", "Calling myFix to fix permissions and genrate cache...<br>");
 
-		// writeToLog("$buildLogPath/dload/myFix.sh", "sudo myfix -q -t / >> $buildLogPath/myFix.log &");
-		// system_call("sh $buildLogPath/dload/myFix.sh &");
+		// End build log and create a lastbuild log
+		system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $buildLogPath/build.log");
+		system_call("mv $buildLogPath/build.log $workpath/logs/lastbuild.log ");
+				
+		// Create run_myFix text file to start myFix process
+		writeToLog("$buildLogPath/Run_myFix.txt", "");
 	}
 	
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
@@ -187,6 +190,8 @@ function showLoadingLog() {
 	$buildLogPath = "$workpath/logs/build";
 	
 	echo "<div class='pageitem_bottom'\">";	
+	
+	// Check the file download status
 	if(is_dir("$buildLogPath/dload/statFiles")) {
 		$fcount = shell_exec("cd $buildLogPath/dload/statFiles; ls | wc -l");
 	}
@@ -209,10 +214,14 @@ function showLoadingLog() {
 		//
 		// myFix log
 		//
-		if ($fcount == 0 && is_file("$buildLogPath/myFix.log") && !is_file("$buildLogPath/myFix2.log"))
+		if ($fcount == 0 && is_file("$buildLogPath/Run_myFix.txt") && !is_file("$buildLogPath/myFix.log"))
 		{
+			writeToLog("$buildLogPath/myFix.log", "<a name='myfix'></a>");
+			writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
+			writeToLog("$buildLogPath/myFix.log", "<b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+
 			// Run myFix to generate cahe and fix permissions
-			shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix2.log &");
+			shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 		}
 		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 		echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
@@ -231,8 +240,12 @@ function showUpdateLog() {
 	$workpath = "/Extra/EDP";
 	$updLogPath = "$workpath/logs/update";
 
+	// For log time
+	date_default_timezone_set("UTC");
+	$date = date("d-m-y H-i");
+	
 	if(is_file("$updLogPath/updateFinish.log")) {
-		system_call("mv $updLogPath/updateFinish.log $updLogPath/lastupdate.log ");
+		system_call("mv $updLogPath/updateFinish.log $workpath/logs/lastupdate.log ");
 		system("sudo killall EDP"); 
     	system("open $workpath/bin/EDPweb.app");
     	exit;
@@ -247,18 +260,24 @@ function showUpdateLog() {
 	{
 			echo "<ul class='pageitem'>";
 			if (file_exists("$updLogPath/Updsuccess.txt")) {
-			
-				system_call("mv $updLogPath/update.log $updLogPath/updateFinish.log ");
-				
+							
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Update success.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
 				echo "<br></ul>";
 				
+				system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $updLogPath/update.log");
+				system_call("mv $updLogPath/update.log $updLogPath/updateFinish.log ");
+
 				echo "<b>Update Log:</b>\n";
 				echo "<pre>";
 				if(is_file("$updLogPath/updateFinish.log"))
 					include "$updLogPath/updateFinish.log";
 				echo "</pre>";
+				
+				// Append current update log to the updates log 
+				$fileContents = file_get_contents("$updLogPath/updateFinish.log");
+				file_put_contents("$workpath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
+				
 				echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
 				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
 			}
@@ -272,6 +291,13 @@ function showUpdateLog() {
 				if(is_file("$updLogPath/update.log"))
 					include "$updLogPath/update.log";
 				echo "</pre>";
+				
+				system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $updLogPath/update.log");
+				system_call("mv $updLogPath/update.log $workpath/logs/lastupdate.log ");
+				
+				// Append current update log to the updates log 
+				$fileContents = file_get_contents("$updLogPath/update.log");
+				file_put_contents("$workpath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
 			}					
 			echo "</div>";
 	}

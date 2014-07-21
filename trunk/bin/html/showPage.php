@@ -1,6 +1,14 @@
 
 <?php
 	$i = $_GET['i'];
+	if ($i == "") {
+		$i = $_POST['i'];
+	}
+	
+	// For logs
+	date_default_timezone_set("UTC");
+	$date = date("d-m-y H-i");
+
 	include_once "edpconfig.inc.php";
 	include_once "header.inc.php";
 
@@ -227,9 +235,125 @@
 			echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 			
+			system_call("echo '<br>*** Logging started on: $date UTC ***' >> $updLogPath/update.log");
 			system_call("sudo sh $workpath/bin/update.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
+			exit;
+		break;
+		
+		case "UpdateDB":
+		
+			$updLogPath = "$workpath/logs/update";
+
+			// Clear logs and scripts
+			if(is_dir("$updLogPath")) {
+				system_call("rm -rf $updLogPath/*");
+			}
+			
+			// create log directory if not found
+			if(!is_dir("$workpath/logs")) {
+				system_call("mkdir $workpath/logs");
+			}
+			if(!is_dir("$updLogPath")) {
+				system_call("mkdir $updLogPath");
+			}
+			
+			// Start installation process by Launching the script which provides the summary of the build process 
+			echo "<script> document.location.href = 'workerapp.php?action=showUpdateLog#myfix'; </script>";
+		
+			echoPageItemTOP("icons/big/update.png", "Update");
+			echo "<div class='pageitem_bottom'\">";	
+			echo "<center><b>Please wait for few minutes while we download the database... which will take approx 1 to 5 minutes depending on your internet speed</b></center>";
+			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+			
+			system_call("echo '<br>*** Logging started on: $date UTC ***' >> $updLogPath/update.log");
+			system_call("sudo sh $workpath/bin/updateDB.sh >> $updLogPath/update.log &");
+
+			echo "</div>";
+			exit;
+		break;
+		
+		case "BuildLogs":
+			echoPageItemTOP("icons/big/logs.png", "Build Log");
+   			echo "<div class='pageitem_bottom'>\n";
+    		
+    		echo "<b>Log:</b>\n";
+			echo "<pre>";
+			if(is_file("$workpath/logs/build.log"))
+				include "$workpath/logs/build.log";
+			echo "</pre>";
+			
+   			echo "</div>\n";
+			exit;
+		break;
+		
+		case "UpdateLogs":
+			echoPageItemTOP("icons/big/logs.png", "Update Log");
+   			echo "<div class='pageitem_bottom'>\n";
+    		
+    		echo "<b>Log:</b>\n";
+			echo "<pre>";
+			if(is_file("$workpath/logs/update.log"))
+				include "$workpath/logs/update.log";
+			echo "</pre>";
+			
+   			echo "</div>\n";
+			exit;
+		break;
+		
+		case "LastBuildLog":
+			echoPageItemTOP("icons/big/logs.png", "Last Build Log");
+   			echo "<div class='pageitem_bottom'>\n";
+    		
+    		echo "<b>Log:</b>\n";
+			echo "<pre>";
+			if(is_file("$workpath/logs/lastbuild.log"))
+				include "$workpath/logs/lastbuild.log";
+			echo "</pre>";
+			
+   			echo "</div>\n";
+			exit;
+		break;
+		
+		case "LastUpdateLog":
+			echoPageItemTOP("icons/big/logs.png", "Last Update Log");
+   			echo "<div class='pageitem_bottom'>\n";
+    		
+    		echo "<b>Log:</b>\n";
+			echo "<pre>";
+			if(is_file("$workpath/logs/lastupdate.log"))
+				include "$workpath/logs/lastupdate.log";
+			echo "</pre>";
+			
+   			echo "</div>\n";
+			exit;
+		break;
+		
+		case "ClearLogs":
+			echoPageItemTOP("icons/big/logs.png", "Clear Logs");
+   			echo "<div class='pageitem_bottom'>\n";
+    		
+    		if ($action == "") {
+    			echo "<form action='showPage.php' method='post'>";
+			
+				echo "<input type='hidden' name='i' value='Clear Logs'>";
+				echo "<input type='hidden' name='action' value='removeLogs'>";
+			
+				if (file_exists("$workpath/build.log"))
+					checkbox("Remove Build Log?", "rmBuildLog", "no");
+				
+				if (file_exists("$workpath/update.log"))
+					checkbox("Remove Update Log?", "rmUpdateLog", "no");
+			
+				echo '<li class="button"><input name="Submit input" type="submit" value="Clear" /></li>';
+				echo "</form>";
+    		}
+    		else {
+    			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Log(s) Cleared.</center></b>";
+    		}			
+   			echo "</div>\n";
 			exit;
 		break;
 	}
