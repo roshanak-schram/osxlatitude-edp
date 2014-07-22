@@ -152,10 +152,13 @@ class svnDownload {
 				break;
 				
 				case "Bootloader":
-				$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name /; echo \"Copy : $fname bootloader installed/updated<br>\" >> $buildLogPath/build.log";
-				$categdir = "$workpath/kextPacks/$categ";
-				$packdir = "$categdir/$fname";
-				$svnpath = "kextpacks/$categ/$fname";
+				$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name/boot /; echo \"Copy : $fname bootloader installed/updated<br>\" >> $buildLogPath/build.log";
+				if (!is_dir("$workpath/kextPacks/$categ")) {
+					system_call("mkdir $workpath/kextPacks/$categ");
+				}
+				$categdir = "$workpath/kextPacks/$categ/$fname";
+				$packdir = "$categdir/$name";
+				$svnpath = "kextpacks/$categ/$fname/$name";
 				break;
 			}
 		}	

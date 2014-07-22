@@ -164,15 +164,20 @@ if ($action == 'dobuild') {
 		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
 		applyFixes();
 		
-		if($modeldb[$modelRowID]["updateCham"] == "on") {
+		// Check for bootloader update
+		$chameBootID = $_POST['chameBootID'];
+		if(chameBootFolder != "") {
+			global $edp_db;
+			$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$chameBootID'");
+			$stmt->execute(); $cbootDB = $stmt->fetchAll(); $chameRow = $cbootDB[0];
 			
-			if($modeldb[$modelRowID]["useEnochCham"] == "on") {
+			if($chameRow['type'] == "Enoch") {
 				writeToLog("$buildLogPath/build.log", " Updating enoch bootloader...<br>");
-				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", "boot");
+				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", "$chameRow['foldername']");
 			} 
 			else {
 				writeToLog("$buildLogPath/build.log", " Updating standard bootloader...<br>");
-				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", "boot");
+				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", "$chameRow['foldername']");
 			}			
 		}
 			
