@@ -17,7 +17,9 @@ $slepath    = getConfig('slepath');
 $cachepath  = getConfig('cachepath');
 $incpath    = getConfig('incpath');
 
-
+//Populate Chameleon boot array
+$stmt = $edp_db->query("SELECT * FROM chameBoot order by id");
+$stmt->execute(); $chameBootdb = $stmt->fetchAll();
 
 //Populate Audio array
 $stmt = $edp_db->query("SELECT * FROM audio order by id");

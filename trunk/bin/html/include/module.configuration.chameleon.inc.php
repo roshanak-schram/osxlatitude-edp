@@ -2,9 +2,26 @@
 
 		echo "<div id=\"tabs-3\"><span class='graytitle'>Chameleon bootloader configuration</span>";
 		echo "<ul class='pageitem'>";				
-			checkbox("Update Chameleon to latest version (v2.2 r2391)?", "updateCham", "no");
-			checkbox("Use Enoch version of Chameleon(v2.2 r2390)?", "useEnochCham", "no");
-			checkbox("Use custom chameleon (if you have, copy boot file to '/Extra/include')?", "customCham", "no");	
+		echo "<span class='arrow'></span><li class='select'><select name='chameBootID' id='chameBootID'>";
+		echo "<option value='' selected>&nbsp;&nbsp;Select version here if you want to update bootloader...</option>\n";
+			
+			$i = 0;
+			while ($chameBootdb[$i] != "") {
+				//resetting vars
+				$id = ""; $version = ""; $notes = ""; $type = ""; $os_support = "";
+				
+				//Getting vars from the optional multidim. array
+				$id = $chameBootdb[$i]['id']; $type = $chameBootdb[$i]['type']; 
+				$version = $chameBootdb[$i]['version'];  $notes = $chameBootdb[$i]['notes'];
+				$os_support = $chameBootdb[$i]['os_support'];
+				
+				echo "<option value='$id' > $type v$version $os_support </option>\n";
+					
+				$i++;
+			}
+			
+		echo "</select>span class='arrow'></span></li>";
+		checkbox("Use custom chameleon (if you have, copy boot file to '/Extra/include')?", "customCham", "no");	
 		echo "</ul><br>";
 		
 		echo "<span class='graytitle'>Modules</span>";
