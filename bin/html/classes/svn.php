@@ -152,7 +152,7 @@ class svnDownload {
 				break;
 				
 				case "Bootloader":
-				$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name/boot /; echo \"Copy : $fname bootloader installed/updated<br>\" >> $buildLogPath/build.log";
+				$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name/boot /; echo \"Copy : $name $fname bootloader installed/updated<br>\" >> $buildLogPath/build.log";
 				if (!is_dir("$workpath/kextPacks/$categ")) {
 					system_call("mkdir $workpath/kextPacks/$categ");
 				}
