@@ -69,13 +69,13 @@ if ($action == "showCredits") {
 	echo "<ul class='pageitem'>\n";
 	echo "<li class='textbox'>\n";
 	echo "<p><b>Name:</b> $row[name]</p>\n";
-	echo "<p><b>Type:</b> $row[type]</p>\n";	
 	echo "<p><b>Creator:</b> $row[owner]</p>\n";
 	echo "<p><b>E-mail:</b> $row[contactemail]</p><br>\n";
-	echo "<p><b>Website:</b><a href=\"$row[inforurl]\"> Click here to Visit</a></p>\n";
+	echo "<p><b>Project/Support Website: </b><a href=\"$row[inforurl]\">Click here to Visit</a></p>\n";
 	$url = $row[donationurl];
-	//echo "<p><b>Donate to support:</b> <input type='button' value='Donate' onclick='edp.openlink(\"$url\");'> ($url)</p>\n";
-	echo "<p><b>Donate to support:</b><a href=\"$row[donationurl]\"> Click here to Donate</a></p>\n";			
+	echo "<form action=\"$row[donationurl]\">";
+	echo '<p><b>Want to support the creator? </b><input type="submit" value="Donate"></p>';
+	echo "</form>";
 	echo "</li>\n";
 	echo "</ul>\n";
 	echo "<br>";	

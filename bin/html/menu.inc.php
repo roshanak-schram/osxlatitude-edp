@@ -32,82 +32,88 @@
 
 <?php
 
+	//
 	// Credits menu
+	//
 	if ($i == "Credits") {
-		$result1 = $edp_db->query("SELECT * FROM credits order by category");
-		foreach($result1 as $row1) {
-			if ($row1[category] != $last && $row1[status] == "active") { 
-				echo "<div id='title' class='edpmenu_title_text' style='margin-top: 10px;'>&nbsp;&nbsp;$row1[category]</div>";
+		$creditCateg = $edp_db->query("SELECT * FROM credits order by category");
+		foreach($creditCateg as $row) {
+			if ($row[category] != $last && $row[status] == "active") { 
+				echo "<div id='title' class='edpmenu_title_text' style='margin-top: 10px;'>&nbsp;&nbsp;$row[category]</div>";
 				echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
-				$result2 = $edp_db->query("SELECT * FROM credits where category = '$row1[category]' order by name");
-				foreach($result2 as $row2) {
-					addMenuItem("loadURL('workerapp.php?action=showCredits&id=$row2[id]');", "icons/sidebar/draft.png", "$row2[name] <i>by $row2[owner]</i>");
+				
+				$crditName = $edp_db->query("SELECT * FROM credits where category = '$row[category]' order by name");
+				foreach($crditName as $nameRow) {
+					addMenuItem("loadURL('workerapp.php?action=showCredits&id=$nameRow[id]');", "icons/sidebar/draft.png", "$nameRow[name] <i>by $nameRow[owner]</i>");
 				}
 				echo "</table>";
 			}
-			$last = $row1[category];
+			$last = $row[category];
 		}
 		exit;	
 	}
 
- //-------------------------> side menus
- 
-switch ($i) {
-	case "Applications":
-	case "Tools":
-		$query = "SELECT * FROM appsdata";
-	break;
+	//
+	// Side menus
+	// 
+	switch ($i) {
+		case "Applications":
+		case "Tools":
+			$query = "SELECT * FROM appsdata";
+		break;
 	
-	case "EDP":
-	case "Configuration":
-		$query = "SELECT * FROM edpdata";
-	break;
+		case "EDP":
+		case "Configuration":
+			$query = "SELECT * FROM edpdata";
+		break;
 	
-	case "Fixes":
-		$query = "SELECT * FROM fixesdata";
-	break;
-}
-
-//echo "$i<br>";
-//echo "$query<br>";
-
-// Fetch menu items that have a category defined 
-$categData = $edp_db->query("$query where category = '$i' order by menu");
-foreach($categData as $row) {
-	if ($row[menu] != $last && $i == $row[category]) { 
-		echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";
-		generateMenu("$query", "$row[menu]", "$row[category]");
+		case "Fixes":
+			$query = "SELECT * FROM fixesdata";
+	
 	}
-	$last = $row[menu];
-}	
 
-function generateMenu($query, $menu, $category) {
-	global $edp_db;
-	echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
-	
-	$menuData = $edp_db->query("$query where menu = '$menu' order by submenu");
-	foreach($menuData as $row) {
-		if ($row[status] == "active") {
-			//
-			// Check if the type is redirect (meaning it will go thru showresource php) or direct instead
-			//
-			if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
-			
-			// redirecting the resource with category and id info in the link
-			else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
+
+	//
+	// Fetch and add menu items that have a category defined 
+	//
+	$categData = $edp_db->query("$query where category = '$i' order by menu");
+	foreach($categData as $row) {
+		if ($row[menu] != $last && $i == $row[category]) { 
+			echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";
+			generateMenu("$query", "$row[menu]", "$row[category]");
 		}
-	}
-	echo "</table>";
-}	
+		$last = $row[menu];
+	}	
 
-// Function for writeing out menu items
-function addMenuItem($action, $icon, $title) {
-	echo "<tr onclick=\"$action\" style='cursor: hand'>";
-	echo "	<td width='20' height='28'></td>\n";
-	echo "	<td width='24' height='28'><img alt='list' src='$icon' width='18px' height='18px'/></td>\n";
-	echo "	<td><span class='edpmenu_menuoption_text' onmouseover='mover(this)' onmouseout='mout(this)'>$title</span></td>";
-	echo "</tr>\n";
-}
+	function generateMenu($query, $menu, $category) {
+		global $edp_db;
+		echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
+	
+		$menuData = $edp_db->query("$query where menu = '$menu' order by submenu");
+		foreach($menuData as $row) {
+			if ($row[status] == "active") {
+				//
+				// Check if the type is redirect (meaning it will go thru showresource php) or direct instead
+				//
+				if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
+			
+				// redirecting the resource with category and id info in the link
+				else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
+			}
+		}
+		echo "</table>";
+	}	
+
+	//
+	// Add submenu items
+	//
+	function addMenuItem($action, $icon, $title) {
+		echo "<tr onclick=\"$action\" style='cursor: hand'>";
+		echo "	<td width='20' height='28'></td>\n";
+		echo "	<td width='24' height='28'><img alt='list' src='$icon' width='18px' height='18px'/></td>\n";
+		echo "	<td><span class='edpmenu_menuoption_text' onmouseover='mover(this)' onmouseout='mout(this)'>$title</span></td>";
+		echo "</tr>\n";
+	}
 
 ?>
 		
