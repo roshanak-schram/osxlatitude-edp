@@ -149,14 +149,14 @@
  			</script>
  			
  			<?php
- 			exit;
+ 			
 		break;
 		
 		case "Configuration":
 			echoPageItemTOP("icons/big/sysprefs.png", "Configuration");
 			echo "<div class='pageitem_bottom'>\n";
 			echo "Build your model using EDP which provides combination of kexts, dsdt, plists needed to boot your system and allows you to configure.";
-			exit;
+			
 		break;
 		
 		case "Applications":
@@ -181,16 +181,16 @@
 		case "Credits":
 			echoPageItemTOP("icons/big/credits.png", "Credits");
 			echo "<div class='pageitem_bottom'>\n";
-			echo "In this section you can find some of the most used hackintosh applications.";
+			echo "You can see all of the names of the people who contributed their files to EDP in this section.<br>";
+
 			echo "<h1>Thank you!!!!</h1>";
-			echo "<h2> .. to all of you that made EDP happened....</h2>";
+			echo "<h2> .. to all of you that made EDP happened.</h2>";
 			echo "<br>";
 
-			echo "EDP is not just made by the team of OSXLatitude, it's made by a lot of people who have spend thousands and thousands of hours to make all this happened...";
-
+			echo "EDP is not just made by the team of OSXLatitude, it's made by a lot of people who have provided their files to EDP after spending hundreds of hours to make some working and help many others.";
 			echo "<br><br>";
 			echo "<b>Help us out....</b><br>";
-			echo "Found something in here that you made? Send an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a> and we will put you too on this page.";
+			echo "Got something that you made which can help others (or) have any queries regarding EDP? Send an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a> and we will put your files on EDP.";
 		break;
 		
 		case "Changelog":
@@ -207,7 +207,7 @@
     		    echo '<p>Commited on: ' . date('l jS \of F Y h:i:s A', strtotime($item->pubDate)) . '</p></li></ul>';
   			  }
    			echo "</div>\n";
-			exit;
+			
 		break;
 		
 		case "Update":
@@ -239,7 +239,7 @@
 			system_call("sudo sh $workpath/bin/update.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
-			exit;
+			
 		break;
 		
 		case "UpdateDB":
@@ -271,7 +271,7 @@
 			system_call("sudo sh $workpath/bin/updateDB.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
-			exit;
+			
 		break;
 		
 		case "BuildLogs":
@@ -291,7 +291,7 @@
     		}
     					
    			echo "</div>\n";
-			exit;
+			
 		break;
 		
 		case "UpdateLogs":
@@ -311,7 +311,7 @@
     		}
 			
    			echo "</div>\n";
-			exit;
+			
 		break;
 		
 		case "LastBuildLog":
@@ -331,7 +331,7 @@
     		}
 			
    			echo "</div>\n";
-			exit;
+			
 		break;
 		
 		case "LastUpdateLog":
@@ -351,7 +351,7 @@
     		}
     		
    			echo "</div>\n";
-			exit;
+			
 		break;
 		
 		case "ClearLogs":
@@ -404,7 +404,7 @@
     			
     		}			
    			echo "</div>\n";
-		exit;
+		
 		break;
 		
 		case "DownloadedApps":
@@ -499,7 +499,7 @@
     			}
     		}			
     		echo "</div>\n";
-		exit;
+		
 		break;
 		
 		case "DownloadedKextPacks":
@@ -573,12 +573,9 @@
     			}    			
     		}			
     		echo "</div>\n";
-		exit;
+		
 		break;
 		
 	}
 
 ?>
-
-<br><br>
-<b>This section is currently under construction, will be updated soon... come back later</b>
