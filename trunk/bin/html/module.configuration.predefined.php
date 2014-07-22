@@ -173,11 +173,11 @@ if ($action == 'dobuild') {
 			
 			if($chameRow['type'] == "Enoch") {
 				writeToLog("$buildLogPath/build.log", " Updating enoch bootloader...<br>");
-				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", "$chameRow['foldername']");
+				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", $chameRow['foldername']);
 			} 
 			else {
 				writeToLog("$buildLogPath/build.log", " Updating standard bootloader...<br>");
-				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", "$chameRow['foldername']");
+				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", $chameRow['foldername']);
 			}			
 		}
 			
