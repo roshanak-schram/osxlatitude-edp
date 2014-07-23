@@ -470,6 +470,8 @@ function copyEssentials() {
 	global $modeldb, $modelRowID;
     global $os;
 
+	$extrapath = "/Extra";
+
     writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files...<br>");
     
     // use EDP SMBIos?
@@ -615,6 +617,9 @@ function copyEssentials() {
 		else {
 			system_call("cp -a $workpath/bin/Themes/. /Extra/Themes");
 		}
+    }
+    else {
+    	writeToLog("$workpath/logs/build/build.log", "  Skipping Themes from EDP on user request<br>");
     }
     
 }
@@ -1105,6 +1110,7 @@ function applyFixes() {
 function copyCustomFiles() {
     //Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $modelNamePath;
+	global $modeldb, $modelRowID;
 	
 	$extrapath = "/Extra";
 
