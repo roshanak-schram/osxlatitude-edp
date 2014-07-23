@@ -622,6 +622,14 @@ function copyEssentials() {
     	writeToLog("$workpath/logs/build/build.log", "  Skipping Themes from EDP on user request<br>");
     }
     
+    //
+    // Create a script file if we need to copy custom Theme from Extra/include
+    //
+    if($modeldb[$modelRowID]['useIncTheme'] == "on")
+    {
+    	writeToLog("$workpath/logs/build/dLoadScripts/CopyCustomTheme.sh", "");
+    }
+    
 }
 
  /*
@@ -1190,7 +1198,7 @@ function copyCustomFiles() {
     //
     // Copy Custom Themes folder from $incpatch to /Extra
     //
-    if($modeldb[$modelRowID]['useIncTheme'] == "on")
+    if(is_file("$workpath/logs/build/dLoadScripts/CopyCustomTheme.sh") && shell_exec("cd $incpath/Themes; ls | wc -l") > 0)
     {
     	if (is_dir("$incpath/Themes")) {
 			writeToLog("$workpath/logs/build/build.log", "  Custom themes folder found, copied to /Extra<br>");
