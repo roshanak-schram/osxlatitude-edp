@@ -181,7 +181,8 @@ if ($action == 'dobuild') {
 		// Check for bootloader update
 		if(chameBootFolder != "") {
 			global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$modeldb[$modelRowID][chameBootID]'");
+			$bootID = $modeldb[$modelRowID]['chameBootID'];
+			$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$bootID'");
 			$stmt->execute(); $cbootDB = $stmt->fetchAll(); $chameRow = $cbootDB[0];
 			
 			if($chameRow['type'] == "Enoch") {
