@@ -453,7 +453,7 @@
 				
 				if ($appID == 0) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-    				echo "<b><center> No Application data downloaded by EDP.</center></b>";
+    				echo "<b><center> No Application data downloaded by EDP available.</center></b>";
     				echo "</ul>";
     			}
     			else {
@@ -507,7 +507,7 @@
 		break;
 		
 		case "DownloadedKextPacks":
-			echoPageItemTOP("icons/big/apps.png", "Downloaded Kext Packs data by EDP");
+			echoPageItemTOP("icons/big/allfiles.png", "Downloaded Kext Packs data by EDP");
    			echo "<div class='pageitem_bottom'>";
    			
    			// Get all the files/folders anme in comma seperated way
@@ -538,7 +538,7 @@
 		
 				if ($kpID == 0) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-    				echo "<b><center> No Kext packs data downloaded by EDP.</center></b>";
+    				echo "<b><center> No Kext packs data downloaded by EDP available.</center></b>";
     				echo "</ul>";
     			}
     			else {
@@ -574,6 +574,123 @@
     			else {
     				echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no Kext pack data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
+    			}    			
+    		}			
+    		echo "</div>";
+		
+		break;
+		
+		case "DownloadedModelData":
+			echoPageItemTOP("icons/big/allfiles.png", "Downloaded model data by EDP");
+   			echo "<div class='pageitem_bottom'>";
+   			
+   			// Get all the files/folders anme in comma seperated way
+			$vinfo = shell_exec("ls -m $workpath/model-data/");
+			$vArray = explode(',', $vinfo);
+			
+			$mID = 0;
+			
+   			$action = $_POST['action'];
+    		if ($action == "") {
+    			echo "<form action='showPage.php' method='post'>";
+			
+				echo "<input type='hidden' name='i' value='DownloadedModelData'>";
+				echo "<input type='hidden' name='action' value='removeMdata'>";
+			
+				echo "<ul class='pageitem'>";
+				
+				foreach($vArray as $vName) // Vendor Name
+				{
+					$vName = preg_replace('/\s+/', '',$vName); //remove white spaces
+
+					if ($vName != "" && $vName != ".DS_Store") {
+				
+						$ginfo = shell_exec("ls -m $workpath/model-data/$vName/");
+						$gArray = explode(',', $ginfo);
+						
+						foreach($gArray as $gName) // Generation Name
+						{
+							$gName = preg_replace('/\s+/', '',$gName); //remove white spaces
+
+							if ($gName != "" && $gName != ".DS_Store") {
+				
+								$minfo = shell_exec("ls -m $workpath/model-data/$vName/$gName/");
+								$mArray = explode(',', $minfo);
+						
+								foreach($mArray as $mName) // Model Name
+								{
+									$mName = preg_replace('/\s+/', '',$mName); //remove white spaces
+
+									if ($mName != "" && $mName != ".DS_Store") {
+				
+										checkbox("$mName", $mID, "yes");
+						
+										$mID++;				
+									}
+								}				
+							}
+						}				
+					}
+				}
+		
+				if ($mID == 0) {
+    				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> No model data downloaded by EDP available.</center></b>";
+    				echo "</ul>";
+    			}
+    			else {
+					echo "</ul>";
+				
+					echo '<ul class="pageitem">';
+					echo '<li class="button"><input name="Submit input" type="submit" value="Delete selected model data" /></li>';
+					echo '</ul>';
+				}
+				echo "</form>";
+    		}
+    		else {
+    		
+    			foreach($vArray as $vName) // Vendor Name
+				{
+					$vName = preg_replace('/\s+/', '',$vName); //remove white spaces
+
+					if ($vName != "" && $vName != ".DS_Store") {
+				
+						$ginfo = shell_exec("ls -m $workpath/model-data/$vName/");
+						$gArray = explode(',', $ginfo);
+						
+						foreach($gArray as $gName) // Generation Name
+						{
+							$gName = preg_replace('/\s+/', '',$gName); //remove white spaces
+
+							if ($gName != "" && $gName != ".DS_Store") {
+				
+								$minfo = shell_exec("ls -m $workpath/model-data/$vName/$gName/");
+								$mArray = explode(',', $minfo);
+						
+								foreach($mArray as $mName) // Model Name
+								{
+									$mName = preg_replace('/\s+/', '',$mName); //remove white spaces
+
+									if ($mName != "" && $mName != ".DS_Store") {
+										
+										if($_POST[$mID] == "on") {
+											system_call("rm -rf $workpath/model-data/$vName/$gName/$mName");
+										}
+										$mID++;				
+									}
+								}				
+							}
+						}				
+					}
+				}				
+    			
+    			if ($mID > 0) {
+    				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+					echo "<b><center> Model data deleted.</center></b>";
+    			}
+    			else {
+    				echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+    				echo "<b><center> There is no model data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
     			}    			
     		}			
     		echo "</div>";
