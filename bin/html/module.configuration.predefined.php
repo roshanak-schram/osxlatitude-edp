@@ -8,10 +8,11 @@ include "header.inc.php";
 global $edpDBase;
 		
 // Get the values from the javascript link 
-$sysType	 = $_GET['type'];	if ($sysType == "") 	{ $sysType 	= $_POST['type']; }
+$sysType	= $_GET['type'];	if ($sysType == "") { $sysType 	= $_POST['type']; }
 $modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID']; }
+$cpuModel 	= $_GET['cpuModel'];	if ($cpuModel == "") { $cpuModel 	= $_POST['cpuModel']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
-		
+	
 $buildLogPath = "$workpath/logs/build";
 
 
@@ -158,6 +159,10 @@ if ($action == 'dobuild') {
 			//
 		
 			$svnLoad->loadModelEssentialFiles();
+			
+			if ($cpuModel != "EDP")
+				$svnLoad->loadCPUFiles($cpuModel);
+				
 		}
 		if (shell_exec("cd $workpath/model-data/$modelNamePath/common; ls | wc -l") > 0) {
 			writeToLog("$buildLogPath/build.log", " Essential files downloaded from SVN</b><br>");
@@ -256,8 +261,12 @@ if ($action == "") {
 
 	echo "<li id='model-container' class='select hidden'><td><select id='model' name='model'>";
 
-	echo "</select><span class='arrow'></span> </li></ul>";
+	echo "</select><span class='arrow'></span> </li>";
 
+	echo "<li id='cpu-container' class='select hidden'><td><select id='cpu' name='cpu'>";
+
+	echo "</select><span class='arrow'></span> </li></ul>";
+	
 	echo '<div id="continue-container" class="hidden">';
 	
 	echo "<p><B><center>After clicking 'Continue' EDP will let you to config your machine.<br></p><br>";
@@ -278,14 +287,14 @@ if ($action == "") {
 			console.log('Selected type: ' + type);
 
 			if (type == '') {
-				jQuery('#vendor-container, #serie-container, #model-container, #continue-container').addClass('hidden');
+				jQuery('#vendor-container, #serie-container, #model-container, #cpu-container, #continue-container').addClass('hidden');
 				return;
 			}
 
 			jQuery.get('workerapp.php', { action: 'builderVendorValues', type: type }, function(data) {
 				jQuery('#vendor').empty().append(data).val('');
 				jQuery('#vendor-container').removeClass('hidden');
-				jQuery('#serie-container, #model-container, #continue-container').addClass('hidden');
+				jQuery('#serie-container, #model-container, #cpu-container, #continue-container').addClass('hidden');
 			});
 		});
 		
@@ -295,15 +304,15 @@ if ($action == "") {
 
 			console.log('Selected vendor: ' + vendor);
 
-			if (vendor == '') {
-				jQuery('#serie-container, #model-container, #continue-container').addClass('hidden');
+			if (type == '' || vendor == '') {
+				jQuery('#serie-container, #model-container, #cpu-container, #continue-container').addClass('hidden');
 				return;
 			}
 
 			jQuery.get('workerapp.php', { action: 'builderSerieValues', type: type, vendor: vendor }, function(data) {
 				jQuery('#serie').empty().append(data).val('');
 				jQuery('#serie-container').removeClass('hidden');
-				jQuery('#model-container, #continue-container').addClass('hidden');
+				jQuery('#model-container, #cpu-container, #continue-container').addClass('hidden');
 			});
 		});
 
@@ -314,25 +323,48 @@ if ($action == "") {
 
 			console.log('Selected serie: ' + serie);
 
-			if (vendor == '' || serie == '') {
-				jQuery('#model-container, #continue-container').addClass('hidden');
+			if (type == '' || vendor == '' || serie == '') {
+				jQuery('#model-container, #cpu-container, #continue-container').addClass('hidden');
 				return;
 			}
 
 			jQuery.get('workerapp.php', { action: 'builderModelValues', type: type, vendor: vendor, serie: serie }, function(data) {
 				jQuery('#model').empty().append(data);
 				jQuery('#model-container').removeClass('hidden');
+				jQuery('#cpu-container, #continue-container').addClass('hidden');
 			});
 		});
 
 		jQuery('#model').change(function() {
+			var type = jQuery('#type option:selected').val();
 			var vendor = jQuery('#vendor option:selected').val();
 			var serie  = jQuery('#serie option:selected').val();
 			var model  = jQuery('#model option:selected').val();
 
 			console.log('Selected model: ' + model);
 
-			if (vendor == '' || serie == '' || model == '') {
+			if (type == '' || vendor == '' || serie == '' || model == '') {
+				jQuery('#cpu-container, #continue-container').addClass('hidden');
+				return;
+			}
+
+			jQuery.get('workerapp.php', { action: 'builderCPUValues', type: type, model: model }, function(data) {
+				jQuery('#cpu').empty().append(data);
+				jQuery('#cpu-container').removeClass('hidden');
+				jQuery('#continue-container').addClass('hidden');
+			});
+		});
+		
+		jQuery('#cpu').change(function() {
+			var type = jQuery('#type option:selected').val();
+			var vendor = jQuery('#vendor option:selected').val();
+			var serie  = jQuery('#serie option:selected').val();
+			var model  = jQuery('#model option:selected').val();
+			var cpu  = jQuery('#cpu option:selected').val();
+			
+			console.log('Selected cpu: ' + cpu);
+
+			if (type == '' || vendor == '' || serie == '' || model == '' || cpu == '') {
 				jQuery('#continue-container').addClass('hidden');
 				return;
 			}
@@ -425,8 +457,11 @@ if ($action == "") {
 			var m = document.getElementById("model");
 			var id = m.options[m.selectedIndex].value;
 			
+			var c = document.getElementById("cpu");
+			var cpuModel = c.options[c.selectedIndex].value;
+			
 			if (model == "") { alert('Please select a model before continuing..'); return; }
-			document.location.href = 'module.configuration.predefined.php?type='+type+'&modelID='+id+'&action=confirm';		
+			document.location.href = 'module.configuration.predefined.php?type='+type+'&modelID='+id+'&cpuModel='+cpuModel+'&action=confirm';		
 			top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog#myfix';
 		}
 		function showType() {

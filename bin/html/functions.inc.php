@@ -471,14 +471,15 @@ function copyEssentials() {
     global $os;
 
 	$extrapath = "/Extra";
-
+	$modelDirPath = "$workpath/model-data/$modelNamePath";
+	
     writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files...<br>");
     
     // use EDP SMBIos?
     if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on")
     {
-    	$file1 = "$workpath/model-data/$modelNamePath/common/SMBios.plist"; 
-    	$file2 = "$workpath/model-data/$modelNamePath/$os/SMBios.plist"; 
+    	$file1 = "$modelDirPath/common/SMBios.plist"; 
+    	$file2 = "$modelDirPath/$os/SMBios.plist"; 
 
    		writeToLog("$workpath/logs/build/build.log", "  SMBios.plist found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
@@ -497,8 +498,8 @@ function copyEssentials() {
     // use EDP org.chameleon.Boot.plist?
     if($modeldb[$modelRowID]["useEDPCHAM"] == "on")
     {
-    	$file1 = "$workpath/model-data/$modelNamePath/common/org.chameleon.Boot.plist"; 
-    	$file2 = "$workpath/model-data/$modelNamePath/$os/org.chameleon.Boot.plist"; 
+    	$file1 = "$modelDirPath/common/org.chameleon.Boot.plist"; 
+    	$file2 = "$modelDirPath/$os/org.chameleon.Boot.plist"; 
 
    	    writeToLog("$workpath/logs/build/build.log", "  org.chameleon.Boot.plist found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
@@ -517,8 +518,8 @@ function copyEssentials() {
     // use EDP DSDT?
     if($modeldb[$modelRowID]["useEDPDSDT"] == "on")
     {
-    	$file1 = "$workpath/model-data/$modelNamePath/common/dsdt.aml"; 
-    	$file2 = "$workpath/model-data/$modelNamePath/$os/dsdt.aml"; 
+    	$file1 = "$modelDirPath/common/dsdt.aml"; 
+    	$file2 = "$modelDirPath/$os/dsdt.aml"; 
 
     	writeToLog("$workpath/logs/build/build.log", "  dsdt found, Copying to $extrapath<br>");
     	//Remove existing file from /Extra
@@ -535,16 +536,16 @@ function copyEssentials() {
     }
 	
     // If its mavericks then copy the files from ml folder temporarilyfor now
-    if($os == "mav" && !is_dir("$workpath/model-data/$modelNamePath/$os") && is_dir("$workpath/model-data/$modelNamePath/ml")) {
+    if($os == "mav" && !is_dir("$modelDirPath/$os") && is_dir("$modelDirPath/ml")) {
     writeToLog("$workpath/logs/build/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
     if($modeldb[$modelRowID]["useEDPDSDT"] == "on") {
-    	$file = "$workpath/model-data/$modelNamePath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    	$file = "$modelDirPath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     	}
     if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on") {
-    	$file = "$workpath/model-data/$modelNamePath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+    	$file = "$modelDirPath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
     	}
     if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
-    	$file = "$workpath/model-data/$modelNamePath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+    	$file = "$modelDirPath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
     	}
     }						
 
@@ -558,38 +559,46 @@ function copyEssentials() {
     if($modeldb[$modelRowID]["useEDPSSDT"] == "on")
     {
     
+      if (is_dir("$modelPath/cpu") && shell_exec("cd $modelPath/cpu; ls | wc -l") > 0) {
+      	$ssdtFilesPath = "$modelPath/cpu";
+      }
+      else {
+      	$ssdtFilesPath = "$modelPath/common";
+      }
+      
       if (file_exists("$extrapath/SSDT.aml")) { system_call("rm $extrapath/SSDT.aml"); }
-      $file = "$workpath/model-data/$modelNamePath/common/SSDT.aml";
+      $file = "$ssdtFilesPath/SSDT.aml";
   	  if (file_exists($file)) 
        { 
     		writeToLog("$workpath/logs/build/build.log", "  SSDT files found, Copying to $extrapath<br>");
     		system_call("cp -f $file $extrapath");
+    		
     		// set DropSSDT to Yes from org.chameleon.Boot.plist
 			system("sudo /usr/libexec/PlistBuddy -c \"set DropSSDT Yes\" $extrapath/org.chameleon.Boot.plist"); 
    		}
    		
     	if (file_exists("$extrapath/SSDT-1.aml")) { system_call("rm $extrapath/SSDT-1.aml"); }
-   		$file = "$workpath/model-data/$modelNamePath/common/SSDT-1.aml"; if (file_exists($file)) { 
+   		$file = "$ssdtFilesPath/SSDT-1.aml"; if (file_exists($file)) { 
    			system_call("cp -f $file $extrapath"); 
     	}
     	
     	if (file_exists("$extrapath/SSDT-2.aml")) { system_call("rm $extrapath/SSDT-2.aml"); }
-    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-2.aml"; if (file_exists($file)) { 
+    	$file = "$ssdtFilesPath/SSDT-2.aml"; if (file_exists($file)) { 
     		system_call("cp -f $file $extrapath"); 
     	}
     	
     	if (file_exists("$extrapath/SSDT-3.aml")) { system_call("rm $extrapath/SSDT-3.aml"); }
-    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-3.aml"; if (file_exists($file)) { 
+    	$file = "$ssdtFilesPath/SSDT-3.aml"; if (file_exists($file)) { 
     		system_call("cp -f $file $extrapath"); 
     	}
 
     	if (file_exists("$extrapath/SSDT-4.aml")) { system_call("rm $extrapath/SSDT-4.aml"); } 
-    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-4.aml"; if (file_exists($file)) {
+    	$file = "$ssdtFilesPath/SSDT-4.aml"; if (file_exists($file)) {
     		system_call("cp -f $file $extrapath"); 
     	}
     	
     	if (file_exists("$extrapath/SSDT-5.aml")) { system_call("rm $extrapath/SSDT-5.aml"); } 
-    	$file = "$workpath/model-data/$modelNamePath/common/SSDT-5.aml"; if (file_exists($file)) {
+    	$file = "$ssdtFilesPath/SSDT-5.aml"; if (file_exists($file)) {
     		system_call("cp -f $file $extrapath"); 
     	}	
     }  
@@ -610,8 +619,8 @@ function copyEssentials() {
 		 	system_call("rm -rf /Extra/Themes/*");
 		 }
 	 
-		if(is_dir("$workpath/model-data/$modelNamePath/common/Themes")) {
-			system_call("cp -a $workpath/model-data/$modelNamePath/common/Themes/. /Extra/Themes");
+		if(is_dir("$modelDirPath/common/Themes")) {
+			system_call("cp -a $modelDirPath/common/Themes/. /Extra/Themes");
 		}
 		// Standard theme folder
 		else {
@@ -669,6 +678,9 @@ function copyEssentials() {
     global $builder;
 	global $svnLoad;
 
+	// model path
+	$modelDirPath = "$workpath/model-data/$modelNamePath";
+	
 	// kextpack svn path
 	$kextPacks = "$workpath/kextPacks";    
     
@@ -828,8 +840,8 @@ function copyEssentials() {
 							if (getVersion() >= $aID[1]) {
 								writeToLog("$workpath/logs/build/build.log", " Downloading Audio kext patched AppleHDA<br>");
 
-								if(!is_dir("$workpath/model-data/$modelNamePath/applehda"))
-									system_call("mkdir $workpath/model-data/$modelNamePath/applehda");
+								if(!is_dir("$modelDirPath/applehda"))
+									system_call("mkdir $modelDirPath/applehda");
 					
 								$svnLoad->kextpackLoader("Extensions", "audiocommon", "$modelNamePath/applehda");
 								$svnLoad->kextpackLoader("Extensions", "audio$os", "$modelNamePath/applehda");
@@ -984,16 +996,16 @@ function copyEssentials() {
 	$svnLoad->kextpackLoader("Extensions", "kexts$os", "$modelNamePath/Extensions");
 	
     // From Model data (Common and $os folder used before, have to remove this when all the models updated to new Extensions folder)
-    if(is_dir("$workpath/model-data/$modelNamePath/common/Extensions"))
+    if(is_dir("$modelDirPath/common/Extensions"))
     {
     	writeToLog("$workpath/logs/build/build.log", "  Copying kexts from model common folder to $ee<br>");
-    	$tf = "$workpath/model-data/$modelNamePath/common/Extensions";
+    	$tf = "$modelDirPath/common/Extensions";
     	system_call("cp -a $tf/. $ee/");
     }
-    if(is_dir("$workpath/model-data/$modelNamePath/$os/Extensions"))
+    if(is_dir("$modelDirPath/$os/Extensions"))
     {
     	writeToLog("$workpath/logs/build/build.log", "  Copying kexts from model $os folder to $ee<br>");
-    	$tf = "$workpath/model-data/$modelNamePath/$os/Extensions";
+    	$tf = "$modelDirPath/$os/Extensions";
     	system_call("cp -a $tf/. $ee/");
     }
     
@@ -1025,6 +1037,9 @@ function applyFixes() {
 	global $edpDBase;
 	global $cpufixdb;
 
+	// model path
+	$modelDirPath = "$workpath/model-data/$modelNamePath";
+	
 	//Get our class(s)
 	global $svnLoad;
 	
@@ -1120,6 +1135,9 @@ function copyCustomFiles() {
     global $workpath, $rootpath, $slepath, $incpath, $os, $ee, $modelNamePath;
 	global $modeldb, $modelRowID;
 	
+	// model path
+	$modelDirPath = "$workpath/model-data/$modelNamePath";
+	
 	$extrapath = "/Extra";
 
 	writeToLog("$workpath/logs/build/build.log", " Checking for Custom files from EDP model database... <br>");
@@ -1129,16 +1147,16 @@ function copyCustomFiles() {
     //
     if ($modeldb[$modelRowID]['customCham'] == "on") {
         
-        $cboot = "$workpath/model-data/$modelNamePath/common/boot";
-        $osboot = "$workpath/model-data/$modelNamePath/$os/boot";
+        $cboot = "$modelDirPath/common/boot";
+        $osboot = "$modelDirPath/$os/boot";
         
         if(is_file("$cboot") || is_file("$osboot"))
         {
         	writeToLog("$workpath/logs/build/build.log", "  Custom chameleon found, copied to $rootpath <br>");
 
         	system_call("rm -f $rootpath/boot");
-        	system_call("cp $workpath/model-data/$modelNamePath/common/boot $rootpath");
-        	system_call("cp $workpath/model-data/$modelNamePath/$os/boot $rootpath");
+        	system_call("cp $modelDirPath/common/boot $rootpath");
+        	system_call("cp $modelDirPath/$os/boot $rootpath");
         }
     }
     
@@ -1146,21 +1164,21 @@ function copyCustomFiles() {
     // Check if we need a custom made kernel from EDP model kernel folder
     //
     
-    if(is_dir("$workpath/model-data/$modelNamePath/kernel/kernel$os")) {
+    if(is_dir("$modelDirPath/kernel/kernel$os")) {
         	
-        $ckernel = "$workpath/model-data/$modelNamePath/kernel/kernel$os/custom_kernel";
+        $ckernel = "$modelDirPath/kernel/kernel$os/custom_kernel";
         if(is_file("$ckernel"))
         {
         	writeToLog("$workpath/logs/build/build.log", "  Custom kernel found, copied to $rootpath <br>");
         	system_call("rm -f $rootpath/custom_kernel");
-       		system_call("cp $workpath/model-data/$modelNamePath/kernel/kernel$os//custom_kernel $rootpath");
+       		system_call("cp $modelDirPath/kernel/kernel$os/custom_kernel $rootpath");
         }
-        $kernelos = "$workpath/model-data/$modelNamePath/kernel/kernel$os/mach_kernel";
+        $kernelos = "$modelDirPath/kernel/kernel$os/mach_kernel";
         if(is_file("$kernelos"))
         {
         	writeToLog("$workpath/logs/build/build.log", "  Custom mach_kernel found, copied to $rootpath <br>");
         	system_call("rm -f $rootpath/mach_kernel");
-       		system_call("cp $workpath/model-data/$modelNamePath/kernel/kernel$os/mach_kernel $rootpath");
+       		system_call("cp $modelDirPath/kernel/kernel$os/mach_kernel $rootpath");
         }
     }
     

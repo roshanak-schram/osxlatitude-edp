@@ -18,7 +18,7 @@ include_once "functions.inc.php";
 // Ajax Methods to build type, vendor, seris and model values 
 //--- Builder page ajax actions
 
-if ($action == "builderVendorValues" || $action == "builderSerieValues" || $action == "builderModelValues") {
+if ($action == "builderVendorValues" || $action == "builderSerieValues" || $action == "builderModelValues" || $action == "builderCPUValues") {
 
 	include_once "edpconfig.inc.php";
 	global $edpDBase;
@@ -34,6 +34,10 @@ if ($action == "builderVendorValues" || $action == "builderSerieValues" || $acti
 		
 		case "builderModelValues":
 			echo $edpDBase->builderGetModelValues($_GET['type'], $_GET['vendor'], $_GET['serie']);
+		break;
+		
+		case "builderCPUValues":
+			echo $edpDBase->builderGetCPUValues($_GET['type'], $_GET['model']);
 		break;
 	}
     exit;

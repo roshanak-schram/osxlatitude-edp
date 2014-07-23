@@ -226,13 +226,56 @@ class edpDatabase {
 		$return = '';
 
 		foreach($result as $row) {
-		if($row['generation'] != "")
+			if($row['generation'] != "")
 				$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['generation'] .')  </option>';
 			else
 				$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . '  </option>';
 		}
 
 		return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
+	}
+	
+	//
+	// Get model data from database using system type
+	//
+	public function builderGetCPUValues($sysType, $modelid) {
+		global $edp_db;
+
+		switch ($sysType) {
+				  case "Notebook":
+				  case "Ultrabook":
+				  case "Tablet":
+					$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid' ORDER BY type";
+				  break;
+			  
+				  case "Desktop":
+				  case "Workstation":
+				  case "AllinOnePC":
+					$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$sysType' AND AND id = '$modelid' ORDER BY type";
+				  break;
+		}
+	
+		$result = $edp_db->query($query);
+		$return = '';
+
+		$cpuCount = 0;
+		foreach($result as $row) {
+			if($row['cpu'] != "") {
+				
+				$data = $row['cpu'];
+    			$cpuArray 	= explode(',', $data);
+    
+    			foreach($cpuArray as $cpuID) {
+    				$cpuID = preg_replace('/\s+/', '',$cpuID); //remove white spaces
+    				$return .= '<option value="' . $cpuID . '">&nbsp;&nbsp;' . $cpuID . '</option>';
+    			}
+				$cpuCount++;
+			}
+		}
+		if ($cpuCount == 0)
+			$return .= '<option value="EDP">&nbsp;&nbsp;According to EDP database</option>';
+			
+		return '<option value="" >&nbsp;&nbsp;Select your CPU model...</option>' . $return;
 	}
 
 	public function updateDB() {
