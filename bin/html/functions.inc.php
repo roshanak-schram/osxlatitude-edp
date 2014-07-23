@@ -465,18 +465,28 @@ function echoPageItemTOP($icon, $text) {
 /*
  * Essential file copy like dsdt, ssdt and plists
  */
-function copyEssentials() {
-    global $workpath, $modelNamePath;
-	global $modeldb, $modelRowID;
-    global $os;
+function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
+   
+    $os = getVersion();
 
+	$workpath = "/Extra/EDP";
 	$extrapath = "/Extra";
 	$modelDirPath = "$workpath/model-data/$modelNamePath";
 	
-    writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files... if they are aleady exist in $extrapath then will be overwritten<br>");
+    writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files... will be overwritten if exists<br>");
     
+    if (shell_exec("cd $modelDirPath/common; ls | wc -l") > 0 && 
+         (!is_dir("$modelDirPath/cpu") || shell_exec("cd $modelDirPath/cpu; ls | wc -l") > 0)) 
+    {
+		writeToLog("$workpath/logs/build/build.log", " Found Essential files downloaded from SVN, Copying...</b><br>");
+	}
+	else {
+		writeToLog("$workpath/logs/build/build.log", " Essential files not downloaded from SVN (either not found or no internet)</b><br>");
+		return;
+	}
+		
     // use EDP SMBIos?
-    if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on")
+    if($smbios == "yes")
     {
     	$file1 = "$modelDirPath/common/SMBios.plist"; 
     	$file2 = "$modelDirPath/$os/SMBios.plist"; 
@@ -501,7 +511,7 @@ function copyEssentials() {
     }
     
     // use EDP org.chameleon.Boot.plist?
-    if($modeldb[$modelRowID]["useEDPCHAM"] == "on")
+    if($chame == "yes")
     {
     	$file1 = "$modelDirPath/common/org.chameleon.Boot.plist"; 
     	$file2 = "$modelDirPath/$os/org.chameleon.Boot.plist"; 
@@ -526,7 +536,7 @@ function copyEssentials() {
     }
     
     // use EDP DSDT?
-    if($modeldb[$modelRowID]["useEDPDSDT"] == "on")
+    if($dsdt == "yes")
     {
     	$file1 = "$modelDirPath/common/dsdt.aml"; 
     	$file2 = "$modelDirPath/$os/dsdt.aml"; 
@@ -567,20 +577,20 @@ function copyEssentials() {
     }						
 
 	// use EDP org.chameleon.Boot.plist?
-	if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
+	if($chame == "yes") {
 		// set UseKernelCache to Yes from org.chameleon.Boot.plist
 		system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
 	}
 	
 	// use EDP SSDT?
-    if($modeldb[$modelRowID]["useEDPSSDT"] == "on")
+    if($ssdt == "yes")
     {
     
-      if (is_dir("$modelPath/cpu") && shell_exec("cd $modelPath/cpu; ls | wc -l") > 0) {
-      	$ssdtFilesPath = "$modelPath/cpu";
+      if (is_dir("$modelDirPath/cpu") && shell_exec("cd $modelDirPath/cpu; ls | wc -l") > 0) {
+      	$ssdtFilesPath = "$modelDirPath/cpu";
       }
       else {
-      	$ssdtFilesPath = "$modelPath/common";
+      	$ssdtFilesPath = "$modelDirPath/common";
       }
       
       if (file_exists("$extrapath/SSDT.aml")) { system_call("rm $extrapath/SSDT.aml"); }
@@ -626,7 +636,7 @@ function copyEssentials() {
     //
     // Copy Themes folder to Extra
     //
-    if($modeldb[$modelRowID]['useEDPTheme'] == "on")
+    if($theme == "yes")
     {
     	writeToLog("$workpath/logs/build/build.log", "  Copying Themes folder to /Extra...<br>");
 		if (!is_dir("/Extra/Themes")) {
@@ -646,14 +656,6 @@ function copyEssentials() {
     }
     else {
     	writeToLog("$workpath/logs/build/build.log", "  Skipping Themes from EDP on user request<br>");
-    }
-    
-    //
-    // Create a script file if we need to copy custom Theme from Extra/include
-    //
-    if($modeldb[$modelRowID]['useIncTheme'] == "on")
-    {
-    	writeToLog("$workpath/logs/build/dLoadScripts/CopyCustomTheme.sh", "");
     }
     
 }
@@ -683,7 +685,7 @@ function copyEssentials() {
 /*
  * Copy EDP Kexts copy for build
  */
- function copyEDPKexts()
+ function PrepareEDPKextPacks()
  {
  	//Get vars from config.inc.php
     global $workpath, $rootpath, $slepath, $modelNamePath, $ee;
@@ -724,12 +726,12 @@ function copyEssentials() {
     		}
     	
         	if ($fname != "") { 
-        	    writeToLog("$workpath/logs/build/build.log", " Downloading Touchpad kext $fname...<br>");
+        	    writeToLog("$workpath/logs/build/build.log", " Preparing to download Touchpad kext $fname...<br>");
         	    
         	    if(!is_dir("$kextPacks/PS2Touchpad"))
     				system_call("mkdir $kextPacks/PS2Touchpad");
     				
-    			$svnLoad->kextpackLoader("PS2Touchpad", "$fname", "$name");
+    			$svnLoad->PrepareKextpackDownload("PS2Touchpad", "$fname", "$name");
     		}
 		 } 
 		// Reset vars
@@ -765,24 +767,24 @@ function copyEssentials() {
     			break;
     			
     			case 4:
-    				writeToLog("$workpath/logs/build/build.log", " Downloading WiFi kext $fname<br>");
+    				writeToLog("$workpath/logs/build/build.log", " Preparing to download WiFi kext $fname...<br>");
     					
     				if(!is_dir("$kextPacks/Wireless"))
     					system_call("mkdir $kextPacks/Wireless");
     				
-    				$svnLoad->kextpackLoader("Wireless", "$fname", "$name");
+    				$svnLoad->PrepareKextpackDownload("Wireless", "$fname", "$name");
     			break;
     		}
     		
     		// Load Bluetooth kext for AR3011 and BCM4352
     		if($wifid < "3")
     			{
-    				writeToLog("$workpath/logs/build/build.log", " Downloading Bluetooth kext $fname<br>");
+    				writeToLog("$workpath/logs/build/build.log", " Preparing to download Bluetooth kext $fname...<br>");
         	    
         	    	 if(!is_dir("$kextPacks/Wireless"))
     					system_call("mkdir $kextPacks/Wireless");
     					
-    				 $svnLoad->kextpackLoader("Wireless", "BluetoothFWUploader", "BluetoothFWUploader.kext");
+    				 $svnLoad->PrepareKextpackDownload("Wireless", "BluetoothFWUploader", "BluetoothFWUploader.kext");
     			}
     		}
 		}
@@ -801,12 +803,12 @@ function copyEssentials() {
     		$name = $fakesmcdb[$fakesmcid]['name']; 
     		
     		if ($fname != "") {
-    			writeToLog("$workpath/logs/build/build.log", " Downloading FakeSMC kext $fname<br>");
+    			writeToLog("$workpath/logs/build/build.log", " Preparing to download FakeSMC kext $fname...<br>");
         	    
         	    if(!is_dir("$kextPacks/FakeSMC"))
     				system_call("mkdir $kextPacks/FakeSMC");
     					
-    			$svnLoad->kextpackLoader("FakeSMC", "$fname", "$name");
+    			$svnLoad->PrepareKextpackDownload("FakeSMC", "$fname", "$name");
     		}
      	}
 		// Reset vars
@@ -855,13 +857,13 @@ function copyEssentials() {
 							$aID = explode(',', $row[$os]);
 						
 							if (getVersion() >= $aID[1]) {
-								writeToLog("$workpath/logs/build/build.log", " Downloading Audio kext patched AppleHDA<br>");
+								writeToLog("$workpath/logs/build/build.log", " Preparing to download Audio kext patched AppleHDA...<br>");
 
 								if(!is_dir("$modelDirPath/applehda"))
 									system_call("mkdir $modelDirPath/applehda");
 					
-								$svnLoad->kextpackLoader("Extensions", "audiocommon", "$modelNamePath/applehda");
-								$svnLoad->kextpackLoader("Extensions", "audio$os", "$modelNamePath/applehda");
+								$svnLoad->PrepareKextpackDownload("Extensions", "audiocommon", "$modelNamePath/applehda");
+								$svnLoad->PrepareKextpackDownload("Extensions", "audio$os", "$modelNamePath/applehda");
 								$usingAppleHDA = "yes";
 							}
 							else 
@@ -876,17 +878,17 @@ function copyEssentials() {
     		//
     		// Check for VoodooHDA
     		//
-        	if ($fname != "" && $usingAppleHDA = "") {
+        	if ($fname != "" && $usingAppleHDA == "") {
     			        
-    		    writeToLog("$workpath/logs/build/build.log", " Downloading Audio kext $fname<br>");
+    		    writeToLog("$workpath/logs/build/build.log", " Preparing to download Audio kext $fname...<br>");
 
     			if(!is_dir("$kextPacks/Audio"))
     				system_call("mkdir $kextPacks/Audio");
     					    
-        		$svnLoad->kextpackLoader("Audio", "$fname", "$name");
+        		$svnLoad->PrepareKextpackDownload("Audio", "$fname", "$name");
         		
         		// Copy Prefpane and Settings loader
-        		$svnLoad->kextpackLoader("Audio", "Settings", "AudioSettings");
+        		$svnLoad->PrepareKextpackDownload("Audio", "Settings", "AudioSettings");
         	} 
         	
    	 	}
@@ -905,7 +907,7 @@ function copyEssentials() {
         	
         	if ($fname != "") {
         		
-        		writeToLog("$workpath/logs/build/build.log", " Downloading Ethernet kext $name<br>");
+        		writeToLog("$workpath/logs/build/build.log", " Preparing to download Ethernet kext $name...<br>");
         	    
     			if(!is_dir("$kextPacks/Ethernet"))
     				system_call("mkdir $kextPacks/Ethernet");
@@ -919,13 +921,13 @@ function copyEssentials() {
 				
 					//Choose 10.8+ version 
 					if(getMacOSXVersion() >= "10.8")
-						$svnLoad->kextpackLoader("Ethernet", "$fname", "NewRTL81xx");
+						$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "NewRTL81xx");
 					//chooose Lion version
 					else if(getMacOSXVersion() == "10.7")
-						$svnLoad->kextpackLoader("Ethernet", "$fname", "NewRTL81xx_Lion");
+						$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "NewRTL81xx_Lion");
     			}
     			else
-    				$svnLoad->kextpackLoader("Ethernet", "$fname", "$name");   
+    				$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "$name");   
      	  	}	
 		}
 		// Reset vars
@@ -942,12 +944,12 @@ function copyEssentials() {
         $name = $batterydb[$battid]['name'];
         
         if ($fname != "") {
-        		writeToLog("$workpath/logs/build/build.log", " Downloading Battery kext $name<br>");
+        		writeToLog("$workpath/logs/build/build.log", " Preparing to download Battery kext $name...<br>");
         	    
         	    if(!is_dir("$kextPacks/Battery"))
     				system_call("mkdir $kextPacks/Battery");
     				
-    			$svnLoad->kextpackLoader("Battery", "$fname", "$name");  
+    			$svnLoad->PrepareKextpackDownload("Battery", "$fname", "$name");  
     		}
 	   }
 		// Reset vars
@@ -972,6 +974,9 @@ function copyEssentials() {
         $name = $opdata[name];
         
          if ($fname != "") { 
+         
+         	writeToLog("$workpath/logs/build/build.log", " Preparing to download Optional pack $name...<br>");
+
     		if(!is_dir("$kextPacks/$categ"))
     			system_call("mkdir $kextPacks/$categ");
     		
@@ -979,20 +984,20 @@ function copyEssentials() {
     		if($id == "5") {
 				//Choose new version 
 				if(getMacOSXVersion() >= "10.8.5")
-					$svnLoad->kextpackLoader("$categ", "GenericXHCIUSB3_New", "$name");
+					$svnLoad->PrepareKextpackDownload("$categ", "GenericXHCIUSB3_New", "$name");
 				//chooose old version
 				else if(getMacOSXVersion() < "10.8.5")
-					$svnLoad->kextpackLoader("$categ", "$fname", "$name");
+					$svnLoad->PrepareKextpackDownload("$categ", "$fname", "$name");
     		}
     		else	
-    			$svnLoad->kextpackLoader("$categ", "$fname", "$name");
+    			$svnLoad->PrepareKextpackDownload("$categ", "$fname", "$name");
     	 }
       }
     	// Reset vars
 		$name = "";
 		$fname = "";
 		
-	writeToLog("$workpath/logs/build/build.log", " Downloading Standard kexts... <br>");
+	writeToLog("$workpath/logs/build/build.log", " Preparing to download Standard kexts... <br>");
 
 	//
     // Standard kexts
@@ -1000,17 +1005,17 @@ function copyEssentials() {
     if(!is_dir("$workpath/kextPacks/Standard"));
     	system_call("mkdir $workpath/kextPacks/Standard");
     	
-    $svnLoad->kextpackLoader("Standard", "common", "Standard common");
+    $svnLoad->PrepareKextpackDownload("Standard", "common", "Standard common");
 
-    $svnLoad->kextpackLoader("Standard", "$os", "Standard $os");
+    $svnLoad->PrepareKextpackDownload("Standard", "$os", "Standard $os");
     
-    writeToLog("$workpath/logs/build/build.log", " Downloading Model specific kexts... <br>");
+    writeToLog("$workpath/logs/build/build.log", " Preparing to download Model specific kexts... <br>");
 
     //
 	// From Model data (Extensions folder)
 	//
-	$svnLoad->kextpackLoader("Extensions", "kextscommon", "$modelNamePath/Extensions");
-	$svnLoad->kextpackLoader("Extensions", "kexts$os", "$modelNamePath/Extensions");
+	$svnLoad->PrepareKextpackDownload("Extensions", "kextscommon", "$modelNamePath/Extensions");
+	$svnLoad->PrepareKextpackDownload("Extensions", "kexts$os", "$modelNamePath/Extensions");
 	
     // From Model data (Common and $os folder used before, have to remove this when all the models updated to new Extensions folder)
     if(is_dir("$modelDirPath/common/Extensions"))
@@ -1030,8 +1035,26 @@ function copyEssentials() {
     // Download custom kernel from EDP
     //
     	  	
-    $svnLoad->kextpackLoader("Kernel", "kernel$os", "$modelNamePath/Kernel");
+    $svnLoad->PrepareKextpackDownload("Kernel", "kernel$os", "$modelNamePath/Kernel");
     
+    //
+    // Download bootloader for update
+    //
+    $bootID = $modeldb[$modelRowID]['chameBootID'];
+	if($bootID != "") {		
+		$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$bootID'");
+		$stmt->execute(); $cbootDB = $stmt->fetchAll(); $chameRow = $cbootDB[0];
+		
+		if($chameRow['type'] == "Enoch") {
+			writeToLog("$buildLogPath/build.log", " Updating enoch bootloader...<br>");
+			$svnLoad->PrepareKextpackDownload("Bootloader", "EnochBoot", $chameRow['foldername']);
+		} 
+		else {
+			writeToLog("$buildLogPath/build.log", " Updating standard bootloader...<br>");
+			$svnLoad->PrepareKextpackDownload("Bootloader", "StandardBoot", $chameRow['foldername']);
+		}			
+	}
+	
     //
     // Create a script file if we need to copy kexts from Extra/include/Extensions
     //
@@ -1040,8 +1063,6 @@ function copyEssentials() {
     	writeToLog("$workpath/logs/build/dLoadScripts/CopyCustomKexts.sh", "");
     } 
     
-	writeToLog("$workpath/logs/build/build.log", "<br>");
-
  }
  
 /*
@@ -1084,14 +1105,14 @@ function applyFixes() {
         }
         else if(($modeldb[$modelRowID]['emupstates'] == "on") && $i == "3") {
         	
-        	$svnLoad->kextpackLoader("PowerMgmt", "VoodooPState", "$kxtname"); 
+        	$svnLoad->PrepareKextpackDownload("PowerMgmt", "VoodooPState", "$kxtname"); 
         }
         else if ($kxtname != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
 
     		if(!is_dir("$kextPacks/PowerMgmt"))
     			system_call("mkdir $kextPacks/PowerMgmt");
     		
-    		$svnLoad->kextpackLoader("PowerMgmt", "$name", "$kxtname");
+    		$svnLoad->PrepareKextpackDownload("PowerMgmt", "$name", "$kxtname");
     		
     		 //remove PStateMenu if installed before
     		 if (file_exists("/Library/LaunchAgents/PStateMenu.plist")) { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
@@ -1104,7 +1125,7 @@ function applyFixes() {
 	$fname = "";
 		
 	//
- 	// Apply Generic xes
+ 	// Apply Generic fixes
  	//
     $data = $modeldb[$modelRowID]['fixes'];
     $array 	= explode(',', $data);
@@ -1129,13 +1150,13 @@ function applyFixes() {
        			writeToLog("$workpath/logs/build/build.log", " Applying ACPI fix for Battery read and Coolbook...<br>");
        		}
        		else if($id == "5") {
-       			writeToLog("$workpath/logs/build/build.log", " Downloading patched IOATAFamily fix for IDE disks...<br>");
+       			writeToLog("$workpath/logs/build/build.log", " Preparing to download patched IOATAFamily fix for IDE disks...<br>");
        		}
        		
     		if(!is_dir("$kextPacks/$categ"))
     			system_call("mkdir $kextPacks/$categ");
     		
-    		$svnLoad->kextpackLoader("$categ", "$fname", "$name");
+    		$svnLoad->PrepareKextpackDownload("$categ", "$fname", "$name");
     	}
 	}
     	
