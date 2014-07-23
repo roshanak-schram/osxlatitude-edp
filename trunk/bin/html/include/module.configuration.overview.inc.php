@@ -5,7 +5,7 @@ echo "<div id=\"tabs-0\">";
 		global $os;
 		$os_support = "supports_$os";
 		
-		switch (mdrow[$os_support]) {
+		switch ($mdrow[$os_support]) {
 			case "yes":
 			$support = "Works with this OSX version";
 			$color = "green";
@@ -75,7 +75,7 @@ echo "<ul class='pageitem'>";
 		
         echo "<tr class='compat_model_text' height='40px'>";
 		
-		if (mdrow[$os_support] == "yes" || mdrow[$os_support] == "question") {
+		if ($mdrow[$os_support] == "yes" || $mdrow[$os_support] == "question") {
 			if ($crow[qeci] != "")          { echo "  <td><center><img src=\"/images/compat/$crow[qeci].png\" width='20px'></center></td>\n";  } else { echo "<td></td>"; }
 			if ($crow[sound] != "")         { echo "  <td><center><img src=\"/images/compat/$crow[sound].png\" width='20px'></center></td>\n";  } else { echo "<td></td>"; }
 			if ($crow[trackpad] != "")      { echo "  <td><center><img src=\"/images/compat/$crow[trackpad].png\" width='20px'></center></td>\n";  } else { echo "<td></td>"; }
