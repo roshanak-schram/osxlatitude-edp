@@ -3,69 +3,77 @@
 class svnDownload {
 
 	/*
-	 * public functions to download essential and custom files from model folder
+	 * Public function to prepare the essential files download
 	 */
-	public function loadModelEssentialFiles() {
+	public function PrepareEssentialFilesDownload($model) {
 		global $workpath, $modelNamePath, $os;
 	
+		if ($model != "") {
+			$modelNamePath = $model;
+		}
+		
+		$buildLogPath = "$workpath/logs/build";
+    		
+    	if(!is_dir("$buildLogPath/dLoadStatus/"))
+			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/essentialFiles.txt";
+    	else
+    		$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
+
+		$endStatFile = "rm -f $buildLogPath/dLoadStatus/essentialFiles.txt";
+		
 		//
 		// download essential files from common folder
 		//
 		$modelfolder = "$workpath/model-data/$modelNamePath/common";
+		
 		if (is_dir("$modelfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+			$checkoutCmd = "if svn --non-interactive --username edp --password edp --force --quiet update $modelfolder; then echo \"Update : Common Essential files update finished<br>\" >> $buildLogPath/build.log; else echo \"Update : Common Essential files update failed<br>\" >> $buildLogPath/build.log; fi";
 		} else {
-			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common .");
+			$checkoutCmd = "mkdir $modelfolder; cd $modelfolder; if svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common .; then echo \"Download : Common Essential files download finished<br>\" >> $buildLogPath/build.log; else echo \"Download : Common Essential files download failed<br>\" >> $buildLogPath/build.log; fi";
 		}
 	
+		writeToLog("$buildLogPath/dLoadScripts/essentialFilesCommon.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
+
 		//
 		// download essential files from $os folder
 		//
-		$modelfolder = "$workpath/model-data/$modelNamePath/$os";
-		if (is_dir("$modelfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
-		} else {
-			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/$os .");
-		}
-	}
-	
-	public function svnModeldata($model) {
-		global $workpath, $os;
 		
-		//
-		// download essential files from common folder
-		//
-		$modelfolder = "$workpath/model-data/$model/common";
+		$modelfolder = "$workpath/model-data/$modelNamePath/$os";
+		
 		if (is_dir("$modelfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
+			$checkoutCmd = "if svn --non-interactive --username edp --password edp --force --quiet update $modelfolder; then echo \"Update : $os Essential files update finished<br>\" >> $buildLogPath/build.log; else echo \"Update : $os Essential files update failed<br>\" >> $buildLogPath/build.log; fi";
 		} else {
-			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/common .");
+			$checkoutCmd = "mkdir $modelfolder; cd $modelfolder; if svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/$os .; then echo \"Download : $os Essential files download finished<br>\" >> $buildLogPath/build.log; else echo \"Download : $os Essential files download failed<br>\" >> $buildLogPath/build.log; fi";
 		}
-	
-		//
-		// download essential files from common $os
-		//
-		$modelfolder = "$workpath/model-data/$model/$os";
-		if (is_dir("$modelfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelfolder");
-		} else {
-			system_call("mkdir $modelfolder; cd $modelfolder; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$model/$os .");
-		}
+		
+		writeToLog("$buildLogPath/dLoadScripts/essentialFiles$os.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
+		
 	}
 	
-	public function loadCPUFiles($cpuModel) {
+	/*
+	 * Public function to prepare the cpu ssdt files download
+	 */
+	public function PrepareSSDTFilesDownload($cpuModel) {
 		global $workpath, $modelNamePath;
 		
-		//
-		// download cpu ssdt files
-		//
-		$modelcpudir = "$workpath/model-data/$modelNamePath/cpu/";
+		$buildLogPath = "$workpath/logs/build";
+    		
+    	if(!is_dir("$buildLogPath/dLoadStatus/"))
+			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/essentialFiles.txt";
+    	else
+    		$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
+
+		$endStatFile = "rm -f $buildLogPath/dLoadStatus/essentialFiles.txt";
+		
+		$modelcpudir = "$workpath/model-data/$modelNamePath/cpu";
 		
 		if (is_dir("$modelcpudir")) {
-			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelcpudir");
+			$checkoutCmd = "if svn --non-interactive --username edp --password edp --force --quiet update $modelcpudir; then echo \"Update : $cpuModel SSDT files update finished<br>\" >> $buildLogPath/build.log; else echo \"Update : $cpuModel SSDT files update failed<br>\" >> $buildLogPath/build.log; fi";
 		} else {
-			system_call("mkdir $modelcpudir; cd $modelcpudir; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/cpu/$cpuModel .");
+			$checkoutCmd = "mkdir $modelcpudir; cd $modelcpudir; if svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/cpu/$cpuModel .; then echo \"Download : $cpuModel SSDT files download finished<br>\" >> $buildLogPath/build.log; else echo \"Download : $cpuModel SSDT files download failed<br>\" >> $buildLogPath/build.log; fi";
 		}
+		
+		writeToLog("$buildLogPath/dLoadScripts/SSDT_$cpuModel.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
 	
 	}
 
@@ -83,9 +91,9 @@ class svnDownload {
 	}
 	
 	/*
- 	 * This function will download a kextpack from SVN if requested (or update it if allready exists) 
+ 	 * This function will prepare the download of kextpacks from SVN if requested (or update it if exists) 
  	 */
-	public function kextpackLoader($categ, $fname, $name) {
+	public function PrepareKextpackDownload($categ, $fname, $name) {
 		global $workpath, $edp, $ee;
 		
     	$buildLogPath = "$workpath/logs/build";
@@ -177,20 +185,16 @@ class svnDownload {
 		}	
 			
 		if (is_dir("$packdir")) {
-			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir; then echo \"Update : $name file(s) finished<br>\" >> $buildLogPath/build.log; $copyKextCmd; fi";
+			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $packdir; then echo \"Update : $name file(s) finished<br>\" >> $buildLogPath/build.log; $copyKextCmd; else echo \"Update : $name file(s) update failed<br>\" >> $buildLogPath/build.log; fi";
 
 			writeToLog("$buildLogPath/dLoadScripts/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile;");
-			system_call("sh $buildLogPath/dLoadScripts/$fname.sh >> $buildLogPath/build.log &");
-			
-			// system_call("svn --non-interactive --username edp --password edp --quiet --force update $packdir");
+			// system_call("sh $buildLogPath/dLoadScripts/$fname.sh >> $buildLogPath/build.log &");
 		}
 		else {
-			$checkoutCmd = "mkdir $categdir; cd $categdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $buildLogPath/build.log; $copyKextCmd; fi";
+			$checkoutCmd = "mkdir $categdir; cd $categdir; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $buildLogPath/build.log; $copyKextCmd; else echo \"Download : $name file(s) download failed<br>\" >> $buildLogPath/build.log; fi";
 
 			writeToLog("$buildLogPath/dLoadScripts/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
-			system_call("sh $buildLogPath/dLoadScripts/$fname.sh >> $buildLogPath/build.log &");
-			
-			// system_call("mkdir $packdir; cd $packdir; svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/kextpacks/$pname/ .");
+			// system_call("sh $buildLogPath/dLoadScripts/$fname.sh >> $buildLogPath/build.log &");
 		}
 	} 
 

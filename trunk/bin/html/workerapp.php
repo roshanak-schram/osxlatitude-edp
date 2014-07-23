@@ -105,7 +105,14 @@ if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
 if ($action == "showBuildLog")			
  { 
 	include_once "edpconfig.inc.php";
-	showBuildLog(); exit ;
+	$modelPath 	= $_GET['modelPath'];
+	$dsdt 	= $_GET['dsdt'];
+	$ssdt 	= $_GET['ssdt'];
+	$theme 	= $_GET['theme'];
+	$smbios	= $_GET['smbios'];
+	$chame 	= $_GET['chame'];
+	
+	showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame); exit ;
  }
 if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
@@ -122,7 +129,7 @@ if ($action == "showInstallLog")
 	exit ; 
 }
 
-function showBuildLog() {
+function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 	$workpath = "/Extra/EDP";
 	$buildLogPath = "$workpath/logs/build";
 	
@@ -149,7 +156,7 @@ function showBuildLog() {
 		echo "<b>Files left to download/update : $fcount</b><br>";
 		
 	//
-	// Run Step 5 and 6 after the kexts are downloaded
+	// Run Step 5 to 7 after the prepared files are downloaded
 	//
 	if ($fcount == 0 && is_dir("$buildLogPath/dLoadStatus") && !is_file("$buildLogPath/Run_myFix.txt"))
 	{
@@ -157,15 +164,23 @@ function showBuildLog() {
 		writeToLog("$buildLogPath/build.log", "<br><b>All Files downloaded/updated.</b><br>");
 		
 		//
-		// Step 5 : Copying custom files from /Extra/include
+		// Step 5 : Copy essentials like dsdt, ssdt and plists 
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copy user provided files from /Extra/include:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copying essential files downloaded:</b><br>");
+
+		copyEssentials($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame);
+		
+		//
+		// Step 6 : Copying custom files from /Extra/include
+		//
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Copying user provided files from /Extra/include:</b><br>");
+		
 		copyCustomFiles();
 		
 		//
-		// Step 6 : Applying last minute fixes and generating caches
+		// Step 7 : Applying last minute fixes and generating caches
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Apply last minute fixes and Call myFix to copy kexts & generate kernelcache:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 7) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
 		
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
@@ -176,8 +191,14 @@ function showBuildLog() {
 		system_call("nvram -d boot-args");
 		writeToLog("$buildLogPath/build.log", " Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
-   		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and genrate cache...<br>");
-
+			
+		// Kernel hack for YOS
+		writeToLog("$buildLogPath/build.log", " Checking if we are running Yosemite and need to link kernel</b><br>");
+		$r = getVersion();
+  		if ($r == "yos") { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
+		
+		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and genrate cache...<br>");
+		
 		// End build log and create a lastbuild log
 		system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
 		system_call("cp $buildLogPath/build.log $workpath/logs/lastbuild.log ");

@@ -10,7 +10,7 @@ global $edpDBase;
 // Get the values from the javascript link 
 $sysType	= $_GET['type'];	if ($sysType == "") { $sysType 	= $_POST['type']; }
 $modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID']; }
-$cpuModel 	= $_GET['cpuModel'];	if ($cpuModel == "") { $cpuModel 	= $_POST['cpuModel']; }
+$cpuID 		= $_GET['cpuID'];	if ($cpuID == "")	{ $cpuID 	= $_POST['cpuID']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 	
 $buildLogPath = "$workpath/logs/build";
@@ -77,7 +77,23 @@ if ($action == 'dobuild') {
 		global $workpath, $rootpath, $ee, $os; 
 		global $modelName;
 	
+		// For log time
+		date_default_timezone_set("UTC");
+		$date = date("d-m-y H-i");
+	
+		system_call("echo '<br>*** Logging started on: $date UTC Time ***' >> $buildLogPath/build.log");
+			
+		//
+		// Step 1 : Create the folder path and download the model data 
+		//
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Prepare essential files download:</b><br>");
+
+		writeToLog("$buildLogPath/build.log", " Preparing myhack...</b><br>");
 		
+		myHackCheck();
+		
+		writeToLog("$buildLogPath/build.log", " Preparing essential files for the model $modelName...</b><br>");
+
 		//
 		// Create directories for build
 		//
@@ -97,25 +113,6 @@ if ($action == 'dobuild') {
 		if(!is_dir("$workpath/logs/fixes"))
     		system_call("mkdir $workpath/logs/fixes");
     		
-    		
-		// For log time
-		date_default_timezone_set("UTC");
-		$date = date("d-m-y H-i");
-	
-		system_call("echo '<br>*** Logging started on: $date UTC Time ***' >> $buildLogPath/build.log");
-
-		// Launch the script which provides the summary of the build process 
-		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";
-		
-    
-		//
-		// Check if myhack is up2date and ready for build
-		//
-		myHackCheck();
-			
-		//
-		// Step 1 : Create the folder path and download the model data 
-		//
 		
 		global $modelNamePath;
 		$modelRowID = 0;
@@ -123,9 +120,7 @@ if ($action == 'dobuild') {
 		$ven = $edpDBase->builderGetVendorValuebyID($sysType, $modelID);
 		$gen = $edpDBase->builderGetGenValuebyID($sysType, $modelID);
 		
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Download/update essential files for the model $modelName:</b><br>");
-		writeToLog("$buildLogPath/build.log", " Checking essential files DSDT, SSDT and system plists from SVN</b><br>");
-
+		
 		// use old method if there are is no generation column in db 
 		if($gen == "") {
 		
@@ -136,7 +131,7 @@ if ($action == 'dobuild') {
 				
 			// system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $buildLogPath/build.log 2>&1");
 			
-			$svnLoad->svnModeldata("$modelName");
+			$svnLoad->PrepareEssentialFilesDownload("$modelName");
 		}
 		else {
 		
@@ -158,62 +153,87 @@ if ($action == 'dobuild') {
 			// old method "$svnLoad->svnModeldata" for the old models which is not updated for the new DB to fetch files
 			//
 		
-			$svnLoad->loadModelEssentialFiles();
+			$svnLoad->PrepareEssentialFilesDownload("");
 			
-			if ($cpuModel != "EDP")
-				$svnLoad->loadCPUFiles($cpuModel);
+			if ($cpuID != "EDP")
+				$svnLoad->PrepareSSDTFilesDownload($cpuID);
 				
 		}
-		if (shell_exec("cd $workpath/model-data/$modelNamePath/common; ls | wc -l") > 0) {
-			writeToLog("$buildLogPath/build.log", " Essential files downloaded from SVN</b><br>");
-		}
-		else {
-			writeToLog("$buildLogPath/build.log", " Essential files not downloaded from SVN (either not found or no internet)</b><br>");
-		}
-
-		//
-		// Step 2 : Copy essentials like dsdt, ssdt and plists 
-		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Copy Essential files downloaded and from /Extra/include:</b><br>");
-		copyEssentials();
-			
-		//
-		// Step 3 : Applying Fixes and bootloader config
-		//	
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Apply fixes and Chameleon config:</b><br>");
-		applyFixes();
 		
-		// Check for bootloader update
-		if(chameBootFolder != "") {
-			global $edp_db;
-			$bootID = $modeldb[$modelRowID]['chameBootID'];
+		//
+		// Create a script file if we need to copy custom Theme from Extra/include
+		//
+		if($modeldb[$modelRowID]['useIncTheme'] == "on")
+		{
+			writeToLog("$workpath/logs/build/dLoadScripts/CopyCustomTheme.sh", "");
+		}
+		if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on")
+			$smbios = "yes";
+		
+		if($modeldb[$modelRowID]["useEDPCHAM"] == "on")
+			$chame = "yes";
+		
+		if($modeldb[$modelRowID]["useEDPDSDT"] == "on")
+			$dsdt = "yes";
+		
+		if($modeldb[$modelRowID]["useEDPSSDT"] == "on")
+			$ssdt = "yes";
+		
+		if($modeldb[$modelRowID]['useEDPTheme'] == "on")
+			$theme = "yes";
+		
+		// Launch the script which provides the summary of the build process 
+		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog&modelPath=$modelNamePath&smbios=$smbios&chame=$chame&dsdt=$dsdt&ssdt=$ssdt&theme=$theme'; </script>";
+		
+		//
+		// Step 2 : Preparing  kext packs
+		//
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Prepare Kext packs for the system hardware:</b><br>");
+		PrepareEDPKextPacks();	
+			
+		//  prepare for bootloader update
+		$bootID = $modeldb[$modelRowID]['chameBootID'];
+		if($bootID != "") {		
 			$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$bootID'");
 			$stmt->execute(); $cbootDB = $stmt->fetchAll(); $chameRow = $cbootDB[0];
-			
+		
 			if($chameRow['type'] == "Enoch") {
 				writeToLog("$buildLogPath/build.log", " Updating enoch bootloader...<br>");
-				$svnLoad->kextpackLoader("Bootloader", "EnochBoot", $chameRow['foldername']);
+				$svnLoad->PrepareKextpackDownload("Bootloader", "EnochBoot", $chameRow['foldername']);
 			} 
 			else {
 				writeToLog("$buildLogPath/build.log", " Updating standard bootloader...<br>");
-				$svnLoad->kextpackLoader("Bootloader", "StandardBoot", $chameRow['foldername']);
+				$svnLoad->PrepareKextpackDownload("Bootloader", "StandardBoot", $chameRow['foldername']);
 			}			
 		}
-			
-		//Kernel hack for YOS
-		writeToLog("$buildLogPath/build.log", " Checking if we are running Yosemite and need to link kernel</b><br>");
-		$r = getVersion();
-  		if ($r == "yos") { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
-
-
-		writeToLog("$buildLogPath/build.log", " Copying selected modules...</b><br>");
+				
+		//
+		// Step 3 : Preparing/Applying Fixes and chameleon modules
+		//	
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Apply and prepare fixes for system:</b><br>");
+		applyFixes();
+		
+		writeToLog("$buildLogPath/build.log", " Copying selected chameleon modules...</b><br>");
 		$chamModules->copyChamModules($modeldb[$modelRowID]);
 		
 		//
-		// Step 4 : Copying kexts
-		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 4) Download and prepare kexts:</b><br>");
-		copyEDPKexts();		
+		// Step 4 : Start the download of prepared files for download
+		//	
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Start the download of prepared files:</b><br>");
+		
+		// Get all the files in comma seperated way
+		$dListInfo = shell_exec("ls -m $buildLogPath/dLoadScripts/");
+		$dScriptsArray = explode(',', $dListInfo);
+		
+		foreach($dScriptsArray as $dScript) {
+			$dScript = preg_replace('/\s+/', '',$dScript); //remove white spaces in name
+			
+			if ($dScript != "")
+			{
+				system_call("sh $buildLogPath/dLoadScripts/$dScript >> $buildLogPath/build.log &");
+			}
+		}	
+			
 }
 
 //-------------------------> Here starts the Vendor and model selector - but only if $action is empty
@@ -433,6 +453,7 @@ if ($action == "") {
 			// set model vars in hidden input to read back during build
 			echo "<input type='hidden' name='action' value='dobuild'>";
 			echo "<input type='hidden' name='modelID' value='$modelID'>";
+			echo "<input type='hidden' name='cpuID' value='$cpuID'>";
 			echo "<input type='hidden' name='type' value='$mdrow[type]'>";
 			echo "<input type='hidden' name='name' value='$mdrow[name]'>";
 			echo "<input type='hidden' name='desc' value='$mdrow[desc]'>";
@@ -458,10 +479,10 @@ if ($action == "") {
 			var id = m.options[m.selectedIndex].value;
 			
 			var c = document.getElementById("cpu");
-			var cpuModel = c.options[c.selectedIndex].value;
+			var cpuID = c.options[c.selectedIndex].value;
 			
 			if (model == "") { alert('Please select a model before continuing..'); return; }
-			document.location.href = 'module.configuration.predefined.php?type='+type+'&modelID='+id+'&cpuModel='+cpuModel+'&action=confirm';		
+			document.location.href = 'module.configuration.predefined.php?type='+type+'&modelID='+id+'&cpuID='+cpuID+'&action=confirm';		
 			top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog#myfix';
 		}
 		function showType() {
