@@ -155,13 +155,13 @@ function showBuildLog() {
 		//
 		// Step 5 : Copying custom files from /Extra/include
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copying custom files from /Extra/include:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copy user provided files from /Extra/include:</b><br>");
 		copyCustomFiles();
 		
 		//
 		// Step 6 : Applying last minute fixes and generating caches
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Apply last minute fixes and Call myFix to copy kexts & generate kernelcache:</b><br>");
 		
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
@@ -177,7 +177,11 @@ function showBuildLog() {
 		// End build log and create a lastbuild log
 		system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $buildLogPath/build.log");
 		system_call("cp $buildLogPath/build.log $workpath/logs/lastbuild.log ");
-				
+		
+		// Append current build log to the builds log 
+		$fileContents = file_get_contents("$buildLogPath/build.log");
+		file_put_contents("$workpath/logs/build.log", $fileContents, FILE_APPEND | LOCK_EX);
+						
 		// Create run_myFix text file to start myFix process
 		writeToLog("$buildLogPath/Run_myFix.txt", "");
 	}

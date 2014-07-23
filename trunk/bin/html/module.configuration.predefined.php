@@ -119,8 +119,9 @@ if ($action == 'dobuild') {
 		$ven = $edpDBase->builderGetVendorValuebyID($sysType, $modelID);
 		$gen = $edpDBase->builderGetGenValuebyID($sysType, $modelID);
 		
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Download/update essential files for the $modelName:</b><br>");
-		
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Download/update essential files for the model $modelName:</b><br>");
+		writeToLog("$buildLogPath/build.log", " Checking essential files DSDT, SSDT and system plists from SVN</b><br>");
+
 		// use old method if there are is no generation column in db 
 		if($gen == "") {
 		
@@ -129,7 +130,7 @@ if ($action == 'dobuild') {
 			if(!is_dir("$workpath/model-data/$modelName/"))
 				system("mkdir $workpath/model-data/$modelName");
 				
-			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $buildLogPath/build.log 2>&1");
+			// system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $buildLogPath/build.log 2>&1");
 			
 			$svnLoad->svnModeldata("$modelName");
 		}
@@ -146,7 +147,7 @@ if ($action == 'dobuild') {
 			if(!is_dir("$workpath/model-data/$modelNamePath/"))
 				system("mkdir $workpath/model-data/$modelNamePath");
 			
-			system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $buildLogPath/build.log 2>&1");
+			// system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $buildLogPath/build.log 2>&1");
 			
 			//
 			// We use the new method "loadModelEssentialFiles" for the models and 
@@ -155,17 +156,23 @@ if ($action == 'dobuild') {
 		
 			$svnLoad->loadModelEssentialFiles();
 		}
-			
+		if (shell_exec("cd $workpath/model-data/$modelNamePath/common; ls | wc -l") > 0) {
+			writeToLog("$buildLogPath/build.log", " Essential files downloaded from SVN</b><br>");
+		}
+		else {
+			writeToLog("$buildLogPath/build.log", " Essential files not downloaded from SVN (either not found or no internet)</b><br>");
+		}
+
 		//
 		// Step 2 : Copy essentials like dsdt, ssdt and plists 
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Copying Essential files downloaded and from /Extra/include:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Copy Essential files downloaded and from /Extra/include:</b><br>");
 		copyEssentials();
 			
 		//
 		// Step 3 : Applying Fixes and bootloader config
 		//	
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Applying fixes and Chameleon config:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Apply fixes and Chameleon config:</b><br>");
 		applyFixes();
 		
 		// Check for bootloader update
@@ -196,7 +203,7 @@ if ($action == 'dobuild') {
 		//
 		// Step 4 : Copying kexts
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 4) Downlading and preparing kexts:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 4) Download and prepare kexts:</b><br>");
 		copyEDPKexts();		
 }
 
