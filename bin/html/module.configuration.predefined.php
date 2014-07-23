@@ -90,6 +90,9 @@ if ($action == 'dobuild') {
     	if(!is_dir("$buildLogPath"))
     		system_call("mkdir $buildLogPath");
     		
+    	if(!is_dir("$buildLogPath/dLoadScripts/"))
+    		system_call("mkdir $buildLogPath/dLoadScripts");
+    		
 		if(!is_dir("$workpath/logs/fixes"))
     		system_call("mkdir $workpath/logs/fixes");
     		
@@ -98,7 +101,7 @@ if ($action == 'dobuild') {
 		date_default_timezone_set("UTC");
 		$date = date("d-m-y H-i");
 	
-		system_call("echo '<br>*** Logging started on: $date UTC ***' >> $buildLogPath/build.log");
+		system_call("echo '<br>*** Logging started on: $date UTC Time ***' >> $buildLogPath/build.log");
 
 		// Launch the script which provides the summary of the build process 
 		echo "<script> document.location.href = 'workerapp.php?action=showBuildLog#myfix'; </script>";

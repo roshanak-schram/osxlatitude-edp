@@ -175,7 +175,7 @@ function showBuildLog() {
    		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and genrate cache...<br>");
 
 		// End build log and create a lastbuild log
-		system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $buildLogPath/build.log");
+		system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
 		system_call("cp $buildLogPath/build.log $workpath/logs/lastbuild.log ");
 		
 		// Append current build log to the builds log 
@@ -269,7 +269,7 @@ function showUpdateLog() {
 				echo "<b><center> Update success.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
 				echo "<br></ul>";
 				
-				system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $updLogPath/update.log");
+				system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $updLogPath/update.log");
 				system_call("mv $updLogPath/update.log $updLogPath/updateFinish.log ");
 
 				echo "<b>Update Log:</b>\n";
@@ -296,7 +296,7 @@ function showUpdateLog() {
 					include "$updLogPath/update.log";
 				echo "</pre>";
 				
-				system_call("echo '<br>*** Logging ended on: $date UTC ***' >> $updLogPath/update.log");
+				system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $updLogPath/update.log");
 				system_call("mv $updLogPath/update.log $workpath/logs/lastupdate.log ");
 				
 				// Append current update log to the updates log 

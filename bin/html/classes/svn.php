@@ -73,9 +73,6 @@ class svnDownload {
 		global $workpath, $edp, $ee;
 		
     	$buildLogPath = "$workpath/logs/build";
-    	
-    	if(!is_dir("$buildLogPath/dLoadScripts/"))
-    		system_call("mkdir $buildLogPath/dLoadScripts");
     		
     	if(!is_dir("$buildLogPath/dLoadStatus/"))
 			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/$fname.txt";

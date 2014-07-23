@@ -154,33 +154,36 @@
 		
 		case "Configuration":
 			echoPageItemTOP("icons/big/sysprefs.png", "Configuration");
-			echo "<div class='pageitem_bottom'>\n";
+			echo "<div class='pageitem_bottom'>";
 			echo "Build your model using EDP which provides combination of kexts, dsdt, plists needed to boot your system and allows you to configure.";
-			
+			echo "</div>";
 		break;
 		
 		case "Applications":
 			echoPageItemTOP("icons/big/apps.png", "Applications");
-			echo "<div class='pageitem_bottom'>\n";
+			echo "<div class='pageitem_bottom'>";
 			echo "In this section you can find some of the most used hackintosh applications.";
+			echo "</div>";
 		break;
 		
 		case "Tools":
 			echoPageItemTOP("icons/big/tools.png", "Tools");
-			echo "<div class='pageitem_bottom'>\n";
+			echo "<div class='pageitem_bottom'>";
 			echo "Having the right tool for the situation is always part of the problem. We have collected some of the best tools out there.<br>";
 			echo "Know a good tool that we should include? Shoot an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a>";
+			echo "</div>";
 		break;
 		
 		case "Fixes":
 			echoPageItemTOP("icons/big/emergency.png", "Fixes - The solution to the problem!");
-			echo "<div class='pageitem_bottom'>\n";
+			echo "<div class='pageitem_bottom'>";
 			echo "This section contains solution for the most common Hackintosh problems. If you still miss a fix, you can post it on our forum.";
+			echo "</div>";
 		break;
 		
 		case "Credits":
 			echoPageItemTOP("icons/big/credits.png", "Credits");
-			echo "<div class='pageitem_bottom'>\n";
+			echo "<div class='pageitem_bottom'>";
 			echo "You can see all of the names of the people who contributed their files to EDP in this section.<br>";
 
 			echo "<h1>Thank you!!!!</h1>";
@@ -191,11 +194,12 @@
 			echo "<br><br>";
 			echo "<b>Help us out....</b><br>";
 			echo "Got something that you made which can help others (or) have any queries regarding EDP? Send an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a> and we will put your files on EDP.";
+			echo "</div>";
 		break;
 		
 		case "Changelog":
 			echoPageItemTOP("icons/big/xcode.png", "Changelog for EDP...");
-   			 echo "<div class='pageitem_bottom'>\n";
+   			 echo "<div class='pageitem_bottom'>";
     
     		$url = "http://pipes.yahoo.com/pipes/pipe.run?_id=fcf8f5975800dd5f04a86cdcdcef7c4d&_render=rss";
     		$xml = new SimpleXmlElement(file_get_contents($url));
@@ -206,7 +210,7 @@
   		    	echo '<p>' . trim($item->description) . '</p><br/>';
     		    echo '<p>Commited on: ' . date('l jS \of F Y h:i:s A', strtotime($item->pubDate)) . '</p></li></ul>';
   			  }
-   			echo "</div>\n";
+   			echo "</div>";
 			
 		break;
 		
@@ -235,7 +239,7 @@
 			echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 			
-			system_call("echo '<br>*** Logging started on: $date UTC ***' >> $updLogPath/update.log");
+			system_call("echo '*** Logging started on: $date UTC Time ***<br>' >> $updLogPath/update.log");
 			system_call("sudo sh $workpath/bin/update.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
@@ -267,7 +271,7 @@
 			echo "<center><b>Please wait for few minutes while we download the database... which will take approx 1 to 5 minutes depending on your internet speed</b></center>";
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 			
-			system_call("echo '<br>*** Logging started on: $date UTC ***' >> $updLogPath/update.log");
+			system_call("echo '<br>*** Logging started on: $date UTC Time ***<br>' >> $updLogPath/update.log");
 			system_call("sudo sh $workpath/bin/updateDB.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
@@ -276,7 +280,7 @@
 		
 		case "BuildLogs":
 			echoPageItemTOP("icons/big/logs.png", "Build Log");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/build.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -290,13 +294,13 @@
 				echo "</pre>";
     		}
     					
-   			echo "</div>\n";
+   			echo "</div>";
 			
 		break;
 		
 		case "UpdateLogs":
 			echoPageItemTOP("icons/big/logs.png", "Update Log");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/update.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -310,13 +314,13 @@
 				echo "</pre>";
     		}
 			
-   			echo "</div>\n";
+   			echo "</div>";
 			
 		break;
 		
 		case "LastBuildLog":
 			echoPageItemTOP("icons/big/logs.png", "Last Build Log");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/lastbuild.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -330,13 +334,13 @@
 				echo "</pre>";
     		}
 			
-   			echo "</div>\n";
+   			echo "</div>";
 			
 		break;
 		
 		case "LastUpdateLog":
 			echoPageItemTOP("icons/big/logs.png", "Last Update Log");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/lastupdate.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -350,13 +354,13 @@
 				echo "</pre>";
     		}
     		
-   			echo "</div>\n";
+   			echo "</div>";
 			
 		break;
 		
 		case "ClearLogs":
 			echoPageItemTOP("icons/big/logs.png", "Clear Logs");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
     		
     		$action = $_POST['action'];
     		if ($action == "") {
@@ -403,13 +407,13 @@
     			}
     			
     		}			
-   			echo "</div>\n";
+   			echo "</div>";
 		
 		break;
 		
 		case "DownloadedApps":
 			echoPageItemTOP("icons/big/apps.png", "Downloaded application data by EDP");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
    			
    			// Get all the files/folders anme in comma seperated way
 			$appslinfo = shell_exec("ls -m $workpath/apps/");
@@ -498,13 +502,13 @@
     				echo "<b><center> There is no Application data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
     			}
     		}			
-    		echo "</div>\n";
+    		echo "</div>";
 		
 		break;
 		
 		case "DownloadedKextPacks":
 			echoPageItemTOP("icons/big/apps.png", "Downloaded Kext Packs data by EDP");
-   			echo "<div class='pageitem_bottom'>\n";
+   			echo "<div class='pageitem_bottom'>";
    			
    			// Get all the files/folders anme in comma seperated way
 			$kplinfo = shell_exec("ls -m $workpath/kextPacks/");
@@ -572,7 +576,7 @@
     				echo "<b><center> There is no Kext pack data to delete (Either not selected to delete (or) nothing downloaded).</center></b>";
     			}    			
     		}			
-    		echo "</div>\n";
+    		echo "</div>";
 		
 		break;
 		
