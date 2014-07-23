@@ -13,12 +13,8 @@ class svnDownload {
 		}
 		
 		$buildLogPath = "$workpath/logs/build";
-    		
-    	if(!is_dir("$buildLogPath/dLoadStatus/"))
-			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/essentialFiles.txt";
-    	else
-    		$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
-
+  
+    	$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
 		$endStatFile = "rm -f $buildLogPath/dLoadStatus/essentialFiles.txt";
 		
 		//
@@ -57,12 +53,8 @@ class svnDownload {
 		global $workpath, $modelNamePath;
 		
 		$buildLogPath = "$workpath/logs/build";
-    		
-    	if(!is_dir("$buildLogPath/dLoadStatus/"))
-			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/essentialFiles.txt";
-    	else
-    		$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
-
+    
+    	$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
 		$endStatFile = "rm -f $buildLogPath/dLoadStatus/essentialFiles.txt";
 		
 		$modelcpudir = "$workpath/model-data/$modelNamePath/cpu";
@@ -98,11 +90,7 @@ class svnDownload {
 		
     	$buildLogPath = "$workpath/logs/build";
     		
-    	if(!is_dir("$buildLogPath/dLoadStatus/"))
-			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/$fname.txt";
-    	else
-    		$createStatFile = "touch $buildLogPath/dLoadStatus/$fname.txt";	
-
+    	$createStatFile = "touch $buildLogPath/dLoadStatus/$fname.txt";	
 		$endStatFile = "rm -f $buildLogPath/dLoadStatus/$fname.txt";
 		
 		//
