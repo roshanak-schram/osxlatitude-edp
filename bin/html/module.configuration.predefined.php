@@ -97,24 +97,16 @@ if ($action == 'dobuild') {
     	if(!is_dir("$buildLogPath"))
     		system_call("mkdir $buildLogPath");
     		
-    	if(!is_dir("$buildLogPath/dLoadScripts/"))
-    		system_call("mkdir $buildLogPath/dLoadScripts");
-    		
+		if(!is_dir("$buildLogPath/dLoadScripts"))
+			system_call("mkdir $buildLogPath/dLoadScripts");
+
 		if(!is_dir("$workpath/logs/fixes"))
     		system_call("mkdir $workpath/logs/fixes");
 		
-		//
-		// Clear build log files
-		//
-				
-		writeToLog("$buildLogPath/build.log", "<br> Cleaning up logs of last build...<br>");
+		
+		writeToLog("$buildLogPath/build.log", "<br> Cleaning up last build...<br>");
 
 		system_call("rm -Rf /Extra/Extensions/*");
-	
-		if(!is_dir("$buildLogPath"))
-			system_call("mkdir $buildLogPath");
-		else
-			system_call("rm -rf $buildLogPath/*");
 			
 			
 		//
@@ -240,6 +232,10 @@ if ($action == 'dobuild') {
 		$dListInfo = shell_exec("ls -m $buildLogPath/dLoadScripts/");
 		$dScriptsArray = explode(',', $dListInfo);
 		
+		if(!is_dir("$buildLogPath/dLoadStatus")) {
+			system_call("mkdir $buildLogPath/dLoadStatus");
+		}
+			
 		foreach($dScriptsArray as $dScript) {
 			$dScript = preg_replace('/\s+/', '',$dScript); //remove white spaces in name
 			
@@ -254,7 +250,17 @@ if ($action == 'dobuild') {
 //-------------------------> Here starts the Vendor and model selector - but only if $action is empty
 
 if ($action == "") {
-				
+		
+	//
+	// Clear build log files
+	//
+	
+	if(!is_dir("$buildLogPath"))
+		system_call("mkdir $buildLogPath");
+	else {
+		system_call("rm -rf $buildLogPath/*");
+	}	
+		
 	// Write out the top menu
 	echoPageItemTOP("icons/big/config.png", "Select a model your wish to configure for:");
 
@@ -401,7 +407,7 @@ if ($action == "") {
 
 //--------------------> Here starts the build confirmation page 
 //Check if $action was set via GET or POST - if it is set, we asume that we are going to confirm the build
-	if ($action == "confirm") {
+	if ($action == "confirm") {		
 		
 		// Fetch standard model info needed for the configuration of the choosen model to build
 		switch ($sysType) {

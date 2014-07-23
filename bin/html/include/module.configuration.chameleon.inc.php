@@ -15,7 +15,7 @@
 				$version = $chameBootdb[$i]['version'];  $notes = $chameBootdb[$i]['notes'];
 				$os_support = $chameBootdb[$i]['os_support'];
 				
-				echo "<option value='$id' > $type v$version $os_support </option>\n";
+				echo "<option value='$id' >&nbsp;&nbsp;$type v$version $os_support </option>\n";
 					
 				$i++;
 			}
