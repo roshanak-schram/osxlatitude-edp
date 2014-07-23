@@ -78,11 +78,11 @@ class svnDownload {
     		system_call("mkdir $buildLogPath/dLoadScripts");
     		
     	if(!is_dir("$buildLogPath/dLoadStatus/"))
-			$createStatFile = "mkdir $buildLogPath/dLoadStatus; cd $buildLogPath/dLoadStatus; touch $fname.txt";
+			$createStatFile = "mkdir $buildLogPath/dLoadStatus; touch $buildLogPath/dLoadStatus/$fname.txt";
     	else
-    		$createStatFile = "cd $buildLogPath/dLoadStatus; touch $fname.txt";	
+    		$createStatFile = "touch $buildLogPath/dLoadStatus/$fname.txt";	
 
-		$endStatFile = "cd $buildLogPath/dLoadStatus; rm -rf $fname.txt";
+		$endStatFile = "rm -f $buildLogPath/dLoadStatus/$fname.txt";
 		
 		//
 		// Download custom Kexts, kernel and AppleHDA from model data
