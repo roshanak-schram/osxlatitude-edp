@@ -77,23 +77,13 @@ if ($action == 'dobuild') {
 		global $workpath, $rootpath, $ee, $os; 
 		global $modelName;
 	
+		
 		// For log time
 		date_default_timezone_set("UTC");
 		$date = date("d-m-y H-i");
 	
 		system_call("echo '<br>*** Logging started on: $date UTC Time ***' >> $buildLogPath/build.log");
-			
-		//
-		// Step 1 : Create the folder path and download the model data 
-		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Prepare essential files download:</b><br>");
-
-		writeToLog("$buildLogPath/build.log", " Preparing myhack...</b><br>");
 		
-		myHackCheck();
-		
-		writeToLog("$buildLogPath/build.log", " Preparing essential files for the model $modelName...</b><br>");
-
 		//
 		// Create directories for build
 		//
@@ -112,8 +102,33 @@ if ($action == 'dobuild') {
     		
 		if(!is_dir("$workpath/logs/fixes"))
     		system_call("mkdir $workpath/logs/fixes");
-    		
 		
+		//
+		// Clear build log files
+		//
+				
+		writeToLog("$buildLogPath/build.log", "<br> Cleaning up logs of last build...<br>");
+
+		system_call("rm -Rf /Extra/Extensions/*");
+	
+		if(!is_dir("$buildLogPath"))
+			system_call("mkdir $buildLogPath");
+		else
+			system_call("rm -rf $buildLogPath/*");
+			
+			
+		//
+		// Step 1 : Create the folder path and download the model data 
+		//
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Prepare essential files download:</b><br>");
+
+		writeToLog("$buildLogPath/build.log", " Preparing myhack...</b><br>");
+		
+		myHackCheck();
+		
+		writeToLog("$buildLogPath/build.log", " Preparing essential files for the model $modelName...</b><br>");
+
+			
 		global $modelNamePath;
 		$modelRowID = 0;
 		$modelName = $modeldb[$modelRowID]["name"];
@@ -239,19 +254,6 @@ if ($action == 'dobuild') {
 //-------------------------> Here starts the Vendor and model selector - but only if $action is empty
 
 if ($action == "") {
-
-	//
-	// Clear build log files
-	//
-	writeToLog("$buildLogPath/build.log", "  Cleaning up EDP files of last build...<br>");
-    
-    system_call("rm -Rf /Extra/Extensions/*");
-    	
-	if(!is_dir("$buildLogPath"))
-    	system_call("mkdir $buildLogPath");
-    else
-    	system_call("rm -rf $buildLogPath/*");
-	
 				
 	// Write out the top menu
 	echoPageItemTOP("icons/big/config.png", "Select a model your wish to configure for:");
