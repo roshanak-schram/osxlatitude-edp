@@ -473,7 +473,7 @@ function copyEssentials() {
 	$extrapath = "/Extra";
 	$modelDirPath = "$workpath/model-data/$modelNamePath";
 	
-    writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files...<br>");
+    writeToLog("$workpath/logs/build/build.log", " Checking for DSDT, SSDT and System Plist files... if they are aleady exist in $extrapath then will be overwritten<br>");
     
     // use EDP SMBIos?
     if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on")
@@ -481,15 +481,20 @@ function copyEssentials() {
     	$file1 = "$modelDirPath/common/SMBios.plist"; 
     	$file2 = "$modelDirPath/$os/SMBios.plist"; 
 
-   		writeToLog("$workpath/logs/build/build.log", "  SMBios.plist found, Copying to $extrapath<br>");
-    	//Remove existing file from /Extra
-    	if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
-    	//Copy file from common folder if exists
-    	if(file_exists($file1))
-    	system_call("cp -f $file1 $extrapath"); 
-    	//Copy file from os folder if exists
-    	if(file_exists($file2))
-    	system_call("cp -f $file2 $extrapath");
+    	// Remove existing file from /Extra
+    	// if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
+    	
+    	// Copy file from common folder if exists
+    	if(file_exists($file1)) {
+    		system_call("cp -f $file1 $extrapath"); 
+   			writeToLog("$workpath/logs/build/build.log", "  Common SMBios.plist found, Copying to $extrapath<br>");
+    	}
+    	
+    	// Copy file from os folder if exists
+    	if(file_exists($file2)) {
+    		system_call("cp -f $file2 $extrapath");
+   			writeToLog("$workpath/logs/build/build.log", "  OSX specific SMBios.plist found, Copying to $extrapath <br>");
+    	}
     	
     } else {
     	writeToLog("$workpath/logs/build/build.log", "  Skipping SMBios.plist file from EDP on user request<br>");
@@ -501,15 +506,20 @@ function copyEssentials() {
     	$file1 = "$modelDirPath/common/org.chameleon.Boot.plist"; 
     	$file2 = "$modelDirPath/$os/org.chameleon.Boot.plist"; 
 
-   	    writeToLog("$workpath/logs/build/build.log", "  org.chameleon.Boot.plist found, Copying to $extrapath<br>");
-    	//Remove existing file from /Extra
-    	if (file_exists("$extrapath/org.chameleon.Boot.plist")) { system_call("rm $extrapath/org.chameleon.Boot.plist"); }
-    	//Copy file from common folder if exists
-    	if(file_exists($file1))
-    	system_call("cp -f $file1 $extrapath"); 
-    	//Copy file from os folder if exists
-    	if(file_exists($file2))
-    	system_call("cp -f $file2 $extrapath");
+    	// Remove existing file from /Extra
+    	// if (file_exists("$extrapath/org.chameleon.Boot.plist")) { system_call("rm $extrapath/org.chameleon.Boot.plist"); }
+    	
+    	// Copy file from common folder if exists
+    	if(file_exists($file1)) {
+    		system_call("cp -f $file1 $extrapath"); 
+   	  		writeToLog("$workpath/logs/build/build.log", "  Common org.chameleon.Boot.plist found, Copying to $extrapath<br>");
+    	}
+    	
+    	// Copy file from os folder if exists
+    	if(file_exists($file2)) {
+    		system_call("cp -f $file2 $extrapath");
+   	    	writeToLog("$workpath/logs/build/build.log", "  OS specific org.chameleon.Boot.plist found, Copying to $extrapath<br>");
+    	}
    	 	
     } else {
     	writeToLog("$workpath/logs/build/build.log", "  Skipping org.chameleon.Boot.plist file from EDP on user request<br>");
@@ -521,15 +531,20 @@ function copyEssentials() {
     	$file1 = "$modelDirPath/common/dsdt.aml"; 
     	$file2 = "$modelDirPath/$os/dsdt.aml"; 
 
-    	writeToLog("$workpath/logs/build/build.log", "  dsdt found, Copying to $extrapath<br>");
-    	//Remove existing file from /Extra
-    	if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
+    	// Remove existing file from /Extra
+    	// if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
+    	
     	//Copy file from common folder if exists
-    	if(file_exists($file1))
-    	system_call("cp -f $file1 $extrapath"); 
+    	if(file_exists($file1)) {
+    		system_call("cp -f $file1 $extrapath");
+    		writeToLog("$workpath/logs/build/build.log", "  Common dsdt found, Copying to $extrapath<br>");
+    	}
+    	
     	//Copy file from os folder if exists
-    	if(file_exists($file2))
-    	system_call("cp -f $file2 $extrapath");
+    	if(file_exists($file2)) {
+    		system_call("cp -f $file2 $extrapath");
+    		writeToLog("$workpath/logs/build/build.log", "  OS specific dsdt found, Copying to $extrapath<br>");
+    	}
     	
     } else {
     	writeToLog("$workpath/logs/build/build.log", "  Skipping DSDT file from EDP on user request<br>");
@@ -537,16 +552,18 @@ function copyEssentials() {
 	
     // If its mavericks then copy the files from ml folder temporarilyfor now
     if($os == "mav" && !is_dir("$modelDirPath/$os") && is_dir("$modelDirPath/ml")) {
-    writeToLog("$workpath/logs/build/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
-    if($modeldb[$modelRowID]["useEDPDSDT"] == "on") {
-    	$file = "$modelDirPath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-    	}
-    if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on") {
-    	$file = "$modelDirPath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-    	}
-    if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
-    	$file = "$modelDirPath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-    	}
+    	
+    	writeToLog("$workpath/logs/build/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
+		
+		if($modeldb[$modelRowID]["useEDPDSDT"] == "on") {
+			$file = "$modelDirPath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+			}
+		if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on") {
+			$file = "$modelDirPath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+			}
+		if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
+			$file = "$modelDirPath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+			}
     }						
 
 	// use EDP org.chameleon.Boot.plist?

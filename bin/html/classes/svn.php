@@ -64,7 +64,7 @@ class svnDownload {
 		if (is_dir("$modelcpudir")) {
 			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelcpudir");
 		} else {
-			system_call("mkdir $modelcpudir"; cd $modelcpudir; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/cpu/$cpuModel .");
+			system_call("mkdir $modelcpudir; cd $modelcpudir; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/cpu/$cpuModel .");
 		}
 	
 	}
