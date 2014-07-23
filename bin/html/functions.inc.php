@@ -247,7 +247,7 @@ function echoPageItemTOP($icon, $text) {
 		}
 		
 		writeToLog("$log", "  AppleIntelSNBGraphicsFB.kext patched successfullly for Intel HD3000 VGA and HDMI<br>");
-		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+		system_call("touch $workpath/logs/fixes/patchSuccess.txt;");
 	}
 
 	/*
@@ -291,7 +291,7 @@ function echoPageItemTOP($icon, $text) {
 		}
 		
 		writeToLog("$log", "  AppleIntelCPUPowerManagement.kext patched successfullly<br>");
-		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+		system_call("touch $workpath/logs/fixes/patchSuccess.txt;");
 	}
 
 
@@ -343,7 +343,7 @@ function echoPageItemTOP($icon, $text) {
 		} 
 		
 		writeToLog("$log", "  WiFi kext patched successfullly for AR9285/AR9287 card <br>");
-		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+		system_call("touch $workpath/logs/fixes/patchSuccess.txt;");
 	}
 
 	/*
@@ -396,7 +396,7 @@ function echoPageItemTOP($icon, $text) {
 		} 
 		
 		writeToLog("$log", "  WiFi kext/binary patched successfullly for BCM4352 card<br>");
-		system_call("cd $workpath/logs/fixes; touch patchSuccess.txt;");
+		system_call("touch $workpath/logs/fixes/patchSuccess.txt;");
 	}
 
 	/*
@@ -596,20 +596,27 @@ function copyEssentials() {
     }
     
     //
-    // Copy Custom Themes folder to Extra
+    // Copy Themes folder to Extra
     //
-    writeToLog("$workpath/logs/build/build.log", "  Copying Themes folder to /Extra...<br>");
-    if (!is_dir("/Extra/Themes")) {
-        system_call("mkdir /Extra/Themes");
-     }
-     
-    if(is_dir("$workpath/model-data/$modelNamePath/common/Themes")) {
-		system_call("cp -a $workpath/model-data/$modelNamePath/common/Themes/. /Extra/Themes");
+    if($modeldb[$modelRowID]['useEDPTheme'] == "on")
+    {
+    	writeToLog("$workpath/logs/build/build.log", "  Copying Themes folder to /Extra...<br>");
+		if (!is_dir("/Extra/Themes")) {
+			system_call("mkdir /Extra/Themes");
+		 }
+		 else {
+		 	system_call("rm -rf /Extra/Themes/*");
+		 }
+	 
+		if(is_dir("$workpath/model-data/$modelNamePath/common/Themes")) {
+			system_call("cp -a $workpath/model-data/$modelNamePath/common/Themes/. /Extra/Themes");
+		}
+		// Standard theme folder
+		else {
+			system_call("cp -a $workpath/bin/Themes/. /Extra/Themes");
+		}
     }
-    // Standard theme folder
-    else {
-    	system_call("cp -a $workpath/bin/Themes/. /Extra/Themes");
-    }
+    
 }
 
  /*
@@ -1177,12 +1184,15 @@ function copyCustomFiles() {
     //
     // Copy Custom Themes folder from $incpatch to /Extra
     //
-    if (is_dir("$incpath/Themes")) {
-        writeToLog("$workpath/logs/build/build.log", "  Custom themes folder found, copied to /Extra<br>");
-        system_call("rm -rf /Extra/Themes");
-        system_call("mkdir /Extra/Themes");
-		system_call("cp -a $incpath/Themes/. /Extra/Themes/");
-     }	
+    if($modeldb[$modelRowID]['useIncTheme'] == "on")
+    {
+    	if (is_dir("$incpath/Themes")) {
+			writeToLog("$workpath/logs/build/build.log", "  Custom themes folder found, copied to /Extra<br>");
+			system_call("rm -rf /Extra/Themes");
+			system_call("mkdir /Extra/Themes");
+			system_call("cp -a $incpath/Themes/. /Extra/Themes/");
+     	}
+    }
      
 	//
     // Copying Custom kexts from include if CopyCustomKexts file exists

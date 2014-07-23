@@ -34,11 +34,13 @@ if ($action == 'dobuild') {
 			'useEDPSSDT' 		=> $_POST['useEDPSSDT'],			
 			'useEDPSMBIOS' 		=> $_POST['useEDPSMBIOS'], 			
 			'useEDPCHAM' 		=> $_POST['useEDPCHAM'], 
+			'useEDPTheme' 		=> $_POST['useEDPTheme'], 
 			'useIncExtensions' 	=> $_POST['useIncExtensions'], 		
 			'useIncDSDT' 		=> $_POST['useIncDSDT'],			
 			'useIncSSDT' 		=> $_POST['useIncSSDT'],			
 			'useIncSMBIOS' 		=> $_POST['useIncSMBIOS'], 			
-			'useIncCHAM' 		=> $_POST['useIncCHAM'],            		
+			'useIncCHAM' 		=> $_POST['useIncCHAM'], 
+			'useIncTheme' 		=> $_POST['useIncTheme'],            		
 			'ps2pack' 		     => $_POST['ps2pack'],
 			'batterypack'		 => $_POST['batterypack'],
 			'ethernet'		     => $_POST['ethernet'],
@@ -61,8 +63,7 @@ if ($action == 'dobuild') {
 			'uClibcxx' 		     => $_POST['ChamModuleuClibcxx'],
 			'HDAEnabler' 		 => $_POST['ChamHDAEnabler'],
 			'customCham' 		 => $_POST['customCham'],
-			'updateCham' 		 => $_POST['updateCham'],
-			'useEnochCham' 		 => $_POST['useEnochCham'],
+			'chameBootID' 		 => $_POST['chameBootID'],
 			'fixes' 		     => $_POST['fixes'],
 			'optionalpacks'	     => $_POST['optionalpacks']                    		 
 		),
@@ -79,17 +80,20 @@ if ($action == 'dobuild') {
 		//
 		// Create directories for build
 		//
-
-		if(!is_dir("$workpath/logs"))
+    		
+    	if(!is_dir("$workpath/kextPacks"))
+    		system_call("mkdir $workpath/kextPacks");
+    		
+    	if(!is_dir("$workpath/logs"))
     		system_call("mkdir $workpath/logs");
     		
     	if(!is_dir("$buildLogPath"))
     		system_call("mkdir $buildLogPath");
     		
-    	if(!is_dir("$workpath/kextPacks"))
-    		system_call("mkdir $workpath/kextPacks");
+		if(!is_dir("$workpath/logs/fixes"))
+    		system_call("mkdir $workpath/logs/fixes");
     		
-	
+    		
 		// For log time
 		date_default_timezone_set("UTC");
 		$date = date("d-m-y H-i");
@@ -165,10 +169,9 @@ if ($action == 'dobuild') {
 		applyFixes();
 		
 		// Check for bootloader update
-		$chameBootID = $_POST['chameBootID'];
 		if(chameBootFolder != "") {
 			global $edp_db;
-			$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$chameBootID'");
+			$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$modeldb[$modelRowID][chameBootID]'");
 			$stmt->execute(); $cbootDB = $stmt->fetchAll(); $chameRow = $cbootDB[0];
 			
 			if($chameRow['type'] == "Enoch") {
@@ -341,12 +344,14 @@ if ($action == "") {
  			  case "Ultrabook":
  			  case "Tablet":
  			  	$query = "SELECT * FROM modelsPortable where id = '$modelID'";
+ 			  	$cquery = "SELECT * FROM compatNB where model_id = '$modelID'";
  			  break;
  			  
  			  case "Desktop":
  			  case "Workstation":
  			  case "AllinOnePC":
  			  	$query = "SELECT * FROM modelsDesk where id = '$modelID'";
+ 			  	$cquery = "SELECT * FROM compatDesk where model_id = '$modelID'";
  			  break;
  		}
 		$stmt = $edp_db->query($query);
