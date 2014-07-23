@@ -13,11 +13,9 @@ rm -rf /Extra/EDP/logs/update/*
 echo "Downloading new database..."
 if curl -o edp.sqlite3 http://www.osxlatitude.com/dbupdate.php --connect-timeout 10 ; then
     echo "Database successfully downloaded <br>"
-	touch /Extra/EDP/logs/update/Updsuccess.txt
 else
     echo "Could not update database... using backup <br>"
     cp backup/edp.sqlite3 ./edp.sqlite3
-	touch /Extra/EDP/logs/update/Updfail.txt
 fi
 
 echo "<br>Database Update finished."
