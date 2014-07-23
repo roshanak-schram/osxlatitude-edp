@@ -54,22 +54,17 @@ class svnDownload {
 	}
 	
 	public function loadCPUFiles($cpuModel) {
-		global $workpath, $modelNamePath, $os;
+		global $workpath, $modelNamePath;
 		
 		//
 		// download cpu ssdt files
 		//
 		$modelcpudir = "$workpath/model-data/$modelNamePath/cpu/";
-		if (!is_dir("$modelcpudir")) {
-			system_call("mkdir $modelcpudir");
-		}
-	
-		$cpuFilesfolder = "$modelcpudir/$cpuModel";
 		
-		if (is_dir("$cpuFilesfolder")) {
-			system_call("svn --non-interactive --username edp --password edp --force --quiet update $cpuFilesfolder");
+		if (is_dir("$modelcpudir")) {
+			system_call("svn --non-interactive --username edp --password edp --force --quiet update $modelcpudir");
 		} else {
-			system_call("cd $modelcpudir; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/cpu/$cpuModel");
+			system_call("mkdir $modelcpudir"; cd $modelcpudir; svn --non-interactive --username osxlatitude-edp-read-only --force --quiet co http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/cpu/$cpuModel .");
 		}
 	
 	}
