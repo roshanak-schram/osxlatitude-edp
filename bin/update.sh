@@ -1,14 +1,12 @@
-echo "<br>Updating database..."
-rm -rf /Extra/EDP/logs/update/*
+echo "Updating database..."
 
 echo "<br>Making a backup..."
 cd /Extra/EDP/bin
 rm -Rf /Extra/EDP/bin/backup/edp.sqlite3
 cp edp.sqlite3 /Extra/EDP/bin/backup
 
-echo "<br>Cleaning up old files..."
+echo "Cleaning up database..."
 rm -Rf edp.sqlite3
-rm -rf /Extra/EDP/logs/update/*
 
 echo "Downloading new database..."
 if curl -o edp.sqlite3 http://www.osxlatitude.com/dbupdate.php --connect-timeout 10 ; then
