@@ -166,21 +166,21 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		//
 		// Step 5 : Copy essentials like dsdt, ssdt and plists 
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copying essential files downloaded:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 5) Copy essential files downloaded:</b><br>");
 
 		copyEssentials($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame);
 		
 		//
 		// Step 6 : Copying custom files from /Extra/include
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Copying user provided files from /Extra/include:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 6) Copy user provided files from /Extra/include:</b><br>");
 		
 		copyCustomFiles();
 		
 		//
 		// Step 7 : Applying last minute fixes and generating caches
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 7) Applying last minute fixes and Calling myFix to copy kexts & generate kernelcache:</b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 7) Apply last minute fixes and Call myFix to copy kexts & generate kernelcache:</b><br>");
 		
 		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
 		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
