@@ -117,9 +117,6 @@ if ($action == 'dobuild') {
 		writeToLog("$buildLogPath/build.log", " Preparing myhack...</b><br>");
 		
 		myHackCheck();
-		
-		writeToLog("$buildLogPath/build.log", " Preparing essential files for the model $modelName...</b><br>");
-
 			
 		global $modelNamePath;
 		$modelRowID = 0;
@@ -167,6 +164,8 @@ if ($action == 'dobuild') {
 				
 		}
 		
+		writeToLog("$buildLogPath/build.log", " Preparing essential files for the model $modelName...</b><br>");
+
 		//
 		// Create a script file if we need to copy custom Theme from Extra/include
 		//
@@ -227,7 +226,8 @@ if ($action == 'dobuild') {
 		// Step 4 : Start the download of prepared files for download
 		//	
 		writeToLog("$buildLogPath/build.log", "<br><b>Step 3) Start the download of prepared files:</b><br>");
-		
+		writeToLog("$buildLogPath/build.log", "<br>");
+
 		// Get all the files in comma seperated way
 		$dListInfo = shell_exec("ls -m $buildLogPath/dLoadScripts/");
 		$dScriptsArray = explode(',', $dListInfo);

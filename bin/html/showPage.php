@@ -414,7 +414,8 @@
 		case "DownloadedApps":
 			echoPageItemTOP("icons/big/apps.png", "Downloaded application data by EDP");
    			echo "<div class='pageitem_bottom'>";
-   			
+   			echo "<p align=\"justify\"> EDP keeps the downloaded apps during build for subsequent builds, so they will be updated instead of downloading completely. But, if you wish to save some space (or) want to remove the files you don't need can be done here by deleting them.</p>";
+
    			// Get all the files/folders anme in comma seperated way
 			$appslinfo = shell_exec("ls -m $workpath/apps/");
 			$appsArray = explode(',', $appslinfo);
@@ -509,6 +510,7 @@
 		case "DownloadedKextPacks":
 			echoPageItemTOP("icons/big/allfiles.png", "Downloaded Kext Packs data by EDP");
    			echo "<div class='pageitem_bottom'>";
+   			echo "<p align=\"justify\"> EDP keeps the downloaded kext packs during build for subsequent builds, so they will be updated instead of downloading completely. But, if you wish to save some space (or) want to remove the files you don't need can be done here by deleting them.</p>";
    			
    			// Get all the files/folders anme in comma seperated way
 			$kplinfo = shell_exec("ls -m $workpath/kextPacks/");
@@ -583,7 +585,8 @@
 		case "DownloadedModelData":
 			echoPageItemTOP("icons/big/allfiles.png", "Downloaded model data by EDP");
    			echo "<div class='pageitem_bottom'>";
-   			
+   			echo "<p align=\"justify\"> EDP keeps the downloaded model data during build for subsequent builds, so they will be updated instead of downloading completely. But, if you wish to save some space (or) want to remove the files you don't need can be done here by deleting them.</p>";
+
    			// Get all the files/folders anme in comma seperated way
 			$vinfo = shell_exec("ls -m $workpath/model-data/");
 			$vArray = explode(',', $vinfo);
