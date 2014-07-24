@@ -197,7 +197,11 @@ class svnDownload {
 			// system_call("sh $buildLogPath/dLoadScripts/$fname.sh >> $buildLogPath/build.log &");
 		}
 		else {
-			$checkoutCmd = "mkdir $categdir; cd $categdir; if ping -q -c 2 google.com; then if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $buildLogPath/build.log; $copyKextCmd; fi else echo \"Download : No internet to download $name file(s)<br>\" >> $buildLogPath/build.log; fi";
+			
+			if (!is_dir("$categdir")) {
+				system_call("mkdir $categdir");
+			}
+			$checkoutCmd = "cd $categdir; if ping -q -c 2 google.com; then if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"Download : $name file(s) finished<br>\" >> $buildLogPath/build.log; $copyKextCmd; fi else echo \"Download : No internet to download $name file(s)<br>\" >> $buildLogPath/build.log; fi";
 
 			writeToLog("$buildLogPath/dLoadScripts/$fname.sh", "$createStatFile; $checkoutCmd; $endStatFile; ");
 			// system_call("sh $buildLogPath/dLoadScripts/$fname.sh >> $buildLogPath/build.log &");
