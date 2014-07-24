@@ -267,7 +267,12 @@ class edpDatabase {
     
     			foreach($cpuArray as $cpuID) {
     				$cpuID = preg_replace('/\s+/', '',$cpuID); //remove white spaces
-    				$return .= '<option value="' . $cpuID . '">&nbsp;&nbsp;' . $cpuID . '</option>';
+    				
+    				$cpuRes = $edp_db->query("SELECT * FROM  cpu WHERE id = '$cpuID'");
+
+    				foreach($cpuRes as $cpuName) {
+    					$return .= '<option value="' . $cpuName['id'] . '">&nbsp;&nbsp;' . $cpuName['name'] . '</option>';
+    				}
     			}
 				$cpuCount++;
 			}

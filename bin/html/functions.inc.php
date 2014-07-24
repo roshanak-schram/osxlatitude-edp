@@ -1037,23 +1037,6 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     	  	
     $svnLoad->PrepareKextpackDownload("Kernel", "kernel$os", "$modelNamePath/Kernel");
     
-    //
-    // Download bootloader for update
-    //
-    $bootID = $modeldb[$modelRowID]['chameBootID'];
-	if($bootID != "") {		
-		$stmt = $edp_db->query("SELECT * FROM chameBoot where id = '$bootID'");
-		$stmt->execute(); $cbootDB = $stmt->fetchAll(); $chameRow = $cbootDB[0];
-		
-		if($chameRow['type'] == "Enoch") {
-			writeToLog("$buildLogPath/build.log", " Updating enoch bootloader...<br>");
-			$svnLoad->PrepareKextpackDownload("Bootloader", "EnochBoot", $chameRow['foldername']);
-		} 
-		else {
-			writeToLog("$buildLogPath/build.log", " Updating standard bootloader...<br>");
-			$svnLoad->PrepareKextpackDownload("Bootloader", "StandardBoot", $chameRow['foldername']);
-		}			
-	}
 	
     //
     // Create a script file if we need to copy kexts from Extra/include/Extensions

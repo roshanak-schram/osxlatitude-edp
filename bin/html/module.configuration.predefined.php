@@ -241,7 +241,7 @@ if ($action == 'dobuild') {
 			
 			if ($dScript != "")
 			{
-				system_call("sh $buildLogPath/dLoadScripts/$dScript >> $buildLogPath/build.log &");
+				system_call("sh $buildLogPath/dLoadScripts/$dScript >> $buildLogPath/internetCheckLog.log &");
 			}
 		}	
 			
