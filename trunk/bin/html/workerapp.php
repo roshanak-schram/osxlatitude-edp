@@ -66,7 +66,11 @@ if ($action == "showCredits") {
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 
-	echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
+	if ($row[category] == "Apps & Tools")
+		echoPageItemTOP("icons/apps/$row[icon]", "$row[name]");
+	else
+		echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
+		
 	echo "<div class='pageitem_bottom'>\n";
 	echo "<br>";
 	echo "<span class='graytitle'>Info</span><br>";

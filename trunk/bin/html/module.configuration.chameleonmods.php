@@ -34,7 +34,7 @@ if ($showtype == "list") {
 	include "header.inc.php";
 	
 	// Write out the top menu
-	echoPageItemTOP("icons/big/tools.png", "Chameleon modules");
+	echoPageItemTOP("icons/big/chame.png", "Chameleon modules");
 	echo "<div class='pageitem_bottom'>\n";
 	echo "<br>Use this to configure the modules you want to be used by chameleon.<br><br>";
 	
