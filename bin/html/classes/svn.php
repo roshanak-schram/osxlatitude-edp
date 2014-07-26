@@ -264,7 +264,7 @@ class svnDownload {
 			system_call("sh $logPath/$fname.sh >> $logPath/$logName.log &");
 		}
 		else {
-			$checkoutCmd = "cd dataDir; if ping -q -c 2 google.com; then if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $logPath/Success_$fname.txt; fi else echo \"$fname file(s) download failed due to no internet<br>\"; touch $logPath/Fail_$fname.txt; fi";
+			$checkoutCmd = "cd $dataDir; if ping -q -c 2 google.com; then if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $logPath/Success_$fname.txt; fi else echo \"$fname file(s) download failed due to no internet<br>\"; touch $logPath/Fail_$fname.txt; fi";
 
 			writeToLog("$logPath/$fname.sh", "$checkoutCmd;");
 			
