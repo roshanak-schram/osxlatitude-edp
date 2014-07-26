@@ -153,7 +153,7 @@
 		break;
 		
 		case "Configuration":
-			echoPageItemTOP("icons/big/sysprefs.png", "Configuration");
+			echoPageItemTOP("icons/big/config.png", "Configuration");
 			echo "<div class='pageitem_bottom'>";
 			echo "Build your model using EDP which provides combination of kexts, dsdt, plists needed to boot your system and allows you to configure.";
 			echo "</div>";
@@ -175,7 +175,7 @@
 		break;
 		
 		case "Fixes":
-			echoPageItemTOP("icons/big/emergency.png", "Fixes - The solution to the problem!");
+			echoPageItemTOP("icons/big/terminal.png", "Fixes - The solution to the problem!");
 			echo "<div class='pageitem_bottom'>";
 			echo "This section contains solution for the most common Hackintosh problems. If you still miss a fix, you can post it on our forum.";
 			echo "</div>";
@@ -198,7 +198,7 @@
 		break;
 		
 		case "Changelog":
-			echoPageItemTOP("icons/big/xcode.png", "Changelog for EDP...");
+			echoPageItemTOP("icons/big/activity.png", "Changelog for EDP...");
    			 echo "<div class='pageitem_bottom'>";
     
     		$url = "http://pipes.yahoo.com/pipes/pipe.run?_id=fcf8f5975800dd5f04a86cdcdcef7c4d&_render=rss";
@@ -279,7 +279,7 @@
 		break;
 		
 		case "BuildLogs":
-			echoPageItemTOP("icons/big/logs.png", "Build Log");
+			echoPageItemTOP("icons/big/activity.png", "Build Log");
    			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/build.log")) {
@@ -299,7 +299,7 @@
 		break;
 		
 		case "UpdateLogs":
-			echoPageItemTOP("icons/big/logs.png", "Update Log");
+			echoPageItemTOP("icons/big/activity.png", "Update Log");
    			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/update.log")) {
@@ -319,7 +319,7 @@
 		break;
 		
 		case "LastBuildLog":
-			echoPageItemTOP("icons/big/logs.png", "Last Build Log");
+			echoPageItemTOP("icons/big/activity.png", "Last Build Log");
    			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/lastbuild.log")) {
@@ -339,7 +339,7 @@
 		break;
 		
 		case "LastUpdateLog":
-			echoPageItemTOP("icons/big/logs.png", "Last Update Log");
+			echoPageItemTOP("icons/big/activity.png", "Last Update Log");
    			echo "<div class='pageitem_bottom'>";
     		
     		if (!file_exists("$workpath/logs/lastupdate.log")) {
@@ -359,7 +359,7 @@
 		break;
 		
 		case "ClearLogs":
-			echoPageItemTOP("icons/big/logs.png", "Clear Logs");
+			echoPageItemTOP("icons/big/trash.png", "Clear Logs");
    			echo "<div class='pageitem_bottom'>";
     		
     		$action = $_POST['action'];
@@ -508,7 +508,7 @@
 		break;
 		
 		case "DownloadedKextPacks":
-			echoPageItemTOP("icons/big/allfiles.png", "Downloaded Kext Packs data by EDP");
+			echoPageItemTOP("icons/big/kext.png", "Downloaded Kext Packs data by EDP");
    			echo "<div class='pageitem_bottom'>";
    			
    			// Get all the files/folders anme in comma seperated way
@@ -583,7 +583,7 @@
 		break;
 		
 		case "DownloadedModelData":
-			echoPageItemTOP("icons/big/allfiles.png", "Downloaded model data by EDP");
+			echoPageItemTOP("icons/big/files.png", "Downloaded model data by EDP");
    			echo "<div class='pageitem_bottom'>";
 
    			// Get all the files/folders anme in comma seperated way

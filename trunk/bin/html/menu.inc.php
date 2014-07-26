@@ -44,7 +44,7 @@
 				
 				$crditName = $edp_db->query("SELECT * FROM credits where category = '$row[category]' order by name");
 				foreach($crditName as $nameRow) {
-					addMenuItem("loadURL('workerapp.php?action=showCredits&id=$nameRow[id]');", "icons/sidebar/draft.png", "$nameRow[name] <i>by $nameRow[owner]</i>");
+					addMenuItem("loadURL('workerapp.php?action=showCredits&id=$nameRow[id]');", "icons/sidebar/user.png", "$nameRow[name] <i>by $nameRow[owner]</i>");
 				}
 				echo "</table>";
 			}
