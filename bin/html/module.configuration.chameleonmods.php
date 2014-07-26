@@ -24,8 +24,8 @@ if ($action == "update") {
     $chamModConfig = "";
 }
 
-// If the showtype is set to standalone we asume that its being called from the sidebar menu under configuration
-if ($showtype == "standalone") {
+// If the showtype is set to list we asume that its being called from the sidebar menu under configuration
+if ($showtype == "list") {
 
 	// Get the current config
 	$chamModConfig = $chamModules->chamModGetConfig();
@@ -51,11 +51,11 @@ foreach($result as $row) {
 }
 echo "</ul><br>";
 					
-// Finish html for standalone mode
-if ($showtype == "standalone") {
+// Finish html for list mode
+if ($showtype == "list") {
 	echo "</div>";
 	echo "<input type='hidden' name='action' value='update'>";
-	echo "<input type='hidden' name='showtype' value='standalone'>";	
+	echo "<input type='hidden' name='showtype' value='list'>";	
 	echo "<ul class='pageitem'>\n";
 	echo "	<li class='button'><input name='Submit input' type='submit' value='Save changes' /></li>\n";
 	echo "</ul></form>\n";

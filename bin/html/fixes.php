@@ -38,7 +38,7 @@
 		echo "<form action='fixes.php' method='post'>";
 
 		// Write out the top menu
-		echoPageItemTOP("icons/small/$row[icon]", "$row[submenu]");
+		echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
 		
 		?>
 		
