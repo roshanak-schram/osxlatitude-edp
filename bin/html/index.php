@@ -12,15 +12,15 @@ $edpmode = "web";
     <body onload="bootloader();" onresize="aligndesign();" background="images/console_bg.png">
     	
 
-	<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topbar-bg-normal2.png" height="69">
+	<table border="0" width="100%" cellpadding="0" style="border-collapse: collapse" background="images/topmenu-bg.png" height="69">
             <tr style="vertical-align: bottom;"  class="topbarmenu" align="center" style='cursor: hand'>
             	<td width="80" onclick="loader('EDP')"><img src="icons/big/edp.png" width="38"></td>
                             	
-                <td width="80" onclick="loader('Configuration')"><img src="icons/big/sysprefs.png" width="40"></td>
+                <td width="80" onclick="loader('Configuration')"><img src="icons/big/config.png" width="40"></td>
 
 				<td width="80" onclick="loader('Applications')"><img src="icons/big/apps.png" width="40"></td>
                 <td width="80" onclick="loader('Tools')"><img src="icons/big/tools.png" width="40"></td>
-                <td width="80" onclick="loader('Fixes')"><img src="icons/big/emergency.png" width="40"></td>
+                <td width="80" onclick="loader('Fixes')"><img src="icons/big/terminal.png" width="40"></td>
 
                 <td>&nbsp;</td>
                 <td width="80" onclick="loader('Credits');"><img src="icons/big/credits.png" width="40"></td>                
