@@ -23,8 +23,10 @@ $edpmode = "web";
                 <td width="80" onclick="loader('Fixes')"><img src="icons/big/terminal.png" width="40"></td>
 
                 <td>&nbsp;</td>
-                <td width="80" onclick="loader('Credits');"><img src="icons/big/credits.png" width="40"></td>                
-                <td width="80"><a href="http://code.google.com/p/osxlatitude-edp/issues/list" target="_blank"><img src="icons/big/issues.png" width="40"></a></td>
+                <td width="80"><a href="http://www.osxlatitude.com/edp/documentation/" target="_blank"><img src="icons/big/guide.png" width="40"></a></td>
+            	<td width="80"><a href="http://forum.osxlatitude.com/index.php?/forum/6-feedback/" target="_blank"><img src="icons/big/feedback.png" width="40"></a></td>
+                <td width="80"><a href="http://forum.osxlatitude.com/index.php?/forum/9-issues-and-bugs/" target="_blank"><img src="icons/big/issues.png" width="40"></a></td>
+                <td width="80" onclick="loader('Credits');"><img src="icons/big/credits.png" width="40"></td>    
                 <td width="80"><a href='<?= "$donateurl"; ?>' target='_blank'><img src="icons/big/paypal.png" width="40"></a></td>
             </tr>
             <tr class="topbarmenu" align="center" style='cursor: hand'>
@@ -34,8 +36,10 @@ $edpmode = "web";
                 <td>Tools</td> 
                 <td>Fixes</td>
                 <td>&nbsp;</td>
-                <td>Credits</td>                
+                <td>EDP Guide</td>
+                <td>Feedback</td>
                 <td>Issues</td>
+                <td>Credits</td>
                 <td>Donate</td>
             </tr>
         </table>

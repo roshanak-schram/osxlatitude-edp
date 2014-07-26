@@ -97,7 +97,7 @@
 				//
 				
 				// choose icon
-				if ($row[category] == "Applications" || $row[category] == "Tools") { $icon = "icons/sidebar/apps.png"; } 
+				if ($row[category] == "Applications") { $icon = "icons/sidebar/apps.png"; } 
 				elseif ($row[category] == "Tools") { $icon = "icons/sidebar/tools.png"; } 
 				else { $icon = "icons/sidebar/$row[icon]"; }
 				
