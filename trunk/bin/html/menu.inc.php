@@ -95,10 +95,17 @@
 				//
 				// Check if the type is redirect (meaning it will go thru showresource php) or direct instead
 				//
-				if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
+				
+				// choose icon
+				if ($row[category] == "Applications" || $row[category] == "Tools") { $icon = "icons/sidebar/apps.png"; } 
+				elseif ($row[category] == "Tools") { $icon = "icons/sidebar/tools.png"; } 
+				else { $icon = "icons/sidebar/$row[icon]"; }
+				
+				// direct load
+				if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "$icon", "$row[submenu]"); }
 			
 				// redirecting the resource with category and id info in the link
-				else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "icons/sidebar/$row[icon]", "$row[submenu]"); }
+				else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "$icon", "$row[submenu]"); }
 			}
 		}
 		echo "</table>";

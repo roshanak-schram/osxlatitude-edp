@@ -35,7 +35,7 @@
 			
 	if ($action == "")
 	{
-		echo "<form action='osxFixes.php' method='post'>";
+		echo "<form action='fixes.php' method='post'>";
 
 		// Write out the top menu
 		echoPageItemTOP("icons/small/$row[icon]", "$row[submenu]");
