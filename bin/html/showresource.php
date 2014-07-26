@@ -54,14 +54,20 @@
 			
 	if ($action == "")
 	{
+	
+		if ($categ == "Applications" || $categ == "Tools")
+		{
+			$action = "Install";
+			// Write out the top menu
+			echoPageItemTOP("icons/apps/$row[icon]", "$row[submenu]");
+		}
+		else {
+			// Write out the top menu
+			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
+		}
+		
 		echo "<form action='$row[action]' method='post'>";
 
-		// Write out the top menu
-		if ($categ != "EDP") {
-			echoPageItemTOP("icons/sidebar/$row[icon]", "$row[submenu]");
-		}
-		else
-			echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
 		
 		if ($categ == "Fixes") 
 		{
@@ -80,11 +86,7 @@
 			}
 			
 		} 
-		else if ($categ == "Applications" || $categ == "Tools")
-		{
-			$action = "Install";
-		}
-	
+			
 		?>
 		
 		<div class="pageitem_bottom">
@@ -113,15 +115,17 @@
 	elseif ($action == "Install")
 	{
 		// Start installation process by Launching the script which provides the summary of the build process 
-		echo "<script> document.location.href = 'workerapp.php?id=$id&name=$row[name]&submenu=$row[submenu]&icon=$row[icon]&action=showInstallLog#myfix'; </script>";
+		echo "<script> document.location.href = 'workerapp.php?id=$id&name=$row[name]&submenu=$row[submenu]&icon=$row[icon]&action=showInstallLog'; </script>";
 		
 		// Clear logs and scripts
 		if(is_dir("$workpath/logs/apps")) {
 			system_call("rm -rf $workpath/logs/apps/*");
 		}
 		
+		global $svnLoad;
+		
 		// Download app
-		appsLoader("$row[menu]","$row[name]");
+		$svnLoad->svnDataLoader("AppsTools", "$row[menu]","$row[name]");
 	}
 	elseif ($action == "Patch")
 	{
@@ -195,46 +199,6 @@
 		echo "</div>";
 	}
 
-function appsLoader($categ, $fname) {
-		global $workpath, $edp;
-    	  
-    	$appsLogPath = "$workpath/logs/apps";
-    	  	
-    	// create app local download directory if not found
-    	if(!is_dir("$workpath/apps")) {
-			system_call("mkdir $workpath/apps");
-		}
-		if(!is_dir("$workpath/apps/$categ")) {
-			system_call("mkdir $workpath/apps/$categ");
-		}
-		
-		// create log directory if not found
-		if(!is_dir("$workpath/logs")) {
-			system_call("mkdir $workpath/logs");
-		}
-		if(!is_dir("$appsLogPath")) {
-			system_call("mkdir $appsLogPath");
-		}
-		
-		//
-		// Download apps from SVN
-		//
-    	$appdir = "$workpath/apps/$categ/$fname";
-		$svnpath = "apps/$categ/$fname";
-			
-		if (is_dir("$appdir")) {
-			$checkoutCmd = "if svn --non-interactive --username edp --password edp --quiet --force update $appdir; then echo \"$fname file(s) updated finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) update failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
-
-			writeToLog("$appsLogPath/$fname.sh", "$checkoutCmd;");
-			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");
-		}
-		else {
-			$checkoutCmd = "cd $workpath/apps/$categ; if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $appsLogPath/Success_$fname.txt; else echo \"$fname file(s) download failed (may be wrong svn path or no internet)<br>\"; touch $appsLogPath/Fail_$fname.txt; fi";
-
-			writeToLog("$appsLogPath/$fname.sh", "$checkoutCmd;");
-			system_call("sh $appsLogPath/$fname.sh >> $appsLogPath/appInstall.log &");	
-		}
-} 
 ?>
 
 

@@ -102,6 +102,26 @@ if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
 // Log functions
 //
 
+if ($action == "showFixLog")			
+ { 
+	include_once "edpconfig.inc.php";
+	
+	$fixKeyArray 	= explode(',', $_GET['fixInfoKeys']);
+	$fixValueArray 	= explode(',', $_GET['fixInfoValues']);
+	
+	$fixData = Array();
+	
+	$index = 0;
+	foreach($fixKeyArray as $fix) {
+		$fixData[$fix] = $fixValueArray[$index];
+		$index++;
+	}	
+	
+	// var_dump($fixData);
+	showFixLog($fixData);
+	exit;
+ }
+ 
 if ($action == "showBuildLog")			
  { 
 	include_once "edpconfig.inc.php";
@@ -344,7 +364,7 @@ function showUpdateLog() {
 function showInstallLog($id, $name, $submenu, $icon) {
 	global $workpath, $edp_db;
 		
-	echoPageItemTOP("icons/sidebar/$icon", "$submenu");
+	echoPageItemTOP("icons/apps/$icon", "$submenu");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
@@ -402,6 +422,95 @@ function showInstallLog($id, $name, $submenu, $icon) {
 	else 
 	{
 		echo "<center><b>Please wait for few minutes while we download and install the app... which will take approx 1 to 10 minutes depending on your internet speed.</b></center>";
+		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+	}
+	
+	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+	echo "</div>";
+}
+
+function showFixLog($fixData) {
+	global $workpath, $edp_db;
+		
+	echoPageItemTOP("icons/big/$fixData[icon]", "$fixData[submenu]");
+	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
+
+	echo "<div class='pageitem_bottom'\">";	
+	
+	$fixLogPath = "$workpath/logs/fixes";
+	
+	
+	if (is_file("$fixLogPath/Success_$fixData[name].txt") || is_file("$fixLogPath/Fail_$fixData[name].txt"))
+	{
+			// Get info from db
+			$stmt = $edp_db->query("SELECT * FROM fixesdata where id = '$fixData[id]'");
+			$stmt->execute();
+			$rows = $stmt->fetchAll();
+			$row = $rows[0];
+			
+			//
+			// Install the downloaded fix
+			//
+			echo "<ul class='pageitem'>";
+			if (file_exists("$fixLogPath/Success_$fixData[name].txt")) {
+							
+				switch($fixData[name]) {
+					case "EAPDFix":
+					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[name]";
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Speakers $fixData[spk]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Headphones $fixData[hp]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:ExternalMic $fixData[extMic]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:SpkHasEAPD $fixData[spkFix]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:HpHasEAPD $fixData[hpFix]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+					system_call("rm -rf $fixData[path]/EAPDFix.kext");
+					system_call("cp -rf $fixPath/EAPDFix.kext $fixData[path]/");
+					
+					if ($fixData[path] == "/Extra/Extensions") {
+						myHackCheck();
+						system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+					}
+					else {
+						system_call("sudo touch /System/Library/Extensions/ >> $log &");
+					}
+					break;
+					
+					case "BluetoothFWUploader":
+					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[name]";
+					system_call("rm -rf $fixData[path]/BTFirmwareUploader.kext");
+					system_call("cp -rf $fixPath/BTFirmwareUploader.kext $fixData[path]/");
+					
+					if ($fixData[path] == "/Extra/Extensions") {
+						myHackCheck();
+						system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+					}
+					else {
+						system_call("sudo touch /System/Library/Extensions/ >> $log &");
+					}
+					break;
+					
+				}
+								
+				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:49%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Fix finished.</b><br><br><b> You can now close app (or) reboot your sytem to see the fix in action.</center></b>";
+				echo "<br></ul>";
+			}
+			else {
+				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Fix failed.</b><br><br><b> Check the log for the reason.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$fixLogPath/fixInstall.log"))
+					include "$fixLogPath/fixInstall.log";
+				echo "</pre>";
+			}					
+			echo "</div>";
+			exit;
+	}
+	else 
+	{
+		echo "<center><b>Please wait for few minutes while we apply fix... which will take approx 1 to 10 minutes if it requires internet which depends on your speed.</b></center>";
 		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 	}
 	
