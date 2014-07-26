@@ -208,6 +208,69 @@ class svnDownload {
 		}
 	} 
 
+	/*
+ 	 * This function will download of kextpacks from SVN if requested (or update it if exists) 
+ 	 */
+	function svnDataLoader($logType, $categ, $fname) {
+		global $workpath, $edp;
+    	      	  	
+    	switch ($logType) {
+    		case "AppsTools":
+				$logPath = "$workpath/logs/apps";
+				// create app local download directory if not found
+				if(!is_dir("$workpath/apps")) {
+					system_call("mkdir $workpath/apps");
+				}
+				if(!is_dir("$workpath/apps/$categ")) {
+					system_call("mkdir $workpath/apps/$categ");
+				}
+				$dataDir = "$workpath/apps/$categ";
+				$svnpath = "apps/$categ/$fname";
+				$logName = "appInstall";
+    		break;
+    		
+    		case "Fixes":
+				$logPath = "$workpath/logs/fixes";
+				// create fix local download directory if not found
+				if(!is_dir("$workpath/kextpacks")) {
+					system_call("mkdir $workpath/kextpacks");
+				}
+				if(!is_dir("$workpath/kextpacks/$categ")) {
+					system_call("mkdir $workpath/kextpacks/$categ");
+				}
+				$dataDir = "$workpath/kextpacks/$categ";
+				$svnpath = "kextpacks/$categ/$fname";
+				$logName = "fixInstall";
+    		break;
+    	}
+		
+		// create log directory if not found
+		if(!is_dir("$workpath/logs")) {
+			system_call("mkdir $workpath/logs");
+		}
+		if(!is_dir("$logPath")) {
+			system_call("mkdir $logPath");
+		}
+		
+    	//
+		// Run download script (which downloads data from SVN) in background to download asynchronously 
+		// (synchronous which is without background download has freezing problem and 
+		//  we can't provide download status in php due to no multhreading)
+		//
+		if (is_dir("$dataDir/$fname")) {
+			$checkoutCmd = "if ping -q -c 2 google.com; then if svn --non-interactive --username edp --password edp --quiet --force update $dataDir/$fname; then echo \"$fname file(s) updated finished<br>\"; touch $logPath/Success_$fname.txt; fi else echo \"$fname file(s) update failed due to no internet<br>\"; touch $logPath/Fail_$fname.txt; fi";
+
+			writeToLog("$logPath/$fname.sh", "$checkoutCmd;");
+			system_call("sh $logPath/$fname.sh >> $logPath/$logName.log &");
+		}
+		else {
+			$checkoutCmd = "cd dataDir; if ping -q -c 2 google.com; then if svn --non-interactive --username osxlatitude-edp-read-only --quiet --force co http://osxlatitude-edp.googlecode.com/svn/$svnpath; then echo \"$fname file(s) download finished<br>\"; touch $logPath/Success_$fname.txt; fi else echo \"$fname file(s) download failed due to no internet<br>\"; touch $logPath/Fail_$fname.txt; fi";
+
+			writeToLog("$logPath/$fname.sh", "$checkoutCmd;");
+			
+			system_call("sh $logPath/$fname.sh >> $logPath/$logName.log &");	
+		}
+	} 
 }
 
 $svnLoad = new svnDownload();
