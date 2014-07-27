@@ -174,8 +174,8 @@ class svnDownload {
 				case "PowerMgmt":
 				$copyKextCmd = "cp -a $workpath/kextPacks/$categ/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
 				$categdir = "$workpath/kextPacks/$categ"; // PowerMgmt/kextname.kext
-				$packdir = "$categdir/$name";
-				$svnpath = "kextpacks/$categ/$name";
+				$packdir = "$categdir/$name.kext";
+				$svnpath = "kextpacks/$categ/$name.kext";
 				break;
 				
 				case "Bootloader":

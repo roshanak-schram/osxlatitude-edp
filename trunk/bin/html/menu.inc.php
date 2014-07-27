@@ -59,37 +59,63 @@
 	switch ($i) {
 		case "Applications":
 		case "Tools":
-			$query = "SELECT * FROM appsdata";
+			//
+			// Fetch and add menu items that have a category defined 
+			//
+			generateMenu("SELECT * FROM appsdata", "where category = '$i' order by menu");
+
 		break;
 	
 		case "EDP":
 		case "Configuration":
-			$query = "SELECT * FROM edpdata";
+			//
+			// Fetch and add menu items that have a category defined 
+			//
+			generateMenu("SELECT * FROM edpdata", "where category = '$i' order by menu");
+			
 		break;
 	
 		case "Fixes":
-			$query = "SELECT * FROM fixesdata";
+			//
+			// Fetch and add menu items for pmfixes 
+			//
+			generateMenu("SELECT * FROM pmfixes", "order by menu");
+			
+			//
+			// Fetch and add menu items for sysfixes 
+			//
+			generateMenu("SELECT * FROM sysfixes", "order by menu");
+
+		break;
 	
-	}
-
-
-	//
-	// Fetch and add menu items that have a category defined 
-	//
-	$categData = $edp_db->query("$query where category = '$i' order by menu");
-	foreach($categData as $row) {
-		if ($row[menu] != $last && $i == $row[category]) { 
-			echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";
-			generateMenu("$query", "$row[menu]", "$row[category]");
-		}
-		$last = $row[menu];
 	}	
 
-	function generateMenu($query, $menu, $category) {
+	//
+	// Generate menu
+	//
+	function generateMenu($query, $conditional) {
+		//
+		// Add menu items 
+		//
+		global $edp_db;
+		$categData = $edp_db->query("$query $conditional");
+		foreach($categData as $row) {
+			if ($row[menu] != $last) { 
+				echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;$row[menu]</div>";
+				generateMenuItems("$query", "$row[menu]", "$row[category]");
+			}
+			$last = $row[menu];
+		}
+	}
+	
+	//
+	// Generate menu items
+	//
+	function generateMenuItems($query, $menu, $category) {
 		global $edp_db;
 		echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
 	
-		$menuData = $edp_db->query("$query where menu = '$menu' order by submenu");
+		$menuData = $edp_db->query("$query where menu = '$menu' order by name");
 		foreach($menuData as $row) {
 			if ($row[status] == "active") {
 				//
@@ -102,17 +128,17 @@
 				else { $icon = "icons/sidebar/$row[icon]"; }
 				
 				// direct load
-				if ($row[type] == "direct") { addMenuItem("loadURL('$row[action]');", "$icon", "$row[submenu]"); }
+				if ($row[access] == "direct") { addMenuItem("loadURL('$row[action]');", "$icon", "$row[name]"); }
 			
 				// redirecting the resource with category and id info in the link
-				else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "$icon", "$row[submenu]"); }
+				else { addMenuItem("loadURL('showresource.php?category=$category&id=$row[id]');", "$icon", "$row[name]"); }
 			}
 		}
 		echo "</table>";
 	}	
 
 	//
-	// Add submenu items
+	// Add menu items
 	//
 	function addMenuItem($action, $icon, $title) {
 		echo "<tr onclick=\"$action\" style='cursor: hand'>";

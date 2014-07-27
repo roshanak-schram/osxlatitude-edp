@@ -28,8 +28,15 @@
 		$id = $_POST['id'];
 	}
 
+	echo "$id";
+	
 	// Get info from db
-	$stmt = $edp_db->query("SELECT * FROM fixesdata where id = '$id'");
+	if ($fixCateg == "pm") {
+		$stmt = $edp_db->query("SELECT * FROM pmfixes where id = '$id'");
+	}
+	else {
+		$stmt = $edp_db->query("SELECT * FROM sysfixes where id = '$id'");
+	}
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 			
@@ -38,7 +45,7 @@
 		echo "<form action='fixes.php' method='post'>";
 
 		// Write out the top menu
-		echoPageItemTOP("icons/big/$row[icon]", "$row[submenu]");
+		echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
 		
 		?>
 		
@@ -48,6 +55,12 @@
 		<br>
 		<p><b>Descripton:</b></p>
 		<?="$row[description]";?>
+		<br>
+		<p><b>Version:</b></p>
+		<?="$row[version]";?>
+		<br>
+		<p><b>Developer:</b></p>
+		<?="$row[owner]";?>
 		<br>
 		<p><b>Website:</b></p>
 		<a href='<?="$row[link]";?>'>Project/Support Link</a>
@@ -61,7 +74,7 @@
 				checkbox("Apply fix to /System/Library/Extensions instead of myHack load?", "fixToSLE", "no");
 			echo "</ul></div>";
 		
-			switch ($row[name]) {
+			switch ($row[foldername]) {
 				case "EAPDFix":
 					echo "<div class='pageitem_bottom'>";
 					echo "<p><b>Configure your codec values for the kext plist here:</b></p>";
@@ -117,11 +130,11 @@
 				break;
 			
 				Default:
-					
 				break;
 			}
 			
 		?>
+		
 		
 		<ul class="pageitem">
 			<li class="button"><input name="Submit input" type="submit" value="Proceed to Install Fix" /></li>
@@ -160,19 +173,21 @@
 				$hpFix = $_GET['hpFix']; if ($hpFix == "") { $hpFix = $_POST['hpFix']; }
 				if ($hpFix == "") { $hpFix = "No"; } else { $hpFix = "Yes"; }
 				
-				$fixInfoKeys = "id,name,submenu,icon,categ,spk,hp,extMic,spkFix,hpFix,path";
-				$fixInfoValues = "$id,$row[name],$row[submenu],$row[icon],Audio,$spkNode,$hpNode,$extMicNode,$spkFix,$hpFix,$fixPath";
+				$fixInfoKeys = "id,foldername,name,icon,categ,spk,hp,extMic,spkFix,hpFix,path";
+				$fixInfoValues = "$id,$row[foldername],$row[name],$row[icon],Audio,$spkNode,$hpNode,$extMicNode,$spkFix,$hpFix,$fixPath";
 				
 				// Download fix
-				$svnLoad->svnDataLoader("Fixes", "Audio", "$row[name]");
+				$svnLoad->svnDataLoader("Fixes", "$row[category]", "$row[foldername]");
 		
 			break;
 			
+			Default:
 			Case "BluetoothFWUploader":
-				$fixInfoKeys = "id,name,submenu,icon,categ,path";
-				$fixInfoValues = "$id,$row[name],$row[submenu],$row[icon],Wireless,$fixPath";
+				$fixInfoKeys = "id,foldername,name,icon,categ,path";
+				$fixInfoValues = "$id,$row[foldername],$row[name],$row[icon],Wireless,$fixPath";
+				
 				// Download fix
-				$svnLoad->svnDataLoader("Fixes", "Wireless", "$row[name]");
+				$svnLoad->svnDataLoader("Fixes", "$row[category]", "$row[foldername]");
 			break;
 			
 		}
@@ -181,8 +196,7 @@
 		echo "<script> document.location.href = 'workerapp.php?fixInfoKeys=$fixInfoKeys&fixInfoValues=$fixInfoValues&action=showFixLog'; </script>";
 		
 	}
-	
-	/*elseif ($action == "Patch")
+	elseif ($action == "Patch")
 	{
 		$fixLogPath = "$workpath/logs/fixes";
 		
@@ -202,26 +216,47 @@
 		echo "<div class='pageitem_bottom'\">";	
 		echo "<ul class='pageitem'>";
 
-		$fixToSLE = $_POST['fixToSLE'];
+		$patchSLE = $_POST['patchSLE'];
 		
 		switch ($row[name]) {
 		
-			case "":
-				if ($fixToSLE == "on")
+			case "AppleIntelCPUPowerManagementPatch":
+				if ($patchSLE == "on")
+					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "SLE", "yes");
 				else
+					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "EE", "yes");
 			break;
 			
+			case "BCM4352WiFiPatches":
+				if ($patchSLE == "on")
+					patchWiFiBTBCM4352("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchWiFiBTBCM4352("$fixLogPath/fix.log", "EE", "yes");
+			break;
 			
+			case "AR9285AR9287WiFiPatch":
+				if ($patchSLE == "on")
+					patchWiFiAR9285AndAR9287("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchWiFiAR9285AndAR9287("$fixLogPath/fix.log", "EE", "yes");
+			break;
+			
+			case "VGA_HDMI_Intel_HD3000_Patch":
+				if ($patchSLE == "on")
+					patchAppleIntelSNBGraphicsFB("$fixLogPath/fix.log", "SLE", "yes");
+				else
+					patchAppleIntelSNBGraphicsFB("$fixLogPath/fix.log", "EE", "yes");
+			break;
 		}
 		
 		if (is_file("$fixLogPath/patchSuccess.txt")) {
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-			echo "<b><center> Fix finished.</b><br><br><b> You can now reboot the sysem to see the fix in action.</center></b>";
+			echo "<b><center> Patch finished.</b><br><br><b> You can now reboot the sysem to see the patch in action.</center></b>";
 			echo "<br></ul>";
 		}
 		else {
 			echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-			echo "<b><center> Fix failed.</b><br><br><b> Check the log for the reason.</center></b>";
+			echo "<b><center> Patch failed.</b><br><br><b> Check the log for the reason.</center></b>";
 			echo "<br></ul>";
 			
 			echo "<b>Log:</b>\n";
@@ -231,9 +266,7 @@
 			echo "</pre>";
 		}
 		echo "</div>";
-	}*/
+	}
 
 
 ?>
-
-
