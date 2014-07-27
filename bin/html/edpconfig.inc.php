@@ -51,7 +51,7 @@ $stmt = $edp_db->query("SELECT * FROM pmfixes order by id");
 $stmt->execute(); $cpufixdb = $stmt->fetchAll();
 
 //Populate fixes array
-$stmt = $edp_db->query("SELECT * FROM genfixes order by id");
+$stmt = $edp_db->query("SELECT * FROM sysfixes order by id");
 $stmt->execute(); $fixesdb = $stmt->fetchAll();
 
 //Populate Chameleon mods array

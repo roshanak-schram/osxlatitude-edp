@@ -138,6 +138,7 @@ if ($action == "showBuildLog")
 	
 	showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame); exit ;
  }
+ 
 if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
 if ($action == "showUpdateLog")			{ showUpdateLog(); exit ; }
@@ -146,10 +147,10 @@ if ($action == "showInstallLog")
 { 
 	include_once "edpconfig.inc.php";
 
-	$icon 		 	 = $_GET['icon'];
-	$name		 	 = $_GET['name'];
-	$submenu		 = $_GET['submenu'];
-	showInstallLog($id, $name, $submenu, $icon); 
+	$icon 		 	= $_GET['icon'];
+	$foldername		= $_GET['foldername'];
+	$name		 	= $_GET['name'];
+	showInstallLog($id, $foldername, $name, $icon); 
 	exit ; 
 }
 
@@ -365,17 +366,17 @@ function showUpdateLog() {
 
 }
 		
-function showInstallLog($id, $name, $submenu, $icon) {
+function showInstallLog($id, $foldername, $name, $icon) {
 	global $workpath, $edp_db;
 		
-	echoPageItemTOP("icons/apps/$icon", "$submenu");
+	echoPageItemTOP("icons/apps/$icon", "$name");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
 		
 	$appsLogPath = "$workpath/logs/apps";
 	
-	if (is_file("$appsLogPath/Success_$name.txt") || is_file("$appsLogPath/Fail_$name.txt"))
+	if (is_file("$appsLogPath/Success_$foldername.txt") || is_file("$appsLogPath/Fail_$foldername.txt"))
 	{
 			// Get info from db
 			$stmt = $edp_db->query("SELECT * FROM appsdata where id = '$id'");
@@ -387,22 +388,22 @@ function showInstallLog($id, $name, $submenu, $icon) {
 			// Install the downloaded app
 			//
 			echo "<ul class='pageitem'>";
-			if (file_exists("$appsLogPath/Success_$name.txt")) {
+			if (file_exists("$appsLogPath/Success_$foldername.txt")) {
 			
-				$appPath = "$workpath/apps/$row[menu]/$row[name]";
+				$appPath = "$workpath/apps/$row[menu]/$row[foldername]";
 				
-				if ($row[name] == "CamTwist") {
+				if ($row[foldername] == "CamTwist") {
 					system_call("rm -rf /Library/QuickTime/CamTwist.component");
-					system_call("rm -rf /Applications/$row[name]");
+					system_call("rm -rf /Applications/$row[foldername]");
 					
-					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -X -qq $row[name].zip");
+					system_call("cd $appPath; rm -rf CamTwist.component; rm -rf CamTwist; unzip -X -qq $row[foldername].zip");
 						
 					system_call("cp -R $appPath/CamTwist.component /Library/QuickTime/");
 					system_call("cp -a $appPath/CamTwist/. /Applications/CamTwist/");
 				}
 				else {
-					system_call("rm -rf /Applications/$row[name].app");
-					system_call("cd $appPath; unzip -X -qq $row[name].zip -d /Applications");
+					system_call("rm -rf /Applications/$row[foldername].app");
+					system_call("cd $appPath; unzip -X -qq $row[foldername].zip -d /Applications");
 				}		
 				
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -436,7 +437,7 @@ function showInstallLog($id, $name, $submenu, $icon) {
 function showFixLog($fixData) {
 	global $workpath, $edp_db;
 		
-	echoPageItemTOP("icons/big/$fixData[icon]", "$fixData[submenu]");
+	echoPageItemTOP("icons/big/$fixData[icon]", "$fixData[name]");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
@@ -444,7 +445,7 @@ function showFixLog($fixData) {
 	$fixLogPath = "$workpath/logs/fixes";
 	
 	
-	if (is_file("$fixLogPath/Success_$fixData[name].txt") || is_file("$fixLogPath/Fail_$fixData[name].txt"))
+	if (is_file("$fixLogPath/Success_$fixData[foldername].txt") || is_file("$fixLogPath/Fail_$fixData[foldername].txt"))
 	{
 			// Get info from db
 			$stmt = $edp_db->query("SELECT * FROM fixesdata where id = '$fixData[id]'");
@@ -456,11 +457,11 @@ function showFixLog($fixData) {
 			// Install the downloaded fix
 			//
 			echo "<ul class='pageitem'>";
-			if (file_exists("$fixLogPath/Success_$fixData[name].txt")) {
+			if (file_exists("$fixLogPath/Success_$fixData[foldername].txt")) {
 							
-				switch($fixData[name]) {
+				switch($fixData[foldername]) {
 					case "EAPDFix":
-					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[name]";
+					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
 					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Speakers $fixData[spk]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
 					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Headphones $fixData[hp]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
 					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:ExternalMic $fixData[extMic]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
@@ -479,7 +480,7 @@ function showFixLog($fixData) {
 					break;
 					
 					case "BluetoothFWUploader":
-					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[name]";
+					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
 					system_call("rm -rf $fixData[path]/BTFirmwareUploader.kext");
 					system_call("cp -rf $fixPath/BTFirmwareUploader.kext $fixData[path]/");
 					
