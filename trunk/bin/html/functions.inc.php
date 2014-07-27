@@ -1077,9 +1077,9 @@ function applyFixes() {
     
     $i = 0; // iterating through all the id's
 	while ($cpufixdb[$i] != "") {
-	    // Getting kextname from ID
+	    // Get foldername from ID
         $cpufixdata = $edpDBase->getKextpackDataFromID("pmfixes", "$i");
-        $kxtname = $cpufixdata[kextname];
+        $foldername = $cpufixdata[foldername];
         $name = $cpufixdata[edpid];
         
         // Checking if we need to patch AppleIntelCPUPowerManagement.kext
@@ -1088,14 +1088,14 @@ function applyFixes() {
         }
         else if(($modeldb[$modelRowID]['emupstates'] == "on") && $i == "3") {
         	
-        	$svnLoad->PrepareKextpackDownload("PowerMgmt", "VoodooPState", "$kxtname"); 
+        	$svnLoad->PrepareKextpackDownload("PowerMgmt", "VoodooPState", "$foldername"); 
         }
         else if ($kxtname != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
 
     		if(!is_dir("$kextPacks/PowerMgmt"))
     			system_call("mkdir $kextPacks/PowerMgmt");
     		
-    		$svnLoad->PrepareKextpackDownload("PowerMgmt", "$name", "$kxtname");
+    		$svnLoad->PrepareKextpackDownload("PowerMgmt", "$name", "$foldername");
     		
     		 //remove PStateMenu if installed before
     		 if (file_exists("/Library/LaunchAgents/PStateMenu.plist")) { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
@@ -1115,7 +1115,7 @@ function applyFixes() {
     
     foreach($array as $id) {
 	    //Getting names from ID
-	    $fixdata = $edpDBase->getKextpackDataFromID("genfixes", "$id");
+	    $fixdata = $edpDBase->getKextpackDataFromID("sysfixes", "$id");
         $categ = $fixdata[category];
         $fname = $fixdata[foldername];
         $name = $fixdata[name];

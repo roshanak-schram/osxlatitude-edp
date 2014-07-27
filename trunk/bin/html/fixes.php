@@ -68,7 +68,7 @@
 		<?php
 			echo "<input type='hidden' name='id' value='$id'>";
 			echo "<input type='hidden' name='action' value='$type'>";
-			echo "<input type='hidden' name='category' value='$row[name]'>";
+			echo "<input type='hidden' name='category' value='$fixCateg'>";
 			
 			echo "<br><br><ul class='pageitem'>";				
 				checkbox("Apply fix to /System/Library/Extensions instead of myHack load?", "fixToSLE", "no");
@@ -162,7 +162,7 @@
 			system_call("rm -rf $workpath/logs/fixes/*");
 		}
 		
-		switch ($fixCateg) {
+		switch ($row[foldername]) {
 			case "EAPDFix":
 				$spkNode = $_GET['spk']; if ($spkNode == "") { $spkNode = $_POST['spk']; } $spkNode = hexdec($spkNode);
 				$hpNode = $_GET['hp']; if ($hpNode == "") { $hpNode = $_POST['hp']; } $hpNode = hexdec($hpNode);
@@ -182,9 +182,8 @@
 			break;
 			
 			Default:
-			Case "BluetoothFWUploader":
 				$fixInfoKeys = "id,foldername,name,icon,categ,path";
-				$fixInfoValues = "$id,$row[foldername],$row[name],$row[icon],Wireless,$fixPath";
+				$fixInfoValues = "$id,$row[foldername],$row[name],$row[icon],$row[category],$fixPath";
 				
 				// Download fix
 				$svnLoad->svnDataLoader("Fixes", "$row[category]", "$row[foldername]");
@@ -220,7 +219,7 @@
 		
 		switch ($row[foldername]) {
 		
-			case "AppleIntelCPUPowerManagementPatch":
+			case "AppleIntelCPUPowerManagement":
 				if ($patchSLE == "on")
 					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "SLE", "yes");
 				else
