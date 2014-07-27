@@ -215,33 +215,33 @@
 		echo "<div class='pageitem_bottom'\">";	
 		echo "<ul class='pageitem'>";
 
-		$patchSLE = $_POST['patchSLE'];
+		$fixToSLE = $_POST['fixToSLE'];
 		
 		switch ($row[foldername]) {
 		
 			case "AppleIntelCPUPowerManagement":
-				if ($patchSLE == "on")
+				if ($fixToSLE == "on")
 					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "SLE", "yes");
 				else
 					patchAppleIntelCPUPowerManagement("$fixLogPath/fix.log", "EE", "yes");
 			break;
 			
 			case "BCM4352WiFiPatches":
-				if ($patchSLE == "on")
+				if ($fixToSLE == "on")
 					patchWiFiBTBCM4352("$fixLogPath/fix.log", "SLE", "yes");
 				else
 					patchWiFiBTBCM4352("$fixLogPath/fix.log", "EE", "yes");
 			break;
 			
 			case "AR9285AR9287WiFiPatch":
-				if ($patchSLE == "on")
+				if ($fixToSLE == "on")
 					patchWiFiAR9285AndAR9287("$fixLogPath/fix.log", "SLE", "yes");
 				else
 					patchWiFiAR9285AndAR9287("$fixLogPath/fix.log", "EE", "yes");
 			break;
 			
 			case "VGA_HDMI_Intel_HD3000_Patch":
-				if ($patchSLE == "on")
+				if ($fixToSLE == "on")
 					patchAppleIntelSNBGraphicsFB("$fixLogPath/fix.log", "SLE", "yes");
 				else
 					patchAppleIntelSNBGraphicsFB("$fixLogPath/fix.log", "EE", "yes");
