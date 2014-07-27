@@ -485,11 +485,6 @@ function showFixLog($fixData) {
 						// kext packs
 						//
 						$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
-						
-						// Remove existing kext/backup from SLE (or) EE
-						if (is_dir("$fixData[path]/$fixData[foldername].kext") && $fixData[foldername != "") {
-							system_call("rm -rf $fixData[path]/$fixData[foldername]*"); 
-						}
 						system_call("cp -rf $fixPath/* $fixData[path]/"); // Copy kext to SLE (or) E/E
 					
 						// Generate cache
