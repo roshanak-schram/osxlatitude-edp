@@ -72,12 +72,14 @@
 		<p><b>Descripton:</b></p>
 		<?="$row[description]";?>
 		<br>
-		<p><b>Version:</b></p>
-		<?="$row[version]";?>
-		<br>
-		<p><b>Developer:</b></p>
-		<?="$row[owner]";?>
-		<br>
+		<?php 
+			
+			if($categ != "EDP" && $categ != "Configuration") {
+				echo "<p><b>Developer and Version:</b></p>";
+				echo "$row[owner], v$row[version]";
+				echo "<br>";
+			}
+		?>
 		<p><b>Website:</b></p>
 		<a href='<?="$row[link]";?>'>Project/Support Link</a>
 		</div>
@@ -107,7 +109,7 @@
 		global $svnLoad;
 		
 		// Download app
-		$svnLoad->svnDataLoader("AppsTools", "$row[menu]","$row[name]");
+		$svnLoad->svnDataLoader("AppsTools", "$row[menu]","$row[foldername]");
 	}
 
 ?>

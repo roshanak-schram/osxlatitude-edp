@@ -23,12 +23,15 @@
 		$fixCateg = $_POST['category'];
 	}	
 	
+	$type	= $_GET['type'];
+	if ($type == "") {
+		$type = $_POST['type'];
+	}
+	
 	$id 	= $_GET['id'];
 	if ($id == "") {
 		$id = $_POST['id'];
 	}
-
-	echo "$id";
 	
 	// Get info from db
 	if ($fixCateg == "pm") {
@@ -56,18 +59,15 @@
 		<p><b>Descripton:</b></p>
 		<?="$row[description]";?>
 		<br>
-		<p><b>Version:</b></p>
-		<?="$row[version]";?>
-		<br>
-		<p><b>Developer:</b></p>
-		<?="$row[owner]";?>
+		<p><b>Developer and Version:</b></p>
+		<?="$row[owner], v$row[version]";?>
 		<br>
 		<p><b>Website:</b></p>
 		<a href='<?="$row[link]";?>'>Project/Support Link</a>
 		
 		<?php
 			echo "<input type='hidden' name='id' value='$id'>";
-			echo "<input type='hidden' name='action' value='Install'>";
+			echo "<input type='hidden' name='action' value='$type'>";
 			echo "<input type='hidden' name='category' value='$row[name]'>";
 			
 			echo "<br><br><ul class='pageitem'>";				
@@ -218,7 +218,7 @@
 
 		$patchSLE = $_POST['patchSLE'];
 		
-		switch ($row[name]) {
+		switch ($row[foldername]) {
 		
 			case "AppleIntelCPUPowerManagementPatch":
 				if ($patchSLE == "on")
@@ -250,12 +250,12 @@
 		}
 		
 		if (is_file("$fixLogPath/patchSuccess.txt")) {
-			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:49%;top:50%;margin:15px 0 0 -35px;\">";
 			echo "<b><center> Patch finished.</b><br><br><b> You can now reboot the sysem to see the patch in action.</center></b>";
 			echo "<br></ul>";
 		}
 		else {
-			echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+			echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:49%;top:50%;margin:15px 0 0 -35px;\">";
 			echo "<b><center> Patch failed.</b><br><br><b> Check the log for the reason.</center></b>";
 			echo "<br></ul>";
 			
