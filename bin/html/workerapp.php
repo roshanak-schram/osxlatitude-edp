@@ -460,7 +460,8 @@ function showFixLog($fixData) {
 			if (file_exists("$fixLogPath/Success_$fixData[foldername].txt")) {
 							
 				switch($fixData[foldername]) {
-					case "EAPDFix":
+				
+					case "EAPDFix": // Apply plist config and install kext to SLE or EE
 						$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
 						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Speakers $fixData[spk]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
 						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Headphones $fixData[hp]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
@@ -481,22 +482,17 @@ function showFixLog($fixData) {
 					
 					Default:
 						//
-						// Special handling for the PowerMgmt files, due to they are kexts directly instead of folder
+						// kext packs
 						//
-						if ($fixData[categ] == "PowerMgmt" && $fixData[foldername] != "VoodooPState") {
-							$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
-							system_call("rm -rf $fixData[path]/$fixData[foldername]");
-							system_call("cp -rf $fixPath $fixData[path]/");
+						$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
+						
+						// Remove existing kext/backup from SLE (or) EE
+						if (is_dir("$fixData[path]/$fixData[foldername].kext") && $fixData[foldername != "") {
+							system_call("rm -rf $fixData[path]/$fixData[foldername]*"); 
 						}
-						//
-						// Folder kext packs
-						//
-						else {
-							$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
-							system_call("rm -rf $fixData[path]/$fixData[foldername]");
-							system_call("cp -rf $fixPath/* $fixData[path]/");
-						}
+						system_call("cp -rf $fixPath/* $fixData[path]/"); // Copy kext to SLE (or) E/E
 					
+						// Generate cache
 						if ($fixData[path] == "/Extra/Extensions") {
 							myHackCheck();
 							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
