@@ -130,8 +130,38 @@ class svnDownload {
 			$packdir = "$categdir/$fname";
 			$svnpath = "kextpacks/$categ/$fname";
 			$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
-
-
+						
+			// change to correct bootloader, ethernet and power mgmt kexts folder path
+			switch ($categ) {
+		
+				case "Ethernet":
+				$categdir = "$workpath/kextPacks/$categ/$fname"; // Ethernet/RealTek/kextname.kext
+				$packdir = "$categdir/$name";
+				$svnpath = "kextpacks/$categ/$fname/$name";	
+				// Copy kext inside the name folder for new RTL kext 
+				if ($name == "NewRTL81xx" || $name == "NewRTL81xx_Lion") {
+					$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
+				}			
+				break;
+				
+				case "PowerMgmt":
+				$copyKextCmd = "cp -a $workpath/kextPacks/$categ/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
+				$categdir = "$workpath/kextPacks/$categ"; // PowerMgmt/kextname.kext
+				$packdir = "$categdir/$name";
+				$svnpath = "kextpacks/$categ/$name";
+				break;
+				
+				case "Bootloader":
+				$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name/boot /; echo \"Copy : $name $fname bootloader updated<br>\" >> $buildLogPath/build.log";
+				if (!is_dir("$workpath/kextPacks/$categ")) {
+					system_call("mkdir $workpath/kextPacks/$categ");
+				}
+				$categdir = "$workpath/kextPacks/$categ/$fname";
+				$packdir = "$categdir/$name";
+				$svnpath = "kextpacks/$categ/$fname/$name";
+				break;
+			}
+			
 			// Copy VoodooHDA prefpanes
 			if ($name == "AudioSettings")
 			{
@@ -155,37 +185,6 @@ class svnDownload {
 				break;
 				
 				default:
-				break;
-			}
-			
-			// change to correct bootloader, ethernet and power mgmt kexts folder path
-			switch ($categ) {
-		
-				case "Ethernet":
-				$categdir = "$workpath/kextPacks/$categ/$fname"; // Ethernet/RealTek/kextname.kext
-				$packdir = "$categdir/$name";
-				$svnpath = "kextpacks/$categ/$fname/$name";	
-				// Copy kext inside the name folder for new RTL kext 
-				if ($name == "NewRTL81xx" || $name == "NewRTL81xx_Lion") {
-					$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
-				}			
-				break;
-				
-				case "PowerMgmt":
-				$copyKextCmd = "cp -a $workpath/kextPacks/$categ/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
-				$categdir = "$workpath/kextPacks/$categ"; // PowerMgmt/kextname.kext
-				$packdir = "$categdir/$name.kext";
-				$svnpath = "kextpacks/$categ/$name.kext";
-				break;
-				
-				case "Bootloader":
-				$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name/boot /; echo \"Copy : $name $fname bootloader updated<br>\" >> $buildLogPath/build.log";
-				if (!is_dir("$workpath/kextPacks/$categ")) {
-					system_call("mkdir $workpath/kextPacks/$categ");
-				}
-				$categdir = "$workpath/kextPacks/$categ/$fname";
-				$packdir = "$categdir/$name";
-				$svnpath = "kextpacks/$categ/$fname/$name";
 				break;
 			}
 		}	

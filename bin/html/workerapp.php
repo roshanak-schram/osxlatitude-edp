@@ -461,36 +461,49 @@ function showFixLog($fixData) {
 							
 				switch($fixData[foldername]) {
 					case "EAPDFix":
-					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
-					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Speakers $fixData[spk]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
-					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Headphones $fixData[hp]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
-					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:ExternalMic $fixData[extMic]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
-					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:SpkHasEAPD $fixData[spkFix]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
-					system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:HpHasEAPD $fixData[hpFix]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
-					system_call("rm -rf $fixData[path]/EAPDFix.kext");
-					system_call("cp -rf $fixPath/EAPDFix.kext $fixData[path]/");
+						$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
+						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Speakers $fixData[spk]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Headphones $fixData[hp]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:ExternalMic $fixData[extMic]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:SpkHasEAPD $fixData[spkFix]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:HpHasEAPD $fixData[hpFix]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
+						system_call("rm -rf $fixData[path]/EAPDFix.kext");
+						system_call("cp -rf $fixPath/EAPDFix.kext $fixData[path]/");
 					
-					if ($fixData[path] == "/Extra/Extensions") {
-						myHackCheck();
-						system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
-					}
-					else {
-						system_call("sudo touch /System/Library/Extensions/ >> $log &");
-					}
+						if ($fixData[path] == "/Extra/Extensions") {
+							myHackCheck();
+							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+						}
+						else {
+							system_call("sudo touch /System/Library/Extensions/ >> $log &");
+						}
 					break;
 					
-					case "BluetoothFWUploader":
-					$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
-					system_call("rm -rf $fixData[path]/BTFirmwareUploader.kext");
-					system_call("cp -rf $fixPath/BTFirmwareUploader.kext $fixData[path]/");
+					Default:
+						//
+						// Special handling for the PowerMgmt files, due to they are kexts directly instead of folder
+						//
+						if ($fixData[categ] == "PowerMgmt" && $fixData[foldername] != "VoodooPState") {
+							$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
+							system_call("rm -rf $fixData[path]/$fixData[foldername]");
+							system_call("cp -rf $fixPath $fixData[path]/");
+						}
+						//
+						// Folder kext packs
+						//
+						else {
+							$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
+							system_call("rm -rf $fixData[path]/$fixData[foldername]");
+							system_call("cp -rf $fixPath/* $fixData[path]/");
+						}
 					
-					if ($fixData[path] == "/Extra/Extensions") {
-						myHackCheck();
-						system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
-					}
-					else {
-						system_call("sudo touch /System/Library/Extensions/ >> $log &");
-					}
+						if ($fixData[path] == "/Extra/Extensions") {
+							myHackCheck();
+							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+						}
+						else {
+							system_call("sudo touch /System/Library/Extensions/ >> $log &");
+						}
 					break;
 					
 				}
