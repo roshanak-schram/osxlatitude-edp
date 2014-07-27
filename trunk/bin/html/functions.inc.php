@@ -1090,7 +1090,7 @@ function applyFixes() {
         	
         	$svnLoad->PrepareKextpackDownload("PowerMgmt", "VoodooPState", "$foldername"); 
         }
-        else if ($kxtname != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
+        else if ($foldername != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
 
     		if(!is_dir("$kextPacks/PowerMgmt"))
     			system_call("mkdir $kextPacks/PowerMgmt");

@@ -162,7 +162,7 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 	date_default_timezone_set("UTC");
 	$date = date("d-m-y H-i");
 
-	echoPageItemTOP("icons/big/logs.png", "System configuration build log");
+	echoPageItemTOP("icons/big/activity.png", "System configuration build log");
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
 	echo "<div class='pageitem_bottom'\">";	
 	
