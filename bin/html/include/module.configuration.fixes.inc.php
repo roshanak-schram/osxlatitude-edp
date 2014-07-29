@@ -8,7 +8,7 @@
 				$id = ""; $name = ""; $desc = ""; $status = ""; $c = "";
 				
 				//Getting vars from the optional multidim. array
-				$id = $fixesdb[$i]['id']; $name = $fixesdb[$i]['name']; $desc = $fixesdb[$i]['desc'];
+				$id = $fixesdb[$i]['id']; $name = $fixesdb[$i]['name'];
 				
 				//Checking wether we are using this in our model
 				$status = isFixesInUse("$id");
@@ -16,7 +16,7 @@
 				//If the status is "yes" then we will set $c as checked
 				if ($status == "yes") { $c = "checked"; }
 				
-				echo "<li class='checkbox'><span class='name'>$name ($desc) </span><input name='fixesChkBox' value='$id' type='checkbox' $c onchange=\"updateFixes();\"> </li>  \n";
+				echo "<li class='checkbox'><span class='name'>$name </span><input name='fixesChkBox' value='$id' type='checkbox' $c onchange=\"updateFixes();\"> </li>  \n";
 				$i++;
 			}	
 			

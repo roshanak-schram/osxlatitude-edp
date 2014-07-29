@@ -11,7 +11,7 @@
 		
 		foreach($fakesmc as $row) {
 			$sel = ""; if ("$mdrow[fakesmc]" == "$row[id]") { $sel = "SELECTED"; }
-			echo "<option value='$row[id]' $sel>&nbsp;FakeSMC: v$row[version] - $row[notes]</option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp;FakeSMC: v$row[version] - $row[name]</option>\n";
 		}
 		
 		echo "</select><span class='arrow'></span> </li>";
@@ -26,7 +26,7 @@
 		$using = "";
 		foreach($ps2 as $row) {
 			$sel =""; if ("$mdrow[ps2]" == "$row[id]") { $sel = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $sel>&nbsp; PS2: $row[name] v$row[version] - $row[notes]</option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp; PS2: $row[name] v$row[version] </option>\n";
 		}
 		
 		if ($using == "")
@@ -72,7 +72,7 @@
 		foreach($voodoodHDA as $row) {
 			$sel = ""; 
 			if ("$mdrow[audio]" == "$row[id]") { $sel = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $sel>&nbsp; Audio: $row[name] v$row[version] - $row[notes]</option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp; Audio: $row[name] v$row[version] </option>\n";
 		}	
 		
 		if ($using == "")
@@ -91,7 +91,7 @@
 		$using = "";
 		foreach($lan as $row) {
 			$sel = ""; if ("$mdrow[ethernet]" == "$row[id]") { $sel = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $sel>&nbsp; Ethernet: $row[name] v$row[version] - $row[notes]</option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp; Ethernet: $row[name] v$row[version]</option>\n";
 		}			
 		
 		if ($using == "")
