@@ -1095,7 +1095,7 @@ function applyFixes() {
     		if(!is_dir("$kextPacks/PowerMgmt"))
     			system_call("mkdir $kextPacks/PowerMgmt");
     		
-    		$svnLoad->PrepareKextpackDownload("PowerMgmt", "$name", "$foldername");
+    		$svnLoad->PrepareKextpackDownload("PowerMgmt", "$foldername", "$foldername");
     		
     		 //remove PStateMenu if installed before
     		 if (file_exists("/Library/LaunchAgents/PStateMenu.plist")) { system_call("rm -rf /Library/LaunchAgents/PStateMenu.plist"); }
