@@ -143,6 +143,8 @@
 					else if(getMacOSXVersion() < "10.8.5")
 						$svnLoad->PrepareKextpackDownload("Kexts", "$row[category]", "$row[foldername]");
 				}
+				else
+					$svnLoad->svnDataLoader("Kexts", "$row[category]", "$row[foldername]");
 				
 			break;
 			
@@ -168,7 +170,9 @@
 					else if(getMacOSXVersion() == "10.7")
 						$svnLoad->svnDataLoader("Kexts", "Ethernet/$row[foldername]", "RealtekRTL8111_Lion");
     			}
-    			
+    			else
+    				$svnLoad->svnDataLoader("Kexts", "Ethernet/$row[foldername]", "$row[name]");
+    				
 			break;
 		}
 			
