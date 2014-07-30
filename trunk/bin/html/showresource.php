@@ -99,7 +99,7 @@
 	elseif ($action == "Install")
 	{
 		// Start installation process by Launching the script which provides the summary of the build process 
-		echo "<script> document.location.href = 'workerapp.php?id=$id&foldername=$row[foldername]&name=$row[name]&icon=$row[icon]&action=showInstallLog'; </script>";
+		echo "<script> document.location.href = 'workerapp.php?id=$id&foldername=$row[foldername]&name=$row[name]&icon=$row[icon]&action=showAppsLog'; </script>";
 		
 		// Clear logs and scripts
 		if(is_dir("$workpath/logs/apps")) {

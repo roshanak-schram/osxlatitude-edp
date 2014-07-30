@@ -162,7 +162,8 @@
 		case "Applications":
 			echoPageItemTOP("icons/big/apps.png", "Applications");
 			echo "<div class='pageitem_bottom'>";
-			echo "In this section you can find some of the most used hackintosh applications.";
+			echo "In this section you can find some of the most used hackintosh applications.<br>";
+			echo "Know a good application that we should include? Shoot an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a>";
 			echo "</div>";
 		break;
 		
@@ -177,7 +178,16 @@
 		case "Fixes":
 			echoPageItemTOP("icons/big/terminal.png", "Fixes - The solution to the problem!");
 			echo "<div class='pageitem_bottom'>";
-			echo "This section contains solution for the most common Hackintosh problems. If you still miss a fix, you can post it on our forum.";
+			echo "This section contains solution for the most common Hackintosh problems.<br>";
+			echo "Know a fix that we should include? Shoot an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a>";
+			echo "</div>";
+		break;
+		
+		case "Kexts":
+			echoPageItemTOP("icons/big/kext.png", "Kexts");
+			echo "<div class='pageitem_bottom'>";
+			echo "This section contains kexts developed and patched by the Hackintosh community.<br>";
+			echo "Know a kext that we should include? Shoot an email to <a href='mailto:lsb@osxlatitude.com'>lsb@osxlatitude.com</a>";
 			echo "</div>";
 		break;
 		

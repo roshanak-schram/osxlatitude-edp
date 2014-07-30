@@ -17,7 +17,7 @@
 				//If the status is "yes" we will set $c as checked
 				if ($status == "yes") { $c = "checked"; }
 				
-				echo "<li class='checkbox'><span class='name'>v$ver - $brief </span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
+				echo "<li class='checkbox'><span class='name'>$name - v$ver ($row[owner]) </span><input name='optionalbox' value='$id' type='checkbox' $c onchange=\"updateOPT();\"> </li>  \n";
 				$i++;
 			}	
 			

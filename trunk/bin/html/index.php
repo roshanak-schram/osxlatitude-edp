@@ -21,6 +21,7 @@ $edpmode = "web";
 				<td width="80" onclick="loader('Applications')"><img src="icons/big/apps.png" width="40"></td>
                 <td width="80" onclick="loader('Tools')"><img src="icons/big/tools.png" width="40"></td>
                 <td width="80" onclick="loader('Fixes')"><img src="icons/big/terminal.png" width="40"></td>
+                <td width="80" onclick="loader('Kexts')"><img src="icons/big/kext.png" width="40"></td>
 
                 <td>&nbsp;</td>
                 <td width="80"><a href="http://www.osxlatitude.com/edp/documentation/" target="_blank"><img src="icons/big/guide.png" width="40"></a></td>
@@ -35,6 +36,7 @@ $edpmode = "web";
                 <td>Applications</td>
                 <td>Tools</td> 
                 <td>Fixes</td>
+                <td>Kexts</td>
                 <td>&nbsp;</td>
                 <td>EDP Guide</td>
                 <td>Feedback</td>

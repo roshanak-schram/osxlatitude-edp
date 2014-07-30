@@ -143,17 +143,37 @@ if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
 if ($action == "showUpdateLog")			{ showUpdateLog(); exit ; }
 
-if ($action == "showInstallLog")		
+if ($action == "showAppsLog")		
 { 
 	include_once "edpconfig.inc.php";
 
 	$icon 		 	= $_GET['icon'];
 	$foldername		= $_GET['foldername'];
 	$name		 	= $_GET['name'];
-	showInstallLog($id, $foldername, $name, $icon); 
+	showAppsLog($id, $foldername, $name, $icon); 
 	exit ; 
 }
 
+if ($action == "showKextsLog")			
+ { 
+	include_once "edpconfig.inc.php";
+	
+	$kInfoKeyArray 	= explode(',', $_GET['kInfoKeys']);
+	$kInfoKeyValueArray = explode(',', $_GET['kInfoValues']);
+	
+	$InstallData = Array();
+	
+	$index = 0;
+	foreach($kInfoKeyArray as $kInfo) {
+		$InstallData[$kInfo] = $kInfoKeyValueArray[$index];
+		$index++;
+	}	
+	
+	// var_dump($InstallData);
+	showKextsLog($InstallData);
+	exit;
+ }
+ 
 function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 	$workpath = "/Extra/EDP";
 	$buildLogPath = "$workpath/logs/build";
@@ -366,7 +386,7 @@ function showUpdateLog() {
 
 }
 		
-function showInstallLog($id, $foldername, $name, $icon) {
+function showAppsLog($id, $foldername, $name, $icon) {
 	global $workpath, $edp_db;
 		
 	echoPageItemTOP("icons/apps/$icon", "$name");
@@ -476,7 +496,8 @@ function showFixLog($fixData) {
 							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
 						else {
-							system_call("sudo touch /System/Library/Extensions/ >> $log &");
+							system_call("sudo chown -R root:wheel /System/Library/Extensions/");
+							system_call("sudo touch /System/Library/Extensions/");
 						}
 					break;
 					
@@ -493,7 +514,8 @@ function showFixLog($fixData) {
 							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
 						else {
-							system_call("sudo touch /System/Library/Extensions/ >> $log &");
+							system_call("sudo chown -R root:wheel /System/Library/Extensions/");
+							system_call("sudo touch /System/Library/Extensions/");
 						}
 					break;
 					
@@ -520,6 +542,64 @@ function showFixLog($fixData) {
 	else 
 	{
 		echo "<center><b>Please wait for few minutes while we apply fix... which will take approx 1 to 10 minutes if it requires internet which depends on your speed.</b></center>";
+		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+	}
+	
+	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+	echo "</div>";
+}
+
+function showKextsLog($InstallData) {
+	global $workpath, $edp_db;
+		
+	echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[name]");
+	
+	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
+
+	echo "<div class='pageitem_bottom'\">";	
+		
+	$buildLogPath = "$workpath/logs/build";
+	
+	if (is_file("$buildLogPath/Success_$InstallData[foldername].txt") || is_file("$buildLogPath/Fail_$InstallData[foldername].txt"))
+	{
+			//
+			// Install the downloaded kext
+			//
+			echo "<ul class='pageitem'>";
+			if (file_exists("$buildLogPath/Success_$InstallData[foldername].txt")) {
+											
+				$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+				system_call("cp -rf $kPath/*.kext $InstallData[path]/");
+				
+				if ($InstallData[path] == "/Extra/Extensions") {
+					myHackCheck();
+					system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+				}
+				else {
+					system_call("sudo chown -R root:wheel /System/Library/Extensions/");
+					system_call("sudo touch /System/Library/Extensions/");
+				}
+				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Installation finished.</b><br><br><b> You can now reboot your system to see the kext in action.</center></b>";
+				echo "<br></ul>";
+			}
+			else {
+				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Installation failed.</b><br><br><b> Check the log for the reason.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$buildLogPath/kextInstall.log"))
+					include "$buildLogPath/kextInstall.log";
+				echo "</pre>";
+			}					
+			echo "</div>";
+			exit;
+	}
+	else 
+	{
+		echo "<center><b>Please wait for few minutes while we download and install the kext... which will take approx 1 to 10 minutes depending on your internet speed.</b></center>";
 		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 	}
 	
