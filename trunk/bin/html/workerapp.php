@@ -567,8 +567,43 @@ function showKextsLog($InstallData) {
 			//
 			echo "<ul class='pageitem'>";
 			if (file_exists("$buildLogPath/Success_$InstallData[foldername].txt")) {
-											
-				$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+				
+				// Download kext
+				switch ($InstallData[categ]) {
+					
+					case "USB":
+						// Generic XHCI USB3.0
+						if($InstallData[id] == "5") {
+							// Choose new version 
+							if(getMacOSXVersion() >= "10.8.5")
+								$kPath = "$workpath/kextpacks/$InstallData[categ]/GenericXHCIUSB3_New";
+				
+							// Choose old version
+							else if(getMacOSXVersion() < "10.8.5")
+								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+						}
+					break;
+			
+					case "Ethernet":
+						// New Realtek kext
+						if($InstallData[id] == "11") {
+				
+							// Choose 10.8+ version 
+							if(getMacOSXVersion() >= "10.8")
+								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]/RealtekRTL8111";
+					
+							// Choose Lion version
+							else if(getMacOSXVersion() == "10.7")
+								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]/RealtekRTL8111_Lion";
+						}
+					break;
+					
+					Default:
+						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+					break;
+		
+				}	
+				
 				system_call("cp -rf $kPath/*.kext $InstallData[path]/");
 				
 				if ($InstallData[path] == "/Extra/Extensions") {
