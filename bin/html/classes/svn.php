@@ -136,21 +136,20 @@ class svnDownload {
 			//
 			switch ($categ) {
 		
-				case "Ethernet": // Ethernet/FolderName/kextname
+				case "Ethernet": // Ethernet/CategName/KextFolder
 					$categdir = "$workpath/kextPacks/$categ/$fname"; 
 					$packdir = "$categdir/$name";
 					$svnpath = "kextpacks/$categ/$fname/$name";	
-					// Copy kext inside the name folder for the new RTL kext 
-					if ($name == "NewRTL81xx" || $name == "NewRTL81xx_Lion") {
-						$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
-					}			
+					$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				case "Bootloader": // Bootloader/FolderName/VersionName/bootFile
 					$copyKextCmd = "cp -f $workpath/kextPacks/$categ/$fname/$name/boot /; echo \"Copy : $name $fname bootloader updated<br>\" >> $buildLogPath/build.log";
+					
 					if (!is_dir("$workpath/kextPacks/$categ")) {
 						system_call("mkdir $workpath/kextPacks/$categ");
 					}
+					
 					$categdir = "$workpath/kextPacks/$categ/$fname";
 					$packdir = "$categdir/$name";
 					$svnpath = "kextpacks/$categ/$fname/$name";
@@ -170,17 +169,17 @@ class svnDownload {
 			switch ($fname) {
 				// Copy for VoodooPState launch agent plist
 				case "VoodooPState":
-				$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; cp $workpath/kextPacks/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; cp $workpath/kextPacks/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				// Copy for VoodooPS2 prefpanes
 				case "StandardVooDooPS2":
-				$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; cp -R $workpath/kextPacks/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname installed to /Library/PreferencePanes<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; cp -R $workpath/kextPacks/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname installed to /Library/PreferencePanes<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				case "LatestVoodooPS2":				
 				case "VoooDooALPS2":
-				$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; cp $workpath/kextPacks/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kextPacks/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kextPacks/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname file(s) installed<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $workpath/kextPacks/$categ/$fname/*.kext $ee/; cp $workpath/kextPacks/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kextPacks/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kextPacks/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname file(s) installed<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				default:

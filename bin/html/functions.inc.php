@@ -919,12 +919,13 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     			// New Realtek kext
     			if($lanid == "11") {
 				
-					//Choose 10.8+ version 
+					// Choose 10.8+ version 
 					if(getMacOSXVersion() >= "10.8")
-						$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "NewRTL81xx");
-					//chooose Lion version
+						$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "RealtekRTL8111");
+					
+					// Choose Lion version
 					else if(getMacOSXVersion() == "10.7")
-						$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "NewRTL81xx_Lion");
+						$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "RealtekRTL8111_Lion");
     			}
     			else
     				$svnLoad->PrepareKextpackDownload("Ethernet", "$fname", "$name");   
@@ -982,10 +983,11 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		
     		// Generic XHCI USB3.0
     		if($id == "5") {
-				//Choose new version 
+				// Choose new version 
 				if(getMacOSXVersion() >= "10.8.5")
 					$svnLoad->PrepareKextpackDownload("$categ", "GenericXHCIUSB3_New", "$name");
-				//chooose old version
+				
+				// Choose old version
 				else if(getMacOSXVersion() < "10.8.5")
 					$svnLoad->PrepareKextpackDownload("$categ", "$fname", "$name");
     		}
