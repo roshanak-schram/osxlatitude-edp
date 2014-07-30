@@ -555,7 +555,7 @@ function showKextsLog($InstallData) {
 	if ($InstallData[categ] != "Ethernet")
 		echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[name]");
 	else
-		echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[folername]");
+		echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[foldername]");
 	
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
