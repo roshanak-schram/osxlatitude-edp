@@ -552,7 +552,10 @@ function showFixLog($fixData) {
 function showKextsLog($InstallData) {
 	global $workpath, $edp_db;
 		
-	echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[name]");
+	if ($InstallData[categ] != "Ethernet")
+		echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[name]");
+	else
+		echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[folername]");
 	
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
@@ -582,6 +585,9 @@ function showKextsLog($InstallData) {
 							else if(getMacOSXVersion() < "10.8.5")
 								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
 						}
+						else
+							$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+
 					break;
 			
 					case "Ethernet":
@@ -590,12 +596,15 @@ function showKextsLog($InstallData) {
 				
 							// Choose 10.8+ version 
 							if(getMacOSXVersion() >= "10.8")
-								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]/RealtekRTL8111";
+								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[name]/RealtekRTL8111";
 					
 							// Choose Lion version
 							else if(getMacOSXVersion() == "10.7")
-								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]/RealtekRTL8111_Lion";
+								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[name]/RealtekRTL8111_Lion";
 						}
+						else
+							$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[name]/$InstallData[foldername]";
+
 					break;
 					
 					Default:

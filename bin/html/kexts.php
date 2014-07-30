@@ -151,6 +151,12 @@
 				if(!is_dir("$workpath/kextpacks/Ethernet"))
     				system_call("mkdir $workpath/kextpacks/Ethernet");
     				
+    			//
+				// name and foldername values are swapped due to Extra category folder of Ethernet
+				// so we can check the status of the kext download
+				//
+				$kInfoValues = "$id,$row[name],$row[foldername],$row[icon],$row[category],$installPath";
+					
 				// New Realtek kext
     			if($id == "11") {
 				
