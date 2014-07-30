@@ -74,9 +74,10 @@ function loader(action) {
 	var console = top.document.getElementById('console_iframe');
 	if (action == "EDP") 			{ sidebar.src = 'menu.inc.php?i=EDP'; 			console.src = 'showPage.php?i=EDP'; }	
 	if (action == "Configuration") 	{ sidebar.src = 'menu.inc.php?i=Configuration'; console.src = 'showPage.php?i=Configuration'; }
-	if (action == "Fixes") 			{ sidebar.src = 'menu.inc.php?i=Fixes'; 		console.src = 'showPage.php?i=Fixes'; }
-	if (action == "Tools") 			{ sidebar.src = 'menu.inc.php?i=Tools'; 		console.src = 'showPage.php?i=Tools'; }
 	if (action == "Applications") 	{ sidebar.src = 'menu.inc.php?i=Applications'; 	console.src = 'showPage.php?i=Applications'; }
+	if (action == "Tools") 			{ sidebar.src = 'menu.inc.php?i=Tools'; 		console.src = 'showPage.php?i=Tools'; }
+	if (action == "Fixes") 			{ sidebar.src = 'menu.inc.php?i=Fixes'; 		console.src = 'showPage.php?i=Fixes'; }
+	if (action == "Kexts") 			{ sidebar.src = 'menu.inc.php?i=Kexts'; 		console.src = 'showPage.php?i=Kexts'; }
 	if (action == "Credits") 		{ sidebar.src = 'menu.inc.php?i=Credits'; 		console.src = 'showPage.php?i=Credits'; }
 }
 

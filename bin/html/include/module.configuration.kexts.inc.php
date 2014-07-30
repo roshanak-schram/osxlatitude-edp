@@ -26,7 +26,7 @@
 		$using = "";
 		foreach($ps2 as $row) {
 			$sel =""; if ("$mdrow[ps2]" == "$row[id]") { $sel = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $sel>&nbsp; PS2: $row[name] v$row[version] </option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp; PS2: $row[name] v$row[version] by $row[owner]</option>\n";
 		}
 		
 		if ($using == "")
@@ -91,7 +91,7 @@
 		$using = "";
 		foreach($lan as $row) {
 			$sel = ""; if ("$mdrow[ethernet]" == "$row[id]") { $sel = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $sel>&nbsp; Ethernet: $row[name] v$row[version]</option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp; Ethernet: $row[name] v$row[version] by $row[owner]</option>\n";
 		}			
 		
 		if ($using == "")
@@ -102,7 +102,7 @@
 			
 
 		//
-		// Show dropdown for Wifi Kexts
+		// Show dropdown for WiFi Kexts
 		//
 		$wifi = $edp_db->query("SELECT * FROM wifi");
 		echo "<li class='select'><select name='wifipack'>\n";
@@ -129,7 +129,7 @@
 		$using = "";
 		foreach($bat as $row) {
 			$sel = ""; if ("$mdrow[battery]" == "$row[id]") { $sel = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $sel>&nbsp; Battery: $row[name] v$row[version] </option>\n";
+			echo "<option value='$row[id]' $sel>&nbsp; Battery: $row[name] v$row[version] by $row[owner] </option>\n";
 		}			
 		
 		if ($using == "")

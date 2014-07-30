@@ -87,6 +87,52 @@
 			generateMenu("SELECT * FROM sysfixes", "order by menu");
 
 		break;
+		
+		case "Kexts":
+			//
+			// Fetch and add menu items for audio 
+			//
+
+			echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;Audio</div>";
+			echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
+			echo "<tr onclick=\"kexts.php?category=audio\" style='cursor: hand'>";
+			echo "	<td width='20' height='28'></td>\n";
+			echo "	<td width='24' height='28'><img alt='list' src='icons/sidebar/kext.png' width='18px' height='18px'/></td>\n";
+			echo "	<td><span class='edpmenu_menuoption_text' onmouseover='mover(this)' onmouseout='mout(this)'>VoodooHDA</span></td>";
+			echo "</tr>\n";
+			echo "</table>";
+			
+			//
+			// Fetch and add menu items for battery 
+			//
+			generateMenu("SELECT * FROM battery", "order by menu");
+			
+			//
+			// Fetch and add menu items for fakesmc 
+			//
+			generateMenu("SELECT * FROM fakesmc", "order by menu");
+			
+			//
+			// Fetch and add menu items for ethernet 
+			//
+			generateMenu("SELECT * FROM ethernet", "order by menu");
+			
+			//
+			// Fetch and add menu items for ps2 
+			//
+			generateMenu("SELECT * FROM ps2", "order by menu");
+			
+			//
+			// Fetch and add menu items for wifi 
+			//
+			// generateMenu("SELECT * FROM wifi", "order by menu");
+			
+			//
+			// Fetch and add menu items for optionalpacks 
+			//
+			generateMenu("SELECT * FROM optionalpacks", "order by menu");
+
+		break;
 	
 	}	
 
