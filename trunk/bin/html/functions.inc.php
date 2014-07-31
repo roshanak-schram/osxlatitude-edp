@@ -716,8 +716,22 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		$fname = $ps2db[$ps2id]["foldername"];
     		$name = $ps2db[$ps2id]['kextname'];
     		
-    		// remove voodooPS2 files if its installed before
-    		if($ps2id != "2" && $ps2id != "6")
+    		// remove installed kexts before
+			if (is_dir("/Extra/Extensions/VoodooPS2Controller.kext")  {
+				system_call("rm -rf /Extra/Extensions/VoodooPS2Controller.kext");
+			}
+			if (is_dir("/Extra/Extensions/ApplePS2Controller.kext")  {
+				system_call("rm -rf /Extra/Extensions/ApplePS2Controller.kext");
+			}
+			if (is_dir("/Extra/Extensions/AppleACPIPS2Nub.kext")  {
+				system_call("rm -rf /Extra/Extensions/AppleACPIPS2Nub.kext");
+			}
+			if (is_dir("/Extra/Extensions/ApplePS2ElanTouchpad.kext")  {
+				system_call("rm -rf /Extra/Extensions/ApplePS2ElanTouchpad.kext");
+			}
+						
+    		// remove voodooPS2 files if its installed before for non-voodoo install
+    		if($ps2id != "2" && $ps2id != "5" && $ps2id != "6")
     		{
         		if(is_dir("/Library/PreferencePanes/VoodooPS2.prefpane")) {system_call("rm -rf /Library/PreferencePanes/VoodooPS2.prefpane");}
         		if(file_exists("/usr/bin/VoodooPS2Daemon")) {system_call("rm -rf /usr/bin/VoodooPS2Daemon");}
