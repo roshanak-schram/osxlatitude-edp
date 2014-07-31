@@ -568,16 +568,44 @@ function showKextsLog($InstallData) {
 			//
 			// Install the downloaded kext
 			//
-			echo "<ul class='pageitem'>";
 			if (file_exists("$buildLogPath/Success_$InstallData[foldername].txt")) {
 				
 				// Download kext
 				switch ($InstallData[categ]) {
 					
+					case "PS2Touchpad":
+						// Remove installed kexts which might cause problems
+						if (is_dir("$InstallData[path]/VoodooPS2Controller.kext")  {
+							system_call("rm -rf $InstallData[path]/VoodooPS2Controller.kext");
+						}
+						if (is_dir("$InstallData[path]/ApplePS2Controller.kext")  {
+							system_call("rm -rf $InstallData[path]/ApplePS2Controller.kext");
+						}
+						if (is_dir("$InstallData[path]/AppleACPIPS2Nub.kext")  {
+							system_call("rm -rf $InstallData[path]/AppleACPIPS2Nub.kext");
+						}
+						if (is_dir("$InstallData[path]/ApplePS2ElanTouchpad.kext")  {
+							system_call("rm -rf $InstallData[path]/ApplePS2ElanTouchpad.kext");
+						}
+						
+						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+					break;
+					
 					case "Audio":
 						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+						
 						// Copy prefpane and settings loader
-					    system_call("cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHdaSettingsLoader.app /Applications/; cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHDA.prefPane /Library/PreferencePanes/;");
+						if (is_file("$buildLogPath/Success_Settings.txt") || is_file("$buildLogPath/Fail_Settings.txt")) {
+					    	system_call("cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHdaSettingsLoader.app /Applications/; cp -f $workpath/kextpacks/$InstallData[categ]/Settings/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHDA.prefPane /Library/PreferencePanes/;");
+					    }
+					    // Check back (waiting for VoodooHDA Settings SVN download to finish)
+					    else {
+					    	echo "<center><b>Please wait for few minutes while we download and install the kext... which will take approx 1 to 10 minutes depending on your internet speed.</b></center>";
+							echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+							echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+							echo "</div>";
+							return;
+					    }
 					break;
 					
 					case "USB":
@@ -629,11 +657,14 @@ function showKextsLog($InstallData) {
 					system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 					system_call("sudo touch /System/Library/Extensions/");
 				}
+				
+				echo "<ul class='pageitem'>";
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Installation finished.</b><br><br><b> You can now reboot your system to see the kext in action.</center></b>";
 				echo "<br></ul>";
 			}
 			else {
+				echo "<ul class='pageitem'>";
 				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Installation failed.</b><br><br><b> Check the log for the reason.</center></b>";
 				echo "<br></ul>";
