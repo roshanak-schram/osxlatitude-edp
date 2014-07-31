@@ -717,16 +717,16 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		$name = $ps2db[$ps2id]['kextname'];
     		
     		// remove installed kexts before
-			if (is_dir("/Extra/Extensions/VoodooPS2Controller.kext")  {
+			if (is_dir("/Extra/Extensions/VoodooPS2Controller.kext"))  {
 				system_call("rm -rf /Extra/Extensions/VoodooPS2Controller.kext");
 			}
-			if (is_dir("/Extra/Extensions/ApplePS2Controller.kext")  {
+			if (is_dir("/Extra/Extensions/ApplePS2Controller.kext"))  {
 				system_call("rm -rf /Extra/Extensions/ApplePS2Controller.kext");
 			}
-			if (is_dir("/Extra/Extensions/AppleACPIPS2Nub.kext")  {
+			if (is_dir("/Extra/Extensions/AppleACPIPS2Nub.kext"))  {
 				system_call("rm -rf /Extra/Extensions/AppleACPIPS2Nub.kext");
 			}
-			if (is_dir("/Extra/Extensions/ApplePS2ElanTouchpad.kext")  {
+			if (is_dir("/Extra/Extensions/ApplePS2ElanTouchpad.kext"))  {
 				system_call("rm -rf /Extra/Extensions/ApplePS2ElanTouchpad.kext");
 			}
 						
