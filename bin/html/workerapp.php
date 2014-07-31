@@ -575,16 +575,16 @@ function showKextsLog($InstallData) {
 					
 					case "PS2Touchpad":
 						// Remove installed kexts which might cause problems
-						if (is_dir("$InstallData[path]/VoodooPS2Controller.kext")  {
+						if (is_dir("$InstallData[path]/VoodooPS2Controller.kext"))  {
 							system_call("rm -rf $InstallData[path]/VoodooPS2Controller.kext");
 						}
-						if (is_dir("$InstallData[path]/ApplePS2Controller.kext")  {
+						if (is_dir("$InstallData[path]/ApplePS2Controller.kext"))  {
 							system_call("rm -rf $InstallData[path]/ApplePS2Controller.kext");
 						}
-						if (is_dir("$InstallData[path]/AppleACPIPS2Nub.kext")  {
+						if (is_dir("$InstallData[path]/AppleACPIPS2Nub.kext"))  {
 							system_call("rm -rf $InstallData[path]/AppleACPIPS2Nub.kext");
 						}
-						if (is_dir("$InstallData[path]/ApplePS2ElanTouchpad.kext")  {
+						if (is_dir("$InstallData[path]/ApplePS2ElanTouchpad.kext"))  {
 							system_call("rm -rf $InstallData[path]/ApplePS2ElanTouchpad.kext");
 						}
 						
