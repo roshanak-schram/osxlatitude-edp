@@ -95,7 +95,7 @@
 
 			echo "<div id='title' class='edpmenu_title_text'  style='margin-top: 10px;'>&nbsp;&nbsp;Audio</div>";
 			echo "<table id='menu' class='edpmenu_menuoption' border='0' width='100%' cellpadding='0' style='border-collapse: collapse'>\n";
-			echo "<tr onclick=\"kexts.php?category=audio\" style='cursor: hand'>";
+			echo "<tr onclick=\"loadURL('kexts.php?category=audio&id=4');\" style='cursor: hand'>";
 			echo "	<td width='20' height='28'></td>\n";
 			echo "	<td width='24' height='28'><img alt='list' src='icons/sidebar/kext.png' width='18px' height='18px'/></td>\n";
 			echo "	<td><span class='edpmenu_menuoption_text' onmouseover='mover(this)' onmouseout='mout(this)'>VoodooHDA</span></td>";

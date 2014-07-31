@@ -88,8 +88,8 @@ if ($action == 'dobuild') {
 		// Create directories for build
 		//
     		
-    	if(!is_dir("$workpath/kextPacks"))
-    		system_call("mkdir $workpath/kextPacks");
+    	if(!is_dir("$workpath/kextpacks"))
+    		system_call("mkdir $workpath/kextpacks");
     		
     	if(!is_dir("$workpath/logs"))
     		system_call("mkdir $workpath/logs");
@@ -195,7 +195,7 @@ if ($action == 'dobuild') {
 		// Step 2 : Preparing  kext packs
 		//
 		writeToLog("$buildLogPath/build.log", "<br><b>Step 2) Prepare Kext packs for the system hardware:</b><br>");
-		PrepareEDPKextPacks();	
+		PrepareEDPKextpacks();	
 			
 		//  prepare for bootloader update
 		$bootID = $modeldb[$modelRowID]['chameBootID'];

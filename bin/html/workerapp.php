@@ -574,6 +574,12 @@ function showKextsLog($InstallData) {
 				// Download kext
 				switch ($InstallData[categ]) {
 					
+					case "Audio":
+						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+						// Copy prefpane and settings loader
+					    system_call("cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHdaSettingsLoader.app /Applications/; cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHDA.prefPane /Library/PreferencePanes/;");
+					break;
+					
 					case "USB":
 						// Generic XHCI USB3.0
 						if($InstallData[id] == "5") {

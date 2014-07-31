@@ -23,9 +23,16 @@
 		$kCategory = $_POST['category'];
 	}	
 	
-	$id = $_GET['id'];
-	if ($id == "") {
-		$id = $_POST['id'];
+	$vid = $_POST['vhdaID'];
+	if ($vid == "") {
+		$id = $_GET['id'];
+		if ($id == "") {
+			$id = $_POST['id'];
+		}
+	} 
+	else {
+		// set VoodooHDA ID
+		$id = $vid;
 	}
 		
 	// Get info from db
@@ -66,10 +73,26 @@
 
 		// Write out the top menu
 		echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
+		echo '<div class="pageitem_bottom">';
+
+		// Generate VoodooHDA list
+		if ($kCategory == "audio") {
+			echo "<p><b>Select the version:</b></p>";
+			echo "<ul class='pageitem'><span class='arrow'></span><li class='select'><select name='vhdaID' id='vhdaID'>";
+		
+			$voodoodHDA = $edp_db->query("SELECT * FROM audio");
+			foreach($voodoodHDA as $row) {
+				$sel = ""; 
+				if ("$row[id]" == "4") { $sel = "SELECTED"; }
+			
+				echo "<option value='$row[id]' $sel>&nbsp; $row[name] v$row[version] </option>\n";
+			}
+			
+			echo "</select>span class='arrow'></span></li></ul>";
+		}
 		
 		?>
 		
-		<div class="pageitem_bottom">
 		<p><b>About:</b></p>
 		<?="$row[brief]";?>
 		<br>
@@ -124,24 +147,33 @@
 		
 		// Download kext
 		switch ($kCategory) {
-			case "audio":
 			case "bat":
 			case "smc":
 			case "ps2":
 				$svnLoad->svnDataLoader("Kexts", "$row[category]", "$row[foldername]");
 			break;
 			
+			case "audio":
+				// Download kext
+				$svnLoad->svnDataLoader("Kexts", "$row[category]", "$row[foldername]");
+
+				// Download Prefpane and Settings loader
+        		$svnLoad->svnDataLoader("Kexts", "Audio", "Settings");
+			break;
+
 			case "optpacks":
 				
 				// Generic XHCI USB3.0
 				if($id == "5") {
 					// Choose new version 
-					if(getMacOSXVersion() >= "10.8.5")
-						$svnLoad->PrepareKextpackDownload("Kexts", "$row[category]", "GenericXHCIUSB3_New");
+					if(getMacOSXVersion() >= "10.8.5") {
+						$svnLoad->svnDataLoader("Kexts", "$row[category]", "GenericXHCIUSB3_New");
+						$kInfoValues = "$id,GenericXHCIUSB3_New,$row[name],$row[icon],$row[category],$installPath";
+					}
 			
 					// Choose old version
 					else if(getMacOSXVersion() < "10.8.5")
-						$svnLoad->PrepareKextpackDownload("Kexts", "$row[category]", "$row[foldername]");
+						$svnLoad->svnDataLoader("Kexts", "$row[category]", "$row[foldername]");
 				}
 				else
 					$svnLoad->svnDataLoader("Kexts", "$row[category]", "$row[foldername]");
@@ -167,8 +199,10 @@
 						$svnLoad->svnDataLoader("Kexts", "Ethernet/$row[foldername]", "RealtekRTL8111");
 					
 					// Choose Lion version
-					else if(getMacOSXVersion() == "10.7")
+					else if(getMacOSXVersion() == "10.7") {
 						$svnLoad->svnDataLoader("Kexts", "Ethernet/$row[foldername]", "RealtekRTL8111_Lion");
+						$kInfoValues = "$id,RealtekRTL8111_Lion,$row[foldername],$row[icon],$row[category],$installPath";
+					}
     			}
     			else
     				$svnLoad->svnDataLoader("Kexts", "Ethernet/$row[foldername]", "$row[name]");
