@@ -110,7 +110,7 @@
 		$using = "";
 		foreach($wifi as $row) {
 			$s=""; if ("$mdrow[wifi]" == "$row[id]") { $s = "SELECTED"; $using = "yes"; }
-			echo "<option value='$row[id]' $s>&nbsp; WiFi: $row[name] - $row[notes]</option>\n";
+			echo "<option value='$row[id]' $s>&nbsp; WiFi: $row[name] </option>\n";
 		}
 		
 		if ($using == "")

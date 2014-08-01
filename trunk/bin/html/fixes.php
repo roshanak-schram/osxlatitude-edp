@@ -34,12 +34,21 @@
 	}
 	
 	// Get info from db
-	if ($fixCateg == "pm") {
-		$stmt = $edp_db->query("SELECT * FROM pmfixes where id = '$id'");
+	switch ($fixCateg) {
+		case "pm":
+			$stmt = $edp_db->query("SELECT * FROM pmfixes where id = '$id'");
+		break;
+		
+		case "sys":
+			$stmt = $edp_db->query("SELECT * FROM sysfixes where id = '$id'");
+		break;
+		
+		case "wifi":
+			$stmt = $edp_db->query("SELECT * FROM wifi where id = '$id'");
+		break;
+		
 	}
-	else {
-		$stmt = $edp_db->query("SELECT * FROM sysfixes where id = '$id'");
-	}
+	
 	$stmt->execute();
 	$bigrow = $stmt->fetchAll(); $row = $bigrow[0];
 			
