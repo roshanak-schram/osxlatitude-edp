@@ -1,6 +1,9 @@
 <?php
 	include_once "edpconfig.inc.php";
 
+	// Write out the header
+	include "header.inc.php";
+	
 	// Fetch the show type
 	$showtype 	= $_GET['showtype']; if (!$showtype) { $showtype = $_POST['showtype']; }
 	$action 	= $_POST['action'];
@@ -25,10 +28,12 @@
 			$chamModules->copyChamModules($chamModConfig);
 			$chamModConfig = "";
 			
+			echo "<div class='pageitem_bottom'>\n";
 			echo "<ul class='pageitem'>";
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 			echo "<b><center> Saved changes.</b><br><br><b> You can see the changes in action from your next boot.</center></b>";
-			echo "<br></ul>";
+			echo "<br></ul></div>";
+			exit;
 		break;
 		
 		case "updateBootloader":
@@ -38,16 +43,18 @@
 				
 				if (file_exists("$incPath/boot")) {
 					system_call("cp -f $incPath/boot /");
+					echo "<div class='pageitem_bottom'>\n";
 					echo "<ul class='pageitem'>";
 					echo "<img src=\"icons/big/sucess.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 					echo "<b><center> Update success.</b><br><br><b> You can see the changes in action from your next boot.</center></b>";
-					echo "<br></ul>";
+					echo "<br></ul></div>";
 				}
 				else {
+					echo "<div class='pageitem_bottom'>\n";
 					echo "<ul class='pageitem'>";
 					echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 					echo "<b><center> File not found.</b><br><br><b> Copy your bootloader file to $incPath and try again.</center></b>";
-					echo "<br></ul>";
+					echo "<br></ul></div>";
 				}
 			}
 			elseif ($chameID  != "") {
@@ -73,11 +80,13 @@
 				
 			}
 			else {
+				echo "<div class='pageitem_bottom'>\n";
 				echo "<ul class='pageitem'>";
 				echo "<img src=\"icons/big/warning.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Nothing selected.</b><br><br><b> Please select your bootloader update options and try again.</center></b>";
-				echo "<br></ul>";
+				echo "<br></ul></div>";
 			}
+			exit;
 		break;
 		
 	}
@@ -91,9 +100,6 @@
 		
 			// Get the current config
 			$chamModConfig = $chamModules->chamModGetConfig();
-	
-			// Write out the header
-			include "header.inc.php";
 	
 			// Write out the top menu
 			echoPageItemTOP("icons/big/chame.png", "Chameleon modules");
@@ -120,9 +126,7 @@
 		break;
 	
 		case "boot":
-			// Write out the header
-			include "header.inc.php";
-	
+		
 			// Write out the top menu
 			echoPageItemTOP("icons/big/chame.png", "Chameleon bootloader");
 			echo "<div class='pageitem_bottom'>\n";
@@ -144,7 +148,7 @@
 					$version = $chameBootdb[$i]['version'];  $notes = $chameBootdb[$i]['notes'];
 					$os_support = $chameBootdb[$i]['os_support'];
 				
-					echo "<option value='$id' >&nbsp;&nbsp;$type v$version $os_support </option>\n";
+					echo "<option value='$i' >&nbsp;&nbsp;$type v$version $os_support </option>\n";
 					
 					$i++;
 				}
