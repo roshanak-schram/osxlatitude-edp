@@ -72,16 +72,19 @@
 					system_call("mkdir $svnpackPath/Bootloader");
 				}
 			
+				$type = $chameBootdb[$chameID]['type'];
+				$fname = $chameBootdb[$chameID]['foldername'];
+				
 				// Download the bootloader
-				if ($chameBootdb[$chameID]['type'] == "Enoch") {
-					$svnLoad->svnDataLoader("Kexts", "Bootloader/EnochBoot", "$chameBootdb[$chameID][foldername]");
+				if ($type == "Enoch") {
+					$svnLoad->svnDataLoader("Kexts", "Bootloader/EnochBoot", $fname);
 				}
 				else {
-					$svnLoad->svnDataLoader("Kexts", "Bootloader/StandardBoot", "$chameBootdb[$chameID][foldername]");
+					$svnLoad->svnDataLoader("Kexts", "Bootloader/StandardBoot", $fname);
 				}
 			
 				// Start installation process by Launching the script which provides the summary of the build process 
-				echo "<script> document.location.href = 'workerapp.php?type=$chameBootdb[$chameID][type]&fname=$chameBootdb[$chameID][foldername]&action=showChameUpdateLog'; </script>";
+				echo "<script> document.location.href = 'workerapp.php?type=$type&fname=$fname&action=showChameUpdateLog'; </script>";
 				
 			}
 			else {
