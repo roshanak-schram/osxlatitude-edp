@@ -688,7 +688,7 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
  function PrepareEDPKextpacks()
  {
  	//Get vars from config.inc.php
-    global $workPath, $rootPath, $slePath, $modelNamePath, $eePath;
+    global $workPath, $svnpackPath, $rootPath, $slePath, $modelNamePath, $eePath;
     global $ps2db, $audiodb, $wifidb, $cpufixdb, $batterydb, $landb, $fakesmcdb;
     global $modeldb, $modelRowID;
     global $os;
@@ -700,9 +700,6 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 	// model path
 	$modelDirPath = "$workPath/model-data/$modelNamePath";
 	
-	// kextpack svn path
-	$kextpacks = "$workPath/kextpacks";    
-    
     // Use EDP Kexts?
     if($modeldb[$modelRowID]['useEDPExtensions'] == "on")
     {
@@ -742,8 +739,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
         	if ($fname != "") { 
         	    writeToLog("$workPath/logs/build/build.log", " Preparing to download Touchpad kext $fname...<br>");
         	    
-        	    if(!is_dir("$kextpacks/PS2Touchpad"))
-    				system_call("mkdir $kextpacks/PS2Touchpad");
+        	    if(!is_dir("$svnpackPath/PS2Touchpad"))
+    				system_call("mkdir $svnpackPath/PS2Touchpad");
     				
     			$svnLoad->PrepareKextpackDownload("PS2Touchpad", "$fname", "$name");
     		}
@@ -783,8 +780,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     			case 4:
     				writeToLog("$workPath/logs/build/build.log", " Preparing to download WiFi kext $fname...<br>");
     					
-    				if(!is_dir("$kextpacks/Wireless"))
-    					system_call("mkdir $kextpacks/Wireless");
+    				if(!is_dir("$svnpackPath/Wireless"))
+    					system_call("mkdir $svnpackPath/Wireless");
     				
     				$svnLoad->PrepareKextpackDownload("Wireless", "$fname", "$name");
     			break;
@@ -795,8 +792,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     			{
     				writeToLog("$workPath/logs/build/build.log", " Preparing to download Bluetooth kext $fname...<br>");
         	    
-        	    	 if(!is_dir("$kextpacks/Wireless"))
-    					system_call("mkdir $kextpacks/Wireless");
+        	    	 if(!is_dir("$svnpackPath/Wireless"))
+    					system_call("mkdir $svnpackPath/Wireless");
     					
     				 $svnLoad->PrepareKextpackDownload("Wireless", "BluetoothFWUploader", "BluetoothFWUploader.kext");
     			}
@@ -819,8 +816,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		if ($fname != "") {
     			writeToLog("$workPath/logs/build/build.log", " Preparing to download FakeSMC kext $fname...<br>");
         	    
-        	    if(!is_dir("$kextpacks/FakeSMC"))
-    				system_call("mkdir $kextpacks/FakeSMC");
+        	    if(!is_dir("$svnpackPath/FakeSMC"))
+    				system_call("mkdir $svnpackPath/FakeSMC");
     					
     			$svnLoad->PrepareKextpackDownload("FakeSMC", "$fname", "$name");
     		}
@@ -896,8 +893,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     			        
     		    writeToLog("$workPath/logs/build/build.log", " Preparing to download Audio kext $fname...<br>");
 
-    			if(!is_dir("$kextpacks/Audio"))
-    				system_call("mkdir $kextpacks/Audio");
+    			if(!is_dir("$svnpackPath/Audio"))
+    				system_call("mkdir $svnpackPath/Audio");
     					    
         		$svnLoad->PrepareKextpackDownload("Audio", "$fname", "$name");
         		
@@ -923,12 +920,12 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
         		
         		writeToLog("$workPath/logs/build/build.log", " Preparing to download Ethernet kext $name...<br>");
         	    
-    			if(!is_dir("$kextpacks/Ethernet"))
-    				system_call("mkdir $kextpacks/Ethernet");
+    			if(!is_dir("$svnpackPath/Ethernet"))
+    				system_call("mkdir $svnpackPath/Ethernet");
     			
     			// Category folder
-    			if(!is_dir("$kextpacks/Ethernet/$fname"))
-    				system_call("mkdir $kextpacks/Ethernet/$fname");
+    			if(!is_dir("$svnpackPath/Ethernet/$fname"))
+    				system_call("mkdir $svnpackPath/Ethernet/$fname");
     		
     			// New Realtek kext
     			if($lanid == "11") {
@@ -961,8 +958,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
         if ($fname != "") {
         		writeToLog("$workPath/logs/build/build.log", " Preparing to download Battery kext $name...<br>");
         	    
-        	    if(!is_dir("$kextpacks/Battery"))
-    				system_call("mkdir $kextpacks/Battery");
+        	    if(!is_dir("$svnpackPath/Battery"))
+    				system_call("mkdir $svnpackPath/Battery");
     				
     			$svnLoad->PrepareKextpackDownload("Battery", "$fname", "$name");  
     		}
@@ -992,8 +989,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
          
          	writeToLog("$workPath/logs/build/build.log", " Preparing to download Optional pack $name...<br>");
 
-    		if(!is_dir("$kextpacks/$categ"))
-    			system_call("mkdir $kextpacks/$categ");
+    		if(!is_dir("$svnpackPath/$categ"))
+    			system_call("mkdir $svnpackPath/$categ");
     		
     		// Generic XHCI USB3.0
     		if($id == "5") {
@@ -1081,7 +1078,7 @@ function applyFixes() {
 	global $svnLoad;
 	
 	//kextpack svn path
-	$kextpacks = "$workPath/kextpacks";
+	$svnpackPath = "$workPath/kextpacks";
 	
     writeToLog("$workPath/logs/build/build.log", " Applying fixes and patches...... <br>");
 	
@@ -1108,8 +1105,8 @@ function applyFixes() {
         }
         else if ($foldername != "" && $modeldb[$modelRowID][$cpufixdata[edpid]] == "on") { 
 
-    		if(!is_dir("$kextpacks/PowerMgmt"))
-    			system_call("mkdir $kextpacks/PowerMgmt");
+    		if(!is_dir("$svnpackPath/PowerMgmt"))
+    			system_call("mkdir $svnpackPath/PowerMgmt");
     		
     		$svnLoad->PrepareKextpackDownload("PowerMgmt", "$foldername", "$foldername");
     		
@@ -1152,8 +1149,8 @@ function applyFixes() {
        			writeToLog("$workPath/logs/build/build.log", " Preparing to download patched IOATAFamily fix for IDE disks...<br>");
        		}
        		
-    		if(!is_dir("$kextpacks/$categ"))
-    			system_call("mkdir $kextpacks/$categ");
+    		if(!is_dir("$svnpackPath/$categ"))
+    			system_call("mkdir $svnpackPath/$categ");
     		
     		$svnLoad->PrepareKextpackDownload("$categ", "$fname", "$name");
     	}
