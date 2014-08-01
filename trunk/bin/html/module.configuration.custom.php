@@ -1,7 +1,6 @@
 
 <?php
 	include_once "functions.inc.php";
-		
 	include "header.inc.php";
 
 	$skippbuild = "";
@@ -124,12 +123,11 @@
 // Build Process		
 function doCustomBuild() {
 
-	global $workpath;
-	global $slepath;
-	global $ee;
+	global $workPath;
+	global $eePath;
+	global $incPath;
 	
-	$incpath = "/Extra/include"; 
-	$buildLogPath = "$workpath/logs/build";
+	$buildLogPath = "$workPath/logs/build";
 	
 	$cusoper = $_POST['copchoice'];
 	$edpoper = $_POST['eopchoice'];
@@ -171,9 +169,9 @@ function doCustomBuild() {
 	else if($cusoper != "cnone")
 	{
 		//Step 1
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Checking if you have selected any sources from $incpath </b><br>");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 1) Checking if you have selected any sources from $incPath </b><br>");
 
-		writeToLog("$buildLogPath/build.log", "Copying $incpath/Extensions to $ee <br>");
+		writeToLog("$buildLogPath/build.log", "Copying $incPath/Extensions to $eePath <br>");
 			
 			//Get all the kexts name in comma seperated way
 			$cclinfo = shell_exec("ls -m /Extra/include/Extensions/");
@@ -188,13 +186,13 @@ function doCustomBuild() {
 				$ccfkname = preg_replace('/\s+/', '',$ccfkname); //remove white spaces
 					
 				if($_POST[$pckid] == "on") {
-					  system("cp -R /Extra/include/Extensions/$ccfkname $ee");
-					  writeToLog("$buildLogPath/build.log", "Copying $ccfkname to $ee<br>");
+					  system("cp -R /Extra/include/Extensions/$ccfkname $eePath");
+					  writeToLog("$buildLogPath/build.log", "Copying $ccfkname to $eePath<br>");
 					}
 					else {
 						if(is_dir("/Extra/Extensions/$ccfkname")) {
 							system("rm -rf /Extra/Extensions/$ccfkname");
-					  		writeToLog("$buildLogPath/build.log", "Removing $ccfkname from $ee<br>");
+					  		writeToLog("$buildLogPath/build.log", "Removing $ccfkname from $eePath<br>");
 					  	}
 					}
 			 	}
@@ -202,7 +200,7 @@ function doCustomBuild() {
 			 }
 	
 		if ($dsdt == "on") {
-			writeToLog("$buildLogPath/build.log", "Copying $incpath/dsdt.aml to /Extra<br>");
+			writeToLog("$buildLogPath/build.log", "Copying $incPath/dsdt.aml to /Extra<br>");
 			system_call("cp -f /Extra/include/dsdt.aml /Extra");
 		} 	
 	
@@ -228,12 +226,12 @@ function doCustomBuild() {
     	}
 
 		if ($smbios == "on")	{
-			writeToLog("$buildLogPath/build.log", "Copying $incpath/smbios.plist to /Extra<br>"); 
+			writeToLog("$buildLogPath/build.log", "Copying $incPath/smbios.plist to /Extra<br>"); 
 			system_call("cp -f /Extra/include/smbios.plist /Extra");
 			}
 	
 		if ($boot == "on") { 
-			writeToLog("$buildLogPath/build.log", "Copying $incpath/org.chameleon.Boot.plist to /Extra<br>");
+			writeToLog("$buildLogPath/build.log", "Copying $incPath/org.chameleon.Boot.plist to /Extra<br>");
 			system_call("cp -f /Extra/include/org.chameleon.Boot.plist /Extra");
 			}		
 		

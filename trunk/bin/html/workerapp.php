@@ -1,9 +1,13 @@
 <?php
-
-				
+		
 $action = $_GET['action'];
 $url 	= $_GET['url'];
 $id 	= $_GET['id'];
+
+?><script> 
+    // Reference to the edp javascript core
+    var edp = top.edp;
+</script><?
 
 if ($action == "goto_hell") {
 	echo "If the window does not close automatically you may close it now";
@@ -12,15 +16,24 @@ if ($action == "goto_hell") {
 	exit;
 }
 
+if ($action == "") {
+    echo "No action defined.";
+    exit;
+}
+
+if ($action == "close-edpweb") 	{ echo "<pre>"; close - edpweb(); exit; }
+
+
 include_once "functions.inc.php";
 
-
-// Ajax Methods to build type, vendor, seris and model values 
-//--- Builder page ajax actions
+//
+// Ajax Methods to build type, vendor, series and model values 
+//
 
 if ($action == "builderVendorValues" || $action == "builderSerieValues" || $action == "builderModelValues" || $action == "builderCPUValues") {
 
 	include_once "edpconfig.inc.php";
+	
 	global $edpDBase;
 	
 	switch($action) {
@@ -44,22 +57,16 @@ if ($action == "builderVendorValues" || $action == "builderSerieValues" || $acti
 }
 
 
+//
 // Non Ajax methods below
+//
 include_once "header.inc.php";
 
-?><script> 
-    //Reference to the edp javascript core
-    var edp = top.edp;
-</script><?
+if ($action == "showUpdateLog")	{ showUpdateLog(); exit ; }
 
-if ($action == "") {
-    echo "No action defined..";
-    exit;
-}
+include_once "edpconfig.inc.php";
 
 if ($action == "showCredits") {
-
-	include_once "edpconfig.inc.php";
 
 	//Fetch data for ID
 	$stmt = $edp_db->query("SELECT * FROM credits where id = '$id'");
@@ -100,16 +107,12 @@ if ($action == "showCredits") {
 	exit;	
 }
 
-if ($action == "close-edpweb") 			{ echo "<pre>"; close - edpweb(); exit; }
-
 //
 // Log functions
 //
 
 if ($action == "showFixLog")			
  { 
-	include_once "edpconfig.inc.php";
-	
 	$fixKeyArray 	= explode(',', $_GET['fixInfoKeys']);
 	$fixValueArray 	= explode(',', $_GET['fixInfoValues']);
 	
@@ -128,7 +131,6 @@ if ($action == "showFixLog")
  
 if ($action == "showBuildLog")			
  { 
-	include_once "edpconfig.inc.php";
 	$modelPath 	= $_GET['modelPath'];
 	$dsdt 	= $_GET['dsdt'];
 	$ssdt 	= $_GET['ssdt'];
@@ -141,12 +143,10 @@ if ($action == "showBuildLog")
  
 if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
-if ($action == "showUpdateLog")			{ showUpdateLog(); exit ; }
+if ($action == "showChameUpdateLog")	{ showChameUpdateLog(); exit ; }
 
 if ($action == "showAppsLog")		
 { 
-	include_once "edpconfig.inc.php";
-
 	$icon 		 	= $_GET['icon'];
 	$foldername		= $_GET['foldername'];
 	$name		 	= $_GET['name'];
@@ -155,9 +155,7 @@ if ($action == "showAppsLog")
 }
 
 if ($action == "showKextsLog")			
- { 
-	include_once "edpconfig.inc.php";
-	
+ { 	
 	$kInfoKeyArray 	= explode(',', $_GET['kInfoKeys']);
 	$kInfoKeyValueArray = explode(',', $_GET['kInfoValues']);
 	
@@ -175,12 +173,8 @@ if ($action == "showKextsLog")
  }
  
 function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
-	$workpath = "/Extra/EDP";
-	$buildLogPath = "$workpath/logs/build";
-	
-	// For log time
-	date_default_timezone_set("UTC");
-	$date = date("d-m-y H-i");
+	global $workPath, $svnpackPath, $date;
+	$buildLogPath = "$workPath/logs/build";
 
 	echoPageItemTOP("icons/big/activity.png", "System configuration build log");
 	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
@@ -246,11 +240,11 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		
 		// End build log and create a lastbuild log
 		system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
-		system_call("cp $buildLogPath/build.log $workpath/logs/lastbuild.log ");
+		system_call("cp $buildLogPath/build.log $workPath/logs/lastbuild.log ");
 		
 		// Append current build log to the builds log 
 		$fileContents = file_get_contents("$buildLogPath/build.log");
-		file_put_contents("$workpath/logs/build.log", $fileContents, FILE_APPEND | LOCK_EX);
+		file_put_contents("$workPath/logs/build.log", $fileContents, FILE_APPEND | LOCK_EX);
 						
 		// Create run_myFix text file to start myFix process
 		writeToLog("$buildLogPath/Run_myFix.txt", "");
@@ -261,8 +255,8 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 }
 
 function showLoadingLog() {
-	$workpath = "/Extra/EDP";	
-	$buildLogPath = "$workpath/logs/build";
+	global $workPath, $svnpackPath;	
+	$buildLogPath = "$workPath/logs/build";
 	
 	echo "<div class='pageitem_bottom'\">";	
 	
@@ -310,22 +304,11 @@ function showCustomBuildInfo() {
 	echo "</div>";
 }
 
-function showUpdateLog() {
-	$workpath = "/Extra/EDP";
-	$updLogPath = "$workpath/logs/update";
+function showChameUpdateLog() {
+	global $workPath, $svnpackPath;
+	$updLogPath = "$workPath/logs/update";
 
-	// For log time
-	date_default_timezone_set("UTC");
-	$date = date("d-m-y H-i");
-	
-	if(is_file("$updLogPath/updateFinish.log")) {
-		system_call("mv $updLogPath/updateFinish.log $workpath/logs/lastupdate.log ");
-		system("sudo killall EDP"); 
-    	system("open $workpath/bin/EDPweb.app");
-    	exit;
-	}
-				
-	echoPageItemTOP("icons/big/update.png", "EDP Update");
+	echoPageItemTOP("icons/big/chame.png", "Chameleon bootloader Update");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
@@ -336,24 +319,9 @@ function showUpdateLog() {
 			if (file_exists("$updLogPath/Updsuccess.txt")) {
 							
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Update success.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
+				echo "<b><center> Update success.</b><br><br><b> You can see the changes in action from your next boot.</center></b>";
 				echo "<br></ul>";
 				
-				system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $updLogPath/update.log");
-				system_call("mv $updLogPath/update.log $updLogPath/updateFinish.log ");
-
-				echo "<b>Update Log:</b>\n";
-				echo "<pre>";
-				if(is_file("$updLogPath/updateFinish.log"))
-					include "$updLogPath/updateFinish.log";
-				echo "</pre>";
-				
-				// Append current update log to the updates log 
-				$fileContents = file_get_contents("$updLogPath/updateFinish.log");
-				file_put_contents("$workpath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
-				
-				echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
-				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
 			}
 			else {
 				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -366,18 +334,12 @@ function showUpdateLog() {
 					include "$updLogPath/update.log";
 				echo "</pre>";
 				
-				system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $updLogPath/update.log");
-				system_call("mv $updLogPath/update.log $workpath/logs/lastupdate.log ");
-				
-				// Append current update log to the updates log 
-				$fileContents = file_get_contents("$updLogPath/update.log");
-				file_put_contents("$workpath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
 			}					
 			echo "</div>";
 	}
 	else 
 	{
-		echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
+		echo "<center><b>Please wait for few minutes while we download the update... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
 		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 		
 		echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
@@ -387,14 +349,14 @@ function showUpdateLog() {
 }
 		
 function showAppsLog($id, $foldername, $name, $icon) {
-	global $workpath, $edp_db;
+	global $workPath, $svnpackPath, $edp_db;
 		
 	echoPageItemTOP("icons/apps/$icon", "$name");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
 		
-	$appsLogPath = "$workpath/logs/apps";
+	$appsLogPath = "$workPath/logs/apps";
 	
 	if (is_file("$appsLogPath/Success_$foldername.txt") || is_file("$appsLogPath/Fail_$foldername.txt"))
 	{
@@ -410,7 +372,7 @@ function showAppsLog($id, $foldername, $name, $icon) {
 			echo "<ul class='pageitem'>";
 			if (file_exists("$appsLogPath/Success_$foldername.txt")) {
 			
-				$appPath = "$workpath/apps/$row[menu]/$row[foldername]";
+				$appPath = "$workPath/apps/$row[menu]/$row[foldername]";
 				
 				if ($row[foldername] == "CamTwist") {
 					system_call("rm -rf /Library/QuickTime/CamTwist.component");
@@ -455,14 +417,14 @@ function showAppsLog($id, $foldername, $name, $icon) {
 }
 
 function showFixLog($fixData) {
-	global $workpath, $edp_db;
+	global $workPath, $svnpackPath, $edp_db;
 		
 	echoPageItemTOP("icons/big/$fixData[icon]", "$fixData[name]");
 	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
 
 	echo "<div class='pageitem_bottom'\">";	
 	
-	$fixLogPath = "$workpath/logs/fixes";
+	$fixLogPath = "$workPath/logs/fixes";
 	
 	
 	if (is_file("$fixLogPath/Success_$fixData[foldername].txt") || is_file("$fixLogPath/Fail_$fixData[foldername].txt"))
@@ -482,7 +444,7 @@ function showFixLog($fixData) {
 				switch($fixData[foldername]) {
 				
 					case "EAPDFix": // Apply plist config and install kext to SLE or EE
-						$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
+						$fixPath = "$svnpackPath/$fixData[categ]/$fixData[foldername]";
 						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Speakers $fixData[spk]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
 						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:Headphones $fixData[hp]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
 						system_call("sudo /usr/libexec/PlistBuddy -c \"set IOKitPersonalities:EAPDFix:CodecValues:ExternalMic $fixData[extMic]\" $fixPath/EAPDFix.kext/Contents/Info.plist >> $fixLogPath/fixInstall.log");
@@ -505,7 +467,7 @@ function showFixLog($fixData) {
 						//
 						// kext packs
 						//
-						$fixPath = "$workpath/kextpacks/$fixData[categ]/$fixData[foldername]";
+						$fixPath = "$svnpackPath/$fixData[categ]/$fixData[foldername]";
 						system_call("cp -rf $fixPath/* $fixData[path]/"); // Copy kext to SLE (or) E/E
 					
 						// Generate cache
@@ -522,7 +484,7 @@ function showFixLog($fixData) {
 				}
 								
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:49%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Fix finished.</b><br><br><b> You can now close app (or) reboot your sytem to see the fix in action.</center></b>";
+				echo "<b><center> Fix finished.</b><br><br><b> You can see the changes in action from your next boot.</center></b>";
 				echo "<br></ul>";
 			}
 			else {
@@ -550,7 +512,7 @@ function showFixLog($fixData) {
 }
 
 function showKextsLog($InstallData) {
-	global $workpath, $edp_db;
+	global $workPath, $svnpackPath, $edp_db;
 		
 	if ($InstallData[categ] != "Ethernet")
 		echoPageItemTOP("icons/big/$InstallData[icon]", "$InstallData[name]");
@@ -561,7 +523,7 @@ function showKextsLog($InstallData) {
 
 	echo "<div class='pageitem_bottom'\">";	
 		
-	$buildLogPath = "$workpath/logs/build";
+	$buildLogPath = "$workPath/logs/build";
 	
 	if (is_file("$buildLogPath/Success_$InstallData[foldername].txt") || is_file("$buildLogPath/Fail_$InstallData[foldername].txt"))
 	{
@@ -588,15 +550,15 @@ function showKextsLog($InstallData) {
 							system_call("rm -rf $InstallData[path]/ApplePS2ElanTouchpad.kext");
 						}
 						
-						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+						$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[foldername]";
 					break;
 					
 					case "Audio":
-						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+						$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[foldername]";
 						
 						// Copy prefpane and settings loader
 						if (is_file("$buildLogPath/Success_Settings.txt") || is_file("$buildLogPath/Fail_Settings.txt")) {
-					    	system_call("cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHdaSettingsLoader.app /Applications/; cp -f $workpath/kextpacks/$InstallData[categ]/Settings/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -rf $workpath/kextpacks/$InstallData[categ]/Settings/VoodooHDA.prefPane /Library/PreferencePanes/;");
+					    	system_call("cp -rf $svnpackPath/$InstallData[categ]/Settings/VoodooHdaSettingsLoader.app /Applications/; cp -f $svnpackPath/$InstallData[categ]/Settings/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -rf $svnpackPath/$InstallData[categ]/Settings/VoodooHDA.prefPane /Library/PreferencePanes/;");
 					    }
 					    // Check back (waiting for VoodooHDA Settings SVN download to finish)
 					    else {
@@ -613,14 +575,14 @@ function showKextsLog($InstallData) {
 						if($InstallData[id] == "5") {
 							// Choose new version 
 							if(getMacOSXVersion() >= "10.8.5")
-								$kPath = "$workpath/kextpacks/$InstallData[categ]/GenericXHCIUSB3_New";
+								$kPath = "$svnpackPath/$InstallData[categ]/GenericXHCIUSB3_New";
 				
 							// Choose old version
 							else if(getMacOSXVersion() < "10.8.5")
-								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+								$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[foldername]";
 						}
 						else
-							$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+							$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[foldername]";
 
 					break;
 			
@@ -630,19 +592,19 @@ function showKextsLog($InstallData) {
 				
 							// Choose 10.8+ version 
 							if(getMacOSXVersion() >= "10.8")
-								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[name]/RealtekRTL8111";
+								$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[name]/RealtekRTL8111";
 					
 							// Choose Lion version
 							else if(getMacOSXVersion() == "10.7")
-								$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[name]/RealtekRTL8111_Lion";
+								$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[name]/RealtekRTL8111_Lion";
 						}
 						else
-							$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[name]/$InstallData[foldername]";
+							$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[name]/$InstallData[foldername]";
 
 					break;
 					
 					Default:
-						$kPath = "$workpath/kextpacks/$InstallData[categ]/$InstallData[foldername]";
+						$kPath = "$svnpackPath/$InstallData[categ]/$InstallData[foldername]";
 					break;
 		
 				}	
@@ -660,7 +622,7 @@ function showKextsLog($InstallData) {
 				
 				echo "<ul class='pageitem'>";
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-				echo "<b><center> Installation finished.</b><br><br><b> You can now reboot your system to see the kext in action.</center></b>";
+				echo "<b><center> Installation finished.</b><br><br><b> You can see the changes in action from your next boot.</center></b>";
 				echo "<br></ul>";
 			}
 			else {
@@ -686,6 +648,88 @@ function showKextsLog($InstallData) {
 	
 	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	echo "</div>";
+}
+
+//
+// Special case in Update function for workPath due to reload of App forces DB reload
+//
+
+function showUpdateLog() {
+	
+	$workPath = "/Extra/EDP"; // can't use global path (using makes update to break)
+
+	// For log time
+	date_default_timezone_set("UTC");
+	$date = date("d-m-y H-i");
+	
+	$updLogPath = "$workPath/logs/update";
+
+	if(is_file("$updLogPath/updateFinish.log")) {
+		system_call("mv $updLogPath/updateFinish.log $workPath/logs/lastupdate.log ");
+		system("sudo killall EDP"); 
+    	system("open $workPath/bin/EDPweb.app");
+    	exit;
+	}
+				
+	echoPageItemTOP("icons/big/update.png", "EDP Update");
+	echo "<body onload=\"JavaScript:timedRefresh(8000);\">";	
+
+	echo "<div class='pageitem_bottom'\">";	
+			
+	if (is_file("$updLogPath/Updsuccess.txt") || is_file("$updLogPath/Updfail.txt"))
+	{
+			echo "<ul class='pageitem'>";
+			if (file_exists("$updLogPath/Updsuccess.txt")) {
+							
+				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Update success.</b><br><br><b> Please wait 10 sec... the App will reload for the new changes to take effect.</center></b>";
+				echo "<br></ul>";
+				
+				system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $updLogPath/update.log");
+				system_call("mv $updLogPath/update.log $updLogPath/updateFinish.log ");
+
+				echo "<b>Update Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$updLogPath/updateFinish.log"))
+					include "$updLogPath/updateFinish.log";
+				echo "</pre>";
+				
+				// Append current update log to the updates log 
+				$fileContents = file_get_contents("$updLogPath/updateFinish.log");
+				file_put_contents("$workPath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
+				
+				echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
+				echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\", timeoutPeriod); } </script>\n";
+			}
+			else {
+				echo "<img src=\"icons/big/fail.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+				echo "<b><center> Update failed.</b><br><br><b> Check the log for the reason.</center></b>";
+				echo "<br></ul>";
+				
+				echo "<b>Update Log:</b>\n";
+				echo "<pre>";
+				if(is_file("$updLogPath/update.log"))
+					include "$updLogPath/update.log";
+				echo "</pre>";
+				
+				system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $updLogPath/update.log");
+				system_call("mv $updLogPath/update.log $workPath/logs/lastupdate.log ");
+				
+				// Append current update log to the updates log 
+				$fileContents = file_get_contents("$updLogPath/update.log");
+				file_put_contents("$workPath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
+			}					
+			echo "</div>";
+	}
+	else 
+	{
+		echo "<center><b>Please wait for few minutes while we download the updates... which will take approx 1 to 10 minutes depending on your internet speed</b></center>";
+		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+		
+		echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+		echo "</div>";
+	}
+
 }
 
 ?>

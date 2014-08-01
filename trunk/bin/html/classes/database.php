@@ -284,11 +284,11 @@ class edpDatabase {
 	}
 
 	public function updateDB() {
-		global $workpath;
+		global $workPath;
 		
     	echo "\nUpdating database... <br><br>\n";
-    	system_call("rm -Rf $workpath/bin/edp.sqlite3");
-    	system_call("curl -o $workpath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
+    	system_call("rm -Rf $workPath/bin/edp.sqlite3");
+    	system_call("curl -o $workPath/bin/edp.sqlite3 http://www.osxlatitude.com/dbupdate.php");
     }
 }
 

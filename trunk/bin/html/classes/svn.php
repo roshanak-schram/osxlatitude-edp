@@ -6,13 +6,13 @@ class svnDownload {
 	 * Public function to prepare the essential files download
 	 */
 	public function PrepareEssentialFilesDownload($model) {
-		global $workpath, $modelNamePath, $os;
+		global $workPath, $modelNamePath, $os;
 	
 		if ($model != "") {
 			$modelNamePath = $model;
 		}
 		
-		$buildLogPath = "$workpath/logs/build";
+		$buildLogPath = "$workPath/logs/build";
   
     	$createStatFile = "touch $buildLogPath/dLoadStatus/essentialFiles.txt";	
 		$endStatFile = "rm -f $buildLogPath/dLoadStatus/essentialFiles.txt";
@@ -20,7 +20,7 @@ class svnDownload {
 		//
 		// download essential files from common folder
 		//
-		$modelfolder = "$workpath/model-data/$modelNamePath/common";
+		$modelfolder = "$workPath/model-data/$modelNamePath/common";
 		
 		if (is_dir("$modelfolder") && shell_exec("cd $modelfolder; ls | wc -l") > 0) {
 			$checkoutCmd = "if ping -q -c 2 google.com; then if svn --non-interactive --username edp --password edp --force --quiet update $modelfolder; then echo \"Update : Common Essential files update finished<br>\" >> $buildLogPath/build.log; fi else echo \"Update : No internet to update Common essential files<br>\" >> $buildLogPath/build.log; fi";
@@ -38,7 +38,7 @@ class svnDownload {
 		// download essential files from $os folder
 		//
 		
-		$modelfolder = "$workpath/model-data/$modelNamePath/$os";
+		$modelfolder = "$workPath/model-data/$modelNamePath/$os";
 		
 		if (is_dir("$modelfolder") && shell_exec("cd $modelfolder; ls | wc -l") > 0) {
 			$checkoutCmd = "if ping -q -c 2 google.com; then if svn --non-interactive --username edp --password edp --force --quiet update $modelfolder; then echo \"Update : $os Essential files update finished<br>\" >> $buildLogPath/build.log; else echo \"Update : $os Essential files update failed<br>\" >> $buildLogPath/build.log; fi";
@@ -58,14 +58,14 @@ class svnDownload {
 	 * Public function to prepare the cpu ssdt files download
 	 */
 	public function PrepareSSDTFilesDownload($cpuID) {
-		global $workpath, $modelNamePath, $edp_db;
+		global $workPath, $modelNamePath, $edp_db;
 		
-		$buildLogPath = "$workpath/logs/build";
+		$buildLogPath = "$workPath/logs/build";
     
     	$createStatFile = "touch $buildLogPath/dLoadStatus/SSDTFiles.txt";	
 		$endStatFile = "rm -f $buildLogPath/dLoadStatus/SSDTFiles.txt";
 		
-		$modelcpudir = "$workpath/model-data/$modelNamePath/cpu";
+		$modelcpudir = "$workPath/model-data/$modelNamePath/cpu";
 		
 		$cpuRes = $edp_db->query("SELECT * FROM  cpu WHERE id = '$cpuID'");
 
@@ -88,9 +88,9 @@ class svnDownload {
 	}
 
 	public function checkSVNrevs() {
-		global $localrev, $workpath;
+		global $localrev, $workPath;
 
-		$remoterev = exec("cd $workpath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
+		$remoterev = exec("cd $workPath; svn info -r HEAD --username edp --password edp --non-interactive | grep -i \"Last Changed Rev\"");
 		$remoterev = str_replace("Last Changed Rev: ", "", $remoterev);
 
 		if ($localrev < $remoterev) {
@@ -104,9 +104,9 @@ class svnDownload {
  	 * This function will prepare the download of kextpacks from SVN if requested (or update it if exists) 
  	 */
 	public function PrepareKextpackDownload($categ, $fname, $name) {
-		global $workpath, $edp, $ee;
+		global $workPath, $svnpackPath, $edp, $eePath;
 		
-    	$buildLogPath = "$workpath/logs/build";
+    	$buildLogPath = "$workPath/logs/build";
     		
     	$createStatFile = "touch $buildLogPath/dLoadStatus/$fname.txt";	
 		$endStatFile = "rm -f $buildLogPath/dLoadStatus/$fname.txt";
@@ -116,20 +116,20 @@ class svnDownload {
 		//
     	if ($categ == "Extensions"  || $categ == "Kernel")
 		{
-			$categdir = "$workpath/model-data/$name";
+			$categdir = "$workPath/model-data/$name";
 			$packdir = "$categdir/$fname";
 			$svnpath = "model-data/$name/$fname";
-			$copyKextCmd = "cp -a $workpath/model-data/$name/$fname/*.kext $ee/; echo \"Copy : $fname file(s) installed<br>\" >> $buildLogPath/build.log";
+			$copyKextCmd = "cp -a $workPath/model-data/$name/$fname/*.kext $eePath/; echo \"Copy : $fname file(s) installed<br>\" >> $buildLogPath/build.log";
 			$name = $fname;
 		}
 		//
 		// Download kexts and booloader from kextpacks
 		//
 		else {
-			$categdir = "$workpath/kextpacks/$categ";
+			$categdir = "$svnpackPath/$categ";
 			$packdir = "$categdir/$fname";
 			$svnpath = "kextpacks/$categ/$fname";
-			$copyKextCmd = "cp -a $workpath/kextpacks/$categ/$fname/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
+			$copyKextCmd = "cp -a $svnpackPath/$categ/$fname/*.kext $eePath/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
 						
 			//
 			// Special handling to choose bootloader and ethernet kexts
@@ -137,20 +137,20 @@ class svnDownload {
 			switch ($categ) {
 		
 				case "Ethernet": // Ethernet/CategName/KextFolder
-					$categdir = "$workpath/kextpacks/$categ/$fname"; 
+					$categdir = "$svnpackPath/$categ/$fname"; 
 					$packdir = "$categdir/$name";
 					$svnpath = "kextpacks/$categ/$fname/$name";	
-					$copyKextCmd = "cp -a $workpath/kextpacks/$categ/$fname/$name/*.kext $ee/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $svnpackPath/$categ/$fname/$name/*.kext $eePath/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				case "Bootloader": // Bootloader/FolderName/VersionName/bootFile
-					$copyKextCmd = "cp -f $workpath/kextpacks/$categ/$fname/$name/boot /; echo \"Copy : $name $fname bootloader updated<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -f $svnpackPath/$categ/$fname/$name/boot /; echo \"Copy : $name $fname bootloader updated<br>\" >> $buildLogPath/build.log";
 					
-					if (!is_dir("$workpath/kextpacks/$categ")) {
-						system_call("mkdir $workpath/kextpacks/$categ");
+					if (!is_dir("$svnpackPath/$categ")) {
+						system_call("mkdir $svnpackPath/$categ");
 					}
 					
-					$categdir = "$workpath/kextpacks/$categ/$fname";
+					$categdir = "$svnpackPath/$categ/$fname";
 					$packdir = "$categdir/$name";
 					$svnpath = "kextpacks/$categ/$fname/$name";
 				break;
@@ -163,23 +163,23 @@ class svnDownload {
 			// Set Copy for VoodooHDA prefpanes
 			if ($name == "AudioSettings")
 			{
-        		$copyKextCmd = "cp -a $workpath/kextpacks/$categ/$fname/*.kext $ee/; cp -R $workpath/kextpacks/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $workpath/kextpacks/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $workpath/kextpacks/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA file(s) installed<br>\" >> $buildLogPath/build.log";
+        		$copyKextCmd = "cp -a $svnpackPath/$categ/$fname/*.kext $eePath/; cp -R $svnpackPath/$categ/$fname/VoodooHdaSettingsLoader.app /Applications/; cp $svnpackPath/$categ/$fname/com.restore.voodooHDASettings.plist /Library/LaunchAgents/; cp -R $svnpackPath/$categ/$fname/VoodooHDA.prefPane /Library/PreferencePanes/; echo \"Copy : VoodooHDA file(s) installed<br>\" >> $buildLogPath/build.log";
 			}
 			
 			switch ($fname) {
 				// Copy for VoodooPState launch agent plist
 				case "VoodooPState":
-					$copyKextCmd = "cp -a $workpath/kextpacks/$categ/$fname/*.kext $ee/; cp $workpath/kextpacks/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $svnpackPath/$categ/$fname/*.kext $eePath/; cp $svnpackPath/PowerMgmt/VoodooPState/PStateMenu.plist /Library/LaunchAgents/; echo \"Copy : $name file(s) installed<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				// Copy for VoodooPS2 prefpanes
 				case "StandardVooDooPS2":
-					$copyKextCmd = "cp -a $workpath/kextpacks/$categ/$fname/*.kext $ee/; cp -R $workpath/kextpacks/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname installed to /Library/PreferencePanes<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $svnpackPath/$categ/$fname/*.kext $eePath/; cp -R $svnpackPath/$categ/$fname/VoodooPS2.prefpane /Library/PreferencePanes; echo \"Copy : $fname installed to /Library/PreferencePanes<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				case "LatestVoodooPS2":				
 				case "VoooDooALPS2":
-					$copyKextCmd = "cp -a $workpath/kextpacks/$categ/$fname/*.kext $ee/; cp $workpath/kextpacks/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $workpath/kextpacks/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $workpath/kextpacks/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname file(s) installed<br>\" >> $buildLogPath/build.log";
+					$copyKextCmd = "cp -a $svnpackPath/$categ/$fname/*.kext $eePath/; cp $svnpackPath/$categ/$fname/VoodooPS2Daemon /usr/bin; cp $svnpackPath/$categ/$fname/org.rehabman.voodoo.driver.Daemon.plist /Library/LaunchDaemons; cp -R $svnpackPath/$categ/$fname/VoodooPS2synapticsPane.prefPane /Library/PreferencePanes; echo \"Copy : $fname file(s) installed<br>\" >> $buildLogPath/build.log";
 				break;
 				
 				default:
@@ -210,55 +210,56 @@ class svnDownload {
  	 * This function will download of kextpacks from SVN if requested (or update it if exists) 
  	 */
 	function svnDataLoader($logType, $categ, $fname) {
-		global $workpath, $edp;
+		global $workPath, $svnpackPath, $edp;
     	      	  	
     	switch ($logType) {
     		case "AppsTools":
-				$logPath = "$workpath/logs/apps";
+				$logPath = "$workPath/logs/apps";
 				// create app local download directory if not found
-				if(!is_dir("$workpath/apps")) {
-					system_call("mkdir $workpath/apps");
+				if(!is_dir("$workPath/apps")) {
+					system_call("mkdir $workPath/apps");
 				}
-				if(!is_dir("$workpath/apps/$categ")) {
-					system_call("mkdir $workpath/apps/$categ");
+				if(!is_dir("$workPath/apps/$categ")) {
+					system_call("mkdir $workPath/apps/$categ");
 				}
-				$dataDir = "$workpath/apps/$categ";
+				$dataDir = "$workPath/apps/$categ";
 				$svnpath = "apps/$categ/$fname";
 				$logName = "appInstall";
     		break;
     		
     		case "Kexts":
-				$logPath = "$workpath/logs/build";
+				$logPath = "$workPath/logs/build";
+				
 				// create fix local download directory if not found
-				if(!is_dir("$workpath/kextpacks")) {
-					system_call("mkdir $workpath/kextpacks");
+				if(!is_dir("$svnpackPath")) {
+					system_call("mkdir $svnpackPath");
 				}
-				if(!is_dir("$workpath/kextpacks/$categ")) {
-					system_call("mkdir $workpath/kextpacks/$categ");
+				if(!is_dir("$svnpackPath/$categ")) {
+					system_call("mkdir $svnpackPath/$categ");
 				}
-				$dataDir = "$workpath/kextpacks/$categ";
+				$dataDir = "$svnpackPath/$categ";
 				$svnpath = "kextpacks/$categ/$fname";
 				$logName = "kextInstall";
     		break;
     		
     		case "Fixes":
-				$logPath = "$workpath/logs/fixes";
+				$logPath = "$workPath/logs/fixes";
 				// create fix local download directory if not found
-				if(!is_dir("$workpath/kextpacks")) {
-					system_call("mkdir $workpath/kextpacks");
+				if(!is_dir("$svnpackPath")) {
+					system_call("mkdir $svnpackPath");
 				}
-				if(!is_dir("$workpath/kextpacks/$categ")) {
-					system_call("mkdir $workpath/kextpacks/$categ");
+				if(!is_dir("$svnpackPath/$categ")) {
+					system_call("mkdir $svnpackPath/$categ");
 				}
-				$dataDir = "$workpath/kextpacks/$categ";
+				$dataDir = "$svnpackPath/$categ";
 				$svnpath = "kextpacks/$categ/$fname";
 				$logName = "fixInstall";
     		break;
     	}
 		
 		// create log directory if not found
-		if(!is_dir("$workpath/logs")) {
-			system_call("mkdir $workpath/logs");
+		if(!is_dir("$workPath/logs")) {
+			system_call("mkdir $workPath/logs");
 		}
 		if(!is_dir("$logPath")) {
 			system_call("mkdir $logPath");

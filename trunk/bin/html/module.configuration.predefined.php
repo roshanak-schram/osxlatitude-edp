@@ -13,7 +13,7 @@ $modelID 	= $_GET['modelID'];	if ($modelID == "") { $modelID 	= $_POST['modelID'
 $cpuID 		= $_GET['cpuID'];	if ($cpuID == "")	{ $cpuID 	= $_POST['cpuID']; }
 $action 	= $_GET['action']; 	if ($action == "") 	{ $action 	= $_POST['action']; }
 	
-$buildLogPath = "$workpath/logs/build";
+$buildLogPath = "$logsPath/build";
 
 
 //-------------------------> Do build page starts here
@@ -74,7 +74,7 @@ if ($action == 'dobuild') {
 		global $chamModules; 
 		global $svnLoad; 
 		
-		global $workpath, $rootpath, $ee, $os; 
+		global $workPath, $svnpackPath, $os; 
 		global $modelName;
 	
 		
@@ -88,11 +88,11 @@ if ($action == 'dobuild') {
 		// Create directories for build
 		//
     		
-    	if(!is_dir("$workpath/kextpacks"))
-    		system_call("mkdir $workpath/kextpacks");
+    	if(!is_dir("$svnpackPath"))
+    		system_call("mkdir $svnpackPath");
     		
-    	if(!is_dir("$workpath/logs"))
-    		system_call("mkdir $workpath/logs");
+    	if(!is_dir("$logsPath"))
+    		system_call("mkdir $logsPath");
     		
     	if(!is_dir("$buildLogPath"))
     		system_call("mkdir $buildLogPath");
@@ -100,8 +100,8 @@ if ($action == 'dobuild') {
 		if(!is_dir("$buildLogPath/dLoadScripts"))
 			system_call("mkdir $buildLogPath/dLoadScripts");
 
-		if(!is_dir("$workpath/logs/fixes"))
-    		system_call("mkdir $workpath/logs/fixes");
+		if(!is_dir("$logsPath/fixes"))
+    		system_call("mkdir $logsPath/fixes");
 		
 		
 		writeToLog("$buildLogPath/build.log", "<br> Cleaning up last build...<br>");
@@ -130,8 +130,8 @@ if ($action == 'dobuild') {
 		
 			$modelNamePath = "$modelName";
 
-			if(!is_dir("$workpath/model-data/$modelName/"))
-				system("mkdir $workpath/model-data/$modelName");
+			if(!is_dir("$workPath/model-data/$modelName/"))
+				system("mkdir $workPath/model-data/$modelName");
 				
 			// system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelName/common >> $buildLogPath/build.log 2>&1");
 			
@@ -141,14 +141,14 @@ if ($action == 'dobuild') {
 		
 			$modelNamePath = "$ven/$gen/$modelName";
 			
-			if(!is_dir("$workpath/model-data/$ven"))
-				system("mkdir $workpath/model-data/$ven");
+			if(!is_dir("$workPath/model-data/$ven"))
+				system("mkdir $workPath/model-data/$ven");
 			
-			if(!is_dir("$workpath/model-data/$ven/$gen"))
-				system("mkdir $workpath/model-data/$ven/$gen");
+			if(!is_dir("$workPath/model-data/$ven/$gen"))
+				system("mkdir $workPath/model-data/$ven/$gen");
 			
-			if(!is_dir("$workpath/model-data/$modelNamePath/"))
-				system("mkdir $workpath/model-data/$modelNamePath");
+			if(!is_dir("$workPath/model-data/$modelNamePath/"))
+				system("mkdir $workPath/model-data/$modelNamePath");
 			
 			// system_call("svn --non-interactive --username osxlatitude-edp-read-only list http://osxlatitude-edp.googlecode.com/svn/model-data/$modelNamePath/common >> $buildLogPath/build.log 2>&1");
 			
@@ -171,7 +171,7 @@ if ($action == 'dobuild') {
 		//
 		if($modeldb[$modelRowID]['useIncTheme'] == "on")
 		{
-			writeToLog("$workpath/logs/build/dLoadScripts/CopyCustomTheme.sh", "");
+			writeToLog("$logsPath/build/dLoadScripts/CopyCustomTheme.sh", "");
 		}
 		if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on")
 			$smbios = "yes";

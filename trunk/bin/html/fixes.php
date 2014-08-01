@@ -167,8 +167,8 @@
 		global $svnLoad;
 		
 		// Clear logs and scripts
-		if(is_dir("$workpath/logs/fixes")) {
-			system_call("rm -rf $workpath/logs/fixes/*");
+		if(is_dir("$logsPath/fixes")) {
+			system_call("rm -rf $logsPath/fixes/*");
 		}
 		
 		switch ($row[foldername]) {
@@ -206,7 +206,7 @@
 	}
 	elseif ($action == "Patch")
 	{
-		$fixLogPath = "$workpath/logs/fixes";
+		$fixLogPath = "$logsPath/fixes";
 		
 		// Clear logs and scripts
 		if(is_dir("$fixLogPath")) {
@@ -214,8 +214,8 @@
 		}
 		
 		// create log directory if not found
-		if(!is_dir("$workpath/logs")) {
-			system_call("mkdir $workpath/logs");
+		if(!is_dir("$logsPath")) {
+			system_call("mkdir $logsPath");
 		}
 		if(!is_dir("$fixLogPath")) {
 			system_call("mkdir $fixLogPath");
