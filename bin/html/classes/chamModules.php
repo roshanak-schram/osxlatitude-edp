@@ -4,8 +4,8 @@ class chamModules {
 
 	//-----> Copies modules from EDP/modules to /Extra/modules by removing old onces first - it will only copy whatever is defined in $chamModConfig
 	public function copyChamModules($chamModConfig) {
-		global $workpath;
-		$modpathFROM 	= "$workpath/bin/modules";
+		global $workPath;
+		$modpathFROM 	= "$workPath/bin/modules";
 		$modpathTO 		= "/Extra/modules/";
 	
 		if(!is_dir("/Extra/modules"));
@@ -30,7 +30,7 @@ class chamModules {
 
 	//----> Get current configuration from /Extra/modules folder by checking wich files is there
 	public function chamModGetConfig() {
-		global $workpath;
+		global $workPath;
 		$modpath = "/Extra/modules";
 
 		$array = array(

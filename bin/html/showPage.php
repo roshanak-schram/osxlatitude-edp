@@ -226,7 +226,7 @@
 		
 		case "Update":
 		
-			$updLogPath = "$workpath/logs/update";
+			$updLogPath = "$logsPath/update";
 
 			// Clear logs and scripts
 			if(is_dir("$updLogPath")) {
@@ -234,8 +234,8 @@
 			}
 			
 			// create log directory if not found
-			if(!is_dir("$workpath/logs")) {
-				system_call("mkdir $workpath/logs");
+			if(!is_dir("$logsPath")) {
+				system_call("mkdir $logsPath");
 			}
 			if(!is_dir("$updLogPath")) {
 				system_call("mkdir $updLogPath");
@@ -250,7 +250,7 @@
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 			
 			system_call("echo '*** Logging started on: $date UTC Time ***<br>' >> $updLogPath/update.log");
-			system_call("sudo sh $workpath/bin/update.sh >> $updLogPath/update.log &");
+			system_call("sudo sh $workPath/bin/update.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
 			
@@ -258,7 +258,7 @@
 		
 		case "UpdateDB":
 		
-			$updLogPath = "$workpath/logs/update";
+			$updLogPath = "$logsPath/update";
 
 			// Clear logs and scripts
 			if(is_dir("$updLogPath")) {
@@ -266,8 +266,8 @@
 			}
 			
 			// create log directory if not found
-			if(!is_dir("$workpath/logs")) {
-				system_call("mkdir $workpath/logs");
+			if(!is_dir("$logsPath")) {
+				system_call("mkdir $logsPath");
 			}
 			if(!is_dir("$updLogPath")) {
 				system_call("mkdir $updLogPath");
@@ -282,7 +282,7 @@
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
 			
 			system_call("echo '<br>*** Logging started on: $date UTC Time ***<br>' >> $updLogPath/update.log");
-			system_call("sudo sh $workpath/bin/updateDB.sh >> $updLogPath/update.log &");
+			system_call("sudo sh $workPath/bin/updateDB.sh >> $updLogPath/update.log &");
 
 			echo "</div>";
 			
@@ -292,15 +292,15 @@
 			echoPageItemTOP("icons/big/activity.png", "Build Log");
    			echo "<div class='pageitem_bottom'>";
     		
-    		if (!file_exists("$workpath/logs/build.log")) {
+    		if (!file_exists("$logsPath/build.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no log available.</center></b>";
     				echo "</ul>";
     		} 
     		else {
     			echo "<pre>";
-				if(is_file("$workpath/logs/build.log"))
-					include "$workpath/logs/build.log";
+				if(is_file("$logsPath/build.log"))
+					include "$logsPath/build.log";
 				echo "</pre>";
     		}
     					
@@ -312,15 +312,15 @@
 			echoPageItemTOP("icons/big/activity.png", "Update Log");
    			echo "<div class='pageitem_bottom'>";
     		
-    		if (!file_exists("$workpath/logs/update.log")) {
+    		if (!file_exists("$logsPath/update.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no log available.</center></b>";
     				echo "</ul>";
     		} 
     		else {
     			echo "<pre>";
-				if(is_file("$workpath/logs/update.log"))
-					include "$workpath/logs/update.log";
+				if(is_file("$logsPath/update.log"))
+					include "$logsPath/update.log";
 				echo "</pre>";
     		}
 			
@@ -332,15 +332,15 @@
 			echoPageItemTOP("icons/big/activity.png", "Last Build Log");
    			echo "<div class='pageitem_bottom'>";
     		
-    		if (!file_exists("$workpath/logs/lastbuild.log")) {
+    		if (!file_exists("$logsPath/lastbuild.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no log available.</center></b>";
     				echo "</ul>";
     		} 
     		else {
     			echo "<pre>";
-				if(is_file("$workpath/logs/lastbuild.log"))
-					include "$workpath/logs/lastbuild.log";
+				if(is_file("$logsPath/lastbuild.log"))
+					include "$logsPath/lastbuild.log";
 				echo "</pre>";
     		}
 			
@@ -352,15 +352,15 @@
 			echoPageItemTOP("icons/big/activity.png", "Last Update Log");
    			echo "<div class='pageitem_bottom'>";
     		
-    		if (!file_exists("$workpath/logs/lastupdate.log")) {
+    		if (!file_exists("$logsPath/lastupdate.log")) {
     				echo "<img src=\"icons/big/info.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
     				echo "<b><center> There is no log available.</center></b>";
     				echo "</ul>";
     		} 
     		else {
     			echo "<pre>";
-				if(is_file("$workpath/logs/lastupdate.log"))
-					include "$workpath/logs/lastupdate.log";
+				if(is_file("$logsPath/lastupdate.log"))
+					include "$logsPath/lastupdate.log";
 				echo "</pre>";
     		}
     		
@@ -396,16 +396,16 @@
     			$selectedToClear = "no"; 
     			
     			$rmBuildLog = $_POST['rmBuildLog']; 
-    			if ($rmBuildLog == "on") { system_call("rm -f $workpath/logs/build.log");  system_call("rm -rf $workpath/logs/build/*"); $selectedToClear = "yes"; }
+    			if ($rmBuildLog == "on") { system_call("rm -f $logsPath/build.log");  system_call("rm -rf $logsPath/build/*"); $selectedToClear = "yes"; }
     			
     			$rmLBuildLog = $_POST['rmLBuildLog']; 
-    			if ($rmLBuildLog == "on") { system_call("rm -f $workpath/logs/lastbuild.log"); $selectedToClear = "yes";  }
+    			if ($rmLBuildLog == "on") { system_call("rm -f $logsPath/lastbuild.log"); $selectedToClear = "yes";  }
     			
     			$rmUpdateLog = $_POST['rmUpdateLog']; 
-    			if ($rmUpdateLog == "on") { system_call("rm -f $workpath/logs/update.log"); system_call("rm -rf $workpath/logs/update/*"); $selectedToClear = "yes"; }
+    			if ($rmUpdateLog == "on") { system_call("rm -f $logsPath/update.log"); system_call("rm -rf $logsPath/update/*"); $selectedToClear = "yes"; }
     			
     			$rmLUpdateLog = $_POST['rmLUpdateLog']; 
-    			if ($rmLUpdateLog == "on") { system_call("rm -f $workpath/logs/lastupdate.log"); $selectedToClear = "yes"; }
+    			if ($rmLUpdateLog == "on") { system_call("rm -f $logsPath/lastupdate.log"); $selectedToClear = "yes"; }
     			
     			if ($selectedToClear == "yes") {
     				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -426,7 +426,7 @@
    			echo "<div class='pageitem_bottom'>";
 
    			// Get all the files/folders anme in comma seperated way
-			$appslinfo = shell_exec("ls -m $workpath/apps/");
+			$appslinfo = shell_exec("ls -m $appsPath/");
 			$appsArray = explode(',', $appslinfo);
 				
    			$action = $_POST['action'];
@@ -446,7 +446,7 @@
 					
 					if ($appCategName != "" && $appName != ".DS_Store") {
 				
-						$appinfo = shell_exec("ls -m $workpath/apps/$appCategName");
+						$appinfo = shell_exec("ls -m $appsPath/$appCategName");
 						$appNameArray = explode(',', $appinfo);
 					
 						foreach($appNameArray as $appName) {
@@ -486,7 +486,7 @@
 
 					if ($appCategName != "" && $appName != ".DS_Store") {
 				
-						$appinfo = shell_exec("ls -m $workpath/apps/$appCategName");
+						$appinfo = shell_exec("ls -m $appsPath/$appCategName");
 						$appNameArray = explode(',', $appinfo);
 					
 						foreach($appNameArray as $appName) {
@@ -496,7 +496,7 @@
 							if ($appName != "" && $appName != ".DS_Store") 
 							{
 								if($_POST[$appID] == "on") {
-									system_call("rm -rf $workpath/apps/$appCategName/$appName");	
+									system_call("rm -rf $appsPath/$appCategName/$appName");	
 								}
 								$appID++;
 							}							
@@ -522,7 +522,7 @@
    			echo "<div class='pageitem_bottom'>";
    			
    			// Get all the files/folders anme in comma seperated way
-			$kplinfo = shell_exec("ls -m $workpath/kextPacks/");
+			$kplinfo = shell_exec("ls -m $workPath/kextPacks/");
 			$kpArray = explode(',', $kplinfo);
 				
    			$action = $_POST['action'];
@@ -572,7 +572,7 @@
 					if ($kpName != "" && $kpName != ".DS_Store") {
 				
 						if($_POST[$kpID] == "on") {
-							system_call("rm -rf $workpath/kextPacks/$kpName");	
+							system_call("rm -rf $workPath/kextPacks/$kpName");	
 						}
 						
 						$kpID++;				
@@ -597,7 +597,7 @@
    			echo "<div class='pageitem_bottom'>";
 
    			// Get all the files/folders anme in comma seperated way
-			$vinfo = shell_exec("ls -m $workpath/model-data/");
+			$vinfo = shell_exec("ls -m $workPath/model-data/");
 			$vArray = explode(',', $vinfo);
 			
 			$mID = 0;
@@ -618,7 +618,7 @@
 
 					if ($vName != "" && $vName != ".DS_Store") {
 				
-						$ginfo = shell_exec("ls -m $workpath/model-data/$vName/");
+						$ginfo = shell_exec("ls -m $workPath/model-data/$vName/");
 						$gArray = explode(',', $ginfo);
 						
 						foreach($gArray as $gName) // Generation Name
@@ -627,7 +627,7 @@
 
 							if ($gName != "" && $gName != ".DS_Store") {
 				
-								$minfo = shell_exec("ls -m $workpath/model-data/$vName/$gName/");
+								$minfo = shell_exec("ls -m $workPath/model-data/$vName/$gName/");
 								$mArray = explode(',', $minfo);
 						
 								foreach($mArray as $mName) // Model Name
@@ -668,7 +668,7 @@
 
 					if ($vName != "" && $vName != ".DS_Store") {
 				
-						$ginfo = shell_exec("ls -m $workpath/model-data/$vName/");
+						$ginfo = shell_exec("ls -m $workPath/model-data/$vName/");
 						$gArray = explode(',', $ginfo);
 						
 						foreach($gArray as $gName) // Generation Name
@@ -677,7 +677,7 @@
 
 							if ($gName != "" && $gName != ".DS_Store") {
 				
-								$minfo = shell_exec("ls -m $workpath/model-data/$vName/$gName/");
+								$minfo = shell_exec("ls -m $workPath/model-data/$vName/$gName/");
 								$mArray = explode(',', $minfo);
 						
 								foreach($mArray as $mName) // Model Name
@@ -687,7 +687,7 @@
 									if ($mName != "" && $mName != ".DS_Store") {
 										
 										if($_POST[$mID] == "on") {
-											system_call("rm -rf $workpath/model-data/$vName/$gName/$mName");
+											system_call("rm -rf $workPath/model-data/$vName/$gName/$mName");
 										}
 										$mID++;				
 									}

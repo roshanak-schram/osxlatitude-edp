@@ -138,8 +138,8 @@
 		global $svnLoad;
 		
 		// Clear logs and scripts
-		if(is_dir("$workpath/logs/build")) {
-			system_call("rm -rf $workpath/logs/build/*");
+		if(is_dir("$logsPath/build")) {
+			system_call("rm -rf $logsPath/build/*");
 		}
 		
 		$kInfoKeys = "id,foldername,name,icon,categ,path";
@@ -182,8 +182,8 @@
 			
 			case "lan":
 				
-				if(!is_dir("$workpath/kextpacks/Ethernet"))
-    				system_call("mkdir $workpath/kextpacks/Ethernet");
+				if(!is_dir("$svnpackPath/Ethernet"))
+    				system_call("mkdir $svnpackPath/Ethernet");
     				
     			//
 				// name and foldername values are swapped due to Extra category folder of Ethernet

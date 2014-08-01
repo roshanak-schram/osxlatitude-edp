@@ -102,8 +102,8 @@
 		echo "<script> document.location.href = 'workerapp.php?id=$id&foldername=$row[foldername]&name=$row[name]&icon=$row[icon]&action=showAppsLog'; </script>";
 		
 		// Clear logs and scripts
-		if(is_dir("$workpath/logs/apps")) {
-			system_call("rm -rf $workpath/logs/apps/*");
+		if(is_dir("$logsPath/apps")) {
+			system_call("rm -rf $logsPath/apps/*");
 		}
 		
 		global $svnLoad;
