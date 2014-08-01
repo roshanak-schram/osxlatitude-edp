@@ -143,7 +143,14 @@ if ($action == "showBuildLog")
  
 if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
-if ($action == "showChameUpdateLog")	{ showChameUpdateLog(); exit ; }
+if ($action == "showChameUpdateLog")	
+{ 
+	$type 	= $_GET['type'];
+	$fname 	= $_GET['fname'];
+	
+	showChameUpdateLog($type, $fname); 
+	exit ; 
+}
 
 if ($action == "showAppsLog")		
 { 
@@ -304,7 +311,7 @@ function showCustomBuildInfo() {
 	echo "</div>";
 }
 
-function showChameUpdateLog() {
+function showChameUpdateLog($type, $fname) {
 	global $workPath, $svnpackPath;
 	$updLogPath = "$workPath/logs/update";
 
@@ -318,6 +325,9 @@ function showChameUpdateLog() {
 			echo "<ul class='pageitem'>";
 			if (file_exists("$updLogPath/Updsuccess.txt")) {
 							
+				// Replace boot file at root
+				system_call("cp -f $svnpackPath/Bootloader/$type/$fname/boot /");
+
 				echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 				echo "<b><center> Update success.</b><br><br><b> You can see the changes in action from your next boot.</center></b>";
 				echo "<br></ul>";

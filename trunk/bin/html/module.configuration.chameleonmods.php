@@ -59,6 +59,11 @@
 			}
 			elseif ($chameID  != "") {
 			
+				// Clear log and scripts
+				if (is_dir("$logsPath/build")) {
+					system_call("rm -rf $logsPath/build/*");
+				}
+				
 				// Create local directory if not found
 				if (!is_dir("$svnpackPath")) {
 					system_call("mkdir $svnpackPath");
@@ -69,14 +74,14 @@
 			
 				// Download the bootloader
 				if ($chameBootdb[$chameID]['type'] == "Enoch") {
-					$svnLoad->svnDataLoader("Kexts", "Bootloader/EnochBoot", "$chameBootdb[$chameID]['foldername']");
+					$svnLoad->svnDataLoader("Kexts", "Bootloader/EnochBoot", "$chameBootdb[$chameID][foldername]");
 				}
 				else {
-					$svnLoad->svnDataLoader("Kexts", "Bootloader/StandardBoot", "$chameBootdb[$chameID]['foldername']");
+					$svnLoad->svnDataLoader("Kexts", "Bootloader/StandardBoot", "$chameBootdb[$chameID][foldername]");
 				}
 			
 				// Start installation process by Launching the script which provides the summary of the build process 
-				echo "<script> document.location.href = 'workerapp.php?action=showChameUpdateLog'; </script>";
+				echo "<script> document.location.href = 'workerapp.php?type=$chameBootdb[$chameID][type]&fname=$chameBootdb[$chameID][foldername]&action=showChameUpdateLog'; </script>";
 				
 			}
 			else {
