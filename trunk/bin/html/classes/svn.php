@@ -242,6 +242,21 @@ class svnDownload {
 				$logName = "kextInstall";
     		break;
     		
+    		case "Update":
+				$logPath = "$workPath/logs/update";
+				
+				// create update local download directory if not found
+				if(!is_dir("$svnpackPath")) {
+					system_call("mkdir $svnpackPath");
+				}
+				if(!is_dir("$svnpackPath/$categ")) {
+					system_call("mkdir $svnpackPath/$categ");
+				}
+				$dataDir = "$svnpackPath/$categ";
+				$svnpath = "kextpacks/$categ/$fname";
+				$logName = "packUpdateLog";
+    		break;
+    		
     		case "Fixes":
 				$logPath = "$workPath/logs/fixes";
 				// create fix local download directory if not found

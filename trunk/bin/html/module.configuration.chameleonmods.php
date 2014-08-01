@@ -60,8 +60,8 @@
 			elseif ($chameID  != "") {
 			
 				// Clear log and scripts
-				if (is_dir("$logsPath/build")) {
-					system_call("rm -rf $logsPath/build/*");
+				if (is_dir("$logsPath/update")) {
+					system_call("rm -rf $logsPath/update/*");
 				}
 				
 				// Create local directory if not found
@@ -77,10 +77,10 @@
 				
 				// Download the bootloader
 				if ($type == "Enoch") {
-					$svnLoad->svnDataLoader("Kexts", "Bootloader/EnochBoot", $fname);
+					$svnLoad->svnDataLoader("Update", "Bootloader/EnochBoot", $fname);
 				}
 				else {
-					$svnLoad->svnDataLoader("Kexts", "Bootloader/StandardBoot", $fname);
+					$svnLoad->svnDataLoader("Update", "Bootloader/StandardBoot", $fname);
 				}
 			
 				// Start installation process by Launching the script which provides the summary of the build process 
