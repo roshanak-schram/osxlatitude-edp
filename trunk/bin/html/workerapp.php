@@ -320,10 +320,10 @@ function showChameUpdateLog($type, $fname) {
 
 	echo "<div class='pageitem_bottom'\">";	
 			
-	if (is_file("$updLogPath/Updsuccess.txt") || is_file("$updLogPath/Updfail.txt"))
+	if (is_file("$updLogPath/Success_$fname.txt") || is_file("$updLogPath/Fail_$fname.txt"))
 	{
 			echo "<ul class='pageitem'>";
-			if (file_exists("$updLogPath/Updsuccess.txt")) {
+			if (file_exists("$updLogPath/Success_$fname.txt")) {
 							
 				// Replace boot file at root
 				system_call("cp -f $svnpackPath/Bootloader/$type/$fname/boot /");
