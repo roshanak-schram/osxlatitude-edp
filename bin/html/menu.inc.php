@@ -85,6 +85,11 @@
 			// Fetch and add menu items for sysfixes 
 			//
 			generateMenu("SELECT * FROM sysfixes", "order by menu");
+			
+			//
+			// Fetch and add menu items for wifi 
+			//
+			generateMenu("SELECT * FROM wifi", "order by menu");
 
 		break;
 		
@@ -121,11 +126,6 @@
 			// Fetch and add menu items for ps2 
 			//
 			generateMenu("SELECT * FROM ps2", "order by menu");
-			
-			//
-			// Fetch and add menu items for wifi 
-			//
-			// generateMenu("SELECT * FROM wifi", "order by menu");
 			
 			//
 			// Fetch and add menu items for optionalpacks 
