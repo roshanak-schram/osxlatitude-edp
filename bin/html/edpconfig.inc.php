@@ -10,7 +10,7 @@ $logsPath 		= "$workPath/logs";
 $edpversion = "6.0 beta";
 $verbose    = "no";	
 
-$eePath     = "/Extra";		
+$eePath     = "/Extra/Extensions";		
 $rootPath   = "/";
 $slePath    = "/System/Library/Extensions";	
 $cachePath  = "/System/Library/Caches/com.apple.kext.caches/Startup";
