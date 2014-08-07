@@ -159,9 +159,12 @@ if ($action == 'dobuild') {
 		
 			$svnLoad->PrepareEssentialFilesDownload("");
 			
+			// Fetch SSDT files needed for the choosen model
+			
 			if ($cpuID != "EDP")
-				$svnLoad->PrepareSSDTFilesDownload($cpuID);
-				
+			{
+				$svnLoad->PrepareSSDTFilesDownload($sysType, $cpuID);
+			}		
 		}
 		
 		writeToLog("$buildLogPath/build.log", " Preparing essential files for the model $modelName...</b><br>");
@@ -432,7 +435,7 @@ if ($action == "") {
 		echo "<script> $(function() { $( \"#tabs\" ).tabs(); }); </script>\n";
 		
 		echo "<form action='module.configuration.predefined.php' method='post'>";
-		echoPageItemTOP("http://www.osxlatitude.com/wp-content/themes/osxlatitude/img/edp/modelpics/$mdrow[name].png", "$mdrow[desc]");
+		echoPageItemTOP("http://www.osxlatitude.com/wp-content/themes/osxlatitude/img/edp-models/$mdrow[vendor]/$mdrow[generation]/$mdrow[name].png", "$mdrow[desc]");
 		
 		//Show the tabs bar ?>
 		<div id="tabs">
