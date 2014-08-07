@@ -246,12 +246,14 @@ class edpDatabase {
 				  case "Ultrabook":
 				  case "Tablet":
 					$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid' ORDER BY type";
+					$cpuquery = "SELECT * FROM  cpuNB";
 				  break;
 			  
 				  case "Desktop":
 				  case "Workstation":
 				  case "AllinOnePC":
 					$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$sysType' AND AND id = '$modelid' ORDER BY type";
+					$cpuquery = "SELECT * FROM  cpuDesk";
 				  break;
 		}
 	
@@ -268,7 +270,7 @@ class edpDatabase {
     			foreach($cpuArray as $cpuID) {
     				$cpuID = preg_replace('/\s+/', '',$cpuID); //remove white spaces
     				
-    				$cpuRes = $edp_db->query("SELECT * FROM  cpu WHERE id = '$cpuID'");
+    				$cpuRes = $edp_db->query("$cpuquery WHERE id = '$cpuID'");
 
     				foreach($cpuRes as $cpuName) {
     					$return .= '<option value="' . $cpuName['id'] . '">&nbsp;&nbsp;' . $cpuName['name'] . '</option>';

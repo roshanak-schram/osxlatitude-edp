@@ -432,6 +432,8 @@
    			$action = $_POST['action'];
     		if ($action == "") {
    				echo "<p align=\"justify\"> EDP keeps the downloaded apps during build for subsequent builds, so they will be updated instead of downloading completely. But, if you wish to save some space (or) want to remove the files you don't need can be done here by deleting them.</p>";
+   				echo "<p><b>Download folder path: $workPath/apps </p>";
+   				
     			echo "<form action='showPage.php' method='post'>";
 			
 				echo "<input type='hidden' name='i' value='DownloadedApps'>";
@@ -528,6 +530,8 @@
    			$action = $_POST['action'];
     		if ($action == "") {
    				echo "<p align=\"justify\"> EDP keeps the downloaded kext packs during build for subsequent builds, so they will be updated instead of downloading completely. But, if you wish to save some space (or) want to remove the files you don't need can be done here by deleting them.</p>";
+   				echo "<p><b>Download folder path: $workPath/svnpacks </p>";
+   				
     			echo "<form action='showPage.php' method='post'>";
 			
 				echo "<input type='hidden' name='i' value='DownloadedKextPacks'>";
@@ -605,6 +609,8 @@
    			$action = $_POST['action'];
     		if ($action == "") {
    				echo "<p align=\"justify\"> EDP keeps the downloaded model data during build for subsequent builds, so they will be updated instead of downloading completely. But, if you wish to save some space (or) want to remove the files you don't need can be done here by deleting them.</p>";
+   				echo "<p><b>Download folder path: $workPath/model-data </p>";
+   				
     			echo "<form action='showPage.php' method='post'>";
 			
 				echo "<input type='hidden' name='i' value='DownloadedModelData'>";
