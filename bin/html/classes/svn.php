@@ -57,7 +57,7 @@ class svnDownload {
 	/*
 	 * Public function to prepare the cpu ssdt files download
 	 */
-	public function PrepareSSDTFilesDownload($cpuID) {
+	public function PrepareSSDTFilesDownload($sysType, $cpuID) {
 		global $workPath, $modelNamePath, $edp_db;
 		
 		$buildLogPath = "$workPath/logs/build";
@@ -67,7 +67,19 @@ class svnDownload {
 		
 		$modelcpudir = "$workPath/model-data/$modelNamePath/cpu";
 		
-		$cpuRes = $edp_db->query("SELECT * FROM  cpu WHERE id = '$cpuID'");
+		switch ($sysType) {
+			  case "Notebook":
+			  case "Ultrabook":
+			  case "Tablet":
+				$cpuRes = $edp_db->query("SELECT * FROM  cpuNB WHERE id = '$cpuID'");
+			  break;
+		  
+			  case "Desktop":
+			  case "Workstation":
+			  case "AllinOnePC":
+				$cpuRes = $edp_db->query("SELECT * FROM  cpuDesk WHERE id = '$cpuID'");
+			  break;
+		}
 
 		foreach($cpuRes as $cpuName) {
 			

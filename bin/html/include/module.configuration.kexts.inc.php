@@ -46,7 +46,21 @@
 		// Check for AppleHDA		
 		if ($mdrow[audio] == "builtin") {
 			global $os;
-			$applehda = $edp_db->query("SELECT * FROM applehda WHERE model_id = '$mdrow[id]'");
+			
+			switch ($sysType) {
+			  case "Notebook":
+			  case "Ultrabook":
+			  case "Tablet":
+				$applehda = $edp_db->query("SELECT * FROM applehdaNB WHERE model_id = '$mdrow[id]'");
+			  break;
+		  
+			  case "Desktop":
+			  case "Workstation":
+			  case "AllinOnePC":
+				$applehda = $edp_db->query("SELECT * FROM applehdaDesk WHERE model_id = '$mdrow[id]'");
+			  break;
+			}
+		
 			switch ($os) {
 				case "sl":    				
 				case "lion":    				
