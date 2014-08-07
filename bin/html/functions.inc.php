@@ -855,8 +855,22 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 			$usingAppleHDA = "";
 			if ($audioid == "builtin") {
 				global $modelID, $edp_db;
-				global $os;
-				$applehda = $edp_db->query("SELECT * FROM applehda WHERE model_id = '$modelID'");
+				global $os, $sysType;
+				
+				switch ($sysType) {
+				  case "Notebook":
+				  case "Ultrabook":
+				  case "Tablet":
+					$applehda = $edp_db->query("SELECT * FROM applehdaNB WHERE model_id = '$modelID'");
+				  break;
+		  
+				  case "Desktop":
+				  case "Workstation":
+				  case "AllinOnePC":
+					$applehda = $edp_db->query("SELECT * FROM applehdaDesk WHERE model_id = '$modelID'");
+				  break;
+				}
+
 				switch ($os) {
 					case "sl":    				
 					case "lion":    				
