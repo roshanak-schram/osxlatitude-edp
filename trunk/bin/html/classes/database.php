@@ -246,14 +246,14 @@ class edpDatabase {
 				  case "Ultrabook":
 				  case "Tablet":
 					$query = "SELECT DISTINCT * FROM modelsPortable WHERE type = '$sysType' AND id = '$modelid' ORDER BY type";
-					$cpuquery = "SELECT * FROM  cpuNB";
+					$cpuquery = "SELECT * FROM cpuNB";
 				  break;
 			  
 				  case "Desktop":
 				  case "Workstation":
 				  case "AllinOnePC":
-					$query = "SELECT DISTINCT * FROM  modelsDesk WHERE type = '$sysType' AND AND id = '$modelid' ORDER BY type";
-					$cpuquery = "SELECT * FROM  cpuDesk";
+					$query = "SELECT DISTINCT * FROM modelsDesk WHERE type = '$sysType' AND id = '$modelid' ORDER BY type";
+					$cpuquery = "SELECT * FROM cpuDesk";
 				  break;
 		}
 	
