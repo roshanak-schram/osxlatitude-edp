@@ -14,8 +14,6 @@
 	<string>Yes</string>
 	<key>Kernel</key>
 	<string>mach_kernel</string>
-	<key>Kernel Flags</key>
-	<string>arch=i386</string>
 	<key>PciRoot</key>
 	<string>0</string>
 	<key>SystemType</key>
@@ -23,10 +21,8 @@
 	<key>Theme</key>
 	<string>Default</string>
 	<key>Timeout</key>
-	<string>2</string>
-	<key>arch</key>
-	<string>i386</string>
+	<string>10</string>
 	<key>UseKernelCache</key>
-	<string>Yes</string>
+	<string>No</string>
 </dict>
 </plist>

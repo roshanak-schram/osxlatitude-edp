@@ -11,10 +11,8 @@
 	<key>Theme</key>
 	<string>Default</string>
 	<key>Timeout</key>
-	<string>2</string>
-	<key>arch</key>
-	<string>i386</string>
+	<string>10</string>
 	<key>UseKernelCache</key>
-	<string>Yes</string>
+	<string>No</string>
 </dict>
 </plist>

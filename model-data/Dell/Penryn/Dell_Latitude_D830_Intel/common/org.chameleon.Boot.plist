@@ -9,7 +9,7 @@
 	<key>Kernel Flags</key>
 	<string>-v</string>
 	<key>Timeout</key>
-	<string>2</string>
+	<string>10</string>
 	<key>Legacy Logo</key>
 	<string>Yes</string>
 	<key>GUI</key>
