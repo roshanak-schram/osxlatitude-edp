@@ -489,7 +489,9 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     if($smbios == "yes")
     {
     	$file1 = "$modelDirPath/common/SMBios.plist"; 
+    	$file1Alt = "$modelDirPath/common/smbios.plist"; 
     	$file2 = "$modelDirPath/$os/SMBios.plist"; 
+    	$file2Alt = "$modelDirPath/$os/smbios.plist"; 
 
     	// Remove existing file from /Extra
     	// if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
@@ -499,10 +501,18 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		system_call("cp -f $file1 $extrapath"); 
    			writeToLog("$workPath/logs/build/build.log", "  Common SMBios.plist found, Copying to $extrapath<br>");
     	}
+    	elseif(file_exists($file1Alt)) {
+    		system_call("cp -f $file1Alt $extrapath"); 
+   			writeToLog("$workPath/logs/build/build.log", "  Common SMBios.plist found, Copying to $extrapath<br>");
+    	}
     	
     	// Copy file from os folder if exists
     	if(file_exists($file2)) {
     		system_call("cp -f $file2 $extrapath");
+   			writeToLog("$workPath/logs/build/build.log", "  OSX specific SMBios.plist found, Copying to $extrapath <br>");
+    	}
+    	elseif(file_exists($file2Alt)) {
+    		system_call("cp -f $file2Alt $extrapath");
    			writeToLog("$workPath/logs/build/build.log", "  OSX specific SMBios.plist found, Copying to $extrapath <br>");
     	}
     	
@@ -538,21 +548,31 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     // use EDP DSDT?
     if($dsdt == "yes")
     {
-    	$file1 = "$modelDirPath/common/dsdt.aml"; 
-    	$file2 = "$modelDirPath/$os/dsdt.aml"; 
+    	$file1 = "$modelDirPath/common/DSDT.aml"; 
+    	$file1Alt = "$modelDirPath/common/dsdt.aml"; 
+    	$file2 = "$modelDirPath/$os/DSDT.aml"; 
+    	$file2Alt = "$modelDirPath/$os/dsdt.aml"; 
 
     	// Remove existing file from /Extra
     	// if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
     	
-    	//Copy file from common folder if exists
+    	// Copy file from common folder if exists
     	if(file_exists($file1)) {
     		system_call("cp -f $file1 $extrapath");
     		writeToLog("$workPath/logs/build/build.log", "  Common dsdt found, Copying to $extrapath<br>");
     	}
+    	elseif(file_exists($file1Alt)) {
+    		system_call("cp -f $file1Alt $extrapath");
+    		writeToLog("$workPath/logs/build/build.log", "  Common dsdt found, Copying to $extrapath<br>");
+    	}
     	
-    	//Copy file from os folder if exists
+    	// Copy file from os folder if exists
     	if(file_exists($file2)) {
     		system_call("cp -f $file2 $extrapath");
+    		writeToLog("$workPath/logs/build/build.log", "  OS specific dsdt found, Copying to $extrapath<br>");
+    	}
+    	elseif(file_exists($file2Alt)) {
+    		system_call("cp -f $file2Alt $extrapath");
     		writeToLog("$workPath/logs/build/build.log", "  OS specific dsdt found, Copying to $extrapath<br>");
     	}
     	
@@ -566,14 +586,17 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     	writeToLog("$workPath/logs/build/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
 		
 		if($modeldb[$modelRowID]["useEDPDSDT"] == "on") {
-			$file = "$modelDirPath/ml/dsdt.aml";                 if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-			}
+			$file = "$modelDirPath/ml/dsdt.aml";  
+			if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+		}
 		if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on") {
-			$file = "$modelDirPath/ml/SMBios.plist";             if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-			}
+			$file = "$modelDirPath/ml/SMBios.plist";  
+			if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
+		}
 		if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
-			$file = "$modelDirPath/ml/org.chameleon.Boot.plist";  if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-			}
+			$file = "$modelDirPath/ml/org.chameleon.Boot.plist";  
+			if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
+		}
     }						
 
 	// use EDP org.chameleon.Boot.plist?
