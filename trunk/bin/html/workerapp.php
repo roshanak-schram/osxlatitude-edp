@@ -86,12 +86,10 @@ if ($action == "showCredits") {
 	echo "<p><b>Name:</b> $row[name]</p>\n";
 	echo "<p><b>Creator:</b> $row[owner]</p>\n";
 	echo "<p><b>E-mail:</b> $row[contactemail]</p><br>\n";
-	echo "<p><b>Project/Support Website: </b><a href=\"$row[inforurl]\">Click here to Visit</a></p>\n";
+	echo "<p><b>Project/Support Website: </b><a href='$row[infourl]'>Click here to visit</a></p>\n";
 
 	if ($row[donationurl] != "") {
-		echo "<form action=\"$row[donationurl]\">";
-		echo '<p><b>Want to support the creator? </b><input type="submit" value="Donate"></p>';
-		echo "</form>";
+		echo "<p><b>Want to support the creator? </b><a href='$row[donationurl]'><input type='submit' value='Donate'></a></p>";
 	}
 	
 	echo "</li>\n";
