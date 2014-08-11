@@ -82,7 +82,7 @@ if ($action == 'dobuild') {
 		date_default_timezone_set("UTC");
 		$date = date("d-m-y H-i");
 	
-		system_call("echo '<br>*** Logging started on: $date UTC Time ***' >> $buildLogPath/build.log");
+		system_call("echo '<br>*** System build logging started on: $date UTC Time ***' >> $buildLogPath/build.log");
 		
 		//
 		// Create directories for build

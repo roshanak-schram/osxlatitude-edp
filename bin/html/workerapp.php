@@ -139,7 +139,8 @@ if ($action == "showBuildLog")
 	showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame); exit ;
  }
  
-if ($action == "showLoadingLog")		{ showLoadingLog(); exit ; }
+if ($action == "showCustomBuildLog")	{ showCustomBuildLog(); exit ; }
+if ($action == "showLoadingLog")		{ showLoadingLog($_GET['type']); exit ; }
 if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
 if ($action == "showChameUpdateLog")	
 { 
@@ -244,7 +245,7 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and genrate cache...<br>");
 		
 		// End build log and create a lastbuild log
-		system_call("echo '<br>*** Logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
+		system_call("echo '<br>*** System build logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
 		system_call("cp $buildLogPath/build.log $workPath/logs/lastbuild.log ");
 		
 		// Append current build log to the builds log 
@@ -259,53 +260,109 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 	echo "</div>";
 }
 
-function showLoadingLog() {
+function showLoadingLog($type) {
 	global $workPath, $svnpackPath;	
 	$buildLogPath = "$workPath/logs/build";
 	
 	echo "<div class='pageitem_bottom'\">";	
 	
-	// Check the file download status
-	if(is_dir("$buildLogPath/dLoadStatus")) {
-		$fcount = shell_exec("cd $buildLogPath/dLoadStatus; ls | wc -l");
-	}
-	
 	//
-	// build log
+	// Load custom build log
 	//
-	if ($fcount == "" || $fcount > 0 || !is_file("$buildLogPath/Run_myFix.txt")) {
-		echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
-		echo "<center><b>After starting the build process, please wait for few minutes while we download the files needed for your model.</b> [which will take approx 5 to 15 minutes depending on your internet speed] <br><br><b>Shortly you will be redirected to the build process log which will show the status of the build.</center></b>";
-		echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+	if ($type == "custom") {
 		
-		if ($fcount > 0)
-			echo "<br><b> Files left to download/update : $fcount</b><br>";
-		
-		echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
-	}
-	else {
-	
 		//
-		// myFix log
+		// Quick Fix
 		//
-		if ($fcount == 0 && is_file("$buildLogPath/Run_myFix.txt") && !is_file("$buildLogPath/myFix.log"))
+		if (is_file("$buildLogPath/quickFix.txt") && !is_file("$buildLogPath/myFix.log")) 
 		{
 			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
-			writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
+			writeToLog("$buildLogPath/myFix.log", "Running quick myFix to fix permissions and genrate cache...<br><br>");
 
 			// Run myFix to generate cahe and fix permissions
 			shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 		}
+		//
+		// Full Fix
+		//
+		elseif (!is_file("$buildLogPath/myFix.log")){
+			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+			writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix permissions and genrate cache...<br><br>");
+
+			// Run myFix to generate cahe and fix permissions
+		    shell_exec("sudo myfix -t / >> $buildLogPath/myFix.log &");
+		}
+		
 		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-		echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
-	}	
+		echo "<b><center> Process Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
+	}
+	//
+	// Load system build log
+	//
+	else 
+	{
+		// Check the file download status
+		if(is_dir("$buildLogPath/dLoadStatus")) {
+			$fcount = shell_exec("cd $buildLogPath/dLoadStatus; ls | wc -l");
+		}
+	
+		//
+		// build log
+		//
+		if ($fcount == "" || $fcount > 0 || !is_file("$buildLogPath/Run_myFix.txt")) {
+			echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
+			echo "<center><b>After starting the build process, please wait for few minutes while we download the files needed for your model.</b> [which will take approx 5 to 15 minutes depending on your internet speed] <br><br><b>Shortly you will be redirected to the build process log which will show the status of the build.</center></b>";
+			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
+		
+			if ($fcount > 0)
+				echo "<br><b> Files left to download/update : $fcount</b><br>";
+		
+			echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+		}
+		else {
+	
+			//
+			// myFix log
+			//
+			if ($fcount == 0 && is_file("$buildLogPath/Run_myFix.txt") && !is_file("$buildLogPath/myFix.log"))
+			{
+				writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+				writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
+
+				// Run myFix to generate cahe and fix permissions
+				shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+			}
+			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+			echo "<b><center> Build Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
+		}	
+	}
+	
+	echo "</div>";
+}
+
+function showCustomBuildLog() {
+	$workPath = "/Extra/EDP";	
+	$buildLogPath = "$workPath/logs/build";
+	
+	echoPageItemTOP("icons/big/activity.png", "Custom build log");
+	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
+	echo "<div class='pageitem_bottom'\">";	
+
+	// Show build logs	
+	if(is_file("$buildLogPath/build.log"))
+		include "$buildLogPath/build.log";
+	
+	if(is_file("$buildLogPath/myFix.log"))
+		include "$buildLogPath/myFix.log";
+	
+	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	echo "</div>";
 }
 
 function showCustomBuildInfo() {
 	echo "<div class='pageitem_bottom'\">";	
 	echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-	echo "<b><center> Build Finished, Please wait for the myFix process to finish fixing permissions and generating caches.</b> [check the build log on right side for status] <br><br><b> You can then reboot your system (or) close this app.</center></b>";
+	echo "<b><center> Build Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
 	echo "</div>";
 }
 
