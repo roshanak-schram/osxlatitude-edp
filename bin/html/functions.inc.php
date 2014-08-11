@@ -1305,7 +1305,7 @@ function copyCustomFiles() {
         	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
     			system_call("rm -rf $eePath/VoodooHDA.kext");
     			system_call("rm -rf $eePath/AppleHDADisabler.kext");
-    			writeToLog("$workPath/logs/build/build.log", "  Found AppleHDA from $incPath, VoodooHDA removed<br>");
+    			writeToLog("$workPath/logs/build/build.log", "  Found AppleHDA from $incPath, VoodooHDA files will be removed if exists<br>");
    		 }
     } 
 

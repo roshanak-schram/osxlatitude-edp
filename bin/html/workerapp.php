@@ -141,7 +141,7 @@ if ($action == "showBuildLog")
  
 if ($action == "showCustomBuildLog")	{ showCustomBuildLog(); exit ; }
 if ($action == "showLoadingLog")		{ showLoadingLog($_GET['type']); exit ; }
-if ($action == "showCustomBuildInfo")	{ showCustomBuildInfo(); exit ; }
+if ($action == "showDeleteStatus")		{ showDeleteStatus(); exit ; }
 if ($action == "showChameUpdateLog")	
 { 
 	$type 	= $_GET['type'];
@@ -359,11 +359,12 @@ function showCustomBuildLog() {
 	echo "</div>";
 }
 
-function showCustomBuildInfo() {
-	echo "<div class='pageitem_bottom'\">";	
+function showDeleteStatus() {
+	echo "<div class='pageitem_bottom'\">";
+	echo "<ul class='pageitem'>";	
 	echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-	echo "<b><center> Build Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
-	echo "</div>";
+	echo "<b><center> File(s) deleted successfully.</center></b>";
+	echo "</ul></div>";
 }
 
 function showChameUpdateLog($type, $fname) {
