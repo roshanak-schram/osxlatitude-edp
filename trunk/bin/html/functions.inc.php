@@ -490,11 +490,6 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     {
     	$file1 = "$modelDirPath/common/SMBios.plist"; 
     	$file1Alt = "$modelDirPath/common/smbios.plist"; 
-    	$file2 = "$modelDirPath/$os/SMBios.plist"; 
-    	$file2Alt = "$modelDirPath/$os/smbios.plist"; 
-
-    	// Remove existing file from /Extra
-    	// if (file_exists("$extrapath/SMBios.plist")) { system_call("rm $extrapath/SMBios.plist"); }
     	
     	// Copy file from common folder if exists
     	if(file_exists($file1)) {
@@ -505,6 +500,9 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		system_call("cp -f $file1Alt $extrapath"); 
    			writeToLog("$workPath/logs/build/build.log", "  Common SMBios.plist found, Copying to $extrapath<br>");
     	}
+    	
+    	$file2 = "$modelDirPath/$os/SMBios.plist"; 
+    	$file2Alt = "$modelDirPath/$os/smbios.plist"; 
     	
     	// Copy file from os folder if exists
     	if(file_exists($file2)) {
@@ -524,17 +522,15 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     if($chame == "yes")
     {
     	$file1 = "$modelDirPath/common/org.chameleon.Boot.plist"; 
-    	$file2 = "$modelDirPath/$os/org.chameleon.Boot.plist"; 
 
-    	// Remove existing file from /Extra
-    	// if (file_exists("$extrapath/org.chameleon.Boot.plist")) { system_call("rm $extrapath/org.chameleon.Boot.plist"); }
-    	
     	// Copy file from common folder if exists
     	if(file_exists($file1)) {
     		system_call("cp -f $file1 $extrapath"); 
    	  		writeToLog("$workPath/logs/build/build.log", "  Common org.chameleon.Boot.plist found, Copying to $extrapath<br>");
     	}
     	
+	    $file2 = "$modelDirPath/$os/org.chameleon.Boot.plist"; 
+
     	// Copy file from os folder if exists
     	if(file_exists($file2)) {
     		system_call("cp -f $file2 $extrapath");
@@ -550,12 +546,7 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     {
     	$file1 = "$modelDirPath/common/DSDT.aml"; 
     	$file1Alt = "$modelDirPath/common/dsdt.aml"; 
-    	$file2 = "$modelDirPath/$os/DSDT.aml"; 
-    	$file2Alt = "$modelDirPath/$os/dsdt.aml"; 
 
-    	// Remove existing file from /Extra
-    	// if (file_exists("$extrapath/dsdt.aml")) { system_call("rm $extrapath/dsdt.aml"); }
-    	
     	// Copy file from common folder if exists
     	if(file_exists($file1)) {
     		system_call("cp -f $file1 $extrapath");
@@ -565,6 +556,9 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		system_call("cp -f $file1Alt $extrapath");
     		writeToLog("$workPath/logs/build/build.log", "  Common dsdt found, Copying to $extrapath<br>");
     	}
+    	
+    	$file2 = "$modelDirPath/$os/DSDT.aml"; 
+    	$file2Alt = "$modelDirPath/$os/dsdt.aml"; 
     	
     	// Copy file from os folder if exists
     	if(file_exists($file2)) {
@@ -734,7 +728,6 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     	if ($ps2id != "" && $ps2id != "no")
         {
     		$fname = $ps2db[$ps2id]["foldername"];
-    		$name = $ps2db[$ps2id]['kextname'];
     		
     		// remove installed kexts before
 			if (is_dir("/Extra/Extensions/VoodooPS2Controller.kext"))  {
@@ -765,7 +758,7 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
         	    if(!is_dir("$svnpackPath/PS2Touchpad"))
     				system_call("mkdir $svnpackPath/PS2Touchpad");
     				
-    			$svnLoad->PrepareKextpackDownload("PS2Touchpad", "$fname", "$name");
+    			$svnLoad->PrepareKextpackDownload("PS2Touchpad", "$fname", "$fname");
     		}
 		 } 
 		// Reset vars
@@ -779,7 +772,7 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     	if ($modeldb[$modelRowID]['wifipack'] != "" && $modeldb[$modelRowID]['wifipack'] != "no") 
     	{
         	$wifid = $modeldb[$modelRowID]['wifipack'];
-        	$name = $wifidb[$wifid]['kextname'];
+        	$name = $wifidb[$wifid]['name'];
         	$fname = $wifidb[$wifid]['foldername'];
         	
         	if ($name != "") {
@@ -787,12 +780,12 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		switch($wifid) {
     			case 0:    			
     			case 1:
-    				writeToLog("$workPath/logs/build/build.log", " Patching WiFi kext $name...<br>");
+    				writeToLog("$workPath/logs/build/build.log", " Patching WiFi kext for $name...<br>");
     				patchWiFiAR9285AndAR9287("$workPath/logs/build/build.log","EE", "no");
     			break;
     			
     			case 2:
-    			    writeToLog("$workPath/logs/build/build.log", " Patching WiFi kext $name...<br>");
+    			    writeToLog("$workPath/logs/build/build.log", " Patching WiFi kext for $name...<br>");
 
     				if(getMacOSXVersion() >= "10.8.5")
     					patchWiFiBTBCM4352("$workPath/logs/build/build.log","EE", "no");
@@ -806,7 +799,7 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     				if(!is_dir("$svnpackPath/Wireless"))
     					system_call("mkdir $svnpackPath/Wireless");
     				
-    				$svnLoad->PrepareKextpackDownload("Wireless", "$fname", "$name");
+    				$svnLoad->PrepareKextpackDownload("Wireless", "$fname", "$fname");
     			break;
     		}
     		
