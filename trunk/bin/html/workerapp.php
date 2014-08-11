@@ -242,7 +242,7 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		$r = getVersion();
   		if ($r == "yos") { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
 		
-		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and genrate cache...<br>");
+		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and generate caches...<br>");
 		
 		// End build log and create a lastbuild log
 		system_call("echo '<br>*** System build logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
@@ -261,40 +261,47 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 }
 
 function showLoadingLog($type) {
-	global $workPath, $svnpackPath;	
+	global $workPath;	
 	$buildLogPath = "$workPath/logs/build";
-	
-	echo "<div class='pageitem_bottom'\">";	
-	
+		
 	//
 	// Load custom build log
 	//
 	if ($type == "custom") {
 		
 		//
-		// Quick Fix
+		// Reload side menu
 		//
-		if (is_file("$buildLogPath/quickFix.txt") && !is_file("$buildLogPath/myFix.log")) 
+		if (is_file("$buildLogPath/deleteAction.txt"))
 		{
-			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
-			writeToLog("$buildLogPath/myFix.log", "Running quick myFix to fix permissions and genrate cache...<br><br>");
-
-			// Run myFix to generate cahe and fix permissions
-			shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+			echo "<script> top.document.getElementById('edpmenu').src ='menu.inc.php?i=Configuration'; </script>";
 		}
-		//
-		// Full Fix
-		//
-		elseif (!is_file("$buildLogPath/myFix.log")){
-			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
-			writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix permissions and genrate cache...<br><br>");
 
-			// Run myFix to generate cahe and fix permissions
-		    shell_exec("sudo myfix -t / >> $buildLogPath/myFix.log &");
+		//
+		// Quick/Full Fix
+		//
+		elseif (!is_file("$buildLogPath/myFix.log")) 
+		{
+			echo "<div class='pageitem_bottom'\">";	
+
+			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+
+			// Run quick myFix to generate cache and fix permissions
+			if(is_file("$buildLogPath/quickFix.txt")) {
+				writeToLog("$buildLogPath/myFix.log", "Running quick myFix to fix permissions and generate caches...<br><br>");
+				shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+			}
+			// Full Fix
+			else {
+				writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix permissions and generate caches...<br><br>");
+		    	shell_exec("sudo myfix -t / >> $buildLogPath/myFix.log &");
+			}
+			
+			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
+			echo "<b><center> Process Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
+			echo "</div>";
 		}
 		
-		echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-		echo "<b><center> Process Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
 	}
 	//
 	// Load system build log
@@ -310,6 +317,7 @@ function showLoadingLog($type) {
 		// build log
 		//
 		if ($fcount == "" || $fcount > 0 || !is_file("$buildLogPath/Run_myFix.txt")) {
+			echo "<div class='pageitem_bottom'\">";	
 			echo "<body onload=\"JavaScript:timedRefresh(8000);\">";
 			echo "<center><b>After starting the build process, please wait for few minutes while we download the files needed for your model.</b> [which will take approx 5 to 15 minutes depending on your internet speed] <br><br><b>Shortly you will be redirected to the build process log which will show the status of the build.</center></b>";
 			echo "<img src=\"icons/big/loading.gif\" style=\"width:200px;height:30px;position:relative;left:50%;top:50%;margin:15px 0 0 -100px;\">";
@@ -318,34 +326,37 @@ function showLoadingLog($type) {
 				echo "<br><b> Files left to download/update : $fcount</b><br>";
 		
 			echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+			echo "</div>";
 		}
 		else {
-	
 			//
 			// myFix log
 			//
 			if ($fcount == 0 && is_file("$buildLogPath/Run_myFix.txt") && !is_file("$buildLogPath/myFix.log"))
 			{
+			
 				writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
-				writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and genrate cache...<br><br>");
+				writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and generate caches...<br><br>");
 
 				// Run myFix to generate cahe and fix permissions
 				shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 			}
+			echo "<div class='pageitem_bottom'\">";	
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
 			echo "<b><center> Build Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
+			echo "</div>";
 		}	
 	}
 	
-	echo "</div>";
 }
+
 
 function showCustomBuildLog() {
 	$workPath = "/Extra/EDP";	
 	$buildLogPath = "$workPath/logs/build";
 	
 	echoPageItemTOP("icons/big/activity.png", "Custom build log");
-	echo "<body onload=\"JavaScript:timedRefresh(5000);\">";	
+	echo "<body onload=\"JavaScript:refreshLog(5000);\">";	
 	echo "<div class='pageitem_bottom'\">";	
 
 	// Show build logs	
@@ -355,7 +366,7 @@ function showCustomBuildLog() {
 	if(is_file("$buildLogPath/myFix.log"))
 		include "$buildLogPath/myFix.log";
 	
-	echo "<script type=\"text/JavaScript\"> function timedRefresh(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
+	echo "<script type=\"text/JavaScript\"> function refreshLog(timeoutPeriod) { logVar = setTimeout(\"location.reload(true);\",timeoutPeriod); } function stopRefresh() { clearTimeout(logVar); } </script>\n";
 	echo "</div>";
 }
 

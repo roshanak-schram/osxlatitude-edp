@@ -120,11 +120,12 @@
 			if($cusoper == "cbuild" || $edpoper == "ebuild" ||
 			   $cusoper == "cfixcache" || $cusoper == "cfullfix")	 
 			{
-				// Launch the script which provides the summary of the myFix process 
-				echo "<body onload=\"JavaScript:processmyFix();\">";
 				doCustomBuild();				
 			}
 			else {
+				// Create delete action to load side menu back
+				writeToLog("/Extra/EDP/logs/build/deleteAction.txt", "");
+				
 				// Launch the script which provides the summary of the delete process 
 				echo "<script> document.location.href = 'workerapp.php?action=showDeleteStatus'; </script>";
 			}
@@ -167,7 +168,7 @@
 					echo "<input type='hidden' name='action' value='dobuild'>";
 					echo "</div><br>";
 			
-			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' /></li></ul><br><br>\n";
+			echo "<ul class='pageitem'><li class='button'><input name='Submit input' type='submit' value='Do build!' onclick='processmyFix();' /></li></ul><br><br>\n";
 		}
 		
 
@@ -334,7 +335,6 @@
 
 	<script>
 	function processmyFix() {
-		
 		top.document.getElementById('edpmenu').src ='workerapp.php?action=showLoadingLog&type=custom';
 	}
 	</script>
