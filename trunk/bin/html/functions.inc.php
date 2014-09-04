@@ -1178,6 +1178,12 @@ function applyFixes() {
        		else if($id == "5") {
        			writeToLog("$workPath/logs/build/build.log", " Preparing to download patched IOATAFamily fix for IDE disks...<br>");
        		}
+       		else if($id == "9") {
+       			writeToLog("$workPath/logs/build/build.log", " Preparing to download $name fix for Apple store access...<br>");
+       		}
+       		else {
+       		 	writeToLog("$workPath/logs/build/build.log", " Preparing to download $name fix...<br>");
+       		}
        		
     		if(!is_dir("$svnpackPath/$categ"))
     			system_call("mkdir $svnpackPath/$categ");
