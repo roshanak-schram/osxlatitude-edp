@@ -1045,8 +1045,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 	//
     // Standard kexts
     //
-    if(!is_dir("$workPath/kextpacks/Standard"));
-    	system_call("mkdir $workPath/kextpacks/Standard");
+    if(!is_dir("$workPath/svnpacks/Standard"));
+    	system_call("mkdir $workPath/svnpacks/Standard");
     	
     $svnLoad->PrepareKextpackDownload("Standard", "common", "Standard common");
 
@@ -1108,7 +1108,7 @@ function applyFixes() {
 	global $svnLoad;
 	
 	//kextpack svn path
-	$svnpackPath = "$workPath/kextpacks";
+	$svnpackPath = "$workPath/svnpacks";
 	
     writeToLog("$workPath/logs/build/build.log", " Applying fixes and patches...... <br>");
 	
