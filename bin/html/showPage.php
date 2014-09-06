@@ -26,7 +26,7 @@
 			$nbTotal = 0;
 
 			// Get Notebooks data from db
-			$nbookData = $edp_db->query("SELECT vendor, COUNT(*) AS count FROM modelsPortable GROUP BY vendor ORDER BY count DESC");
+			$nbookData = $edp_db->query("SELECT vendor, COUNT(*) AS count FROM modelsPortable WHERE generation !='' GROUP BY vendor ORDER BY count DESC");
 
 			// Loop the result and add it to $vendors
 			foreach($nbookData as $row) {
@@ -49,7 +49,7 @@
 			}
 
 			// Get Desktops data from db
-			$deskData = $edp_db->query("SELECT vendor, COUNT(*) AS count FROM modelsDesk GROUP BY vendor ORDER BY count DESC");
+			$deskData = $edp_db->query("SELECT vendor, COUNT(*) AS count FROM modelsDesk WHERE generation !='' GROUP BY vendor ORDER BY count DESC");
 
 			// Loop the result and add it to $vendors
 			foreach($deskData as $row) {

@@ -229,7 +229,7 @@ class edpDatabase {
 			if($row['generation'] != "")
 				$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' (' . $row['generation'] .')  </option>';
 			else
-				$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . '  </option>';
+				$return .= '<option value="' . $row['id'] . '">&nbsp;&nbsp;' . $row[desc] . ' - STILL WORK IN PROGRESS, USE OUR FORUM FOR SUPPORT </option>';
 		}
 
 		return '<option value="" >&nbsp;&nbsp;Select model...</option>' . $return;
