@@ -45,6 +45,7 @@
 			<key>IONameMatch</key>
 			<array>
 				<string>pci1217,8221</string>
+				<string>pci1217,8321</string>
 			</array>
 			<key>IOProviderClass</key>
 			<string>IOPCIDevice</string>
