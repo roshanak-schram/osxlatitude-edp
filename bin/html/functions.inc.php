@@ -235,7 +235,7 @@ function echoPageItemTOP($icon, $text) {
 			break;
 			
 			case "EE":		
-			system_call("cp -rf $slePath/AppleIntelSNBGraphicsFB.kext $eePath/");
+			system_call("cp -rf $slePath/AppleIntelSNBGraphicsFB.kext /Extra/Extensions");
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
 			
 			// touch for kernel cache
@@ -293,7 +293,7 @@ function echoPageItemTOP($icon, $text) {
 				system_call("rm -rf /System/Library/Extensions/NullCPUPowerManagement.kext");
 			}
 					
-			system_call("cp -rf /System/Library/Extensions/AppleIntelCPUPowerManagement.kext $eePath/");
+			system_call("cp -rf /System/Library/Extensions/AppleIntelCPUPowerManagement.kext /Extra/Extensions");
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			// touch for kernel cache
