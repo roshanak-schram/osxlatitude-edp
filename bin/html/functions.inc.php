@@ -869,40 +869,40 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 			// Check for AppleHDA		
 			//
 			$usingAppleHDA = "";
-			if ($audioid == "builtin") {
-				global $modelID, $edp_db;
-				global $os, $sysType;
-				
-				switch ($sysType) {
-				  case "Notebook":
-				  case "Ultrabook":
-				  case "Tablet":
-					$applehda = $edp_db->query("SELECT * FROM applehdaNB WHERE model_id = '$modelID'");
-				  break;
-		  
-				  case "Desktop":
-				  case "Workstation":
-				  case "AllinOnePC":
-					$applehda = $edp_db->query("SELECT * FROM applehdaDesk WHERE model_id = '$modelID'");
-				  break;
-				}
-
-				switch ($os) {
+			switch ($audioid) {
 					case "sl":    				
 					case "lion":    				
 					case "ml":    				
 					case "mav":    				
 					case "yos":
+					
+						global $modelID, $edp_db;
+						global $os, $sysType;
+				
+						switch ($sysType) {
+						  case "Notebook":
+						  case "Ultrabook":
+						  case "Tablet":
+							$applehda = $edp_db->query("SELECT * FROM applehdaNB WHERE model_id = '$modelID'");
+						  break;
+		  
+						  case "Desktop":
+						  case "Workstation":
+						  case "AllinOnePC":
+							$applehda = $edp_db->query("SELECT * FROM applehdaDesk WHERE model_id = '$modelID'");
+						  break;
+						}
+						
 						foreach($applehda as $row) {
-							if ($row[$os] != "no")
-							$aID = explode(',', $row[$os]);
+						
+							$aID = explode(',', $row[$audioid]);
 						
 							if (getVersion() >= $aID[1]) {
 								writeToLog("$workPath/logs/build/build.log", " Preparing to download Audio kext patched AppleHDA...<br>");
 
 								if(!is_dir("$modelDirPath/applehda"))
 									system_call("mkdir $modelDirPath/applehda");
-					
+				
 								$svnLoad->PrepareKextpackDownload("Extensions", "audiocommon", "$modelNamePath/applehda");
 								$svnLoad->PrepareKextpackDownload("Extensions", "audio$os", "$modelNamePath/applehda");
 								$usingAppleHDA = "yes";
@@ -914,7 +914,6 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 						}
 					break;
 				}
-			}
     		
     		//
     		// Check for VoodooHDA
