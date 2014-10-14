@@ -912,13 +912,13 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 							$aID = explode(',', $row[$audioid]);
 						
 							if (getVersion() >= $aID[1]) {
-								writeToLog("$workPath/logs/build/build.log", " Preparing to download Audio kext patched AppleHDA...<br>");
+								writeToLog("$workPath/logs/build/build.log", " Preparing to download Audio kext patched $audioid AppleHDA...<br>");
 
 								if(!is_dir("$modelDirPath/applehda"))
 									system_call("mkdir $modelDirPath/applehda");
 				
 								$svnLoad->PrepareKextpackDownload("Extensions", "audiocommon", "$modelNamePath/applehda");
-								$svnLoad->PrepareKextpackDownload("Extensions", "audio$os", "$modelNamePath/applehda");
+								$svnLoad->PrepareKextpackDownload("Extensions", "audio$audioid", "$modelNamePath/applehda");
 								$usingAppleHDA = "yes";
 							}
 							else 
