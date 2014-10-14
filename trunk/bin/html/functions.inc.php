@@ -921,6 +921,9 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 						//
 						// Remove voodooHDA related files if installed before
 						//
+						if (is_dir("$slePath/VoodooHDA.kext")) { system_call("rm -Rf $slePath/VoodooHDA.kext"); }
+						if (is_dir("$slePath/AppleHDADisabler.kext")) { system_call("rm -Rf $slePath/AppleHDADisabler.kext"); }
+
 						if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
 						if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
 						if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
