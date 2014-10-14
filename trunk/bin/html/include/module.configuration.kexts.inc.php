@@ -68,15 +68,56 @@
 				case "mav":    				
 				case "yos":
 					foreach($applehda as $row) {
-						if ($row[$os] != "no")
-						$aID = explode(',', $row[$os]);
 						
-						if (getVersion() >= $aID[1]) {
-							echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA v$aID[0]</option>\n";
-							$using = "yes";
+						if ($row['sl'] != "no")
+						{
+							$aID = explode(',', $row['sl']);
+						
+							if (getVersion() >= $aID[1]) {
+								echo "<option value='sl' SELECTED>&nbsp; Audio: SL Patched AppleHDA v$aID[0]</option>\n";
+								$using = "yes";
+							}
 						}
-						else 
-							echo "<option value='builtin' SELECTED>&nbsp; Audio: Patched AppleHDA v$aID[0] not supported in this OSX version, using latest VooodooHDA</option>\n";
+						
+						if ($row['lion'] != "no")
+						{
+							$aID = explode(',', $row['lion']);
+
+							if (getVersion() >= $aID[1]) {
+								echo "<option value='lion' SELECTED>&nbsp; Audio: Lion Patched AppleHDA v$aID[0]</option>\n";
+								$using = "yes";
+							}
+						}
+						
+						if ($row['ml'] != "no")
+						{
+							$aID = explode(',', $row['ml']);
+							
+							if (getVersion() >= $aID[1]) {
+								echo "<option value='ml' SELECTED>&nbsp; Audio: ML Patched AppleHDA v$aID[0]</option>\n";
+								$using = "yes";
+							}
+						}
+						
+						if ($row['mav'] != "no")
+						{
+							$aID = explode(',', $row['mav']);
+							
+							if (getVersion() >= $aID[1]) {
+								echo "<option value='mav' SELECTED>&nbsp; Audio: Mavericks Patched AppleHDA v$aID[0]</option>\n";
+								$using = "yes";
+							}
+						}
+						
+						if ($row['yos'] != "no")
+						{
+							$aID = explode(',', $row['yos']);
+							
+							if (getVersion() >= $aID[1]) {
+								echo "<option value='yos' SELECTED>&nbsp; Audio: Yosemite Patched AppleHDA v$aID[0]</option>\n";
+								$using = "yes";
+							}
+						}
 					}
 				break;
 			}
