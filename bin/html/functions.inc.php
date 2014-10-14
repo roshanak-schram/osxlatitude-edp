@@ -866,19 +866,10 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
         	$audioid = $modeldb[$modelRowID]['audiopack'];
     		$fname = $audiodb[$audioid]['foldername']; 
     		$name = $audiodb[$audioid]['name']; 
-    
-    
-    		//
-    		// remove voodooHDA related files if installed before
-    		//
-    		if($audioid == "no" || $audioid == "builtin") {
-        	 	if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
-        	 	if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
-        	 	if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
-   			 }
-        	if (is_dir("$slePath/HDAEnabler.kext")) { system_call("rm -Rf $slePath/HDAEnabler.kext"); }
-        	
-   			
+       			
+       		// Remove HDA Enabler
+       		if (is_dir("$slePath/HDAEnabler.kext")) { system_call("rm -Rf $slePath/HDAEnabler.kext"); }
+
    			//
 			// Check for AppleHDA		
 			//
@@ -926,6 +917,13 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 								writeToLog("$workPath/logs/build/build.log", " Chosen Patched AppleHDA is not supported in this OSX version, using latest VoodooHDA instead<br>");
 							}
 						}
+					case "no":
+						//
+						// Remove voodooHDA related files if installed before
+						//
+						if(is_dir("/Applications/VoodooHdaSettingsLoader.app")) {system_call("rm -rf /Applications/VoodooHdaSettingsLoader.app");}
+						if(file_exists("/Library/LaunchAgents/com.restore.voodooHDASettings.plist")) {system_call("rm -rf /Library/LaunchAgents/com.restore.voodooHDASettings.plist");}
+						if(is_dir("/Library/PreferencePanes/VoodooHDA.prefPane")) {system_call("rm -rf /Library/PreferencePanes/VoodooHDA.prefPane");}
 					break;
 				}
     		
