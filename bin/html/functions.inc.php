@@ -665,6 +665,14 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     }
     
     //
+    // Add kext-dev-mode flag for Yosemite in org.chameleon.Boot.plist
+    //
+    if($os == "yos") {
+    	system("sudo /usr/libexec/PlistBuddy -c \"delete Kernel\ Flags\" $extrapath/org.chameleon.Boot.plist"); 
+		system("sudo /usr/libexec/PlistBuddy -c \"add Kernel\ Flags string kext-dev-mode=1\" $extrapath/org.chameleon.Boot.plist"); 
+    }
+    
+    //
     // Copy Themes folder to Extra
     //
     if($theme == "yes")
