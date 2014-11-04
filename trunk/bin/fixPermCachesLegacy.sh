@@ -1,4 +1,4 @@
-echo "Trying to fix permissions and kernel caches...<br>"
+echo "<b>Trying to fix permissions and rebuild kernel caches...</b>"
 
 echo "<br>Copying myHack kext..."
 rm -rf /System/Library/Extensions/myHack.kext
@@ -18,7 +18,7 @@ chown -R root:wheel /System/Library/Extensions/myHack.kext/Contents/PlugIns/*.ke
 
 sudo touch /System/Library/Extensions
 
-echo "<br>Fixing kernel caches..."
+echo "<br>Rebuilding kernel caches..."
 sudo kextcache -system-prelinked-kernel
 
-echo "<br>Fixing permissions and kernel caches finished."
+echo "<br><b>Fixing permissions and rebuilding kernel caches are finished.</b>"

@@ -104,18 +104,19 @@ function echoPageItemTOP($icon, $text) {
 		}
 	}
 
-	function kernelcachefix() {
+	function KextsPermissionsAndKernelCacheFix() {
 		global $workPath, $rootPath;
-	
-		$chkdir = $rootPath . "/System/Library/Caches/com.apple.kext.caches/Startup";
-		$kerncachefile = $rootPath . "/System/Library/Caches/com.apple.kext.caches/Startup/kernelcache";
-
-		if (!is_dir("$chkdir") && ($workPath == "/Extra/EDP")) {
-			system_call("mkdir $chkdir");
-			if (file_exists($kerncachefile)) {
-				echo "\n\nWARNING: Falling back to EDP kernelcache generation - myfix was not successfull.. \n\n";
-				system_call("kextcache -system-prelinked-kernel");
-			}
+		$buildLogPath = "$workPath/logs/build";
+		
+		$osxVerStr = getVersion();
+		
+		if ($osxVerStr == "yos") { 
+			writeToLog("$buildLogPath/myFix.log", "Running EDP Fix to fix kexts permissions and rebuild caches...<br><br>");
+			system_call("sudo sh $workPath/bin/fixPermCaches.sh >> $buildLogPath/myFix.log &"); 
+		}
+		else { 
+			writeToLog("$buildLogPath/myFix.log", "Running EDP Fix legacy to fix kexts permissions and rebuild caches...<br><br>");
+			system_call("sudo sh $workPath/bin/fixPermCachesLegacy.sh >> $buildLogPath/myFix.log &"); 
 		}
 	}
 

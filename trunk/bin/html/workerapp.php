@@ -279,21 +279,26 @@ function showLoadingLog($type) {
 		{
 			echo "<div class='pageitem_bottom'\">";	
 
-			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
+			writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  Status of kexts permissions fix and caches rebuild process * * * * * * * * * * * *</b><br><pre>");
 
-			// Run quick myFix to generate cache and fix permissions
+			// Run quick myFix to rebuild cache and fix permissions
 			if(is_file("$buildLogPath/quickFix.txt")) {
-				writeToLog("$buildLogPath/myFix.log", "Running quick myFix to fix permissions and generate caches...<br><br>");
+				writeToLog("$buildLogPath/myFix.log", "Running quick myFix to fix kexts permissions and rebuild caches...<br><br>");
 				shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+			}
+			// EDP Fix
+			else if(is_file("$buildLogPath/EDPFix.txt")) {
+				writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix kexts permissions and rebuild caches...<br><br>");
+		    	shell_exec("sudo myfix -t / >> $buildLogPath/myFix.log &");
 			}
 			// Full Fix
 			else {
-				writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix permissions and generate caches...<br><br>");
+				writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix kexts permissions and rebuild caches...<br><br>");
 		    	shell_exec("sudo myfix -t / >> $buildLogPath/myFix.log &");
 			}
 			
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-			echo "<b><center> Process Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
+			echo "<b><center> Process Finished.<br><br>Please wait... until the process on the right side finish fixing kexts permissions and rebuilding caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
 			echo "</div>";
 		}
 		
@@ -329,22 +334,16 @@ function showLoadingLog($type) {
 			//
 			if ($fcount == 0 && is_file("$buildLogPath/Run_myFix.txt") && !is_file("$buildLogPath/myFix.log"))
 			{
-			
-				writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  myFix process status * * * * * * * * * * * *</b><br><pre>");
-				writeToLog("$buildLogPath/myFix.log", "Running myFix to fix permissions and generate caches...<br><br>");
-
-				// Run myFix to generate cahe and fix permissions
-				shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+				writeToLog("$buildLogPath/myFix.log", "<br><br><b>* * * * * * * * * * * *  Status of kexts permissions fix and caches rebuild process * * * * * * * * * * * *</b><br><pre>");
 				
-				/*
-				$r = getVersion();
-  				if ($r == "yos") { system_call("sudo sh $workPath/bin/fixPermCaches.sh"); }
-  				else { system_call("sudo sh $workPath/bin/fixPermCachesLegacy.sh"); }
-  				*/
+				// writeToLog("$buildLogPath/myFix.log", "Running myFix to fix kexts permissions and rebuild caches...<br><br>");
+				// shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+				
+				KextsPermissionsAndKernelCacheFix();
 			}
 			echo "<div class='pageitem_bottom'\">";	
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
-			echo "<b><center> Build Finished.<br><br>Please wait... until the myFix process log on the right side finish fixing permissions and generating caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
+			echo "<b><center> Build Finished.<br><br>Please wait... until the process on the right side to finish fixing kexts permissions and rebuilding caches.</b><br><br><b> You can then reboot your system (or) close this app.</center></b>";
 			echo "</div>";
 		}	
 	}
