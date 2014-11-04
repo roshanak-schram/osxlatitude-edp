@@ -547,14 +547,14 @@ function showFixLog($fixData) {
 					
 						// Generate cache
 						if ($fixData[path] == "/Extra/Extensions") {
-							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "EE");
+							KextsPermissionsAndKernelCacheFix("$fixLogPath/fixInstall.log", "EE");
 							// myHackCheck();
 							// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
 						else {
 							// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 							// system_call("sudo touch /System/Library/Extensions/");
-							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "SLE");
+							KextsPermissionsAndKernelCacheFix("$fixLogPath/fixInstall.log", "SLE");
 						}
 					break;
 					
@@ -689,14 +689,14 @@ function showKextsLog($InstallData) {
 				system_call("cp -rf $kPath/*.kext $InstallData[path]/");
 				
 				if ($InstallData[path] == "/Extra/Extensions") {
-					KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "EE");
+					KextsPermissionsAndKernelCacheFix("$buildLogPath/kextInstall.log", "EE");
 					// myHackCheck();
-					// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+					// system_call("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 				}
 				else {
 					// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 					// system_call("sudo touch /System/Library/Extensions/");
-					KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "SLE");
+					KextsPermissionsAndKernelCacheFix("$buildLogPath/kextInstall.log", "SLE");
 				}
 				
 				echo "<ul class='pageitem'>";
