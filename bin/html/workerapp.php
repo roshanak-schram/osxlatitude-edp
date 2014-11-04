@@ -225,11 +225,7 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		//
 		// Step 7 : Applying last minute fixes and generating caches
 		//
-		writeToLog("$buildLogPath/build.log", "<br><b>Step 7) Apply last minute fixes and Call myFix to copy kexts & generate kernelcache:</b><br>");
-		
-		// Final Chown to SLE and touch (this is due to some issuses with myFix in Mavericks)
-		system_call("sudo chown -R root:wheel /System/Library/Extensions/");
-		system_call("sudo touch /System/Library/Extensions/");
+		writeToLog("$buildLogPath/build.log", "<br><b>Step 7) Apply last minute fixes:</b><br>");
 		
 		// Clear NVRAM
 		writeToLog("$buildLogPath/build.log", " Clearing boot-args in NVRAM...<br>");
@@ -237,7 +233,7 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		writeToLog("$buildLogPath/build.log", " Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
 		
-		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and generate caches...<br>");
+		writeToLog("$buildLogPath/build.log", " Calling EDP Fix/myFix to fix permissions and rebuild caches...<br>");
 		
 		// End build log and create a lastbuild log
 		system_call("echo '<br>*** System build logging ended on: $date UTC Time ***<br>' >> $buildLogPath/build.log");
@@ -288,8 +284,8 @@ function showLoadingLog($type) {
 			}
 			// EDP Fix
 			else if(is_file("$buildLogPath/EDPFix.txt")) {
-				writeToLog("$buildLogPath/myFix.log", "Running full myFix to fix kexts permissions and rebuild caches...<br><br>");
-		    	shell_exec("sudo myfix -t / >> $buildLogPath/myFix.log &");
+				writeToLog("$buildLogPath/myFix.log", "Running EDP Fix to fix kexts permissions and rebuild caches...<br><br>");
+		    	KextsPermissionsAndKernelCacheFix("$buildLogPath/myFix.log", "EE");
 			}
 			// Full Fix
 			else {
@@ -339,7 +335,7 @@ function showLoadingLog($type) {
 				// writeToLog("$buildLogPath/myFix.log", "Running myFix to fix kexts permissions and rebuild caches...<br><br>");
 				// shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 				
-				KextsPermissionsAndKernelCacheFix();
+				KextsPermissionsAndKernelCacheFix("$buildLogPath/myFix.log", "EE");
 			}
 			echo "<div class='pageitem_bottom'\">";	
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
@@ -531,12 +527,14 @@ function showFixLog($fixData) {
 						system_call("cp -rf $fixPath/EAPDFix.kext $fixData[path]/");
 					
 						if ($fixData[path] == "/Extra/Extensions") {
-							myHackCheck();
-							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "EE");
+							// myHackCheck();
+							// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
 						else {
-							system_call("sudo chown -R root:wheel /System/Library/Extensions/");
-							system_call("sudo touch /System/Library/Extensions/");
+							// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
+							// system_call("sudo touch /System/Library/Extensions/");
+							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "SLE");
 						}
 					break;
 					
@@ -549,12 +547,14 @@ function showFixLog($fixData) {
 					
 						// Generate cache
 						if ($fixData[path] == "/Extra/Extensions") {
-							myHackCheck();
-							system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "EE");
+							// myHackCheck();
+							// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
 						else {
-							system_call("sudo chown -R root:wheel /System/Library/Extensions/");
-							system_call("sudo touch /System/Library/Extensions/");
+							// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
+							// system_call("sudo touch /System/Library/Extensions/");
+							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "SLE");
 						}
 					break;
 					
@@ -689,12 +689,14 @@ function showKextsLog($InstallData) {
 				system_call("cp -rf $kPath/*.kext $InstallData[path]/");
 				
 				if ($InstallData[path] == "/Extra/Extensions") {
-					myHackCheck();
-					system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
+					KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "EE");
+					// myHackCheck();
+					// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 				}
 				else {
-					system_call("sudo chown -R root:wheel /System/Library/Extensions/");
-					system_call("sudo touch /System/Library/Extensions/");
+					// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
+					// system_call("sudo touch /System/Library/Extensions/");
+					KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "SLE");
 				}
 				
 				echo "<ul class='pageitem'>";
