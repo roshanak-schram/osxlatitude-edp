@@ -236,11 +236,6 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		system_call("nvram -d boot-args");
 		writeToLog("$buildLogPath/build.log", " Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
-			
-		// Kernel hack for YOS
-		writeToLog("$buildLogPath/build.log", " Checking if we are running Yosemite and need to link kernel</b><br>");
-		$r = getVersion();
-  		if ($r == "yos") { system_call("ln -s /System/Library/Kernels/kernel /mach_kernel"); }
 		
 		writeToLog("$buildLogPath/build.log", " Calling myFix to fix permissions and generate caches...<br>");
 		
@@ -340,6 +335,12 @@ function showLoadingLog($type) {
 
 				// Run myFix to generate cahe and fix permissions
 				shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
+				
+				/*
+				$r = getVersion();
+  				if ($r == "yos") { system_call("sudo sh $workPath/bin/fixPermCaches.sh"); }
+  				else { system_call("sudo sh $workPath/bin/fixPermCachesLegacy.sh"); }
+  				*/
 			}
 			echo "<div class='pageitem_bottom'\">";	
 			echo "<img src=\"icons/big/success.png\" style=\"width:80px;height:80px;position:relative;left:50%;top:50%;margin:15px 0 0 -35px;\">";
