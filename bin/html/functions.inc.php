@@ -255,8 +255,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
 			
 			if ($genCache == "yes") {
+				myHackCheck();
 				KextsPermissionsAndKernelCacheFix($log, "EE");
-				// myHackCheck();
 				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -315,8 +315,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 
 			if ($genCache == "yes") {
+				myHackCheck();
 				KextsPermissionsAndKernelCacheFix($log, "EE");
-				// myHackCheck();
 				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -368,8 +368,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			
 			if ($genCache == "yes") {
+				myHackCheck();
 				KextsPermissionsAndKernelCacheFix($log, "EE");
-				// myHackCheck();
 				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -422,8 +422,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
 			
 			if ($genCache == "yes") {
+				myHackCheck();
 				KextsPermissionsAndKernelCacheFix($log, "EE");
-				// myHackCheck();
 				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
@@ -724,21 +724,22 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
   * and if it dosen't for some weird reason... copy it there...
   */
  	function myHackCheck() {
-  	  global $workPath, $slePath;
+  	  	global $workPath, $slePath;
 
-   	 if (!is_dir("$slePath/myHack.kext")) {
-    	// copy kext to workPath
-        system_call("cp -R \"$workPath/bin/myHack/myHack.kext\" $workPath");
-        // Remove svn versioning
-        system_call("rm -Rf `find -f path \"$workPath/myHack.kext\" -type d -name .svn`");
-        // copy kext to sle
-        system_call("cp -R \"$workPath/myHack.kext\" $slePath");
-      }
-      
-   	 if (!is_file("/usr/sbin/")) {
-        system_call("cp \"$workPath/bin/myHack/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
-   	 }
-   	 
+		 // copy kext to workPath
+		 system_call("cp -R \"$workPath/bin/myHack/myHack.kext\" $workPath");
+			
+		 // Remove svn versioning
+		 system_call("rm -Rf `find -f path \"$workPath/myHack.kext\" -type d -name .svn`");
+	
+		 // copy kext to sle
+		 if (!is_dir("$slePath/myHack.kext")) {	
+			system_call("cp -R \"$workPath/bin/myHack/myHack.kext\" $slePath");
+		 }
+  
+		 if (!is_file("/usr/sbin/")) {
+			system_call("cp \"$workPath/bin/myHack/myfix\" /usr/sbin/myfix; chmod 777 /usr/sbin/myfix");
+		 }
 	}
 	 
 /*

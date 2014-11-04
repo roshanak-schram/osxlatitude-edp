@@ -21,4 +21,4 @@ sudo touch /System/Library/Extensions
 echo "<br>Rebuilding kernel caches..."
 sudo kextcache -system-prelinked-kernel
 
-echo "<br><b>Fixing permissions and rebuilding kernel caches are finished.</b>"
+echo "<br><b>Fixing permissions and rebuilding caches are finished.</b>"
