@@ -795,7 +795,7 @@ function showUpdateLog() {
 				system_call("mv $updLogPath/update.log $workPath/logs/lastupdate.log ");
 				
 				// Append current update log to the updates log 
-				$fileContents = file_get_contents("$updLogPath/update.log");
+				$fileContents = file_get_contents("$updLogPath/lastupdate.log");
 				file_put_contents("$workPath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
 			}					
 			echo "</div>";

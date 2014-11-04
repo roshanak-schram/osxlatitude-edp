@@ -54,11 +54,11 @@
 		{
 			$action = "Install";
 			// Write out the top menu
-			echoPageItemTOP("icons/apps/$row[icon]", "$categ - $row[name]");
+			echoPageItemTOP("icons/apps/$row[icon]", "$row[name]");
 		}
 		else {
 			// Write out the top menu
-			echoPageItemTOP("icons/big/$row[icon]", "$categ - $row[name]");
+			echoPageItemTOP("icons/big/$row[icon]", "$row[name]");
 		}
 		
 		echo "<form action='$row[action]' method='post'>";
