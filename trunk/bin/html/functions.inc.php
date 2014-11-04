@@ -104,20 +104,34 @@ function echoPageItemTOP($icon, $text) {
 		}
 	}
 
-	function KextsPermissionsAndKernelCacheFix() {
-		global $workPath, $rootPath;
-		$buildLogPath = "$workPath/logs/build";
-		
+	function KextsPermissionsAndKernelCacheFix($log, $path) {
+		global $workPath;		
 		$osxVerStr = getVersion();
 		
-		if ($osxVerStr == "yos") { 
-			writeToLog("$buildLogPath/myFix.log", "Running EDP Fix to fix kexts permissions and rebuild caches...<br><br>");
-			system_call("sudo sh $workPath/bin/fixPermCaches.sh >> $buildLogPath/myFix.log &"); 
+		switch ($path) {
+			case "EE":
+			if ($osxVerStr == "yos") { 
+				writeToLog("$log", "Running EDP Fix to fix kexts permissions and rebuild caches...<br><br>");
+				system_call("sudo sh $workPath/bin/fixMyHackPermCaches.sh >> $log &"); 
+			}
+			else { 
+				writeToLog("$log", "Running EDP Fix legacy to fix kexts permissions and rebuild caches...<br><br>");
+				system_call("sudo sh $workPath/bin/fixMyHackPermCachesLegacy.sh >> $log &"); 
+			}
+			break;
+			
+			case "SLE":
+			if ($osxVerStr == "yos") { 
+				writeToLog("$log", "Running EDP Fix to fix kexts permissions and rebuild caches...<br><br>");
+				system_call("sudo sh $workPath/bin/fixPermCaches.sh >> $log &"); 
+			}
+			else { 
+				writeToLog("$log", "Running EDP Fix legacy to fix kexts permissions and rebuild caches...<br><br>");
+				system_call("sudo sh $workPath/bin/fixPermCachesLegacy.sh >> $log &"); 
+			}
+			break;
 		}
-		else { 
-			writeToLog("$buildLogPath/myFix.log", "Running EDP Fix legacy to fix kexts permissions and rebuild caches...<br><br>");
-			system_call("sudo sh $workPath/bin/fixPermCachesLegacy.sh >> $buildLogPath/myFix.log &"); 
-		}
+		
 	}
 
    //------> Function to get version from kext
@@ -231,7 +245,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /System/Library/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
 			
 			if ($genCache == "yes") {
-				system_call("sudo touch /System/Library/Extensions/ >> $log &");
+				// system_call("sudo touch /System/Library/Extensions/ >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "SLE");
 			}
 			break;
 			
@@ -239,10 +254,10 @@ function echoPageItemTOP($icon, $text) {
 			system_call("cp -rf $slePath/AppleIntelSNBGraphicsFB.kext /Extra/Extensions");
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
 			
-			// touch for kernel cache
 			if ($genCache == "yes") {
-				myHackCheck();
-				system_call("sudo myfix -q -t / >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "EE");
+				// myHackCheck();
+				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
 		}
@@ -282,7 +297,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			// touch for kernel cache
 			if ($genCache == "yes") {
-				system_call("sudo touch /System/Library/Extensions/ >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "SLE");
+				// system_call("sudo touch /System/Library/Extensions/ >> $log &");
 			}
 			break;
 			
@@ -297,10 +313,11 @@ function echoPageItemTOP($icon, $text) {
 			system_call("cp -rf /System/Library/Extensions/AppleIntelCPUPowerManagement.kext /Extra/Extensions");
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-			// touch for kernel cache
+
 			if ($genCache == "yes") {
-				myHackCheck();
-				system_call("sudo myfix -q -t / >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "EE");
+				// myHackCheck();
+				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
 		}
@@ -338,7 +355,8 @@ function echoPageItemTOP($icon, $text) {
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
-				system_call("sudo touch /System/Library/Extensions/ >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "SLE");
+				// system_call("sudo touch /System/Library/Extensions/ >> $log &");
 			}
 			break;
 			
@@ -349,10 +367,10 @@ function echoPageItemTOP($icon, $text) {
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			
-			// touch for kernel cache
 			if ($genCache == "yes") {
-				myHackCheck();
-				system_call("sudo myfix -q -t / >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "EE");
+				// myHackCheck();
+				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
 		} 
@@ -387,7 +405,8 @@ function echoPageItemTOP($icon, $text) {
 		
 			// touch for kernel cache
 			if ($genCache == "yes") {
-				system_call("sudo touch /System/Library/Extensions/ >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "SLE");
+				// system_call("sudo touch /System/Library/Extensions/ >> $log &");
 			}
 			break;
 			
@@ -402,10 +421,10 @@ function echoPageItemTOP($icon, $text) {
 			// Kext patch
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
 			
-			// touch for kernel cache
 			if ($genCache == "yes") {
-				myHackCheck();
-				system_call("sudo myfix -q -t / >> $log &");
+				KextsPermissionsAndKernelCacheFix($log, "EE");
+				// myHackCheck();
+				// system_call("sudo myfix -q -t / >> $log &");
 			}
 			break;
 		} 
