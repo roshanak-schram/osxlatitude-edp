@@ -204,8 +204,8 @@ function echoPageItemTOP($icon, $text) {
 	 * @see http://www.insanelymac.com/forum/topic/280062-waiting-for-root-device-when-kernel-cache-used-only-with-some-disks-fix/page__st__60#entry1851722
 	 */
 	function patchAHCI() {
-		global $workPath, $slePath, $eePath;
-		system_call("cp -R $slePath/IOAHCIFamily.kext $eePath");
+		global $workPath, $slePath;
+		system_call("cp -R $slePath/IOAHCIFamily.kext /Extra/Extensions");
 		system_call("perl $workPath/bin/fixes/patch-ahci-mlion.pl >> $workPath/logs/build/build.log");
 	}
 
@@ -214,7 +214,7 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchAppleIntelSNBGraphicsFB($log, $pathToPatch, $genCache) {
 
-		global $eePath, $slePath, $workPath;
+		global $slePath, $workPath;
 	
 		writeToLog("$workPath/logs/build/build.log", " Patching AppleIntelSNBGraphicsFB.kext for VGA and HDMI in Intel HD3000...<br>");
 
@@ -318,7 +318,7 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AirPortAtheros40.kext for the card AR5B95/AR5B195 from Lion onwards
 	 */
 	function patchWiFiAR9285AndAR9287($log, $pathToPatch, $genCache) {
-		global $eePath, $slePath, $workPath;
+		global $slePath, $workPath;
 		
 		writeToLog("$log", " Applying AR9285/AR9287 WiFi kext patch for AR5B195/AR5B95 and AR5B197...<br>");
 
@@ -342,11 +342,11 @@ function echoPageItemTOP($icon, $text) {
 			break;
 			
 			case "EE":		
-			system_call("cp -R $slePath/IO80211Family.kext $eePath/");
-			
+			system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+
 			// Kext patch
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
@@ -364,7 +364,7 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AirPortBrcm4360.kext for the card BCM94352HMB from Mountain Lion 10.8.5 onwards
 	 */
 	function patchWiFiBTBCM4352($log, $pathToPatch, $genCache) {
-		global $eePath, $slePath, $workPath;
+		global $slePath, $workPath;
 		
 		writeToLog("$log", " Applying WiFi patches for BCM4352 card...<br>");
 
@@ -391,7 +391,7 @@ function echoPageItemTOP($icon, $text) {
 			break;
 			
 			case "EE":		
-			system_call("cp -R $slePath/IO80211Family.kext $eePath/");
+			system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
 			
 			// Binary patches
 			system_call('sudo perl -pi -e \'s|\x01\x58\x54|\x01\x55\x53|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // region code change to US
@@ -399,7 +399,7 @@ function echoPageItemTOP($icon, $text) {
 			system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x0F\x85|\x6B\x10\x00\x00\x0F\x84|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
 			
 			// Kext patch
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
+			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
 			
 			// touch for kernel cache
 			if ($genCache == "yes") {
@@ -417,13 +417,13 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AppleAirPortBrcm43224.kext for the card Dell DW1395, DW1397 from Lion onwards
 	 */
 	function patchDW13957WiFiBCM43224() {
-		global $eePath, $slePath;
+		global $slePath;
 		echo " Applying BCM43224 WiFi Fix for Dell DW1395, DW1397 \n";
 
 		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -R $slePath/IO80211Family.kext $eePath/");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
+		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
 		}
 		 else { echo " AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
@@ -432,13 +432,13 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AppleAirPortBrcm4311.kext for the card Dell DW1395, DW1397 in Snow Leopard
 	 */
 	function patchDW13957WiFiBCM4311() {
-		global $eePath, $slePath;
+		global $slePath;
 		echo " Applying BCM4311 WiFi Fix for Dell DW1395, DW1397 \n";
 
 		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -R $slePath/IO80211Family.kext $eePath/");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/KextPatched.plist");
+		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/KextPatched.plist");
 		}
 		 else { echo " AppleAirPortBrcm4311.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
@@ -447,14 +447,14 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AppleAirPortBrcm43224.kext for the card BCM943224 HMS and BCM943225 HMB from Lion onwards
 	 */
 	function patchWiFiBCM43224() {
-		global $eePath, $slePath;
+		global $slePath;
 		echo " Applying BCM43224 WiFi Fix for BCM943224 HMS and BCM943225 HMB \n";
 
 		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -R $slePath/IO80211Family.kext $eePath/");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4353\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
+		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4353\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
 		}
 		 else { echo " AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
@@ -463,13 +463,13 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AirPortBrcm4331.kext for the card BCM943224 HMS and BCM943225 HMB from Lion onwards
 	 */
 	function patchWiFiBCM4331() {
-		global $eePath, $slePath;
+		global $slePath;
 		echo " Applying BCM4331 WiFi Fix for BCM943225 HMB \n";
 
 		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -R $slePath/IO80211Family.kext $eePath/");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" $eePath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/KextPatched.plist");
+		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
+		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/KextPatched.plist");
 		}
 		 else { echo " AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
 	}
