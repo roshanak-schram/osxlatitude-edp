@@ -362,7 +362,13 @@ function echoPageItemTOP($icon, $text) {
 			
 			case "EE":		
 			system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-
+			
+			if (!file_exists("/Extra/Extensions/IO80211Family.kext/")) {
+				writeToLog("$log", "  Failed to copy IO80211Family.kext, retry...<br>");
+				system_call("rm -rf /Extra/Extensions/Contents");
+				system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+			}
+			
 			// Kext patch
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
