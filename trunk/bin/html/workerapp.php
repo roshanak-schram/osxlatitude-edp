@@ -230,8 +230,14 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		// Clear NVRAM
 		writeToLog("$buildLogPath/build.log", " Clearing boot-args in NVRAM...<br>");
 		system_call("nvram -d boot-args");
+		
+		// Remove SVN version
 		writeToLog("$buildLogPath/build.log", " Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
+   		
+   		// Bump kexts to version 1111
+   		writeToLog("$buildLogPath/build.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   		UpdateKextVersions("$buildLogPath/build.log");
 		
 		writeToLog("$buildLogPath/build.log", " Calling EDP Fix/myFix to fix permissions and rebuild caches...<br>");
 		
@@ -286,6 +292,8 @@ function showLoadingLog($type) {
 			else if(is_file("$buildLogPath/EDPFix.txt")) {
 				writeToLog("$buildLogPath/myFix.log", "Running EDP Fix to fix kexts permissions and rebuild caches...<br><br>");
 				myHackCheck();
+   				writeToLog("$buildLogPath/myFix.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   				UpdateKextVersions("$buildLogPath/myFix.log");
 		    	KextsPermissionsAndKernelCacheFix("$buildLogPath/myFix.log", "EE");
 			}
 			// Full Fix
@@ -336,6 +344,8 @@ function showLoadingLog($type) {
 				// writeToLog("$buildLogPath/myFix.log", "Running myFix to fix kexts permissions and rebuild caches...<br><br>");
 				// shell_exec("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 				myHackCheck();
+				writeToLog("$buildLogPath/myFix.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   				UpdateKextVersions("$buildLogPath/myFix.log");
 				KextsPermissionsAndKernelCacheFix("$buildLogPath/myFix.log", "EE");
 			}
 			echo "<div class='pageitem_bottom'\">";	
@@ -529,6 +539,8 @@ function showFixLog($fixData) {
 					
 						if ($fixData[path] == "/Extra/Extensions") {
 							myHackCheck();
+							writeToLog("$fixLogPath/myFix.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   							UpdateKextVersions("$fixLogPath/myFix.log");
 							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "EE");
 							// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
@@ -536,6 +548,8 @@ function showFixLog($fixData) {
 							// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 							// system_call("sudo touch /System/Library/Extensions/");
 							myHackCheck();
+							writeToLog("$fixLogPath/myFix.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   							UpdateKextVersions("$fixLogPath/myFix.log");
 							KextsPermissionsAndKernelCacheFix("$fixLogPath/myFix.log", "SLE");
 						}
 					break;
@@ -550,6 +564,8 @@ function showFixLog($fixData) {
 						// Generate cache
 						if ($fixData[path] == "/Extra/Extensions") {
 							myHackCheck();
+							writeToLog("$fixLogPath/fixInstall.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   							UpdateKextVersions("$fixLogPath/fixInstall.log");
 							KextsPermissionsAndKernelCacheFix("$fixLogPath/fixInstall.log", "EE");
 							// system_call("sudo myfix -q -t / >> $fixLogPath/myFix.log &");
 						}
@@ -557,6 +573,8 @@ function showFixLog($fixData) {
 							// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 							// system_call("sudo touch /System/Library/Extensions/");
 							myHackCheck();
+							writeToLog("$fixLogPath/fixInstall.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   							UpdateKextVersions("$fixLogPath/fixInstall.log");
 							KextsPermissionsAndKernelCacheFix("$fixLogPath/fixInstall.log", "SLE");
 						}
 					break;
@@ -693,6 +711,8 @@ function showKextsLog($InstallData) {
 				
 				if ($InstallData[path] == "/Extra/Extensions") {
 					myHackCheck();
+					writeToLog("$buildLogPath/kextInstall.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   					UpdateKextVersions("$buildLogPath/kextInstall.log");
 					KextsPermissionsAndKernelCacheFix("$buildLogPath/kextInstall.log", "EE");
 					// system_call("sudo myfix -q -t / >> $buildLogPath/myFix.log &");
 				}
@@ -700,6 +720,8 @@ function showKextsLog($InstallData) {
 					// system_call("sudo chown -R root:wheel /System/Library/Extensions/");
 					// system_call("sudo touch /System/Library/Extensions/");
 					myHackCheck();
+					writeToLog("$buildLogPath/kextInstall.log", " Bumping kexts to version 1111 in /Extra/Extensions.EDPFix<br>");
+   					UpdateKextVersions("$buildLogPath/kextInstall.log");
 					KextsPermissionsAndKernelCacheFix("$buildLogPath/kextInstall.log", "SLE");
 				}
 				
