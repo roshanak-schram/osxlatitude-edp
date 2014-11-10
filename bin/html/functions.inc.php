@@ -104,6 +104,38 @@ function echoPageItemTOP($icon, $text) {
 		}
 	}
 
+	function UpdateKextVersions($log)
+	{		
+		if(!is_dir("/Extra/Extensions.EDPFix")) {
+			system_call("mkdir /Extra/Extensions.EDPFix");
+	  	}
+	  	else {
+	  		system_call("rm -rf /Extra/Extensions.EDPFix/*");
+	  	}
+		system_call("cp -a /Extra/Extensions/. /Extra/Extensions.EDPFix/");
+		system_call("cp -a /Extra/Extensions/*.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
+		system_call("rm -rf /Extra/Extensions.EDPFix/*.kext/Contents/PlugIns");
+		
+		// Get all the files/folders anme in comma seperated way
+		$kList = shell_exec("ls -m /Extra/Extensions.EDPFix/");
+		$kListArray = explode(',', $kList);
+			
+		$kCount = 0;
+		
+		foreach($kListArray as $kName) {
+		
+			$kName = preg_replace('/\s+/', '',$kName); //remove white spaces
+
+			if ($kName != "" && $kName != ".DS_Store") {
+		
+				system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleVersion 1111\" /Extra/Extensions.EDPFix/$kName/Contents/Info.plist");
+				system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleShortVersionString 1111\" /Extra/Extensions.EDPFix/$kName/Contents/Info.plist");
+				$kCount++;				
+			}
+		}
+		writeToLog("$log", "Bumped $kCount kext(s) versionst to 1111<br><br>");
+	}
+	
 	function KextsPermissionsAndKernelCacheFix($log, $path) {
 		global $workPath;		
 		$osxVerStr = getVersion();
