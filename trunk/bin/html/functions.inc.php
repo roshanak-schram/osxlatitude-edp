@@ -112,7 +112,7 @@ function echoPageItemTOP($icon, $text) {
 	  	else {
 	  		system_call("rm -rf /Extra/Extensions.EDPFix/*");
 	  	}
-		system_call("cp -a /Extra/Extensions/. /Extra/Extensions.EDPFix/");
+		system_call("cp -a /Extra/Extensions/*.kext /Extra/Extensions.EDPFix/");
 		system_call("cp -a /Extra/Extensions/*.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
 		system_call("rm -rf /Extra/Extensions.EDPFix/*.kext/Contents/PlugIns");
 		
