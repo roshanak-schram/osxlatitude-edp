@@ -235,6 +235,9 @@ function showBuildLog($modelPath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		writeToLog("$buildLogPath/build.log", " Removing version control of kexts in /Extra/Extensions<br>");
    		system_call("rm -Rf `find -f path /Extra/Extensions -type d -name .svn`");
 		
+		// Bump EDP Patched SLE kexts version to 1111
+		UpdateKextVersions("$buildLogPath/build.log");
+		
 		writeToLog("$buildLogPath/build.log", " Calling EDP Fix/myFix to fix permissions and rebuild caches...<br>");
 		
 		// End build log and create a lastbuild log
@@ -801,7 +804,7 @@ function showUpdateLog() {
 				system_call("mv $updLogPath/update.log $workPath/logs/lastupdate.log ");
 				
 				// Append current update log to the updates log 
-				$fileContents = file_get_contents("$updLogPath/lastupdate.log");
+				$fileContents = file_get_contents("$workPath/logs/lastupdate.log");
 				file_put_contents("$workPath/logs/update.log", $fileContents, FILE_APPEND | LOCK_EX);
 			}					
 			echo "</div>";
