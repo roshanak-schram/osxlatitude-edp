@@ -103,6 +103,12 @@ if ($action == 'dobuild') {
 		if(!is_dir("$logsPath/fixes"))
     		system_call("mkdir $logsPath/fixes");
 		
+		if(!is_dir("/Extra/Extensions.EDPFix")) {
+			system_call("mkdir /Extra/Extensions.EDPFix");
+	  	}
+	  	else {
+	  		system_call("rm -rf /Extra/Extensions.EDPFix/*");
+	  	}
 		
 		writeToLog("$buildLogPath/build.log", "<br> Cleaning up last build...<br>");
 

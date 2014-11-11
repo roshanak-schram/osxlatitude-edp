@@ -106,15 +106,11 @@ function echoPageItemTOP($icon, $text) {
 
 	function UpdateKextVersions($log)
 	{		
-		if(!is_dir("/Extra/Extensions.EDPFix")) {
-			system_call("mkdir /Extra/Extensions.EDPFix");
-	  	}
-	  	else {
-	  		system_call("rm -rf /Extra/Extensions.EDPFix/*");
-	  	}
+		/*
 		system_call("cp -a /Extra/Extensions/*.kext /Extra/Extensions.EDPFix/");
 		system_call("cp -a /Extra/Extensions/*.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
 		system_call("rm -rf /Extra/Extensions.EDPFix/*.kext/Contents/PlugIns");
+		*/
 		
 		// Get all the files/folders anme in comma seperated way
 		$kList = shell_exec("ls -m /Extra/Extensions.EDPFix/");
@@ -252,8 +248,15 @@ function echoPageItemTOP($icon, $text) {
 	 */
 	function patchAHCI() {
 		global $workPath, $slePath;
-		system_call("cp -R $slePath/IOAHCIFamily.kext /Extra/Extensions");
-		system_call("perl $workPath/bin/fixes/patch-ahci-mlion.pl >> $workPath/logs/build/build.log");
+		
+       	writeToLog("$workPath/logs/build/build.log", " Patching AHCI.kext to waiting for root device problem in ML<br>");
+
+		system_call("cp -a $slePath/IOAHCIFamily.kext /Extra/Extensions.EDPFix/");
+		system_call("cp -a $slePath/IOAHCIFamily.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
+		system_call("rm -rf /Extra/Extensions.EDPFix/IOAHCIFamily.kext/Contents/PlugIns");
+		
+		// system_call("cp -R $slePath/IOAHCIFamily.kext /Extra/Extensions");
+		// system_call("perl $workPath/bin/fixes/patch-ahci-mlion.pl >> $workPath/logs/build/build.log");
 	}
 
 	/*
@@ -282,9 +285,12 @@ function echoPageItemTOP($icon, $text) {
 			}
 			break;
 			
-			case "EE":		
-			system_call("cp -rf $slePath/AppleIntelSNBGraphicsFB.kext /Extra/Extensions");
-			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
+			case "EE":	
+			system_call("cp -a $slePath/AppleIntelSNBGraphicsFB.kext /Extra/Extensions.EDPFix/");
+			system_call("cp -a $slePath/AppleIntelSNBGraphicsFB.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
+			system_call("rm -rf /Extra/Extensions.EDPFix/AppleIntelSNBGraphicsFB.kext/Contents/PlugIns");
+				
+			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions.EDPFix/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
 			
 			if ($genCache == "yes") {
 				myHackCheck();
@@ -302,7 +308,7 @@ function echoPageItemTOP($icon, $text) {
 	 * Patch AppleIntelCPUPowerxxx for Native Speedstep and Power managment
 	 */
 	function patchAppleIntelCPUPowerManagement($log, $pathToPatch, $genCache) {
-		global $workPath;
+		global $slePath, $workPath;
 			
         writeToLog("$workPath/logs/build/build.log", " Patching AppleIntelCPUPowerManagement.kext...<br>");
 		
@@ -342,9 +348,14 @@ function echoPageItemTOP($icon, $text) {
 				system_call("rm -rf /System/Library/Extensions/NullCPUPowerManagement.kext");
 			}
 					
-			system_call("cp -rf /System/Library/Extensions/AppleIntelCPUPowerManagement.kext /Extra/Extensions");
-			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			system_call("cp -a $slePath/AppleIntelCPUPowerManagement.kext /Extra/Extensions.EDPFix/");
+			system_call("cp -a $slePath/AppleIntelCPUPowerManagement.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
+			system_call("rm -rf /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/PlugIns");
+			
+			system_call("sudo perl /Extra/EDP/bin/fixes/AICPMPatch/AICPMPatch.pl /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement --patch");
+
+			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 
 			if ($genCache == "yes") {
 				myHackCheck();
@@ -392,18 +403,14 @@ function echoPageItemTOP($icon, $text) {
 			}
 			break;
 			
-			case "EE":		
-			system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-			
-			if (!file_exists("/Extra/Extensions/IO80211Family.kext/")) {
-				writeToLog("$log", "  Failed to copy IO80211Family.kext, retry...<br>");
-				system_call("rm -rf /Extra/Extensions/Contents");
-				system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-			}
+			case "EE":					
+			system_call("cp -a $slePath/IO80211Family.kext /Extra/Extensions.EDPFix/");
+			system_call("cp -a $slePath/IO80211Family.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
+			system_call("rm -rf /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns");
 			
 			// Kext patch
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			
 			if ($genCache == "yes") {
 				myHackCheck();
@@ -449,15 +456,17 @@ function echoPageItemTOP($icon, $text) {
 			break;
 			
 			case "EE":		
-			system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
+			system_call("cp -a $slePath/IO80211Family.kext /Extra/Extensions.EDPFix/");
+			system_call("cp -a $slePath/IO80211Family.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
+			system_call("rm -rf /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns");
 			
 			// Binary patches
-			system_call('sudo perl -pi -e \'s|\x01\x58\x54|\x01\x55\x53|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // region code change to US
-			system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x75|\x6B\x10\x00\x00\x74|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
-			system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x0F\x85|\x6B\x10\x00\x00\x0F\x84|g\' /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
+			system_call('sudo perl -pi -e \'s|\x01\x58\x54|\x01\x55\x53|g\' /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // region code change to US
+			system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x75|\x6B\x10\x00\x00\x74|g\' /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
+			system_call('sudo perl -pi -e \'s|\x6B\x10\x00\x00\x0F\x85|\x6B\x10\x00\x00\x0F\x84|g\' /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/MacOS/AirPortBrcm4360'); // skipping binary checks of apple device id to work Appple card
 			
 			// Kext patch
-			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
+			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
 			
 			if ($genCache == "yes") {
 				myHackCheck();
@@ -471,66 +480,6 @@ function echoPageItemTOP($icon, $text) {
 		system_call("touch $workPath/logs/fixes/patchSuccess.txt;");
 	}
 
-	/*
-	 * Patch AppleAirPortBrcm43224.kext for the card Dell DW1395, DW1397 from Lion onwards
-	 */
-	function patchDW13957WiFiBCM43224() {
-		global $slePath;
-		echo " Applying BCM43224 WiFi Fix for Dell DW1395, DW1397 \n";
-
-		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
-		}
-		 else { echo " AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
-	}
-
-	/*
-	 * Patch AppleAirPortBrcm4311.kext for the card Dell DW1395, DW1397 in Snow Leopard
-	 */
-	function patchDW13957WiFiBCM4311() {
-		global $slePath;
-		echo " Applying BCM4311 WiFi Fix for Dell DW1395, DW1397 \n";
-
-		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4315\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm4311.kext/Contents/KextPatched.plist");
-		}
-		 else { echo " AppleAirPortBrcm4311.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
-	}
-
-	/*
-	 * Patch AppleAirPortBrcm43224.kext for the card BCM943224 HMS and BCM943225 HMB from Lion onwards
-	 */
-	function patchWiFiBCM43224() {
-		global $slePath;
-		echo " Applying BCM43224 WiFi Fix for BCM943224 HMS and BCM943225 HMB \n";
-
-		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4353\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AppleAirPortBrcm43224.kext/Contents/KextPatched.plist");
-		}
-		 else { echo " AppleAirPortBrcm43224.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
-	}
-
-	/*
-	 * Patch AirPortBrcm4331.kext for the card BCM943224 HMS and BCM943225 HMB from Lion onwards
-	 */
-	function patchWiFiBCM4331() {
-		global $slePath;
-		echo " Applying BCM4331 WiFi Fix for BCM943225 HMB \n";
-
-		$file = "$slePath/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist";   if (file_exists($file)) {
-		system_call("cp -rf $slePath/IO80211Family.kext /Extra/Extensions");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,4357\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/Info.plist");
-		system_call("sudo /usr/libexec/PlistBuddy -c \"add PatchedBy string \"OSXLatitude\"\" /Extra/Extensions/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4331.kext/Contents/KextPatched.plist");
-		}
-		 else { echo " AirPortBrcm4331.kext not found for patching in System/Library/Extensions/IO80211Family.kext/Contents/PlugIns/\n"; }
-	}
 
 //<----------------------------> EDP Build functions ---------------------------------------------------------------------------------------------------
 
@@ -860,12 +809,11 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
         	    		
     		switch($wifid) {
     			case 0:    			
-    			case 1:
     				writeToLog("$workPath/logs/build/build.log", " Patching WiFi kext for $name...<br>");
     				patchWiFiAR9285AndAR9287("$workPath/logs/build/build.log","EE", "no");
     			break;
     			
-    			case 2:
+    			case 1:
     			    writeToLog("$workPath/logs/build/build.log", " Patching WiFi kext for $name...<br>");
 
     				if(getMacOSXVersion() >= "10.8.5")
@@ -874,8 +822,8 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     					writeToLog("$workPath/logs/build/build.log", "  OSX version is not supported for WiFi, need OSX 10.8.5 or later<br>");
     			break;
     			
-    			case 4:
-    				writeToLog("$workPath/logs/build/build.log", " Preparing to download WiFi kext $fname...<br>");
+    			case 2:
+    				writeToLog("$workPath/logs/build/build.log", " Preparing to download rollback WiFi kext $fname...<br>");
     					
     				if(!is_dir("$svnpackPath/Wireless"))
     					system_call("mkdir $svnpackPath/Wireless");
@@ -1245,7 +1193,6 @@ function applyFixes() {
         $name = $fixdata[name];
         
        if($id == "2") {
-       		writeToLog("$workPath/logs/build/build.log", " Patching AHCI.kext to waiting for root device problem in ML<br>");
        		patchAHCI();
        }
        else if($id == "8") {
