@@ -106,19 +106,17 @@ function echoPageItemTOP($icon, $text) {
 
 	function UpdateKextVersions($log)
 	{		
-		/*
-		system_call("cp -a /Extra/Extensions/*.kext /Extra/Extensions.EDPFix/");
-		system_call("cp -a /Extra/Extensions/*.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
-		system_call("rm -rf /Extra/Extensions.EDPFix/*.kext/Contents/PlugIns");
-		*/
+		//
+		// Bump kext version to 1111 for the patched Apple kexts to load patched kexts instead of Vanilla
+		//
 		
-		// Get all the files/folders anme in comma seperated way
-		$kList = shell_exec("ls -m /Extra/Extensions.EDPFix/");
-		$kListArray = explode(',', $kList);
+		// Get the names of the files in comma seperated
+		$kPList = shell_exec("ls -m /Extra/Extensions.EDPFix/");
+		$kPListArray = explode(',', $kPList);
 			
 		$kCount = 0;
 		
-		foreach($kListArray as $kName) {
+		foreach($kPListArray as $kName) {
 		
 			$kName = preg_replace('/\s+/', '',$kName); //remove white spaces
 
@@ -136,7 +134,38 @@ function echoPageItemTOP($icon, $text) {
 				$kCount++;				
 			}
 		}
-		writeToLog("$log", "Bumped $kCount kext(s) versionst to 1111<br><br>");
+		
+		writeToLog("$log", "Updated $kCount patched kext(s) to version 1111 to load instead of vanilla kext(s)<br>");
+	}
+	
+	function ProcessKextConflicts($log)
+	{		
+		//
+		// Back up and remove the user installed kexts which are same as EDP installed kexts from SLE
+		//
+		
+		$kList = shell_exec("ls -m /Extra/Extensions/");
+		$kListArray = explode(',', $kList);
+			
+		$kCount = 0;
+		
+		if(!is_dir("/Extra/EDP_Removed_Extensions")) {
+			system_call("mkdir /Extra/EDP_Removed_Extensions");
+	  	}
+	  	
+		foreach($kListArray as $kName) {
+		
+			$kName = preg_replace('/\s+/', '',$kName); //remove white spaces
+
+			if ($kName != "" && $kName != ".DS_Store") {
+		
+				system_call("cp -a /System/Library/Extensions/$kName /Extra/EDP_Removed_Extensions");
+				system_call("rm -rf /System/Library/Extensions/$kName");
+				
+				$kCount++;				
+			}
+		}
+		writeToLog("$log", "Removed $kCount kext(s) which conflicts with EDP (back exists in /Extra/EDP_Removed_Extensions)<br>");
 	}
 	
 	function KextsPermissionsAndKernelCacheFix($log, $path) {
@@ -341,9 +370,12 @@ function echoPageItemTOP($icon, $text) {
 				writeToLog("$log", "  NullCPUPowerManagement.kext found, removing...<br>");
 				system_call("rm -rf /System/Library/Extensions/NullCPUPowerManagement.kext");
 			}
-					
-			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
-			system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+				
+			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
+			
+			system_call("cd /Extra/EDP/bin/fixes/AICPMPatch; sudo perl AICPMPatch.pl /System/Library/Extensions/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement --patch");
+
 			// touch for kernel cache
 			if ($genCache == "yes") {
 				KextsPermissionsAndKernelCacheFix($log, "SLE");
@@ -363,7 +395,7 @@ function echoPageItemTOP($icon, $text) {
 			system_call("cp -a $slePath/AppleIntelCPUPowerManagement.kext/Contents/PlugIns/. /Extra/Extensions.EDPFix/");
 			system_call("rm -rf /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/PlugIns");
 			
-			system_call("sudo perl /Extra/EDP/bin/fixes/AICPMPatch/AICPMPatch.pl /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement --patch");
+			system_call("cd /Extra/EDP/bin/fixes/AICPMPatch; sudo perl AICPMPatch.pl /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement --patch");
 
 			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
