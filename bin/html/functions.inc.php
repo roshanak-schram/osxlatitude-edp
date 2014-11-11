@@ -126,6 +126,13 @@ function echoPageItemTOP($icon, $text) {
 		
 				system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleVersion 1111\" /Extra/Extensions.EDPFix/$kName/Contents/Info.plist");
 				system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleShortVersionString 1111\" /Extra/Extensions.EDPFix/$kName/Contents/Info.plist");
+				
+				if(file_exists("/Extra/Extensions.EDPFix/$kName/Contents/version.plist"))
+				{
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleVersion 1111\" /Extra/Extensions.EDPFix/$kName/Contents/version.plist");
+					system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleShortVersionString 1111\" /Extra/Extensions.EDPFix/$kName/Contents/version.plist");
+				}
+				
 				$kCount++;				
 			}
 		}
@@ -257,6 +264,8 @@ function echoPageItemTOP($icon, $text) {
 		
 		// system_call("cp -R $slePath/IOAHCIFamily.kext /Extra/Extensions");
 		// system_call("perl $workPath/bin/fixes/patch-ahci-mlion.pl >> $workPath/logs/build/build.log");
+		
+		UpdateKextVersions("$workPath/logs/build/build.log");
 	}
 
 	/*
@@ -291,6 +300,8 @@ function echoPageItemTOP($icon, $text) {
 			system_call("rm -rf /Extra/Extensions.EDPFix/AppleIntelSNBGraphicsFB.kext/Contents/PlugIns");
 				
 			system_call('sudo perl -pi -e \'s|\x01\x02\x04\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x02\x05\x00\x00\x00\x04\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00\x04\x06\x00\x00\x00\x04\x00\x00\x09\x00\x00\x00|\x01\x02\x03\x00\x10\x07\x00\x00\x10\x07\x00\x00\x05\x03\x00\x00\x02\x00\x00\x00\x30\x00\x00\x00\x06\x02\x00\x00\x00\x01\x00\x00\x07\x00\x00\x00\x03\x04\x00\x00\x00\x08\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g\' /Extra/Extensions.EDPFix/AppleIntelSNBGraphicsFB.kext/Contents/MacOS/AppleIntelSNBGraphicsFB');
+			
+			UpdateKextVersions("$workPath/logs/build/build.log");
 			
 			if ($genCache == "yes") {
 				myHackCheck();
@@ -357,6 +368,8 @@ function echoPageItemTOP($icon, $text) {
 			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x0F\x30|\xE2\x00\x00\x00\x90\x90|g\' /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 			// system_call('sudo perl -pi -e \'s|\xE2\x00\x00\x00\x48\x89\xF2\x0F\x30|\xE2\x00\x00\x00\x48\x89\xF2\x90\x90|g\' /Extra/Extensions.EDPFix/AppleIntelCPUPowerManagement.kext/Contents/MacOS/AppleIntelCPUPowerManagement');
 
+			UpdateKextVersions("$workPath/logs/build/build.log");
+			
 			if ($genCache == "yes") {
 				myHackCheck();
 				KextsPermissionsAndKernelCacheFix($log, "EE");
@@ -411,6 +424,8 @@ function echoPageItemTOP($icon, $text) {
 			// Kext patch
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2b\"\" /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Atheros\ Wireless\ LAN\ PCI:IONameMatch:0 string \"pci168c,2e\"\" /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortAtheros40.kext/Contents/Info.plist");
+			
+			UpdateKextVersions("$workPath/logs/build/build.log");
 			
 			if ($genCache == "yes") {
 				myHackCheck();
@@ -467,6 +482,8 @@ function echoPageItemTOP($icon, $text) {
 			
 			// Kext patch
 			system_call("sudo /usr/libexec/PlistBuddy -c \"add IOKitPersonalities:Broadcom\ 802.11\ PCI:IONameMatch:0 string \"pci14e4,43b1\"\" /Extra/Extensions.EDPFix/IO80211Family.kext/Contents/PlugIns/AirPortBrcm4360.kext/Contents/Info.plist");   
+			
+			UpdateKextVersions("$workPath/logs/build/build.log");
 			
 			if ($genCache == "yes") {
 				myHackCheck();
