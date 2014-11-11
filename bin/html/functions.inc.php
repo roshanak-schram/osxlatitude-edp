@@ -114,7 +114,7 @@ function echoPageItemTOP($icon, $text) {
 		$kPList = shell_exec("ls -m /Extra/Extensions.EDPFix/");
 		$kPListArray = explode(',', $kPList);
 			
-		$kCount = 0;
+		$kPCount = 0;
 		
 		foreach($kPListArray as $kName) {
 		
@@ -131,11 +131,11 @@ function echoPageItemTOP($icon, $text) {
 					system_call("sudo /usr/libexec/PlistBuddy -c \"set :CFBundleShortVersionString 1111\" /Extra/Extensions.EDPFix/$kName/Contents/version.plist");
 				}
 				
-				$kCount++;				
+				$kPCount++;				
 			}
 		}
-		
-		writeToLog("$log", "Updated $kCount patched kext(s) to version 1111 to load instead of vanilla kext(s)<br>");
+		if($kPCount > 0)
+			writeToLog("$log", "Updated $kPCount patched kext(s) to version 1111 to load instead of vanilla kext(s)<br>");
 	}
 	
 	function ProcessKextConflicts($log)
@@ -157,15 +157,15 @@ function echoPageItemTOP($icon, $text) {
 		
 			$kName = preg_replace('/\s+/', '',$kName); //remove white spaces
 
-			if ($kName != "" && $kName != ".DS_Store") {
-		
+			if ($kName != "" && $kName != ".DS_Store" && is_dir("/System/Library/Extensions/$kName")) 
+			{
+				$kCount++;
 				system_call("cp -a /System/Library/Extensions/$kName /Extra/EDP_Removed_Extensions");
 				system_call("rm -rf /System/Library/Extensions/$kName");
-				
-				$kCount++;				
 			}
 		}
-		writeToLog("$log", "Removed $kCount kext(s) which conflicts with EDP (back exists in /Extra/EDP_Removed_Extensions)<br>");
+		if($kCount > 0)
+			writeToLog("$log", "Removed $kCount kext(s) which conflicts with EDP (back exists in /Extra/EDP_Removed_Extensions)<br>");
 	}
 	
 	function KextsPermissionsAndKernelCacheFix($log, $path) {
