@@ -9,8 +9,8 @@ cp -a /Extra/Extensions/. /System/Library/Extensions/myHack.kext/Contents/PlugIn
 cp -a /Extra/Extensions.EDPFix/. /System/Library/Extensions/myHack.kext/Contents/PlugIns/
 
 echo "<br>Fixing permissions..."
-chmod -R 755 /System/Library/Extensions/myHack.kext
-chown -R root:wheel /System/Library/Extensions/myHack.kext
+chmod -R 755 /System/Library/Extensions
+chown -R root:wheel /System/Library/Extensions
 sudo touch /System/Library/Extensions
 
 echo "<br>Rebuilding caches..."
