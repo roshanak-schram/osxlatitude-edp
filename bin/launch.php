@@ -44,7 +44,7 @@ $os_string = "";
 $os = getVersion();
 
 // Start EDP
-swith($os)
+switch($os)
 {
 	case "sl":
 	    system("open http://127.0.0.1:11250/");
