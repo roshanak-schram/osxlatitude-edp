@@ -43,14 +43,22 @@ include_once "html/functions.inc.php";
 $os_string = "";
 $os = getVersion();
 
-if(getMacOSXVersion() >= "10.7") {
-	// EDP app is not being closed automatically after we click close
-	// so we manually close this and open again when we launch it
-	system("sudo killall EDP"); 
-    system("open $workPath/bin/EDPweb.app");
-} else {
-	// start EDP
-    system("open http://127.0.0.1:11250/");
+// Start EDP
+swith($os)
+{
+	case "sl":
+	    system("open http://127.0.0.1:11250/");
+	break;
+	
+	case "lion":
+	case "ml":
+	case "mav":
+	case "yos":
+		// EDP app is not being closed automatically after we click close
+		// so we manually close this and open again when we launch it
+		system("sudo killall EDP"); 
+    	system("open $workPath/bin/EDPweb.app");
+	break;
 }
 
 ?>
