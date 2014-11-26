@@ -2,17 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>DSDT</key>
+	<string>/Extra/DSDT.aml</string>
+	<key>DropSSDT</key>
+	<string>No</string>
 	<key>EthernetBuiltIn</key>
 	<string>Yes</string>
-	<key>Graphics Mode</key>
-	<string>1024x768x32</string>
-	<key>GraphicsEnabler</key>
+	<key>Instant Menu</key>
 	<string>Yes</string>
-	<key>Kernel</key>
-	<string>mach_kernel</string>
-	<key>Timeout</key>
-	<string>5</string>
+	<key>PciRoot</key>
+	<string>1</string>
 	<key>UseKernelCache</key>
-	<string>Yes</string>
+	<string>No</string>
 </dict>
 </plist>
