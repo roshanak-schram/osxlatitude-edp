@@ -19,6 +19,6 @@
 	<key>Timeout</key>
 	<string>5</string>
 	<key>UseKernelCache</key>
-	<string>Yes</string>
+	<string>No</string>
 </dict>
 </plist>
