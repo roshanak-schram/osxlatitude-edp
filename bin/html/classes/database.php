@@ -22,6 +22,7 @@ class edpDatabase {
 			global $edp_db;
 			
 			switch ($sysType) {
+			  case "Mobile Workstation":
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":
@@ -71,6 +72,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+				  case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
@@ -97,6 +99,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+				  case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
@@ -123,6 +126,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+				  case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
@@ -149,6 +153,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+			      case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
@@ -179,6 +184,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+				  case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
@@ -209,6 +215,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+				  case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
@@ -242,6 +249,7 @@ class edpDatabase {
 		global $edp_db;
 
 		switch ($sysType) {
+				  case "Mobile Workstation":
 				  case "Notebook":
 				  case "Ultrabook":
 				  case "Tablet":
