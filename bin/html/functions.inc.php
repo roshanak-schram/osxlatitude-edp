@@ -555,7 +555,9 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 		return;
 	}
 		
+	//
     // use EDP SMBIos?
+    //
     if($smbios == "yes")
     {
     	$file1 = "$modelDirPath/common/SMBios.plist"; 
@@ -588,7 +590,9 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     	writeToLog("$workPath/logs/build/build.log", "  Skipping SMBios.plist file from EDP on user request<br>");
     }
     
+    //
     // use EDP org.chameleon.Boot.plist?
+    //
     if($chame == "yes")
     {
     	$file1 = "$modelDirPath/common/org.chameleon.Boot.plist"; 
@@ -606,12 +610,25 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     		system_call("cp -f $file2 $extrapath");
    	    	writeToLog("$workPath/logs/build/build.log", "  OS specific org.chameleon.Boot.plist found, Copying to $extrapath<br>");
     	}
+    	
+    	// set UseKernelCache to Yes from org.chameleon.Boot.plist
+		system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
+		
+		//
+		// Add kext-dev-mode flag for Yosemite in for common org.chameleon.Boot.plist
+		//
+		if($os == "yos" && file_exists($file1) && !file_exists($file2)) {
+			system("sudo /usr/libexec/PlistBuddy -c \"delete Kernel\ Flags\" $extrapath/org.chameleon.Boot.plist"); 
+			system("sudo /usr/libexec/PlistBuddy -c \"add Kernel\ Flags string kext-dev-mode=1\" $extrapath/org.chameleon.Boot.plist"); 
+		}
    	 	
     } else {
     	writeToLog("$workPath/logs/build/build.log", "  Skipping org.chameleon.Boot.plist file from EDP on user request<br>");
     }
     
+    //
     // use EDP DSDT?
+    //
     if($dsdt == "yes")
     {
     	$file1 = "$modelDirPath/common/DSDT.aml"; 
@@ -642,37 +659,15 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     	
     } else {
     	writeToLog("$workPath/logs/build/build.log", "  Skipping DSDT file from EDP on user request<br>");
-    }
-	
-    // If its mavericks then copy the files from ml folder temporarilyfor now
-    if($os == "mav" && !is_dir("$modelDirPath/$os") && is_dir("$modelDirPath/ml")) {
-    	
-    	writeToLog("$workPath/logs/build/build.log", "  mavericks directory is not found, Copying dsdt and plist files from ml folder<br>");
-		
-		if($modeldb[$modelRowID]["useEDPDSDT"] == "on") {
-			$file = "$modelDirPath/ml/dsdt.aml";  
-			if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-		}
-		if($modeldb[$modelRowID]["useEDPSMBIOS"] == "on") {
-			$file = "$modelDirPath/ml/SMBios.plist";  
-			if (file_exists($file)) { system_call("cp -f $file $extrapath"); }
-		}
-		if($modeldb[$modelRowID]["useEDPCHAM"] == "on") {
-			$file = "$modelDirPath/ml/org.chameleon.Boot.plist";  
-			if (file_exists($file)) { system_call("cp -f $file $extrapath"); }	
-		}
     }						
-
-	// use EDP org.chameleon.Boot.plist?
-	if($chame == "yes") {
-		// set UseKernelCache to Yes from org.chameleon.Boot.plist
-		system("sudo /usr/libexec/PlistBuddy -c \"set UseKernelCache Yes\" $extrapath/org.chameleon.Boot.plist");
-	}
 	
+	//
 	// use EDP SSDT?
+	//
     if($ssdt == "yes")
     {
     
+      // Fins path for SSDT files
       if (is_dir("$modelDirPath/cpu") && shell_exec("cd $modelDirPath/cpu; ls | wc -l") > 0) {
       	$ssdtFilesPath = "$modelDirPath/cpu";
       }
@@ -718,14 +713,6 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
     }  
     else {
     	writeToLog("$workPath/logs/build/build.log", "  Skipping SSDT files from EDP on user request<br>");
-    }
-    
-    //
-    // Add kext-dev-mode flag for Yosemite in org.chameleon.Boot.plist
-    //
-    if($os == "yos") {
-    	system("sudo /usr/libexec/PlistBuddy -c \"delete Kernel\ Flags\" $extrapath/org.chameleon.Boot.plist"); 
-		system("sudo /usr/libexec/PlistBuddy -c \"add Kernel\ Flags string kext-dev-mode=1\" $extrapath/org.chameleon.Boot.plist"); 
     }
     
     //
@@ -949,6 +936,7 @@ function copyEssentials($modelNamePath, $dsdt, $ssdt, $theme, $smbios, $chame) {
 						global $os, $sysType;
 				
 						switch ($sysType) {
+						  case "Mobile Workstation":
 						  case "Notebook":
 						  case "Ultrabook":
 						  case "Tablet":
