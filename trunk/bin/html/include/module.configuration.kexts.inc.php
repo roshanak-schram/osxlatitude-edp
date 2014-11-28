@@ -48,6 +48,7 @@
 			global $os;
 			
 			switch ($sysType) {
+			  case "Mobile Workstation":
 			  case "Notebook":
 			  case "Ultrabook":
 			  case "Tablet":

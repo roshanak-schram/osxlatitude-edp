@@ -420,6 +420,7 @@ if ($action == "") {
 		
 		// Fetch standard model info needed for the configuration of the choosen model to build
 		switch ($sysType) {
+			  case "Mobile Workstation":
  			  case "Notebook":
  			  case "Ultrabook":
  			  case "Tablet":
