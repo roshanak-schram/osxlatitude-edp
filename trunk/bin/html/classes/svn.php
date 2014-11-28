@@ -68,6 +68,7 @@ class svnDownload {
 		$modelcpudir = "$workPath/model-data/$modelNamePath/cpu";
 		
 		switch ($sysType) {
+			  case "Mobile Workstation":
 			  case "Notebook":
 			  case "Ultrabook":
 			  case "Tablet":
